@@ -1,0 +1,252 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{6808380D-A59B-46C9-AA13-DCB968182DC3}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>PTL</RootNamespace>
+    <AssemblyName>PTL</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="csgl">
+      <HintPath>dll\OpenGL\csgl.dll</HintPath>
+    </Reference>
+    <Reference Include="MathNet.Numerics">
+      <HintPath>dll\MathNet\MathNet.Numerics.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>dll\Json60r7\Bin\Net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="SolidWorks.Interop.sldworks">
+      <HintPath>dll\SolidWorks\SolidWorks.Interop.sldworks.dll</HintPath>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="SolidWorks.Interop.swconst">
+      <HintPath>dll\SolidWorks\SolidWorks.Interop.swconst.dll</HintPath>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Management" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Xaml">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="Tao.OpenGl">
+      <HintPath>dll\OpenGL\Tao.OpenGl.dll</HintPath>
+    </Reference>
+    <Reference Include="Tao.Platform.Windows">
+      <HintPath>dll\OpenGL\Tao.Platform.Windows.dll</HintPath>
+    </Reference>
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="WindowsFormsIntegration" />
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+    <Compile Include="Base\SequenceSync.cs" />
+    <Compile Include="Base\Source.cs" />
+    <Compile Include="Base\Link.cs" />
+    <Compile Include="Base\Bind.cs" />
+    <Compile Include="Base\DataType\DataType.cs" />
+    <Compile Include="Base\DelayEvent.cs" />
+    <Compile Include="Definitions\Definitions.cs" />
+    <Compile Include="Base\Unit\Unit.cs" />
+    <Compile Include="Geometry\02_ICollection.cs" />
+    <Compile Include="Geometry\06_IDXF.cs" />
+    <Compile Include="Geometry\01_IGeometry.cs" />
+    <Compile Include="Geometry\07_IScript.cs" />
+    <Compile Include="Geometry\00_Rules.cs" />
+    <Compile Include="Geometry\03_0D.cs" />
+    <Compile Include="Geometry\04_1D.cs" />
+    <Compile Include="Geometry\05_2D.cs" />
+    <Compile Include="Geometry\02_Collection.cs" />
+    <Compile Include="Geometry\CubicClassifier.cs" />
+    <Compile Include="Geometry\BSplin.cs" />
+    <Compile Include="Geometry\RadialAngleClassifier.cs" />
+    <Compile Include="Mathematics\Math2.cs" />
+    <Compile Include="Mathematics\RootFinding.cs" />
+    <Compile Include="OpenGL\Plot\02_View.cs" />
+    <Compile Include="OpenGL\Plot\03_PlotSub.cs" />
+    <Compile Include="Math.cs" />
+    <Compile Include="SolidWorks\SolidWorksAppAdapter.cs" />
+    <Compile Include="Tools\DebugTools\Plot.cs" />
+    <Compile Include="Tools\FileOperation\00_StringFormat.cs" />
+    <Compile Include="Tools\FileOperation\01_XML.cs" />
+    <Compile Include="Tools\FileOperation\02_JSON.cs" />
+    <Compile Include="Tools\FileOperation\03_STLReader.cs" />
+    <Compile Include="Tools\FileOperation\10_DXFExporter.cs" />
+    <Compile Include="Tools\BinaryReaderExtentionMethods\BinaryReader_TryReadExtention.cs" />
+    <Compile Include="Tools\Measurement\STLMeasuringTool.cs" />
+    <Compile Include="Tools\Security.cs" />
+    <Compile Include="Tools\SystemInfo.cs" />
+    <Compile Include="Windows\Controls\01_OpenGLWindow.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Windows\Controls\BComboBox.xaml.cs">
+      <DependentUpon>BComboBox.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\Controls\BComboBox2.cs" />
+    <Compile Include="Windows\Controls\BMenuItem.cs" />
+    <Compile Include="Windows\Controls\BTextBlock.cs" />
+    <Compile Include="Windows\Controls\BTextBox.xaml.cs">
+      <DependentUpon>BTextBox.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\Controls\LTextBox.xaml.cs">
+      <DependentUpon>LTextBox.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\Controls\LTextBox_double_Arrow.xaml.cs">
+      <DependentUpon>LTextBox_double_Arrow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\Controls\BTextBox_Arrow.xaml.cs">
+      <DependentUpon>BTextBox_Arrow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\Controls\LStackPanel.xaml.cs">
+      <DependentUpon>LStackPanel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\Controls\LTextBlock_double.xaml.cs">
+      <DependentUpon>LTextBlock_double.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\Controls\LTextBox_double.xaml.cs">
+      <DependentUpon>LTextBox_double.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\Controls\LTextBox_Int.xaml.cs">
+      <DependentUpon>LTextBox_Int.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\Controls\LTextBox_Uint1DArray.xaml.cs">
+      <DependentUpon>LTextBox_Uint1DArray.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\Controls\OpenGLViewer.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Windows\DebugWindow_Plot.xaml.cs">
+      <DependentUpon>DebugWindow_Plot.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Page Include="Windows\Controls\BComboBox.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Windows\Controls\BTextBox.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Windows\Controls\LTextBox.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Windows\Controls\LTextBox_double_Arrow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Windows\Controls\BTextBox_Arrow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Windows\Controls\LStackPanel.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Windows\Controls\LTextBlock_double.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Windows\Controls\LTextBox_double.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Windows\Controls\LTextBox_Int.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Windows\Controls\LTextBox_Uint1DArray.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Windows\DebugWindow_Plot.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <AppDesigner Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="netDxf\Source Code\netDxf\netDxf.csproj">
+      <Project>{785380e0-ceb9-4c34-82e5-60d0e33e848e}</Project>
+      <Name>netDxf</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

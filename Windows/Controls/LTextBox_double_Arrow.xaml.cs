@@ -1,0 +1,92 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
+using PTL.Base;
+
+namespace PTL.Windows.Controls
+{
+    /// <summary>
+    /// BindableTextBox_Arrow.xaml 的互動邏輯
+    /// </summary>
+    public partial class LTextBox_double_Arrow : UserControl
+    {
+        Link<double> Value = new Link<double>();
+        public LTextBox_double_Arrow()
+        {
+            InitializeComponent();
+            this.GotFocus += (object sender, System.Windows.RoutedEventArgs e) => this._TextBox.SelectAll();
+            this.Value.ValueChanged += Value_Changed;
+        }
+
+        public double _Gradiation = 0.1;
+        public double Gradiation
+        {
+            get
+            {
+                return _Gradiation;
+            }
+            set
+            {
+                if (value > 0 && _Gradiation != value)
+                    this._Gradiation = value;
+            }
+        }
+        String StringFormat = "";
+
+        public void LinkTo(Source<double> source)
+        {
+            Value.LinkTo(source);
+            Value_Changed();
+        }
+
+        private void Button_minus_Click(object sender, RoutedEventArgs e)
+        {
+            this.Value.V -= Gradiation;
+        }
+
+        private void Button_add_Click(object sender, RoutedEventArgs e)
+        {
+            this.Value.V += Gradiation;
+        }
+
+        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            try
+            {
+                this.Value.V = Convert.ToDouble(this._TextBox.Text);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        private void Value_Changed()
+        {
+            if (CheckAccess())
+            {
+                this._TextBox.TextChanged -= TextBox_TextChanged;
+                if (String.IsNullOrEmpty(StringFormat))
+                    this._TextBox.Text = this.Value.V.ToString();
+                else
+                    this._TextBox.Text = this.Value.V.ToString(StringFormat);
+                this._TextBox.TextChanged += TextBox_TextChanged;
+            }
+            else
+            {
+                Dispatcher.Invoke(Value_Changed);
+            }
+        }
+    }
+}

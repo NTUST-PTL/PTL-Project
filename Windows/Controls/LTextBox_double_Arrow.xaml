@@ -1,0 +1,19 @@
+﻿<UserControl x:Class="PTL.Windows.Controls.LTextBox_double_Arrow"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             mc:Ignorable="d" 
+             d:DesignHeight="40" d:DesignWidth="100">
+    <StackPanel>
+        <TextBox x:Name="_TextBox" x:FieldModifier="public" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" TextChanged="TextBox_TextChanged"></TextBox>
+            <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
+            <RepeatButton x:Name="Increase_Button" x:FieldModifier="public" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Stretch" Content="&lt;" Click="Button_minus_Click"></RepeatButton>
+            <RepeatButton x:Name="Decrease_Button" x:FieldModifier="public" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Stretch" Content="&gt;" Click="Button_add_Click"></RepeatButton>
+        </Grid>
+    </StackPanel>
+</UserControl>

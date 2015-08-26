@@ -1,0 +1,148 @@
+C:\Users\F1shift\Desktop\WpfApplication1\WpfApplication1\bin\Debug\PTL.exe.config
+C:\Users\F1shift\Desktop\WpfApplication1\WpfApplication1\bin\Debug\PTL.exe
+C:\Users\F1shift\Desktop\WpfApplication1\WpfApplication1\bin\Debug\PTL.pdb
+C:\Users\F1shift\Desktop\WpfApplication1\WpfApplication1\bin\Debug\csgl.dll
+C:\Users\F1shift\Desktop\WpfApplication1\WpfApplication1\bin\Debug\Newtonsoft.Json.dll
+C:\Users\F1shift\Desktop\WpfApplication1\WpfApplication1\bin\Debug\Tao.OpenGl.dll
+C:\Users\F1shift\Desktop\WpfApplication1\WpfApplication1\bin\Debug\Tao.Platform.Windows.dll
+C:\Users\F1shift\Desktop\WpfApplication1\WpfApplication1\bin\Debug\Newtonsoft.Json.pdb
+C:\Users\F1shift\Desktop\WpfApplication1\WpfApplication1\bin\Debug\Newtonsoft.Json.xml
+C:\Users\F1shift\Desktop\WpfApplication1\WpfApplication1\obj\Debug\Windows\DebugWindow_Plot.g.cs
+C:\Users\F1shift\Desktop\WpfApplication1\WpfApplication1\obj\Debug\App.g.cs
+C:\Users\F1shift\Desktop\WpfApplication1\WpfApplication1\obj\Debug\GeneratedInternalTypeHelper.g.cs
+C:\Users\F1shift\Desktop\WpfApplication1\WpfApplication1\obj\Debug\PTL_MarkupCompile.cache
+C:\Users\F1shift\Desktop\WpfApplication1\WpfApplication1\obj\Debug\PTL_MarkupCompile.lref
+C:\Users\F1shift\Desktop\WpfApplication1\WpfApplication1\obj\Debug\Windows\DebugWindow_Plot.baml
+C:\Users\F1shift\Desktop\WpfApplication1\WpfApplication1\obj\Debug\PTL.g.resources
+C:\Users\F1shift\Desktop\WpfApplication1\WpfApplication1\obj\Debug\PTL.Properties.Resources.resources
+C:\Users\F1shift\Desktop\WpfApplication1\WpfApplication1\obj\Debug\PTL.csproj.GenerateResource.Cache
+C:\Users\F1shift\Desktop\WpfApplication1\WpfApplication1\obj\Debug\PTL.exe
+C:\Users\F1shift\Desktop\WpfApplication1\WpfApplication1\obj\Debug\PTL.pdb
+C:\Users\F1shift\Desktop\WpfApplication1\PTL\bin\Debug\PTL.exe.config
+C:\Users\F1shift\Desktop\WpfApplication1\PTL\obj\Debug\PTL.exe
+C:\Users\F1shift\Desktop\WpfApplication1\PTL\obj\Debug\PTL.pdb
+C:\Users\F1shift\Desktop\WpfApplication1\PTL\bin\Debug\PTL.exe
+C:\Users\F1shift\Desktop\WpfApplication1\PTL\bin\Debug\PTL.pdb
+C:\Users\F1shift\Desktop\WpfApplication1\PTL\bin\Debug\csgl.dll
+C:\Users\F1shift\Desktop\WpfApplication1\PTL\bin\Debug\Newtonsoft.Json.dll
+C:\Users\F1shift\Desktop\WpfApplication1\PTL\bin\Debug\Tao.OpenGl.dll
+C:\Users\F1shift\Desktop\WpfApplication1\PTL\bin\Debug\Tao.Platform.Windows.dll
+C:\Users\F1shift\Desktop\WpfApplication1\PTL\bin\Debug\Newtonsoft.Json.pdb
+C:\Users\F1shift\Desktop\WpfApplication1\PTL\bin\Debug\Newtonsoft.Json.xml
+C:\Users\F1shift\Desktop\WpfApplication1\PTL\obj\Debug\PTL.csprojResolveAssemblyReference.cache
+C:\Users\F1shift\Desktop\WpfApplication1\PTL\obj\Debug\Windows\DebugWindow_Plot.g.cs
+C:\Users\F1shift\Desktop\WpfApplication1\PTL\obj\Debug\App.g.cs
+C:\Users\F1shift\Desktop\WpfApplication1\PTL\obj\Debug\PTL_MarkupCompile.cache
+C:\Users\F1shift\Desktop\WpfApplication1\PTL\obj\Debug\PTL_MarkupCompile.lref
+C:\Users\F1shift\Desktop\WpfApplication1\PTL\obj\Debug\Windows\DebugWindow_Plot.baml
+C:\Users\F1shift\Desktop\WpfApplication1\PTL\obj\Debug\PTL.g.resources
+C:\Users\F1shift\Desktop\WpfApplication1\PTL\obj\Debug\PTL.Properties.Resources.resources
+C:\Users\F1shift\Desktop\WpfApplication1\PTL\obj\Debug\PTL.csproj.GenerateResource.Cache
+E:\F1shift-Data\PTL Project\bin\Debug\PTL.exe.config
+E:\F1shift-Data\PTL Project\bin\Debug\PTL.exe
+E:\F1shift-Data\PTL Project\bin\Debug\PTL.pdb
+E:\F1shift-Data\PTL Project\bin\Debug\csgl.dll
+E:\F1shift-Data\PTL Project\bin\Debug\Newtonsoft.Json.dll
+E:\F1shift-Data\PTL Project\bin\Debug\Tao.OpenGl.dll
+E:\F1shift-Data\PTL Project\bin\Debug\Tao.Platform.Windows.dll
+E:\F1shift-Data\PTL Project\bin\Debug\Newtonsoft.Json.pdb
+E:\F1shift-Data\PTL Project\bin\Debug\Newtonsoft.Json.xml
+E:\F1shift-Data\PTL Project\obj\Debug\PTL.csprojResolveAssemblyReference.cache
+E:\F1shift-Data\PTL Project\obj\Debug\Windows\DebugWindow_Plot.g.cs
+E:\F1shift-Data\PTL Project\obj\Debug\App.g.cs
+E:\F1shift-Data\PTL Project\obj\Debug\PTL_MarkupCompile.cache
+E:\F1shift-Data\PTL Project\obj\Debug\PTL_MarkupCompile.lref
+E:\F1shift-Data\PTL Project\obj\Debug\Windows\DebugWindow_Plot.baml
+E:\F1shift-Data\PTL Project\obj\Debug\PTL.g.resources
+E:\F1shift-Data\PTL Project\obj\Debug\PTL.Properties.Resources.resources
+E:\F1shift-Data\PTL Project\obj\Debug\PTL.csproj.GenerateResource.Cache
+E:\F1shift-Data\PTL Project\obj\Debug\PTL.exe
+E:\F1shift-Data\PTL Project\obj\Debug\PTL.pdb
+C:\Users\F1shift\Desktop\PTL Project\bin\Debug\PTL.exe.config
+C:\Users\F1shift\Desktop\PTL Project\bin\Debug\PTL.exe
+C:\Users\F1shift\Desktop\PTL Project\bin\Debug\PTL.pdb
+C:\Users\F1shift\Desktop\PTL Project\bin\Debug\csgl.dll
+C:\Users\F1shift\Desktop\PTL Project\bin\Debug\MathNet.Numerics.dll
+C:\Users\F1shift\Desktop\PTL Project\bin\Debug\netDxf.dll
+C:\Users\F1shift\Desktop\PTL Project\bin\Debug\Newtonsoft.Json.dll
+C:\Users\F1shift\Desktop\PTL Project\bin\Debug\Tao.OpenGl.dll
+C:\Users\F1shift\Desktop\PTL Project\bin\Debug\Tao.Platform.Windows.dll
+C:\Users\F1shift\Desktop\PTL Project\bin\Debug\netDxf.pdb
+C:\Users\F1shift\Desktop\PTL Project\bin\Debug\netDxf.xml
+C:\Users\F1shift\Desktop\PTL Project\bin\Debug\Newtonsoft.Json.pdb
+C:\Users\F1shift\Desktop\PTL Project\bin\Debug\Newtonsoft.Json.xml
+C:\Users\F1shift\Desktop\PTL Project\obj\Debug\PTL.csprojResolveAssemblyReference.cache
+C:\Users\F1shift\Desktop\PTL Project\obj\Debug\Windows\Controls\BComboBox.baml
+C:\Users\F1shift\Desktop\PTL Project\obj\Debug\Windows\Controls\BTextBox.baml
+C:\Users\F1shift\Desktop\PTL Project\obj\Debug\Windows\Controls\LTextBox.baml
+C:\Users\F1shift\Desktop\PTL Project\obj\Debug\Windows\Controls\LTextBox_double_Arrow.baml
+C:\Users\F1shift\Desktop\PTL Project\obj\Debug\Windows\Controls\BTextBox_Arrow.baml
+C:\Users\F1shift\Desktop\PTL Project\obj\Debug\Windows\Controls\LStackPanel.baml
+C:\Users\F1shift\Desktop\PTL Project\obj\Debug\Windows\Controls\LTextBlock_double.baml
+C:\Users\F1shift\Desktop\PTL Project\obj\Debug\Windows\Controls\LTextBox_double.baml
+C:\Users\F1shift\Desktop\PTL Project\obj\Debug\Windows\Controls\LTextBox_Int.baml
+C:\Users\F1shift\Desktop\PTL Project\obj\Debug\Windows\Controls\LTextBox_Uint1DArray.baml
+C:\Users\F1shift\Desktop\PTL Project\obj\Debug\Windows\Controls\BComboBox.g.cs
+C:\Users\F1shift\Desktop\PTL Project\obj\Debug\Windows\Controls\BTextBox.g.cs
+C:\Users\F1shift\Desktop\PTL Project\obj\Debug\Windows\Controls\LTextBox.g.cs
+C:\Users\F1shift\Desktop\PTL Project\obj\Debug\Windows\Controls\LTextBox_double_Arrow.g.cs
+C:\Users\F1shift\Desktop\PTL Project\obj\Debug\Windows\Controls\BTextBox_Arrow.g.cs
+C:\Users\F1shift\Desktop\PTL Project\obj\Debug\Windows\Controls\LStackPanel.g.cs
+C:\Users\F1shift\Desktop\PTL Project\obj\Debug\Windows\Controls\LTextBlock_double.g.cs
+C:\Users\F1shift\Desktop\PTL Project\obj\Debug\Windows\Controls\LTextBox_double.g.cs
+C:\Users\F1shift\Desktop\PTL Project\obj\Debug\Windows\Controls\LTextBox_Int.g.cs
+C:\Users\F1shift\Desktop\PTL Project\obj\Debug\Windows\Controls\LTextBox_Uint1DArray.g.cs
+C:\Users\F1shift\Desktop\PTL Project\obj\Debug\Windows\DebugWindow_Plot.g.cs
+C:\Users\F1shift\Desktop\PTL Project\obj\Debug\App.g.cs
+C:\Users\F1shift\Desktop\PTL Project\obj\Debug\PTL_MarkupCompile.cache
+C:\Users\F1shift\Desktop\PTL Project\obj\Debug\PTL_MarkupCompile.lref
+C:\Users\F1shift\Desktop\PTL Project\obj\Debug\Windows\DebugWindow_Plot.baml
+C:\Users\F1shift\Desktop\PTL Project\obj\Debug\PTL.g.resources
+C:\Users\F1shift\Desktop\PTL Project\obj\Debug\PTL.Properties.Resources.resources
+C:\Users\F1shift\Desktop\PTL Project\obj\Debug\PTL.csproj.GenerateResource.Cache
+C:\Users\F1shift\Desktop\PTL Project\obj\Debug\PTL.exe
+C:\Users\F1shift\Desktop\PTL Project\obj\Debug\PTL.pdb
+C:\Users\F1shift\Google Drive\PTL Project\PTL Project\bin\Debug\PTL.exe.config
+C:\Users\F1shift\Google Drive\PTL Project\PTL Project\bin\Debug\PTL.exe
+C:\Users\F1shift\Google Drive\PTL Project\PTL Project\bin\Debug\PTL.pdb
+C:\Users\F1shift\Google Drive\PTL Project\PTL Project\bin\Debug\csgl.dll
+C:\Users\F1shift\Google Drive\PTL Project\PTL Project\bin\Debug\MathNet.Numerics.dll
+C:\Users\F1shift\Google Drive\PTL Project\PTL Project\bin\Debug\netDxf.dll
+C:\Users\F1shift\Google Drive\PTL Project\PTL Project\bin\Debug\Newtonsoft.Json.dll
+C:\Users\F1shift\Google Drive\PTL Project\PTL Project\bin\Debug\Tao.OpenGl.dll
+C:\Users\F1shift\Google Drive\PTL Project\PTL Project\bin\Debug\Tao.Platform.Windows.dll
+C:\Users\F1shift\Google Drive\PTL Project\PTL Project\bin\Debug\netDxf.pdb
+C:\Users\F1shift\Google Drive\PTL Project\PTL Project\bin\Debug\netDxf.xml
+C:\Users\F1shift\Google Drive\PTL Project\PTL Project\bin\Debug\Newtonsoft.Json.pdb
+C:\Users\F1shift\Google Drive\PTL Project\PTL Project\bin\Debug\Newtonsoft.Json.xml
+C:\Users\F1shift\Google Drive\PTL Project\PTL Project\obj\Debug\PTL.csprojResolveAssemblyReference.cache
+C:\Users\F1shift\Google Drive\PTL Project\PTL Project\obj\Debug\Windows\Controls\BComboBox.baml
+C:\Users\F1shift\Google Drive\PTL Project\PTL Project\obj\Debug\Windows\Controls\BTextBox.baml
+C:\Users\F1shift\Google Drive\PTL Project\PTL Project\obj\Debug\Windows\Controls\LTextBox.baml
+C:\Users\F1shift\Google Drive\PTL Project\PTL Project\obj\Debug\Windows\Controls\LTextBox_double_Arrow.baml
+C:\Users\F1shift\Google Drive\PTL Project\PTL Project\obj\Debug\Windows\Controls\BTextBox_Arrow.baml
+C:\Users\F1shift\Google Drive\PTL Project\PTL Project\obj\Debug\Windows\Controls\LStackPanel.baml
+C:\Users\F1shift\Google Drive\PTL Project\PTL Project\obj\Debug\Windows\Controls\LTextBlock_double.baml
+C:\Users\F1shift\Google Drive\PTL Project\PTL Project\obj\Debug\Windows\Controls\LTextBox_double.baml
+C:\Users\F1shift\Google Drive\PTL Project\PTL Project\obj\Debug\Windows\Controls\LTextBox_Int.baml
+C:\Users\F1shift\Google Drive\PTL Project\PTL Project\obj\Debug\Windows\Controls\LTextBox_Uint1DArray.baml
+C:\Users\F1shift\Google Drive\PTL Project\PTL Project\obj\Debug\Windows\Controls\BComboBox.g.cs
+C:\Users\F1shift\Google Drive\PTL Project\PTL Project\obj\Debug\Windows\Controls\BTextBox.g.cs
+C:\Users\F1shift\Google Drive\PTL Project\PTL Project\obj\Debug\Windows\Controls\LTextBox.g.cs
+C:\Users\F1shift\Google Drive\PTL Project\PTL Project\obj\Debug\Windows\Controls\LTextBox_double_Arrow.g.cs
+C:\Users\F1shift\Google Drive\PTL Project\PTL Project\obj\Debug\Windows\Controls\BTextBox_Arrow.g.cs
+C:\Users\F1shift\Google Drive\PTL Project\PTL Project\obj\Debug\Windows\Controls\LStackPanel.g.cs
+C:\Users\F1shift\Google Drive\PTL Project\PTL Project\obj\Debug\Windows\Controls\LTextBlock_double.g.cs
+C:\Users\F1shift\Google Drive\PTL Project\PTL Project\obj\Debug\Windows\Controls\LTextBox_double.g.cs
+C:\Users\F1shift\Google Drive\PTL Project\PTL Project\obj\Debug\Windows\Controls\LTextBox_Int.g.cs
+C:\Users\F1shift\Google Drive\PTL Project\PTL Project\obj\Debug\Windows\Controls\LTextBox_Uint1DArray.g.cs
+C:\Users\F1shift\Google Drive\PTL Project\PTL Project\obj\Debug\Windows\DebugWindow_Plot.g.cs
+C:\Users\F1shift\Google Drive\PTL Project\PTL Project\obj\Debug\App.g.cs
+C:\Users\F1shift\Google Drive\PTL Project\PTL Project\obj\Debug\PTL_MarkupCompile.cache
+C:\Users\F1shift\Google Drive\PTL Project\PTL Project\obj\Debug\PTL_MarkupCompile.lref
+C:\Users\F1shift\Google Drive\PTL Project\PTL Project\obj\Debug\Windows\DebugWindow_Plot.baml
+C:\Users\F1shift\Google Drive\PTL Project\PTL Project\obj\Debug\PTL.g.resources
+C:\Users\F1shift\Google Drive\PTL Project\PTL Project\obj\Debug\PTL.Properties.Resources.resources
+C:\Users\F1shift\Google Drive\PTL Project\PTL Project\obj\Debug\PTL.csproj.GenerateResource.Cache
+C:\Users\F1shift\Google Drive\PTL Project\PTL Project\obj\Debug\PTL.exe
+C:\Users\F1shift\Google Drive\PTL Project\PTL Project\obj\Debug\PTL.pdb
