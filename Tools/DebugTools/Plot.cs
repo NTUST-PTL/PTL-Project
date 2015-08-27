@@ -153,6 +153,65 @@ namespace PTL.Tools.DebugTools
             Application.Current.Dispatcher.BeginInvoke(BeginPlot);
         }
 
+        public void ParameterPlot(Func<double, double, PointD> Function, double xstart, double xend, uint xslices, double ystart, double yend, uint yslices, Action<TopoFace> TopoFaceSetter = null)
+        {
+            TopoFace topoFace = null;
+            #region 主要計算
+            if (Function != null && xslices > 0 && yslices > 0)
+	        {
+                uint NRow = xslices + 1;
+                uint NCol = yslices + 1;
+                topoFace = new TopoFace() { Points = new PointD[NRow, NCol] };
+
+                //確認方向
+                if (xstart > xend)
+                {
+                    double newEnd = xstart;
+                    xstart = xend;
+                    xend = newEnd;
+                }
+                if (ystart > yend)
+                {
+                    double newEnd = ystart;
+                    ystart = yend;
+                    yend = newEnd;
+                }
+
+
+                double dx = (xend - xstart) / xslices;
+                double dy = (yend - ystart) / yslices;
+                int i = 0;
+                for (double x = xstart; x <= xend; x += dx)
+                {
+                    int j = 0;
+                    for (double y = ystart; y <= yend; y += dy)
+                    {
+                        topoFace.Points[i, j] = Function(x, y);
+                        j++;
+                    }
+                    i++; 
+                }
+                topoFace.SovleNormalVector();
+                if (TopoFaceSetter != null)
+                    TopoFaceSetter(topoFace);
+                else
+                    topoFace.Color = System.Drawing.Color.LawnGreen;
+	        }
+            
+            #endregion
+
+            Action BeginPlot = () =>
+            {
+                #region
+                if (Window != null)
+                    Window.View.AddSomeThing2Show(topoFace);
+                #endregion
+            };
+
+            //因為牽扯到視窗元素，所以需委托應用程式的STA執行緒來執行
+            Application.Current.Dispatcher.BeginInvoke(BeginPlot);
+        }
+
         public void Clear()
         {
             Action BeginPlot = () =>
