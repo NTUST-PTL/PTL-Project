@@ -5,6 +5,7 @@ using System.Text;
 using System.Diagnostics;
 using PTL.Geometry;
 using PTL.Definitions;
+using PTL.Geometry.MathModel;
 
 namespace PTL.Mathematics
 {
@@ -193,6 +194,21 @@ namespace PTL.Mathematics
 
             return len;
         }
+        protected static double Norm(double[] input)
+        {
+            double sum = 0;
+            for (int i = 0; i <= input.GetUpperBound(0); i++)
+            {
+                sum = sum + System.Math.Pow(input[i], 2);
+            }
+            double len = Sqrt(sum);
+
+            return len;
+        }
+        protected static double Norm(Coordinate input)
+        {
+            return Norm(input.Value);
+        }
         protected static double Norm<T>(T p1) where T : Vector, new()
         {
             double sum = p1.X * p1.X + p1.Y * p1.Y + p1.Z * p1.Z;
@@ -201,51 +217,74 @@ namespace PTL.Mathematics
             return len;
         }
 
+        protected static double[] MatrixDot(double[,] array1, double[] array2)
+        {
+            if (array1.GetLength(1) != array2.GetLength(0))
+                return null;
+
+            int r1, c1, i, j, k;
+            r1 = array1.GetUpperBound(0);  // UBound
+            c1 = array1.GetUpperBound(1);  // UBound
+
+            double[] outptr = new double[r1 + 1];
+            //r1 = UBound(ptr1,1);
+            //c1 = UBound(ptr1, 2);
+            //c2 = UBound(ptr2, 2);
+            for (i = 0; r1 >= i; i++)
+            {
+                outptr[i] = 0.0;
+            }
+            for (i = 0; r1 >= i; i++)
+            {
+                for (k = 0; c1 >= k; k++)
+                {
+                    outptr[i] = outptr[i] + array1[i, k] * array2[k];
+                }
+            }
+            return outptr;
+        }
+        protected static double[,] MatrixDot(double[,] array1, double[,] array2)
+        {
+            if (array1.GetLength(1) != array2.GetLength(0))
+                return null;
+
+            int r1, c1, c2, i, j, k;
+            r1 = array1.GetUpperBound(0);  // UBound
+            c1 = array1.GetUpperBound(1);  // UBound
+            c2 = array2.GetUpperBound(1);  // UBound
+
+            double[,] outptr = new double[r1 + 1, c2 + 1];
+            //r1 = UBound(ptr1,1);
+            //c1 = UBound(ptr1, 2);
+            //c2 = UBound(ptr2, 2);
+            for (i = 0; r1 >= i; i++)
+            {
+                for (j = 0; c2 >= j; j++)
+                {
+                    outptr[i, j] = 0.0;
+                }
+            }
+            for (i = 0; r1 >= i; i++)
+            {
+                for (j = 0; c2 >= j; j++)
+                {
+                    for (k = 0; c1 >= k; k++)
+                    {
+                        outptr[i, j] = outptr[i, j] + array1[i, k] * array2[k, j];
+                    }
+                }
+            }
+            return outptr;
+        }
         protected static double[,] MatrixDot(params double[][,] arrarys)
         {
             for (int i = 0; i < arrarys.Length - 1; i++)
                 if (arrarys[i].GetLength(1) != arrarys[i + 1].GetLength(0))
                     return null;
-
-            Func<double[,], double[,], double[,]> DotFunc = (double[,] ptr1, double[,] ptr2) =>
-            #region
-            {
-                if (ptr1.GetLength(1) != ptr2.GetLength(0))
-                    return null;
-
-                int r1, c1, c2, i, j, k;
-                r1 = ptr1.GetUpperBound(0);  // UBound
-                c1 = ptr1.GetUpperBound(1);  // UBound
-                c2 = ptr2.GetUpperBound(1);  // UBound
-
-                double[,] outptr = new double[r1 + 1, c2 + 1];
-                //r1 = UBound(ptr1,1);
-                //c1 = UBound(ptr1, 2);
-                //c2 = UBound(ptr2, 2);
-                for (i = 0; r1 >= i; i++)
-                {
-                    for (j = 0; c2 >= j; j++)
-                    {
-                        outptr[i, j] = 0.0;
-                    }
-                }
-                for (i = 0; r1 >= i; i++)
-                {
-                    for (j = 0; c2 >= j; j++)
-                    {
-                        for (k = 0; c1 >= k; k++)
-                        {
-                            outptr[i, j] = outptr[i, j] + ptr1[i, k] * ptr2[k, j];
-                        }
-                    }
-                }
-                return outptr;
-            };
-            #endregion
             double[,] outputArray = arrarys[0];
             for (int i = 1; i < arrarys.Length; i++)
             {
-                outputArray = DotFunc(outputArray, arrarys[i]);
+                outputArray = MatrixDot(outputArray, arrarys[i]);
             }
             return outputArray;
         }
@@ -284,6 +323,14 @@ namespace PTL.Mathematics
         protected static double[] Cross(double[] ptr1, double[] ptr2)
         {
             double[] outptr = new double[3];
+            outptr[0] = ptr1[1] * ptr2[2] - ptr1[2] * ptr2[1];
+            outptr[1] = ptr1[2] * ptr2[0] - ptr1[0] * ptr2[2];
+            outptr[2] = ptr1[0] * ptr2[1] - ptr1[1] * ptr2[0];
+            return outptr;
+        }
+        protected static Coordinate Cross(Coordinate ptr1, Coordinate ptr2)
+        {
+            Coordinate outptr = new Coordinate();
             outptr[0] = ptr1[1] * ptr2[2] - ptr1[2] * ptr2[1];
             outptr[1] = ptr1[2] * ptr2[0] - ptr1[0] * ptr2[2];
             outptr[2] = ptr1[0] * ptr2[1] - ptr1[1] * ptr2[0];
@@ -352,6 +399,19 @@ namespace PTL.Mathematics
 
             T p2 = new T() { X = tr2[0], Y = tr2[1], Z = tr2[2] };
             return p2;
+        }
+        protected static double[] MatrixDot3(double[,] tMatrix, double[] tr1)
+        {
+            double[] tr2 = new double[3];
+
+            for (int i = 0; i < 3; i++)
+            {
+                for (int k = 0; k < 3; k++)
+                {
+                    tr2[i] = tr2[i] + tMatrix[i, k] * tr1[k];
+                }
+            }
+            return tr2;
         }
         protected static double[] MatrixDot4(double[,] tMatrix, double[] tr1)
         {
@@ -743,7 +803,27 @@ namespace PTL.Mathematics
             }
             return newPset;
         }
+        protected static double[] TransCoordinate3(double[,] tMatrix, double[] tr1)
+        {
+            double[] tr2 = new double[3];
 
+            for (int i = 0; i < 3; i++)
+            {
+                for (int k = 0; k < 3; k++)
+                {
+                    tr2[i] = tr2[i] + tMatrix[i, k] * tr1[k];
+                }
+            }
+            return tr2;
+        }
+        protected static double[] TransCoordinate4(double[,] tMatrix, double[] tr1)
+        {
+            double[] tr2 = TransCoordinate3(tMatrix, tr1);
+            tr2[0] += tMatrix[0, 3];
+            tr2[1] += tMatrix[1, 3];
+            tr2[2] += tMatrix[2, 3];
+            return tr2;
+        }
 
         /// <summary>
         /// 反矩陣
