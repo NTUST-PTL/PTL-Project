@@ -40,6 +40,10 @@
     <Reference Include="MathNet.Numerics">
       <HintPath>dll\MathNet\MathNet.Numerics.dll</HintPath>
     </Reference>
+    <Reference Include="netDxf, Version=1.0.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>dll\netDxf\netDxf.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>dll\Json60r7\Bin\Net45\Newtonsoft.Json.dll</HintPath>
@@ -100,6 +104,8 @@
     <Compile Include="Geometry\02_Collection.cs" />
     <Compile Include="Geometry\CubicClassifier.cs" />
     <Compile Include="Geometry\BSplin.cs" />
+    <Compile Include="Geometry\MathModel\NURBS_Curve.cs" />
+    <Compile Include="Geometry\MathModel\Coordinate.cs" />
     <Compile Include="Geometry\RadialAngleClassifier.cs" />
     <Compile Include="Mathematics\Math2.cs" />
     <Compile Include="Mathematics\RootFinding.cs" />
@@ -234,12 +240,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="netDxf\Source Code\netDxf\netDxf.csproj">
-      <Project>{785380e0-ceb9-4c34-82e5-60d0e33e848e}</Project>
-      <Name>netDxf</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

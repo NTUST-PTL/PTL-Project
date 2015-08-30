@@ -15,6 +15,7 @@ namespace PTL.Geometry.MathModel
     {
         public Coordinate[] DataPoints;
         public Coordinate[] ControlPoints;
+        public double[][,] Ni;
         public double[] delta_i;
         bool DataOutput = false;
 
@@ -91,6 +92,14 @@ namespace PTL.Geometry.MathModel
             {
                 int i_M = i + 1;
                 R[i_M, 0] = DataPoints[i];
+            }
+            #endregion
+
+            #region 計算每個線段的N矩陣
+            Ni = new double[n][,];
+            for (int i = 0; i < n; i++)
+            {
+                Ni[i] = GetNci(i, false);
             }
             #endregion
 
@@ -201,6 +210,81 @@ namespace PTL.Geometry.MathModel
             //    }
             //}
             #endregion Debug
+        }
+
+        private double[,] GetNci(int segmentsIndex, bool print)
+        {
+            if (segmentsIndex >= 0 && segmentsIndex < DataPoints.Length - 1)
+            {
+                int i_d = segmentsIndex + 2;
+                double[,] Nci = IdentityMatrix(4);
+                Nci[0, 0] = Pow(delta_i[i_d], 2)
+                            / (delta_i[i_d - 1] + delta_i[i_d])
+                            / (delta_i[i_d - 2] + delta_i[i_d - 1] + delta_i[i_d]);
+                Nci[0, 2] = Pow(delta_i[i_d - 1], 2)
+                            / (delta_i[i_d - 1] + delta_i[i_d] + delta_i[i_d + 1])
+                            / (delta_i[i_d - 1] + delta_i[i_d]);
+                Nci[1, 2] = 3 * delta_i[i_d] * delta_i[i_d - 1]
+                            / (delta_i[i_d - 1] + delta_i[i_d] + delta_i[i_d + 1])
+                            / (delta_i[i_d - 1] + delta_i[i_d]);
+                Nci[2, 2] = 3 * Pow(delta_i[i_d], 2)
+                            / (delta_i[i_d - 1] + delta_i[i_d] + delta_i[i_d + 1])
+                            / (delta_i[i_d - 1] + delta_i[i_d]);
+                Nci[3, 3] = Pow(delta_i[i_d], 2)
+                            / (delta_i[i_d] + delta_i[i_d + 1] + delta_i[i_d + 2])
+                            / (delta_i[i_d] + delta_i[i_d + 1]);
+                Nci[3, 2] = -1 *
+                            (
+                                  1.0 / 3.0 * Nci[2, 2]
+                                + Nci[3, 3]
+                                + Pow(delta_i[i_d], 2)
+                                  / (delta_i[i_d] + delta_i[i_d + 1])
+                                  / (delta_i[i_d - 1] + delta_i[i_d] + delta_i[i_d + 1])
+                            );
+                Nci[1, 0] = -3 * Nci[0, 0];
+                Nci[2, 0] = 3 * Nci[0, 0];
+                Nci[3, 0] = -Nci[0, 0];
+                Nci[0, 1] = 1 - Nci[0, 0] - Nci[0, 2];
+                Nci[1, 1] = 3 * Nci[0, 0] - Nci[1, 2];
+                Nci[2, 1] = -(3 * Nci[0, 0] + Nci[2, 2]);
+                Nci[3, 1] = Nci[0, 0] - Nci[3, 2] - Nci[3, 3];
+
+                //Print Nci
+                if (print)
+                {
+                    Console.WriteLine("i = " + segmentsIndex);
+                    Console.WriteLine("Nci = ");
+                    Console.WriteLine("{");
+                    for (int ii = 0; ii < Nci.GetLength(0); ii++)
+                    {
+                        Console.Write("{");
+                        for (int j = 0; j < Nci.GetLength(1); j++)
+                        {
+                            Console.Write("\t");
+                            Console.Write(Nci[ii, j].ToString("0.000000"));
+                            if (j != (Nci.GetLength(1) - 1))
+                                Console.Write(",");
+                        }
+                        Console.Write("}");
+                        if (ii != (Nci.GetLength(0) - 1))
+                            Console.WriteLine(",");
+                        else
+                            Console.WriteLine("");
+                    }
+                    Console.WriteLine("}");
+                }
+                return Nci;
+            }
+            return null;
+        }
+
+        public Coordinate CurveFunc(double para)
+        {
+            double globalPara = para * (DataPoints.Length - 1);
+            double localPara = globalPara % 1;
+            int sIndex = (int)(globalPara - localPara);
+
+
         }
     }
 }
