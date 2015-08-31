@@ -47,8 +47,52 @@ namespace PTL.Tools.DebugTools
             double dx = (end - start) / slices;
             if (Function != null)
             {
-                for (double x = start; x <= end; x += dx)
+                double x = start;
+                for (int i = 0; i < slices + 1; i++)
+                {
                     polyline.AddPoint(new PointD(x, Function(x), 0));
+                    x += dx;
+                }
+                if (PolyLineSetter != null)
+                    PolyLineSetter(polyline);
+                else
+                    polyline.Color = System.Drawing.Color.LawnGreen;
+            }
+            #endregion
+
+            Action BeginPlot = () =>
+            {
+                #region
+                if (Window != null)
+                    Window.View.AddSomeThing2Show(polyline);
+                #endregion
+            };
+
+            //因為牽扯到視窗元素，所以需委托應用程式的STA執行緒來執行
+            Application.Current.Dispatcher.BeginInvoke(BeginPlot);
+        }
+
+        public void ParameterPlot(Func<double, double[]> Function, double start, double end, int slices, Action<PolyLine> PolyLineSetter = null)
+        {
+
+            #region 主要計算
+            PolyLine polyline = new PolyLine();
+
+            if (start > end)
+            {
+                double newEnd = start;
+                start = end;
+                end = newEnd;
+            }
+            double dx = (end - start) / slices;
+            if (Function != null)
+            {
+                double x = start;
+                for (int i = 0; i < slices + 1; i++)
+                {
+                    polyline.AddPoint(new PointD(Function(x)));
+                    x += dx;
+                }
                 if (PolyLineSetter != null)
                     PolyLineSetter(polyline);
                 else
@@ -198,6 +242,66 @@ namespace PTL.Tools.DebugTools
                     topoFace.Color = System.Drawing.Color.LawnGreen;
 	        }
             
+            #endregion
+
+            Action BeginPlot = () =>
+            {
+                #region
+                if (Window != null)
+                    Window.View.AddSomeThing2Show(topoFace);
+                #endregion
+            };
+
+            //因為牽扯到視窗元素，所以需委托應用程式的STA執行緒來執行
+            Application.Current.Dispatcher.BeginInvoke(BeginPlot);
+        }
+
+        public void ParameterPlot(Func<double, double, double[]> Function, double xstart, double xend, uint xslices, double ystart, double yend, uint yslices, Action<TopoFace> TopoFaceSetter = null)
+        {
+            TopoFace topoFace = null;
+            #region 主要計算
+            if (Function != null && xslices > 0 && yslices > 0)
+            {
+                uint NRow = xslices + 1;
+                uint NCol = yslices + 1;
+                topoFace = new TopoFace() { Points = new PointD[NRow, NCol] };
+
+                //確認方向
+                if (xstart > xend)
+                {
+                    double newEnd = xstart;
+                    xstart = xend;
+                    xend = newEnd;
+                }
+                if (ystart > yend)
+                {
+                    double newEnd = ystart;
+                    ystart = yend;
+                    yend = newEnd;
+                }
+
+
+                double dx = (xend - xstart) / xslices;
+                double dy = (yend - ystart) / yslices;
+
+                double x = xstart;
+                for (int i = 0; i < xslices + 1; i++)
+                {
+                    double y = ystart;
+                    for (int j = 0; j < yslices + 1; j++)
+                    {
+                        topoFace.Points[i, j] = new PointD(Function(x, y));
+                        y += dy;
+                    }
+                     x += dx;
+                }
+                topoFace.SovleNormalVector();
+                if (TopoFaceSetter != null)
+                    TopoFaceSetter(topoFace);
+                else
+                    topoFace.Color = System.Drawing.Color.LawnGreen;
+            }
+
             #endregion
 
             Action BeginPlot = () =>

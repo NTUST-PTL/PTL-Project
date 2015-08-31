@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace PTL.Geometry.MathModel
 {
-    public class Coordinate : PTL.Mathematics.Math2, ITransformable
+    public class XYZ : PTL.Mathematics.Math2, ICloneable
     {
-        public new double[] Value = new double[3];
+        public new double[] Value = new double[3] { 0, 0, 0 };
         public double X
         {
             get
@@ -55,28 +55,28 @@ namespace PTL.Geometry.MathModel
             }
         }
 
-        public static Coordinate ZeroVector { get { return new Coordinate(0, 0, 0); } }
+        public static XYZ ZeroVector { get { return new XYZ(0, 0, 0); } }
 
         #region Constructor and Destructor
-        public Coordinate(double x, double y, double z)
+        public XYZ(double x, double y, double z)
         {
             this.X = x;
             this.Y = y;
             this.Z = z;
         }
 
-        public Coordinate(double[] direction)
+        public XYZ(double[] direction)
         {
             this.X = direction[0];
             this.Y = direction[1];
             this.Z = direction[2];
         }
 
-        public Coordinate()
+        public XYZ()
         {
         }
 
-        public Coordinate(Coordinate p)
+        public XYZ(XYZ p)
         {
             this.X = p.X;
             this.Y = p.Y;
@@ -85,9 +85,9 @@ namespace PTL.Geometry.MathModel
         #endregion
 
         #region Operation
-        public static Coordinate operator -(Coordinate p1, Coordinate p2)
+        public static XYZ operator -(XYZ p1, XYZ p2)
         {
-            Coordinate p3 = new Coordinate();
+            XYZ p3 = new XYZ();
 
             p3.X = p1.X - p2.X;
             p3.Y = p1.Y - p2.Y;
@@ -95,9 +95,9 @@ namespace PTL.Geometry.MathModel
 
             return p3;
         }
-        public static Coordinate operator +(Coordinate p1, Coordinate p2)
+        public static XYZ operator +(XYZ p1, XYZ p2)
         {
-            Coordinate p3 = new Coordinate();
+            XYZ p3 = new XYZ();
 
             p3.X = p1.X + p2.X;
             p3.Y = p1.Y + p2.Y;
@@ -105,9 +105,9 @@ namespace PTL.Geometry.MathModel
 
             return p3;
         }
-        public static Coordinate operator *(double scale, Coordinate p1)
+        public static XYZ operator *(double scale, XYZ p1)
         {
-            Coordinate po = new Coordinate();
+            XYZ po = new XYZ();
 
             po.X = scale * p1.X;
             po.Y = scale * p1.Y;
@@ -115,9 +115,9 @@ namespace PTL.Geometry.MathModel
 
             return po;
         }
-        public static Coordinate operator *(Coordinate p1, double scale)
+        public static XYZ operator *(XYZ p1, double scale)
         {
-            Coordinate po = new Coordinate();
+            XYZ po = new XYZ();
 
             po.X = scale * p1.X;
             po.Y = scale * p1.Y;
@@ -125,9 +125,9 @@ namespace PTL.Geometry.MathModel
 
             return po;
         }
-        public static Coordinate operator /(Coordinate p1, double denominator)
+        public static XYZ operator /(XYZ p1, double denominator)
         {
-            Coordinate po = new Coordinate();
+            XYZ po = new XYZ();
 
             po.X = p1.X / denominator;
             po.Y = p1.Y / denominator;
@@ -135,23 +135,23 @@ namespace PTL.Geometry.MathModel
 
             return po;
         }
-        public static implicit operator double[](Coordinate p1)
+        public static implicit operator double[](XYZ p1)
         {
             return p1.Value;
         }
-        public static implicit operator Coordinate(double[] p1)
+        public static implicit operator XYZ(double[] p1)
         {
-            return new Coordinate(p1);
+            return new XYZ(p1);
         }
         #endregion
 
-        public override object Clone()
+        public object Clone()
         {
-            PointD aPoint = new PointD();
-            aPoint.X = this.X;
-            aPoint.Y = this.Y;
-            aPoint.Z = this.Z;
-            return aPoint;
+            XYZ aCoordinate = new XYZ();
+            aCoordinate.X = this.X;
+            aCoordinate.Y = this.Y;
+            aCoordinate.Z = this.Z;
+            return aCoordinate;
         }
 
         public override string ToString()

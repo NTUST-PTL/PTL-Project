@@ -205,7 +205,7 @@ namespace PTL.Mathematics
 
             return len;
         }
-        protected static double Norm(Coordinate input)
+        protected static double Norm(XYZ input)
         {
             return Norm(input.Value);
         }
@@ -217,11 +217,37 @@ namespace PTL.Mathematics
             return len;
         }
 
+        protected static double[] MatrixDot(double[] array1, double[] array2)
+        {
+            int r1 = array1.Length;  // UBound
+
+            double[] outptr = new double[r1];
+            for (int i = 0; i < r1; i++)
+            {
+                outptr[i] = array1[i] * array2[i];
+            }
+            return outptr;
+        }
+        protected static double[] MatrixDot(double[] array1, double[,] array2)
+        {
+            int r2 = array2.GetLength(0);  // UBound
+            int c2 = array2.GetLength(1);  // UBound
+
+            double[] outptr = new double[r2];
+            for (int i = 0; i < r2; i++)
+                outptr[i] = 0.0;
+            
+            for (int i = 0; i < c2; i++)
+            {
+                for (int k = 0; k < r2; k++)
+                {
+                    outptr[i] = outptr[i] + array1[k] * array2[k, i];
+                }
+            }
+            return outptr;
+        }
         protected static double[] MatrixDot(double[,] array1, double[] array2)
         {
-            if (array1.GetLength(1) != array2.GetLength(0))
-                return null;
-
             int r1, c1, i, j, k;
             r1 = array1.GetUpperBound(0);  // UBound
             c1 = array1.GetUpperBound(1);  // UBound
@@ -245,9 +271,6 @@ namespace PTL.Mathematics
         }
         protected static double[,] MatrixDot(double[,] array1, double[,] array2)
         {
-            if (array1.GetLength(1) != array2.GetLength(0))
-                return null;
-
             int r1, c1, c2, i, j, k;
             r1 = array1.GetUpperBound(0);  // UBound
             c1 = array1.GetUpperBound(1);  // UBound
@@ -328,9 +351,9 @@ namespace PTL.Mathematics
             outptr[2] = ptr1[0] * ptr2[1] - ptr1[1] * ptr2[0];
             return outptr;
         }
-        protected static Coordinate Cross(Coordinate ptr1, Coordinate ptr2)
+        protected static XYZ Cross(XYZ ptr1, XYZ ptr2)
         {
-            Coordinate outptr = new Coordinate();
+            XYZ outptr = new XYZ();
             outptr[0] = ptr1[1] * ptr2[2] - ptr1[2] * ptr2[1];
             outptr[1] = ptr1[2] * ptr2[0] - ptr1[0] * ptr2[2];
             outptr[2] = ptr1[0] * ptr2[1] - ptr1[1] * ptr2[0];

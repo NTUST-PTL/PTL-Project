@@ -148,7 +148,6 @@ namespace PTL.Geometry
             //標註設定
             netDxf.Tables.DimensionStyle StandardDimStyle = doc.DimensionStyles["Standard"];
             StandardDimStyle.DIMDEC = (short)3;
-            StandardDimStyle.DIMATFIT = 3;
             StandardDimStyle.DIMASZ = longLength / 80;
             StandardDimStyle.DIMTXT = longLength / 120;
 

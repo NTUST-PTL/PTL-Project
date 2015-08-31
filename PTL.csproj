@@ -42,7 +42,7 @@
     </Reference>
     <Reference Include="netDxf, Version=1.0.1.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>dll\netDxf\netDxf.dll</HintPath>
+      <HintPath>dll\netDxf_1.0.3\bin\Release\netDxf.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -104,8 +104,9 @@
     <Compile Include="Geometry\02_Collection.cs" />
     <Compile Include="Geometry\CubicClassifier.cs" />
     <Compile Include="Geometry\BSplin.cs" />
-    <Compile Include="Geometry\MathModel\NURBS_Curve.cs" />
-    <Compile Include="Geometry\MathModel\Coordinate.cs" />
+    <Compile Include="Geometry\MathModel\Non_Uniform_B_Spline_Curve.cs" />
+    <Compile Include="Geometry\MathModel\XYZ.cs" />
+    <Compile Include="Geometry\MathModel\Non_Uniform_B_Spline_Surface.cs" />
     <Compile Include="Geometry\RadialAngleClassifier.cs" />
     <Compile Include="Mathematics\Math2.cs" />
     <Compile Include="Mathematics\RootFinding.cs" />

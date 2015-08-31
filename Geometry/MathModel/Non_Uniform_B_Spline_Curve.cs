@@ -11,26 +11,26 @@ namespace DoubleArrayExtension
 
 namespace PTL.Geometry.MathModel
 {
-    public class NURBS_Curve : PTL.Mathematics.Math2
+    public class Non_Uniform_B_Spline_Curve : PTL.Mathematics.Math2
     {
-        public Coordinate[] DataPoints;
-        public Coordinate[] ControlPoints;
+        public XYZ[] DataPoints;
+        public XYZ[] ControlPoints;
         public double[][,] Ni;
         public double[] delta_i;
         bool DataOutput = false;
 
-        public NURBS_Curve(Coordinate[]dataPoints)
+        public Non_Uniform_B_Spline_Curve(XYZ[]dataPoints, bool closed = false)
         {
-            Calculate_NURBS_Curve(dataPoints);
+            Calculate_NURBS_Curve(dataPoints, closed);
         }
 
-        public void Calculate_NURBS_Curve(Coordinate[] dataPoints)
+        public void Calculate_NURBS_Curve(XYZ[] dataPoints, bool closed = false)
         {
             DataPoints = dataPoints.ToArray();
             int n = DataPoints.Length;
 
             double[,] M = ZeroMatrix(n + 2, n + 2);
-            Coordinate[,] R = new Coordinate[n + 2, 1];
+            XYZ[,] R = new XYZ[n + 2, 1];
             double[,] invM;
 
             #region 計算弦長
@@ -75,19 +75,24 @@ namespace PTL.Geometry.MathModel
                 R[0, 0] = (DataPoints[1] - DataPoints[0]) / 3.0;
                 R[n + 1, 0] = (DataPoints[0] - DataPoints[1]) / 3.0;
             }
+            else if(closed)
+            {
+                throw new NotImplementedException();
+            }
             else
             {
-                Coordinate a0 = DataPoints[1] - DataPoints[0];
-                Coordinate b0 = DataPoints[2] - DataPoints[0];
-                Coordinate c0 = new Coordinate(Cross(a0.Value, b0.Value));
-                Coordinate r0 = (Norm(a0) * Norm(a0) * Cross(b0, c0) + Norm(b0) * Norm(b0) * Cross(c0, a0)) / (2 * GetLength(c0) * GetLength(c0));
+                XYZ a0 = DataPoints[1] - DataPoints[0];
+                XYZ b0 = DataPoints[2] - DataPoints[0];
+                XYZ c0 = Cross(a0, b0);
+                XYZ r0 = (Norm(a0) * Norm(a0) * Cross(b0, c0) + Norm(b0) * Norm(b0) * Cross(c0, a0)) / (2 * GetLength(c0) * GetLength(c0));
                 R[0, 0] = GetLength(a0) * Cross(r0, c0) / GetLength(Cross(r0, c0));
-                Coordinate an = DataPoints[n - 2] - DataPoints[n - 1];
-                Coordinate bn = DataPoints[n - 3] - DataPoints[n - 1];
-                Coordinate cn = Cross(an, bn);
-                Coordinate rn = (GetLength(an) * GetLength(an) * Cross(bn, cn) + GetLength(bn) * GetLength(bn) * Cross(cn, an)) / (2 * GetLength(cn) * GetLength(cn));
+                XYZ an = DataPoints[n - 2] - DataPoints[n - 1];
+                XYZ bn = DataPoints[n - 3] - DataPoints[n - 1];
+                XYZ cn = Cross(an, bn);
+                XYZ rn = (GetLength(an) * GetLength(an) * Cross(bn, cn) + GetLength(bn) * GetLength(bn) * Cross(cn, an)) / (2 * GetLength(cn) * GetLength(cn));
                 R[n + 1, 0] = -1.0 * GetLength(an) * Cross(rn, cn) / GetLength(Cross(rn, cn));
             }
+
             for (int i = 0; i < n; i++)
             {
                 int i_M = i + 1;
@@ -107,14 +112,14 @@ namespace PTL.Geometry.MathModel
             invM = MatrixInverse(M);
             if (n == 2)
             {
-                ControlPoints = new Coordinate[] { DataPoints[0], DataPoints[0], DataPoints[1], DataPoints[1] };
+                ControlPoints = new XYZ[] { DataPoints[0], DataPoints[0], DataPoints[1], DataPoints[1] };
             }
             else
             {
-                ControlPoints = new Coordinate[n + 2];
+                ControlPoints = new XYZ[n + 2];
                 for (int i = 0; i < ControlPoints.GetLength(0); i++)
                 {
-                    ControlPoints[i] = new Coordinate();
+                    ControlPoints[i] = new XYZ();
                     for (int j = 0; j < ControlPoints.GetLength(0); j++)
                     {
                         ControlPoints[i] += invM[i, j] * R[j, 0];
@@ -278,13 +283,37 @@ namespace PTL.Geometry.MathModel
             return null;
         }
 
-        public Coordinate CurveFunc(double para)
+        public static XYZ Blending(XYZ[] cp, double[,] Nci, double para)
         {
+            //tou
+            double[] tou = new Double[] { 1, para, para * para, para * para * para };
+            //bending
+            double[] blending = MatrixDot(tou, Nci);
+            //ControlPoint
+            XYZ p = new XYZ();
+            for (int i = 0; i < blending.Length; i++)
+            {
+                p += blending[i] * cp[i];
+            }
+            return p;
+        }
+
+        public XYZ CurveFunc(double para)
+        {
+            para = para >= 1 ? 0.999999999999999 : para;
+            para = para < 0 ? 0 : para;
+ 
             double globalPara = para * (DataPoints.Length - 1);
             double localPara = globalPara % 1;
             int sIndex = (int)(globalPara - localPara);
 
+            //Control Points
+            XYZ[] cP = new XYZ[] { ControlPoints[sIndex], ControlPoints[sIndex + 1], ControlPoints[sIndex + 2], ControlPoints[sIndex + 3] };
+            //Nci
+            double[,] Nci = Ni[sIndex];
 
+            XYZ p = Blending(cP, Nci, localPara);
+            return p;
         }
     }
 }

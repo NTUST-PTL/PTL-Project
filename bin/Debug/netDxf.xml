@@ -4,6 +4,73 @@
         <name>netDxf</name>
     </assembly>
     <members>
+        <member name="T:netDxf.Collections.AttributeCollection">
+            <summary>
+            Represents a collection of <see cref="T:netDxf.Entities.Attribute">Attributes</see>.
+            </summary>
+        </member>
+        <member name="M:netDxf.Collections.AttributeCollection.#ctor">
+            <summary>
+            Initializes a new instance of <c>AttributeCollection</c> with the specified collection of attributes.
+            </summary>
+        </member>
+        <member name="M:netDxf.Collections.AttributeCollection.#ctor(System.Collections.Generic.ICollection{netDxf.Entities.Attribute})">
+            <summary>
+            Initializes a new instance of <c>AttributeCollection</c> with the specified collection of attributes.
+            </summary>
+            <param name="attributes">The collection of attributes from which build the dictionary.</param>
+        </member>
+        <member name="M:netDxf.Collections.AttributeCollection.Contains(netDxf.Entities.Attribute)">
+            <summary>
+            Determines whether an attribute is in the collection.
+            </summary>
+            <param name="item">The attribute to locate in the collection.</param>
+            <returns>True if attribute is found in the collection; otherwise, false.</returns>
+        </member>
+        <member name="M:netDxf.Collections.AttributeCollection.CopyTo(netDxf.Entities.Attribute[],System.Int32)">
+            <summary>
+            Copies the entire collection to a compatible one-dimensional array, starting at the specified index of the target array.
+            </summary>
+            <param name="array"> The one-dimensional System.Array that is the destination of the elements copied from the collection. The System.Array must have zero-based indexing.</param>
+            <param name="arrayIndex">The zero-based index in array at which copying begins.</param>
+        </member>
+        <member name="M:netDxf.Collections.AttributeCollection.IndexOf(netDxf.Entities.Attribute)">
+            <summary>
+            Searches for the specified attribute and returns the zero-based index of the first occurrence within the entire collection.
+            </summary>
+            <param name="item">The attribute to locate in the collection.</param>
+            <returns>The zero-based index of the first occurrence of item within the entire collection, if found; otherwise, –1.</returns>
+        </member>
+        <member name="M:netDxf.Collections.AttributeCollection.AttributeWithTag(System.String)">
+            <summary>
+            Searches for the first occurrence attribute with the specified attribute definition tag within the entire collection
+            </summary>
+            <param name="tag"></param>
+            <returns>The first occurrence of the attribute with the specified attribute definition tag within the entire collection.</returns>
+        </member>
+        <member name="M:netDxf.Collections.AttributeCollection.GetEnumerator">
+            <summary>
+            Returns an enumerator that iterates through the collection.
+            </summary>
+            <returns>An enumerator that can be used to iterate through the collection.</returns>
+        </member>
+        <member name="P:netDxf.Collections.AttributeCollection.Count">
+            <summary>
+            Gets the number of object contained in the collection.
+            </summary>
+        </member>
+        <member name="P:netDxf.Collections.AttributeCollection.IsReadOnly">
+            <summary>
+            Gets a value indicating whether the collection is read-only.
+            </summary>
+        </member>
+        <member name="P:netDxf.Collections.AttributeCollection.Item(System.Int32)">
+            <summary>
+            Gets the attribute at the specified index.
+            </summary>
+            <param name="index"> The zero-based index of the element to get or set.</param>
+            <returns>The object at the specified index.</returns>
+        </member>
         <member name="M:netDxf.Entities.AttributeChangeEventArgs.#ctor(netDxf.Entities.Attribute)">
             <summary>
             Initializes a new instance of <c>AttributeChangeEventArgs</c>.
@@ -67,6 +134,151 @@
         <member name="M:netDxf.Entities.EndSequence.#ctor">
             <summary>
             Initializes a new instance of the <c>EndSequence</c> class.
+            </summary>
+        </member>
+        <member name="T:netDxf.Entities.Trace">
+            <summary>
+            Represents a trace <see cref="T:netDxf.Entities.EntityObject">entity</see>.
+            </summary>
+            <remarks>
+            The trace entity has exactly the same graphical representation as the Solid, and its functionality is exactly the same.
+            It is recommended to use the more common Solid entity instead.
+            </remarks>
+        </member>
+        <member name="T:netDxf.Entities.EntityObject">
+            <summary>
+            Represents a generic entity.
+            </summary>
+        </member>
+        <member name="M:netDxf.Entities.EntityObject.ToString">
+            <summary>
+            Converts the value of this instance to its equivalent string representation.
+            </summary>
+            <returns>The string representation.</returns>
+        </member>
+        <member name="M:netDxf.Entities.EntityObject.Clone">
+            <summary>
+            Creates a new entity that is a copy of the current instance.
+            </summary>
+            <returns>A new entity that is a copy of this instance.</returns>
+        </member>
+        <member name="P:netDxf.Entities.EntityObject.Reactors">
+            <summary>
+            Gets the list of dxf objects that has been attached to this entity.
+            </summary>
+        </member>
+        <member name="P:netDxf.Entities.EntityObject.Type">
+            <summary>
+            Gets the entity <see cref="T:netDxf.Entities.EntityType">type</see>.
+            </summary>
+        </member>
+        <member name="P:netDxf.Entities.EntityObject.Color">
+            <summary>
+            Gets or sets the entity <see cref="T:netDxf.AciColor">color</see>.
+            </summary>
+        </member>
+        <member name="P:netDxf.Entities.EntityObject.Layer">
+            <summary>
+            Gets or sets the entity <see cref="P:netDxf.Entities.EntityObject.Layer">layer</see>.
+            </summary>
+        </member>
+        <member name="P:netDxf.Entities.EntityObject.LineType">
+            <summary>
+            Gets or sets the entity <see cref="P:netDxf.Entities.EntityObject.LineType">line type</see>.
+            </summary>
+        </member>
+        <member name="P:netDxf.Entities.EntityObject.Lineweight">
+            <summary>
+            Gets or sets the entity line weight, one unit is always 1/100 mm (default = ByLayer).
+            </summary>
+        </member>
+        <member name="P:netDxf.Entities.EntityObject.Transparency">
+            <summary>
+            Gets or sets layer transparency (default: ByLayer).
+            </summary>
+        </member>
+        <member name="P:netDxf.Entities.EntityObject.LineTypeScale">
+            <summary>
+            Gets or sets the entity line type scale.
+            </summary>
+        </member>
+        <member name="P:netDxf.Entities.EntityObject.IsVisible">
+            <summary>
+            Gets or set the entity visibility.
+            </summary>
+        </member>
+        <member name="P:netDxf.Entities.EntityObject.Normal">
+            <summary>
+            Gets or sets the entity <see cref="T:netDxf.Vector3">normal</see>.
+            </summary>
+        </member>
+        <member name="P:netDxf.Entities.EntityObject.Owner">
+            <summary>
+            Gets the owner of the actual dxf object.
+            </summary>
+        </member>
+        <member name="P:netDxf.Entities.EntityObject.XData">
+            <summary>
+            Gets the entity <see cref="T:netDxf.Collections.XDataDictionary">extended data</see>.
+            </summary>
+        </member>
+        <member name="M:netDxf.Entities.Trace.#ctor">
+            <summary>
+            Initializes a new instance of the <c>Trace</c> class.
+            </summary>
+        </member>
+        <member name="M:netDxf.Entities.Trace.#ctor(netDxf.Vector2,netDxf.Vector2,netDxf.Vector2)">
+            <summary>
+            Initializes a new instance of the <c>Trace</c> class.
+            </summary>
+            <param name="firstVertex">Trace <see cref="T:netDxf.Vector2">first vertex</see> in OCS (object coordinate system).</param>
+            <param name="secondVertex">Trace <see cref="T:netDxf.Vector2">second vertex</see> in OCS (object coordinate system).</param>
+            <param name="thirdVertex">Trace <see cref="T:netDxf.Vector2">third vertex</see> in OCS (object coordinate system).</param>
+        </member>
+        <member name="M:netDxf.Entities.Trace.#ctor(netDxf.Vector2,netDxf.Vector2,netDxf.Vector2,netDxf.Vector2)">
+            <summary>
+            Initializes a new instance of the <c>Trace</c> class.
+            </summary>
+            <param name="firstVertex">Trace <see cref="T:netDxf.Vector2">first vertex</see> in OCS (object coordinate system).</param>
+            <param name="secondVertex">Trace <see cref="T:netDxf.Vector2">second vertex</see> in OCS (object coordinate system).</param>
+            <param name="thirdVertex">Trace <see cref="T:netDxf.Vector2">third vertex</see> in OCS (object coordinate system).</param>
+            <param name="fourthVertex">Trace <see cref="T:netDxf.Vector2">fourth vertex</see> in OCS (object coordinate system).</param>
+        </member>
+        <member name="M:netDxf.Entities.Trace.Clone">
+            <summary>
+            Creates a new Trace that is a copy of the current instance.
+            </summary>
+            <returns>A new Trace that is a copy of this instance.</returns>
+        </member>
+        <member name="P:netDxf.Entities.Trace.FirstVertex">
+            <summary>
+            Gets or sets the first trace <see cref="T:netDxf.Vector3">vertex in OCS (object coordinate system).</see>.
+            </summary>
+        </member>
+        <member name="P:netDxf.Entities.Trace.SecondVertex">
+            <summary>
+            Gets or sets the second trace <see cref="T:netDxf.Vector3">vertex in OCS (object coordinate system).</see>.
+            </summary>
+        </member>
+        <member name="P:netDxf.Entities.Trace.ThirdVertex">
+            <summary>
+            Gets or sets the third trace <see cref="T:netDxf.Vector3">vertex in OCS (object coordinate system).</see>.
+            </summary>
+        </member>
+        <member name="P:netDxf.Entities.Trace.FourthVertex">
+            <summary>
+            Gets or sets the fourth trace <see cref="T:netDxf.Vector3">vertex in OCS (object coordinate system).</see>.
+            </summary>
+        </member>
+        <member name="P:netDxf.Entities.Trace.Elevation">
+            <summary>
+            Gets or sets the trace elevation.
+            </summary>
+            <remarks>This is the distance from the origin to the plane of the trace.</remarks>
+        </member>
+        <member name="P:netDxf.Entities.Trace.Thickness">
+            <summary>
+            Gets or sets the thickness of the trace.
             </summary>
         </member>
         <member name="P:netDxf.IO.ICodeValueReader.Code">
@@ -927,77 +1139,6 @@
             </summary>
             <remarks>This property is used by the BeforeAddItem and BeforeRemoveItem events to cancel the add or remove operations.</remarks>
         </member>
-        <member name="T:netDxf.Collections.AttributeDictionary">
-            <summary>
-            Represents a collection of <see cref="T:netDxf.Entities.Attribute">Attributes</see>.
-            </summary>
-        </member>
-        <member name="M:netDxf.Collections.AttributeDictionary.#ctor">
-            <summary>
-            Initializes a new instance of <c>AttributeDictionary</c>.
-            </summary>
-        </member>
-        <member name="M:netDxf.Collections.AttributeDictionary.#ctor(System.Collections.ICollection)">
-            <summary>
-            Initializes a new instance of <c>AttributeDictionary</c> with the specified collection of attributes.
-            </summary>
-            <param name="attributes">The collection of attributes from which build the dictionary.</param>
-        </member>
-        <member name="M:netDxf.Collections.AttributeDictionary.ContainsTag(System.String)">
-            <summary>
-            Determines whether the dictionary contains an attribute with the specified tag.
-            </summary>
-            <param name="tag">The tag to locate in the dictionary.</param>
-            <returns>True if the dictionary contains an attribute with the tag; otherwise, false.</returns>
-        </member>
-        <member name="M:netDxf.Collections.AttributeDictionary.ContainsValue(netDxf.Entities.Attribute)">
-            <summary>
-            Determines whether the dictionary contains a specific attribute.
-            </summary>
-            <param name="attribute">The attribute to locate in the dictionary.</param>
-            <returns>True if the dictionary contains an attribute with the specified value; otherwise, false.</returns>
-        </member>
-        <member name="M:netDxf.Collections.AttributeDictionary.TryGetValue(System.String,netDxf.Entities.Attribute@)">
-            <summary>
-            Gets the attribute associated with the specified tag.
-            </summary>
-            <param name="tag">The key of the value to tag.</param>
-            <param name="attribute">When this method returns, contains the attribute associated with the specified tag, if the tag is found; otherwise, null. This parameter is passed uninitialized.</param>
-            <returns>True if the dictionary contains an attribute with the specified tag; otherwise, false.</returns>
-        </member>
-        <member name="M:netDxf.Collections.AttributeDictionary.GetEnumerator">
-            <summary>
-            Returns an enumerator that iterates through the dictionary.
-            </summary>
-            <returns>An enumerator that can be used to iterate through the dictionary.</returns>
-        </member>
-        <member name="P:netDxf.Collections.AttributeDictionary.Item(System.String)">
-            <summary>
-            Gets the attribute associated with the specified key.
-            </summary>
-            <param name="tag"> The tag of the attribute to get.</param>
-            <returns>The attribute associated with the specified tag.</returns>
-        </member>
-        <member name="P:netDxf.Collections.AttributeDictionary.Values">
-            <summary>
-            Gets a collection containing the attributes in the dictionary.
-            </summary>
-        </member>
-        <member name="P:netDxf.Collections.AttributeDictionary.Tags">
-            <summary>
-            Gets an ICollection containing the tags of the current dictionary.
-            </summary>
-        </member>
-        <member name="P:netDxf.Collections.AttributeDictionary.Count">
-            <summary>
-            Gets the number of tag/attribute pairs contained in the dictionary.
-            </summary>
-        </member>
-        <member name="P:netDxf.Collections.AttributeDictionary.IsReadOnly">
-            <summary>
-            Gets a value indicating whether dictionary is read-only. It always returns true.
-            </summary>
-        </member>
         <member name="T:netDxf.Collections.EntityCollection">
             <summary>
             Represent a collection of <see cref="T:netDxf.Entities.EntityObject">entities</see> that fire events when it is modified. 
@@ -1040,6 +1181,13 @@
             </summary>
             <param name="item">The <see cref="T:netDxf.Entities.EntityObject">entity</see> to remove from the collection.</param>
             <returns>True if <see cref="T:netDxf.Entities.EntityObject">entity</see> is successfully removed; otherwise, false.</returns>
+        </member>
+        <member name="M:netDxf.Collections.EntityCollection.Remove(System.Collections.Generic.ICollection{netDxf.Entities.EntityObject})">
+            <summary>
+            Removes the first occurrence of a specific object from the collection
+            </summary>
+            <param name="items">The list of objects to remove from the collection.</param>
+            <returns>True if object is successfully removed; otherwise, false.</returns>
         </member>
         <member name="M:netDxf.Collections.EntityCollection.RemoveAt(System.Int32)">
             <summary>
@@ -1186,6 +1334,13 @@
             Removes the first occurrence of a specific object from the collection
             </summary>
             <param name="item">The object to remove from the collection.</param>
+            <returns>True if object is successfully removed; otherwise, false.</returns>
+        </member>
+        <member name="M:netDxf.Collections.ObservableCollection`1.Remove(System.Collections.Generic.ICollection{`0})">
+            <summary>
+            Removes the first occurrence of a specific object from the collection
+            </summary>
+            <param name="items">The list of objects to remove from the collection.</param>
             <returns>True if object is successfully removed; otherwise, false.</returns>
         </member>
         <member name="M:netDxf.Collections.ObservableCollection`1.RemoveAt(System.Int32)">
@@ -1820,87 +1975,6 @@
             Use this entity to overcome the limitations of the PolyfaceMesh, but, keep in mind that this entity was first introduced in AutoCad 2010.<br/>
             The maximum number of faces a mesh can have is 16000000 (16 millions).
             </remarks>
-        </member>
-        <member name="T:netDxf.Entities.EntityObject">
-            <summary>
-            Represents a generic entity.
-            </summary>
-        </member>
-        <member name="M:netDxf.Entities.EntityObject.ToString">
-            <summary>
-            Converts the value of this instance to its equivalent string representation.
-            </summary>
-            <returns>The string representation.</returns>
-        </member>
-        <member name="M:netDxf.Entities.EntityObject.Clone">
-            <summary>
-            Creates a new entity that is a copy of the current instance.
-            </summary>
-            <returns>A new entity that is a copy of this instance.</returns>
-        </member>
-        <member name="P:netDxf.Entities.EntityObject.Reactor">
-            <summary>
-            Gets the object that has been attached to this entity.
-            </summary>
-            <remarks>
-            This information is subject to change in the future to become a list, an entity can be attached to multiple objects;
-            but at the moment only the viewport clipping boundary make use of this. Use this information with care.
-            </remarks>
-        </member>
-        <member name="P:netDxf.Entities.EntityObject.Type">
-            <summary>
-            Gets the entity <see cref="T:netDxf.Entities.EntityType">type</see>.
-            </summary>
-        </member>
-        <member name="P:netDxf.Entities.EntityObject.Color">
-            <summary>
-            Gets or sets the entity <see cref="T:netDxf.AciColor">color</see>.
-            </summary>
-        </member>
-        <member name="P:netDxf.Entities.EntityObject.Layer">
-            <summary>
-            Gets or sets the entity <see cref="P:netDxf.Entities.EntityObject.Layer">layer</see>.
-            </summary>
-        </member>
-        <member name="P:netDxf.Entities.EntityObject.LineType">
-            <summary>
-            Gets or sets the entity <see cref="P:netDxf.Entities.EntityObject.LineType">line type</see>.
-            </summary>
-        </member>
-        <member name="P:netDxf.Entities.EntityObject.Lineweight">
-            <summary>
-            Gets or sets the entity line weight, one unit is always 1/100 mm (default = ByLayer).
-            </summary>
-        </member>
-        <member name="P:netDxf.Entities.EntityObject.Transparency">
-            <summary>
-            Gets or sets layer transparency (default: ByLayer).
-            </summary>
-        </member>
-        <member name="P:netDxf.Entities.EntityObject.LineTypeScale">
-            <summary>
-            Gets or sets the entity line type scale.
-            </summary>
-        </member>
-        <member name="P:netDxf.Entities.EntityObject.IsVisible">
-            <summary>
-            Gets or set the entity visibility.
-            </summary>
-        </member>
-        <member name="P:netDxf.Entities.EntityObject.Normal">
-            <summary>
-            Gets or sets the entity <see cref="T:netDxf.Vector3">normal</see>.
-            </summary>
-        </member>
-        <member name="P:netDxf.Entities.EntityObject.Owner">
-            <summary>
-            Gets the owner of the actual dxf object.
-            </summary>
-        </member>
-        <member name="P:netDxf.Entities.EntityObject.XData">
-            <summary>
-            Gets the entity <see cref="T:netDxf.Collections.XDataDictionary">extended data</see>.
-            </summary>
         </member>
         <member name="M:netDxf.Entities.Mesh.#ctor(System.Collections.Generic.List{netDxf.Vector3},System.Collections.Generic.List{System.Int32[]},System.Collections.Generic.List{netDxf.Entities.MeshEdge})">
             <summary>
@@ -2739,6 +2813,11 @@
         <member name="F:netDxf.Entities.EntityType.Solid">
             <summary>
             Solid entity.
+            </summary>
+        </member>
+        <member name="F:netDxf.Entities.EntityType.Trace">
+            <summary>
+            Trace entity.
             </summary>
         </member>
         <member name="F:netDxf.Entities.EntityType.Spline">
@@ -4404,7 +4483,7 @@
         </member>
         <member name="P:netDxf.Entities.HatchPattern.LineDefinitions">
             <summary>
-            Gets or sets the definition of the lines that make up the pattern (not applicable in Solid fills).
+            Gets the definition of the lines that make up the pattern (not applicable in Solid fills).
             </summary>
         </member>
         <member name="M:netDxf.Entities.HatchGradientPattern.#ctor(System.String)">
@@ -4462,7 +4541,7 @@
         </member>
         <member name="P:netDxf.Entities.HatchGradientPattern.Centered">
             <summary>
-            Gets or sets the gradient definition; corresponds to the centered option on the gradient.
+            Gets or sets if the pattern is centered or not.
             </summary>
             <remarks>
             Each gradient has two definitions, shifted and unsifted. A shift value describes the blend of the two definitions that should be used.
@@ -5474,7 +5553,20 @@
             Represents a hatch <see cref="T:netDxf.Entities.EntityObject">entity</see>.
             </summary>
         </member>
-        <member name="M:netDxf.Entities.Hatch.#ctor(netDxf.Entities.HatchPattern,System.Collections.Generic.List{netDxf.Entities.HatchBoundaryPath})">
+        <member name="M:netDxf.Entities.Hatch.#ctor(netDxf.Entities.HatchPattern,System.Boolean)">
+            <summary>
+            Initializes a new instance of the <c>Hatch</c> class.
+            </summary>
+            <remarks>
+            This constructor is initialized with an empty list of boundary paths, remember a hatch without boundaries will be discarded when saving the file.<br/>
+            The hatch boundary paths must be on the same plane as the hatch.
+            The normal and the elevation of the boundary paths will be omitted (the hatch elevation and normal will be used instead).
+            Only the x and y coordinates for the center of the line, ellipse, circle and arc will be used.
+            </remarks>
+            <param name="pattern"><see cref="T:netDxf.Entities.HatchPattern">Hatch pattern</see>.</param>
+            <param name="associative">Defines if the hatch is associative or not.</param>
+        </member>
+        <member name="M:netDxf.Entities.Hatch.#ctor(netDxf.Entities.HatchPattern,System.Collections.Generic.ICollection{netDxf.Entities.HatchBoundaryPath},System.Boolean)">
             <summary>
             Initializes a new instance of the <c>Hatch</c> class.
             </summary>
@@ -5485,17 +5577,25 @@
             </remarks>
             <param name="pattern"><see cref="T:netDxf.Entities.HatchPattern">Hatch pattern</see>.</param>
             <param name="paths">A list of <see cref="T:netDxf.Entities.HatchBoundaryPath">boundary paths</see>.</param>
+            <param name="associative">Defines if the hatch is associative or not.</param>
         </member>
-        <member name="M:netDxf.Entities.Hatch.CreateWCSBoundary">
+        <member name="M:netDxf.Entities.Hatch.UnLinkBoundary">
             <summary>
-            Creates a list of entities that represents the boundary of the hatch in world coordinates.
+            Unlinks the boundary from the hatch, turning the associative property to false.
             </summary>
-            <returns>A list of entities that makes the boundary of the hatch in world coordinates.</returns>
+            <returns>The list of unlinked entities from the boundary of the hatch.</returns>
+            <remarks>The entities that make the hatch boundaries will not be deleted if they already belong to a document.</remarks>
+        </member>
+        <member name="M:netDxf.Entities.Hatch.CreateBoundary(System.Boolean)">
+            <summary>
+            Creates a list of entities that represents the boundary of the hatch and optionally associates to it.
+            </summary>
+            <param name="linkBoundary">Indicates if the new boundary will be associated with the hatch, turning the associative property to true.</param>
+            <returns>A list of entities that makes the boundary of the hatch.</returns>
             <remarks>
-            The generated list can be used to directly draw the hatch boundary given the normal and elevation of the hatch.
+            If the actual hatch is already associative, the old boundary entities will be unlinked, but not deleted from the hatch document.
+            The new boundary entities will be added to the same layout and document as the hatch, in case it belongs to one.<br/>
             All entities are in world coordinates except the LwPolyline boundary path since by definition its vertexes are expressed in object coordinates.
-            This list differs in that the hatch entities list are in local coordinates of the hatch
-            while with this method the entities are transformed by the normal and elevation of it.
             </remarks>
         </member>
         <member name="M:netDxf.Entities.Hatch.Clone">
@@ -5503,6 +5603,7 @@
             Creates a new Hatch that is a copy of the current instance.
             </summary>
             <returns>A new Hatch that is a copy of this instance.</returns>
+            <remarks>If the hatch is associative the referenced boundary entities will not be automatically cloned. Use CreateBoundary if required.</remarks>
         </member>
         <member name="P:netDxf.Entities.Hatch.Pattern">
             <summary>
@@ -5511,11 +5612,16 @@
         </member>
         <member name="P:netDxf.Entities.Hatch.BoundaryPaths">
             <summary>
-            Gets or sets the hatch boundary paths.
+            Gets the hatch boundary paths.
             </summary>
             <remarks>
             The hatch must contain at least on valid boundary path to be able to add it to the DxfDocument, otherwise it will be rejected.
             </remarks>
+        </member>
+        <member name="P:netDxf.Entities.Hatch.Associative">
+            <summary>
+            Gets if the hatch is associative or not, which means if the hatch object is associated with the hatch boundary entities.
+            </summary>
         </member>
         <member name="P:netDxf.Entities.Hatch.Elevation">
             <summary>
@@ -5541,6 +5647,21 @@
             </summary>
             <param name="edges">List of entities that makes a loop for the hatch boundary paths.</param>
         </member>
+        <member name="M:netDxf.Entities.HatchBoundaryPath.UpdateEdges">
+            <summary>
+            Updates the internal HatchBoundaryPath data. 
+            </summary>
+            <remarks>
+            It is necessary to manually call this method when changes to the boundary entities are made. This is only applicable to associative hatches,
+            non-associative hatches has no associated boundary entities.
+            </remarks>
+        </member>
+        <member name="M:netDxf.Entities.HatchBoundaryPath.Clone">
+            <summary>
+            Creates a new HatchBoundaryPath that is a copy of the current instance.
+            </summary>
+            <returns>A new HatchBoundaryPath that is a copy of this instance.</returns>
+        </member>
         <member name="P:netDxf.Entities.HatchBoundaryPath.Edges">
             <summary>
             Gets the list of entities that makes a loop for the hatch boundary paths.
@@ -5550,6 +5671,12 @@
             <summary>
             Gets the boundary path type flag.
             </summary>
+        </member>
+        <member name="P:netDxf.Entities.HatchBoundaryPath.Entities">
+            <summary>
+            Gets the list of entities that makes the boundary.
+            </summary>
+            <remarks>If the boundary path belongs to a non-associative hatch this list will contain zero entities.</remarks>
         </member>
         <member name="T:netDxf.Entities.HatchPatternLineDefinition">
             <summary>
@@ -5582,7 +5709,7 @@
         </member>
         <member name="P:netDxf.Entities.HatchPatternLineDefinition.DashPattern">
             <summary>
-            Gets or sets the dash patter of the line it is equivalent as the segments of a <see cref="T:netDxf.Tables.LineType">LineType</see>.
+            Gets he dash pattern of the line it is equivalent as the segments of a <see cref="T:netDxf.Tables.LineType">LineType</see>.
             </summary>
             <remarks>
             Positive values means solid segments and negative values means spaces (one entry per element).
@@ -5654,6 +5781,7 @@
             <summary>
             Gets or sets the light weight polyline elevation.
             </summary>
+            <remarks>This is the distance from the origin to the plane of the light weight polyline.</remarks>
         </member>
         <member name="P:netDxf.Entities.LwPolyline.LineTypeGeneration">
             <summary>
@@ -8972,6 +9100,11 @@
             Solid.
             </summary>
         </member>
+        <member name="F:netDxf.DxfObjectCode.Trace">
+            <summary>
+            Trace.
+            </summary>
+        </member>
         <member name="F:netDxf.DxfObjectCode.Text">
             <summary>
             Text string.
@@ -9189,35 +9322,18 @@
             <summary>
             Initializes a new instance of the <c>Solid</c> class.
             </summary>
-            <param name="firstVertex">Solid <see cref="T:netDxf.Vector2">first vertex</see>.</param>
-            <param name="secondVertex">Solid <see cref="T:netDxf.Vector2">second vertex</see>.</param>
-            <param name="thirdVertex">Solid <see cref="T:netDxf.Vector2">third vertex</see>.</param>
+            <param name="firstVertex">Solid <see cref="T:netDxf.Vector2">first vertex</see> in OCS (object coordinate system).</param>
+            <param name="secondVertex">Solid <see cref="T:netDxf.Vector2">second vertex</see> in OCS (object coordinate system).</param>
+            <param name="thirdVertex">Solid <see cref="T:netDxf.Vector2">third vertex</see> in OCS (object coordinate system).</param>
         </member>
         <member name="M:netDxf.Entities.Solid.#ctor(netDxf.Vector2,netDxf.Vector2,netDxf.Vector2,netDxf.Vector2)">
             <summary>
             Initializes a new instance of the <c>Solid</c> class.
             </summary>
-            <param name="firstVertex">Solid <see cref="T:netDxf.Vector2">first vertex</see>.</param>
-            <param name="secondVertex">Solid <see cref="T:netDxf.Vector2">second vertex</see>.</param>
-            <param name="thirdVertex">Solid <see cref="T:netDxf.Vector2">third vertex</see>.</param>
-            <param name="fourthVertex">Solid <see cref="T:netDxf.Vector2">fourth vertex</see>.</param>
-        </member>
-        <member name="M:netDxf.Entities.Solid.#ctor(netDxf.Vector3,netDxf.Vector3,netDxf.Vector3)">
-            <summary>
-            Initializes a new instance of the <c>Solid</c> class.
-            </summary>
-            <param name="firstVertex">Solid <see cref="T:netDxf.Vector3">first vertex</see>.</param>
-            <param name="secondVertex">Solid <see cref="T:netDxf.Vector3">second vertex</see>.</param>
-            <param name="thirdVertex">Solid <see cref="T:netDxf.Vector3">third vertex</see>.</param>
-        </member>
-        <member name="M:netDxf.Entities.Solid.#ctor(netDxf.Vector3,netDxf.Vector3,netDxf.Vector3,netDxf.Vector3)">
-            <summary>
-            Initializes a new instance of the <c>Solid</c> class.
-            </summary>
-            <param name="firstVertex">Solid <see cref="T:netDxf.Vector3">first vertex</see>.</param>
-            <param name="secondVertex">Solid <see cref="T:netDxf.Vector3">second vertex</see>.</param>
-            <param name="thirdVertex">Solid <see cref="T:netDxf.Vector3">third vertex</see>.</param>
-            <param name="fourthVertex">Solid <see cref="T:netDxf.Vector3">fourth vertex</see>.</param>
+            <param name="firstVertex">Solid <see cref="T:netDxf.Vector2">first vertex</see> in OCS (object coordinate system).</param>
+            <param name="secondVertex">Solid <see cref="T:netDxf.Vector2">second vertex</see> in OCS (object coordinate system).</param>
+            <param name="thirdVertex">Solid <see cref="T:netDxf.Vector2">third vertex</see> in OCS (object coordinate system).</param>
+            <param name="fourthVertex">Solid <see cref="T:netDxf.Vector2">fourth vertex</see> in OCS (object coordinate system).</param>
         </member>
         <member name="M:netDxf.Entities.Solid.Clone">
             <summary>
@@ -9227,23 +9343,29 @@
         </member>
         <member name="P:netDxf.Entities.Solid.FirstVertex">
             <summary>
-            Gets or sets the first solid <see cref="T:netDxf.Vector3">vertex</see>.
+            Gets or sets the first solid <see cref="T:netDxf.Vector2">vertex in OCS (object coordinate system).</see>.
             </summary>
         </member>
         <member name="P:netDxf.Entities.Solid.SecondVertex">
             <summary>
-            Gets or sets the second solid <see cref="T:netDxf.Vector3">vertex</see>.
+            Gets or sets the second solid <see cref="T:netDxf.Vector2">vertex in OCS (object coordinate system).</see>.
             </summary>
         </member>
         <member name="P:netDxf.Entities.Solid.ThirdVertex">
             <summary>
-            Gets or sets the third solid <see cref="T:netDxf.Vector3">vertex</see>.
+            Gets or sets the third solid <see cref="T:netDxf.Vector2">vertex in OCS (object coordinate system).</see>.
             </summary>
         </member>
         <member name="P:netDxf.Entities.Solid.FourthVertex">
             <summary>
-            Gets or sets the fourth solid <see cref="T:netDxf.Vector3">vertex</see>.
+            Gets or sets the fourth solid <see cref="T:netDxf.Vector2">vertex in OCS (object coordinate system).</see>.
             </summary>
+        </member>
+        <member name="P:netDxf.Entities.Solid.Elevation">
+            <summary>
+            Gets or sets the solid elevation.
+            </summary>
+            <remarks>This is the distance from the origin to the plane of the solid.</remarks>
         </member>
         <member name="P:netDxf.Entities.Solid.Thickness">
             <summary>
@@ -9676,15 +9798,6 @@
             DIMSCALE does not affect measured lengths, coordinates, or angles.<br/>
             DIMSCALE values of zero are not supported, any imported drawing with a zero value will set the scale to the default 1.0.<br/>
             Default: 1.0
-            </remarks>
-        </member>
-        <member name="P:netDxf.Tables.DimensionStyle.DIMATFIT">
-            <summary>
-            Controls dimension text and arrow placement when space is not sufficient to place both within the extension lines
-            </summary>
-            <remarks>
-            Default: 0<br/>
-            Not implemented in the dimension drawing.
             </remarks>
         </member>
         <member name="P:netDxf.Tables.DimensionStyle.DIMTIH">
@@ -10243,6 +10356,11 @@
         <member name="P:netDxf.DxfDocument.Solids">
             <summary>
             Gets the <see cref="T:netDxf.Entities.Solid">solids</see> list.
+            </summary>
+        </member>
+        <member name="P:netDxf.DxfDocument.Traces">
+            <summary>
+            Gets the <see cref="T:netDxf.Entities.Trace">traces</see> list.
             </summary>
         </member>
         <member name="P:netDxf.DxfDocument.Inserts">
@@ -11018,6 +11136,7 @@
             Updates the actual insert with the attribute properties currently defined in the block. This does not affect any values assigned to attributes in each block.
             </summary>
             <remarks>This method will automatically call the TransformAttributes method, to keep all attributes position and orientation up to date.</remarks>
+            <remarks></remarks>
         </member>
         <member name="M:netDxf.Entities.Insert.GetTransformation(netDxf.Units.DrawingUnits)">
             <summary>
@@ -11956,7 +12075,7 @@
             Low level dxf writer.
             </summary>
         </member>
-        <member name="M:netDxf.IO.DxfWriter.Open(System.IO.Stream,System.Text.Encoding,System.Boolean)">
+        <member name="M:netDxf.IO.DxfWriter.Open(System.IO.Stream,System.Text.Encoding)">
             <summary>
             Open the dxf writer.
             </summary>
@@ -11990,7 +12109,7 @@
             Closes the active table.
             </summary>
         </member>
-        <member name="M:netDxf.IO.DxfWriter.RegisterApplication(netDxf.Tables.ApplicationRegistry)">
+        <member name="M:netDxf.IO.DxfWriter.WriteApplicationRegistry(netDxf.Tables.ApplicationRegistry)">
             <summary>
             Writes a new extended data application registry to the table section.
             </summary>
@@ -12055,7 +12174,7 @@
         </member>
         <member name="F:netDxf.XDataCode.ControlString">
             <summary>
-            An extended data control string can be either ?or ?
+            An extended data control string can be either “{” or “}”.
             These braces enable applications to organize their data by subdividing the data into lists.
             The left brace begins a list, and the right brace terminates the most recent list. Lists can be nested
             </summary>
