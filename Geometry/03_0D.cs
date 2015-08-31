@@ -8,46 +8,55 @@ using System.Drawing;
 using PTL.Definitions;
 using PTL.OpenGL.Plot;
 using CsGL.OpenGL;
+using PTL.Geometry.MathModel;
 
 namespace PTL.Geometry
 {
     public class Vector : Entity, IHaveXYZ
     {
-        public double X { get; set; }
-        public double Y { get; set; }
-        public double Z { get; set; }
+        public double[] Value = new double[3] { 0, 0, 0 };
+        public double X
+        {
+            get
+            {
+                return this.Value[0];
+            }
+            set
+            {
+                this.Value[0] = value;
+            }
+        }
+        public double Y
+        {
+            get
+            {
+                return this.Value[1];
+            }
+            set
+            {
+                this.Value[1] = value;
+            }
+        }
+        public double Z
+        {
+            get
+            {
+                return this.Value[2];
+            }
+            set
+            {
+                this.Value[2] = value;
+            }
+        }
         public double this[int index]
         {
             get
             {
-                switch (index)
-                {
-                    case 0 :
-                        return X;
-                    case 1 :
-                        return Y;
-                    case 2 :
-                        return Z;
-                    default:
-                        return 0;
-                }
+                return this.Value[index];
             }
             set
             {
-                switch (index)
-                {
-                    case 0:
-                        this.X = value;
-                        break;
-                    case 1:
-                        this.Y = value;
-                        break;
-                    case 2:
-                        this.Z = value;
-                        break;
-                    default:
-                        break;;
-                }
+                this.Value[index] = value;
             }
         }
 

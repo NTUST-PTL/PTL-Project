@@ -284,7 +284,7 @@ namespace PTL.Geometry.MathModel
             return null;
         }
 
-        public static XYZ Blending(XYZ[] cp, double[,] Nci, double para)
+        public static XYZ Blending(double para, double[,] Nci, XYZ[] cp)
         {
             //tou
             double[] tou = new Double[] { 1, para, para * para, para * para * para };
@@ -299,11 +299,23 @@ namespace PTL.Geometry.MathModel
             return p;
         }
 
-        public XYZ CurveFunc(double para)
+        public static XYZ TangentBlending(double para, double[,] Nci, XYZ[] cp)
         {
-            //para = para >= 1 ? 0.999999999999999 : para;
-            //para = para < 0 ? 0 : para;
+            //tou
+            double[] tou = new Double[] { 0, 1, para, para * para };
+            //bending
+            double[] blending = MatrixDot(tou, Nci);
+            //ControlPoint
+            XYZ p = new XYZ();
+            for (int i = 0; i < blending.Length; i++)
+            {
+                p += blending[i] * cp[i];
+            }
+            return p;
+        }
 
+        public Tuple<int, double> Param_Mapping(double para)
+        {
             double globalU = para * (DataPoints.Length - 1);
             double localU = globalU % 1;
             int sIndexU = (int)(globalU > 0 ? System.Math.Floor(globalU) : System.Math.Ceiling(globalU));
@@ -319,12 +331,36 @@ namespace PTL.Geometry.MathModel
                 sIndexU = 0;
             }
 
+            return new Tuple<int, double>(sIndexU, localU);
+        }
+
+        public XYZ CurveFunc(double para)
+        {
+            Tuple<int, double> mappedParas = Param_Mapping(para);
+            int sIndexU = mappedParas.Item1;
+            double localU = mappedParas.Item2;
+
             //Control Points
             XYZ[] cP = new XYZ[] { ControlPoints[sIndexU], ControlPoints[sIndexU + 1], ControlPoints[sIndexU + 2], ControlPoints[sIndexU + 3] };
             //Nci
             double[,] Nci = Ni[sIndexU];
 
-            XYZ p = Blending(cP, Nci, localU);
+            XYZ p = Blending(localU, Nci, cP);
+            return p;
+        }
+
+        public XYZ TangentFunc(double para)
+        {
+            Tuple<int, double> mappedParas = Param_Mapping(para);
+            int sIndexU = mappedParas.Item1;
+            double localU = mappedParas.Item2;
+
+            //Control Points
+            XYZ[] cP = new XYZ[] { ControlPoints[sIndexU], ControlPoints[sIndexU + 1], ControlPoints[sIndexU + 2], ControlPoints[sIndexU + 3] };
+            //Nci
+            double[,] Nci = Ni[sIndexU];
+
+            XYZ p = TangentBlending(localU, Nci, cP);
             return p;
         }
     }

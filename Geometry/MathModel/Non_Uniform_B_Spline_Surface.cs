@@ -7,7 +7,7 @@ using PTL.Geometry.MathModel;
 
 namespace PTL.Geometry.MathModel
 {
-    public class Non_Uniform_B_Spline_Surface
+    public class Non_Uniform_B_Spline_Surface : PTL.Mathematics.Math2
     {
         public XYZ[][] DataPoints;
         public Non_Uniform_B_Spline_Curve[] uCurve;
@@ -41,10 +41,11 @@ namespace PTL.Geometry.MathModel
             }
         }
 
-        public XYZ SurfaceFunc(double u, double v)
+        public Tuple<int, double, int, double> Param_Mapping(double u, double v)
         {
-            //u = u >= 1 ? 0.999999999999999 : u;
-            //u = u < 0 ? 0 : u;
+            #region u, v mapping
+
+
             double globalU = u * (DataPoints[0].Length - 1);
             double localU = globalU % 1;
             int sIndexU = (int)(globalU > 0 ? System.Math.Floor(globalU) : System.Math.Ceiling(globalU));
@@ -59,8 +60,8 @@ namespace PTL.Geometry.MathModel
                 localU += sIndexU;
                 sIndexU = 0;
             }
-            //v = v >= 1 ? 0.999999999999999 : v;
-            //v = v < 0 ? 0 : v;
+
+
             double globalV = v * (DataPoints.Length - 1);
             double localV = globalV % 1;
             int sIndexV = (int)(globalV > 0 ? System.Math.Floor(globalV) : System.Math.Ceiling(globalV));
@@ -77,6 +78,19 @@ namespace PTL.Geometry.MathModel
             }
 
 
+            #endregion u, v mapping
+
+            return new Tuple<int,double,int,double>(sIndexU, localU, sIndexV, localV);
+        }
+
+        public XYZ SurfaceFunc(double u, double v)
+        {
+            Tuple<int,double,int,double> mappedPara = Param_Mapping(u, v);
+            int sIndexU = mappedPara.Item1;
+            double localU = mappedPara.Item2;
+            int sIndexV = mappedPara.Item3;
+            double localV = mappedPara.Item4;
+
             XYZ[] uControlPoint = new XYZ[4];
             for (int i = 0; i < 4; i++)
             {
@@ -85,9 +99,57 @@ namespace PTL.Geometry.MathModel
 
             double[,] Nc = uCurve[sIndexV].Ni[sIndexU];
 
-            XYZ p = Non_Uniform_B_Spline_Curve.Blending(uControlPoint, Nc, localU);
+            XYZ p = Non_Uniform_B_Spline_Curve.Blending(localU, Nc, uControlPoint);
 
             return p;
+        }
+
+        public XYZ U_TangentFunc(double u, double v)
+        {
+            Tuple<int, double, int, double> mappedPara = Param_Mapping(u, v);
+            int sIndexU = mappedPara.Item1;
+            double localU = mappedPara.Item2;
+            int sIndexV = mappedPara.Item3;
+            double localV = mappedPara.Item4;
+
+            XYZ[] uControlPoint = new XYZ[4];
+            for (int i = 0; i < 4; i++)
+            {
+                uControlPoint[i] = vCurve[sIndexU + i].CurveFunc(v);
+            }
+
+            double[,] Nc = uCurve[sIndexV].Ni[sIndexU];
+
+            XYZ p = Non_Uniform_B_Spline_Curve.TangentBlending(localU, Nc, uControlPoint);
+
+            return p;
+        }
+
+        public XYZ V_TangentFunc(double u, double v)
+        {
+            Tuple<int, double, int, double> mappedPara = Param_Mapping(u, v);
+            int sIndexU = mappedPara.Item1;
+            double localU = mappedPara.Item2;
+            int sIndexV = mappedPara.Item3;
+            double localV = mappedPara.Item4;
+
+            XYZ[] uControlPoint = new XYZ[4];
+            for (int i = 0; i < 4; i++)
+            {
+                uControlPoint[i] = vCurve[sIndexU + i].TangentFunc(v);
+            }
+
+            double[,] Nc = uCurve[sIndexV].Ni[sIndexU];
+
+            XYZ p = Non_Uniform_B_Spline_Curve.Blending(localU, Nc, uControlPoint);
+
+            return p;
+        }
+
+        public XYZ NormalFunc(double u, double v)
+        {
+            XYZ normal = Cross(U_TangentFunc(u, v), V_TangentFunc(u, v));
+            return normal / Norm(normal);
         }
     }
 }
