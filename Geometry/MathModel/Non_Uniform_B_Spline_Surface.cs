@@ -12,6 +12,8 @@ namespace PTL.Geometry.MathModel
         public XYZ[][] DataPoints;
         public Non_Uniform_B_Spline_Curve[] uCurve;
         public Non_Uniform_B_Spline_Curve[] vCurve;
+        public int LastSegmentIndexU;
+        public int LastSegmentIndexV;
 
         public Non_Uniform_B_Spline_Surface(XYZ[][] dataPoints)
         {
@@ -21,6 +23,8 @@ namespace PTL.Geometry.MathModel
         public void Calulate(XYZ[][] dataPoints)
         {
             this.DataPoints = dataPoints;
+            this.LastSegmentIndexU = dataPoints[0].Length - 2;
+            this.LastSegmentIndexV = dataPoints.Length - 2;
 
             //計算uCurve
             uCurve = new Non_Uniform_B_Spline_Curve[dataPoints.Length];
@@ -39,17 +43,39 @@ namespace PTL.Geometry.MathModel
 
         public XYZ SurfaceFunc(double u, double v)
         {
-            u = u >= 1 ? 0.999999999999999 : u;
-            u = u < 0 ? 0 : u;
+            //u = u >= 1 ? 0.999999999999999 : u;
+            //u = u < 0 ? 0 : u;
             double globalU = u * (DataPoints[0].Length - 1);
             double localU = globalU % 1;
-            int sIndexU = (int)(globalU - localU);
-
-            v = v >= 1 ? 0.999999999999999 : v;
-            v = v < 0 ? 0 : v;
+            int sIndexU = (int)(globalU > 0 ? System.Math.Floor(globalU) : System.Math.Ceiling(globalU));
+            if (sIndexU > LastSegmentIndexU)
+            {
+                int deltaIndex = sIndexU - LastSegmentIndexU;
+                localU += deltaIndex;
+                sIndexU = LastSegmentIndexU;
+            }
+            else if (sIndexU < 0)
+            {
+                localU += sIndexU;
+                sIndexU = 0;
+            }
+            //v = v >= 1 ? 0.999999999999999 : v;
+            //v = v < 0 ? 0 : v;
             double globalV = v * (DataPoints.Length - 1);
             double localV = globalV % 1;
-            int sIndexV = (int)(globalV - localV);
+            int sIndexV = (int)(globalV > 0 ? System.Math.Floor(globalV) : System.Math.Ceiling(globalV));
+            if (sIndexV > LastSegmentIndexV)
+            {
+                int deltaIndex = sIndexV - LastSegmentIndexV;
+                localV += deltaIndex;
+                sIndexV = LastSegmentIndexV;
+            }
+            else if (sIndexV < 0)
+            {
+                localV += sIndexV;
+                sIndexV = 0;
+            }
+
 
             XYZ[] uControlPoint = new XYZ[4];
             for (int i = 0; i < 4; i++)

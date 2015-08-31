@@ -17,6 +17,7 @@ namespace PTL.Geometry.MathModel
         public XYZ[] ControlPoints;
         public double[][,] Ni;
         public double[] delta_i;
+        public int LastSegmentIndex;
         bool DataOutput = false;
 
         public Non_Uniform_B_Spline_Curve(XYZ[]dataPoints, bool closed = false)
@@ -28,7 +29,7 @@ namespace PTL.Geometry.MathModel
         {
             DataPoints = dataPoints.ToArray();
             int n = DataPoints.Length;
-
+            this.LastSegmentIndex = n - 2;
             double[,] M = ZeroMatrix(n + 2, n + 2);
             XYZ[,] R = new XYZ[n + 2, 1];
             double[,] invM;
@@ -300,19 +301,30 @@ namespace PTL.Geometry.MathModel
 
         public XYZ CurveFunc(double para)
         {
-            para = para >= 1 ? 0.999999999999999 : para;
-            para = para < 0 ? 0 : para;
- 
-            double globalPara = para * (DataPoints.Length - 1);
-            double localPara = globalPara % 1;
-            int sIndex = (int)(globalPara - localPara);
+            //para = para >= 1 ? 0.999999999999999 : para;
+            //para = para < 0 ? 0 : para;
+
+            double globalU = para * (DataPoints.Length - 1);
+            double localU = globalU % 1;
+            int sIndexU = (int)(globalU > 0 ? System.Math.Floor(globalU) : System.Math.Ceiling(globalU));
+            if (sIndexU > LastSegmentIndex)
+            {
+                int deltaIndex = sIndexU - LastSegmentIndex;
+                localU += deltaIndex;
+                sIndexU = LastSegmentIndex;
+            }
+            else if (sIndexU < 0)
+            {
+                localU += sIndexU;
+                sIndexU = 0;
+            }
 
             //Control Points
-            XYZ[] cP = new XYZ[] { ControlPoints[sIndex], ControlPoints[sIndex + 1], ControlPoints[sIndex + 2], ControlPoints[sIndex + 3] };
+            XYZ[] cP = new XYZ[] { ControlPoints[sIndexU], ControlPoints[sIndexU + 1], ControlPoints[sIndexU + 2], ControlPoints[sIndexU + 3] };
             //Nci
-            double[,] Nci = Ni[sIndex];
+            double[,] Nci = Ni[sIndexU];
 
-            XYZ p = Blending(cP, Nci, localPara);
+            XYZ p = Blending(cP, Nci, localU);
             return p;
         }
     }
