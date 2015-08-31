@@ -4,16 +4,16 @@
 winexe
 C#
 .cs
-C:\Data\GitHub\PTL Project\obj\Debug\
+C:\Data\GitHub\PTL-Project\obj\Debug\
 PTL
 none
 false
 DEBUG;TRACE
-C:\Data\GitHub\PTL Project\App.xaml
+C:\Data\GitHub\PTL-Project\App.xaml
 11-1104313993
 
 591925578072
-24-1264402887
+24654941185
 Windows\Controls\BComboBox.xaml;Windows\Controls\BTextBox.xaml;Windows\Controls\LTextBox.xaml;Windows\Controls\LTextBox_double_Arrow.xaml;Windows\Controls\BTextBox_Arrow.xaml;Windows\Controls\LStackPanel.xaml;Windows\Controls\LTextBlock_double.xaml;Windows\Controls\LTextBox_double.xaml;Windows\Controls\LTextBox_Int.xaml;Windows\Controls\LTextBox_Uint1DArray.xaml;Windows\DebugWindow_Plot.xaml;
 
 False
