@@ -38,6 +38,13 @@ namespace PTL.Windows
             this.WindowsFormsHost.Child = this.OpenGLWindow;
         }
 
+        //public static async Task<DebugWindow_Plot> InvokeCreatWindows()
+        //{
+        //    Action run => () => {
+
+        //    }
+        //}
+
         #region 外觀介面控制
         private const int WM_SYSCOMMAND = 0x112;
         private HwndSource hwndSource;

@@ -13,23 +13,29 @@ namespace PTL.Tools.DebugTools
     {
         public PTL.Windows.DebugWindow_Plot Window;
 
-        public Plot()
+        public Plot(Action<PTL.Windows.DebugWindow_Plot> WindowSetter = null)
         {
             Window = new Windows.DebugWindow_Plot();
+            if (WindowSetter != null)
+                WindowSetter(Window);
             Window.Show();
         }
 
-        public Plot(Action<PTL.Windows.DebugWindow_Plot> WindowSetter)
+        public static Func<Plot> InvokeCreat(Action<PTL.Windows.DebugWindow_Plot> WindowSetter = null)
         {
-            Action CreatDebugForm = () =>
+            Plot newPlot = null;
+            bool finished = false;
+            Action creat = () =>
             {
-                #region
-                Window = new Windows.DebugWindow_Plot();
-                WindowSetter(Window);
-                Window.Show();
-                #endregion
+                newPlot = new Plot(WindowSetter);
+                finished = true;
             };
-            Application.Current.Dispatcher.BeginInvoke(CreatDebugForm);
+            Application.Current.Dispatcher.BeginInvoke(creat);
+
+            return () => {
+                while (!finished) { }
+                return newPlot;
+            };
         }
 
         public void Plot2D(Func<double, double> Function, double start, double end, int slices, Action<PolyLine> PolyLineSetter = null)
@@ -53,6 +59,41 @@ namespace PTL.Tools.DebugTools
                     polyline.AddPoint(new PointD(x, Function(x), 0));
                     x += dx;
                 }
+                if (PolyLineSetter != null)
+                    PolyLineSetter(polyline);
+                else
+                    polyline.Color = System.Drawing.Color.LawnGreen;
+            }
+            #endregion
+
+            Action BeginPlot = () =>
+            {
+                #region
+                if (Window != null)
+                    Window.View.AddSomeThing2Show(polyline);
+                #endregion
+            };
+
+            //因為牽扯到視窗元素，所以需委托應用程式的STA執行緒來執行
+            Application.Current.Dispatcher.BeginInvoke(BeginPlot);
+        }
+
+        public void Plot2D(Func<double, PointD> Function, double start, double end, int slices, Action<PolyLine> PolyLineSetter = null)
+        {
+            #region 主要計算
+            PolyLine polyline = new PolyLine();
+
+            if (start > end)
+            {
+                double newEnd = start;
+                start = end;
+                end = newEnd;
+            }
+            double dx = (end - start) / slices;
+            if (Function != null)
+            {
+                for (double x = start; x <= end; x += dx)
+                    polyline.AddPoint(Function(x));
                 if (PolyLineSetter != null)
                     PolyLineSetter(polyline);
                 else
@@ -148,61 +189,12 @@ namespace PTL.Tools.DebugTools
             Application.Current.Dispatcher.BeginInvoke(BeginPlot);
         }
 
-        public void PlotLine(PolyLine polyline)
-        {
-            Action BeginPlot = () =>
-            {
-                #region
-                if (Window != null)
-                    Window.View.AddSomeThing2Show(polyline);
-                #endregion
-            };
-
-            //因為牽扯到視窗元素，所以需委托應用程式的STA執行緒來執行
-            Application.Current.Dispatcher.BeginInvoke(BeginPlot);
-        }
-
-        public void Plot2D(Func<double, PointD> Function, double start, double end, int slices, Action<PolyLine> PolyLineSetter = null)
-        {
-            #region 主要計算
-            PolyLine polyline = new PolyLine();
-
-            if (start > end)
-            {
-                double newEnd = start;
-                start = end;
-                end = newEnd;
-            }
-            double dx = (end - start) / slices;
-            if (Function != null)
-            {
-                for (double x = start; x <= end; x += dx)
-                    polyline.AddPoint(Function(x));
-                if (PolyLineSetter != null)
-                    PolyLineSetter(polyline);
-                else
-                    polyline.Color = System.Drawing.Color.LawnGreen;
-            }
-            #endregion
-
-            Action BeginPlot = () =>
-            {
-                #region
-                if (Window != null)
-                    Window.View.AddSomeThing2Show(polyline);
-                #endregion
-            };
-
-            //因為牽扯到視窗元素，所以需委托應用程式的STA執行緒來執行
-            Application.Current.Dispatcher.BeginInvoke(BeginPlot);
-        }
-
         public void ParameterPlot(Func<double, double, PointD> Function, double xstart, double xend, uint xslices, double ystart, double yend, uint yslices, Action<TopoFace> TopoFaceSetter = null)
         {
             TopoFace topoFace = null;
             #region 主要計算
             if (Function != null && xslices > 0 && yslices > 0)
-	        {
+            {
                 uint NRow = xslices + 1;
                 uint NCol = yslices + 1;
                 topoFace = new TopoFace() { Points = new PointD[NRow, NCol] };
@@ -233,15 +225,15 @@ namespace PTL.Tools.DebugTools
                         topoFace.Points[i, j] = Function(x, y);
                         j++;
                     }
-                    i++; 
+                    i++;
                 }
                 topoFace.SovleNormalVector();
                 if (TopoFaceSetter != null)
                     TopoFaceSetter(topoFace);
                 else
                     topoFace.Color = System.Drawing.Color.LawnGreen;
-	        }
-            
+            }
+
             #endregion
 
             Action BeginPlot = () =>
@@ -293,7 +285,7 @@ namespace PTL.Tools.DebugTools
                         topoFace.Points[i, j] = new PointD(Function(x, y));
                         y += dy;
                     }
-                     x += dx;
+                    x += dx;
                 }
                 topoFace.SovleNormalVector();
                 if (TopoFaceSetter != null)
@@ -315,6 +307,21 @@ namespace PTL.Tools.DebugTools
             //因為牽扯到視窗元素，所以需委托應用程式的STA執行緒來執行
             Application.Current.Dispatcher.BeginInvoke(BeginPlot);
         }
+
+        public void AddSomethings(params ICanPlotInOpenGL[] polyline)
+        {
+            Action BeginPlot = () =>
+            {
+                #region
+                if (Window != null)
+                    Window.View.AddSomeThing2Show(polyline);
+                #endregion
+            };
+
+            //因為牽扯到視窗元素，所以需委托應用程式的STA執行緒來執行
+            Application.Current.Dispatcher.BeginInvoke(BeginPlot);
+        }
+
 
         public void Clear()
         {
@@ -364,15 +371,7 @@ namespace PTL.Tools.DebugTools
 
         public System.Timers.Timer timer = new System.Timers.Timer();
 
-        public MonitoringPlot()
-        {
-            Window = new Windows.DebugWindow_Plot();
-            Window.View.AutoScale = true;
-            Window.Show();
-            InitializeTimer();
-        }
-
-        public MonitoringPlot(Action<PTL.Windows.DebugWindow_Plot> WindowSetter)
+        public MonitoringPlot(Action<PTL.Windows.DebugWindow_Plot> WindowSetter = null)
         {
             #region
             Window = new Windows.DebugWindow_Plot();
@@ -381,6 +380,24 @@ namespace PTL.Tools.DebugTools
             Window.Show();
             InitializeTimer();
             #endregion
+        }
+
+        public static Func<MonitoringPlot> InvokeCreat(Action<PTL.Windows.DebugWindow_Plot> WindowSetter = null)
+        {
+            MonitoringPlot newPlot = null;
+            bool finished = false;
+            Action creat = () =>
+            {
+                newPlot = new MonitoringPlot(WindowSetter);
+                finished = true;
+            };
+            Application.Current.Dispatcher.BeginInvoke(creat);
+
+            return () =>
+            {
+                while (!finished) { }
+                return newPlot;
+            };
         }
 
         public void InitializeTimer()
@@ -464,6 +481,20 @@ namespace PTL.Tools.DebugTools
                 PointD lastValue = targetMonitor.Points.Last();
                 targetMonitor.Points.Add(new PointD(lastValue.X + 1, value, 0));
             }
+        }
+
+        public void AddSomethings(params ICanPlotInOpenGL[] polyline)
+        {
+            Action BeginPlot = () =>
+            {
+                #region
+                if (Window != null)
+                    Window.View.AddSomeThing2Show(polyline);
+                #endregion
+            };
+
+            //因為牽扯到視窗元素，所以需委托應用程式的STA執行緒來執行
+            Application.Current.Dispatcher.BeginInvoke(BeginPlot);
         }
 
         public void Clear()

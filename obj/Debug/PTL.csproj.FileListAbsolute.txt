@@ -195,7 +195,6 @@ C:\Data\GitHub\PTL-Project\bin\Debug\PTL.exe
 C:\Data\GitHub\PTL-Project\bin\Debug\PTL.pdb
 C:\Data\GitHub\PTL-Project\bin\Debug\csgl.dll
 C:\Data\GitHub\PTL-Project\bin\Debug\MathNet.Numerics.dll
-C:\Data\GitHub\PTL-Project\bin\Debug\netDxf.dll
 C:\Data\GitHub\PTL-Project\bin\Debug\Newtonsoft.Json.dll
 C:\Data\GitHub\PTL-Project\bin\Debug\Tao.OpenGl.dll
 C:\Data\GitHub\PTL-Project\bin\Debug\Tao.Platform.Windows.dll

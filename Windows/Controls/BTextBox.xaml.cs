@@ -25,13 +25,13 @@ namespace PTL.Windows.Controls
         {
             InitializeComponent();
             InitializeTextBoxEvent();
-            this.GotFocus += (object sender, System.Windows.RoutedEventArgs e) => this._TextBox.SelectAll();
+            this.GotFocus += (object sender, System.Windows.RoutedEventArgs e) => this.TextBox.SelectAll();
             this.BindedValueChanged = _BindedValueChanged;
         }
 
         private void InitializeTextBoxEvent()
         {
-            this._TextBox.TextChanged += (object sender, TextChangedEventArgs e) => this.V = this._TextBox.Text;
+            this.TextBox.TextChanged += (object sender, TextChangedEventArgs e) => this.V = this.TextBox.Text;
             //if (this.TextChanged != null)
             //    this._TextBox.TextChanged += this.TextChanged;
         }
@@ -47,7 +47,7 @@ namespace PTL.Windows.Controls
                 if (this.value != value.ToString())
                 {
                     this.value = value.ToString();
-                    this._TextBox.Text = this.value;
+                    this.TextBox.Text = this.value;
                     if (ValueChanged != null)
                     {
                         bool somthingWrong = false;
@@ -56,16 +56,16 @@ namespace PTL.Windows.Controls
                                 somthingWrong = true;
                         if (somthingWrong)
                         {
-                            if (this._TextBox.Background != this.WarningColor)
+                            if (this.TextBox.Background != this.WarningColor)
                             {
-                                this.ORGBackGroung = this._TextBox.Background;
-                                this._TextBox.Background = this.WarningColor;
+                                this.ORGBackGroung = this.TextBox.Background;
+                                this.TextBox.Background = this.WarningColor;
                             }
                         }
                         else
                         {
-                            if (this._TextBox.Background == this.WarningColor)
-                                this._TextBox.Background = this.ORGBackGroung;
+                            if (this.TextBox.Background == this.WarningColor)
+                                this.TextBox.Background = this.ORGBackGroung;
                         }
                     }
                 }

@@ -5,5 +5,5 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
-    <TextBox x:Name="_TextBox" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"></TextBox>
+    <TextBox x:Name="TextBox" x:FieldModifier="public" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"></TextBox>
 </UserControl>
