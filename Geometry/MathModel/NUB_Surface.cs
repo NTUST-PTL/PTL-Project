@@ -7,15 +7,15 @@ using PTL.Geometry.MathModel;
 
 namespace PTL.Geometry.MathModel
 {
-    public class Non_Uniform_B_Spline_Surface : PTL.Mathematics.Math2
+    public class NUB_Surface : PTL.Mathematics.Math2
     {
         public XYZ[][] DataPoints;
-        public Non_Uniform_B_Spline_Curve[] uCurve;
-        public Non_Uniform_B_Spline_Curve[] vCurve;
+        public NUB_Curve[] uCurve;
+        public NUB_Curve[] vCurve;
         public int LastSegmentIndexU;
         public int LastSegmentIndexV;
 
-        public Non_Uniform_B_Spline_Surface(XYZ[][] dataPoints)
+        public NUB_Surface(XYZ[][] dataPoints)
         {
             Calulate(dataPoints);
         }
@@ -27,17 +27,17 @@ namespace PTL.Geometry.MathModel
             this.LastSegmentIndexV = dataPoints.Length - 2;
 
             //計算uCurve
-            uCurve = new Non_Uniform_B_Spline_Curve[dataPoints.Length];
+            uCurve = new NUB_Curve[dataPoints.Length];
             for (int i = 0; i < dataPoints.Length; i++)
-               uCurve[i] = new Non_Uniform_B_Spline_Curve(dataPoints[i]);
+               uCurve[i] = new NUB_Curve(dataPoints[i]);
 
             //計算vCurve
-            vCurve = new Non_Uniform_B_Spline_Curve[uCurve[0].ControlPoints.Length];
+            vCurve = new NUB_Curve[uCurve[0].ControlPoints.Length];
             for (int i = 0; i < uCurve[0].ControlPoints.Length; i++)
             {
                 XYZ[] vDatapoints = (from curve in uCurve
                                     select curve.ControlPoints[i]).ToArray();
-                vCurve[i] = new Non_Uniform_B_Spline_Curve(vDatapoints);
+                vCurve[i] = new NUB_Curve(vDatapoints);
             }
         }
 
@@ -99,7 +99,7 @@ namespace PTL.Geometry.MathModel
 
             double[,] Nc = uCurve[sIndexV].Ni[sIndexU];
 
-            XYZ p = Non_Uniform_B_Spline_Curve.Blending(localU, Nc, uControlPoint);
+            XYZ p = NUB_Curve.Blending(localU, Nc, uControlPoint);
 
             return p;
         }
@@ -120,7 +120,7 @@ namespace PTL.Geometry.MathModel
 
             double[,] Nc = uCurve[sIndexV].Ni[sIndexU];
 
-            XYZ p = Non_Uniform_B_Spline_Curve.TangentBlending(localU, Nc, uControlPoint);
+            XYZ p = NUB_Curve.TangentBlending(localU, Nc, uControlPoint);
 
             return p;
         }
@@ -141,7 +141,7 @@ namespace PTL.Geometry.MathModel
 
             double[,] Nc = uCurve[sIndexV].Ni[sIndexU];
 
-            XYZ p = Non_Uniform_B_Spline_Curve.Blending(localU, Nc, uControlPoint);
+            XYZ p = NUB_Curve.Blending(localU, Nc, uControlPoint);
 
             return p;
         }

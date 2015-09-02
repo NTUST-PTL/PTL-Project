@@ -11,7 +11,7 @@ namespace DoubleArrayExtension
 
 namespace PTL.Geometry.MathModel
 {
-    public class Non_Uniform_B_Spline_Curve : PTL.Mathematics.Math2
+    public class NUB_Curve : PTL.Mathematics.Math2
     {
         public XYZ[] DataPoints;
         public XYZ[] ControlPoints;
@@ -20,7 +20,7 @@ namespace PTL.Geometry.MathModel
         public int LastSegmentIndex;
         bool DataOutput = false;
 
-        public Non_Uniform_B_Spline_Curve(XYZ[]dataPoints, bool closed = false)
+        public NUB_Curve(XYZ[]dataPoints, bool closed = false)
         {
             Calculate_NURBS_Curve(dataPoints, closed);
         }

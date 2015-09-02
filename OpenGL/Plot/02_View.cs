@@ -3,6 +3,8 @@ using System.Drawing;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
 using CsGL.OpenGL;
 using Tao.Platform.Windows;
 using PTL;
@@ -148,6 +150,54 @@ namespace PTL.OpenGL.Plot
                 OpenGLWindow.Refresh();
             }
         }
+
+        /// <summary>
+        /// 增加顯示的物件
+        /// 需繼承ICanPlotInOpenGL介面
+        /// 若同時亦繼承IHaveBoundary則可自動計算顯示範圍
+        /// </summary>
+        /// <param name="someThing2Show">欲顯示的物件</param>
+        public async Task InvokeAddSomeThing2Show(params ICanPlotInOpenGL[] someThings2Show)
+        {
+            await Application.Current.Dispatcher.BeginInvoke(new Action(() =>
+            {
+                AddSomeThing2Show(someThings2Show);
+            }));
+        }
+        /// <summary>
+        /// 移除顯示的物件
+        /// 需繼承ICanPlotInOpenGL介面
+        /// 若同時亦繼承IHaveBoundary則可自動計算顯示範圍
+        /// </summary>
+        /// <param name="someThing2Show">不想顯示的物件</param>
+        public async Task InvokeRemoveSomeThing2Show(params ICanPlotInOpenGL[] someThingsDontWant2Show)
+        {
+            await Application.Current.Dispatcher.BeginInvoke(new Action(() =>
+            {
+                RemoveSomeThing2Show(someThingsDontWant2Show);
+            }));
+        }
+        /// <summary>
+        /// 清除舊有物件並增加新的顯示物件
+        /// 需繼承ICanPlotInOpenGL介面
+        /// 若同時亦繼承IHaveBoundary則可自動計算顯示範圍
+        /// </summary>
+        /// <param name="someThing2Show">欲顯示的物件</param>
+        public async Task InvokeReplaceThing2Show(params ICanPlotInOpenGL[] someThings2Show)
+        {
+            await Application.Current.Dispatcher.BeginInvoke(new Action(() =>
+            {
+                ReplaceThing2Show(someThings2Show);
+            }));
+        }
+        /// <summary>
+        /// 清除顯示的物件
+        /// </summary>
+        public async Task InvokeClearThings2Show()
+        {
+            await Application.Current.Dispatcher.BeginInvoke(new Action(ClearThings2Show));
+        }
+
         private void CheckBoundary()
         {
             this.geometryBoundary = new PointD[2];
@@ -378,8 +428,8 @@ namespace PTL.OpenGL.Plot
             //背景
             GL.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);// Clear Screen And Depth Buffer
             GL.glClearColor(Convert.ToSingle(this.BackGroundColor.R / 255.0),//R G B alpha
-                            Convert.ToSingle(this.BackGroundColor.G / 255.0), 
-                            Convert.ToSingle(this.BackGroundColor.B / 255.0), 
+                            Convert.ToSingle(this.BackGroundColor.G / 255.0),
+                            Convert.ToSingle(this.BackGroundColor.B / 255.0),
                             Convert.ToSingle(this.BackGroundColor.A / 255.0));
             GL.glFlush();
             //打光與材質

@@ -13,19 +13,19 @@ namespace PTL.OpenGL.Plot
         #region OpenGL 基本程式
         public static void PlotBackground(float colorR, float colorG, float colorB)
         {
-            GL.glClearColor(Convert.ToSingle(colorR / 255.0), Convert.ToSingle(colorG / 255.0), Convert.ToSingle(colorB / 255.0), 1.0f);//R G B alpha
+            GL.glClearColor(System.Convert.ToSingle(colorR / 255.0), System.Convert.ToSingle(colorG / 255.0), System.Convert.ToSingle(colorB / 255.0), 1.0f);//R G B alpha
             GL.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);// Clear Screen And Depth Buffer
             GL.glLoadIdentity();
         }
         public static void PlotBackground(double colorR, double colorG, double colorB)
         {
-            GL.glClearColor(Convert.ToSingle(colorR / 255.0), Convert.ToSingle(colorG / 255.0), Convert.ToSingle(colorB / 255.0), 1.0f);//R G B alpha
+            GL.glClearColor(System.Convert.ToSingle(colorR / 255.0), System.Convert.ToSingle(colorG / 255.0), System.Convert.ToSingle(colorB / 255.0), 1.0f);//R G B alpha
             GL.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);// Clear Screen And Depth Buffer
             GL.glLoadIdentity();
         }
         public static void PlotBackground(System.Drawing.Color color)
         {
-            GL.glClearColor(Convert.ToSingle(color.R / 255.0), Convert.ToSingle(color.G / 255.0), Convert.ToSingle(color.B / 255.0), Convert.ToSingle(color.A / 255.0));//R G B alpha
+            GL.glClearColor(System.Convert.ToSingle(color.R / 255.0), System.Convert.ToSingle(color.G / 255.0), System.Convert.ToSingle(color.B / 255.0), System.Convert.ToSingle(color.A / 255.0));//R G B alpha
             GL.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);// Clear Screen And Depth Buffer
             GL.glLoadIdentity();
             GL.glFlush();
