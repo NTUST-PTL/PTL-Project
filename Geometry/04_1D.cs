@@ -177,6 +177,12 @@ namespace PTL.Geometry
             for (int i = 0; i < nump; i++)
                 Points.Add(tpoints[i].Clone() as PointD);
         }
+        public PolyLine(MathModel.XYZ[] tpoints)
+        {
+            int nump = tpoints.Length;
+            for (int i = 0; i < nump; i++)
+                Points.Add(new PointD(tpoints[i]));
+        }
         public PolyLine(PointD[] tpoints, Color tcolor, LineType ttype, float twidth)
         {
             this.Color = tcolor;
