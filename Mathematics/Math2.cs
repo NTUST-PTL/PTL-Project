@@ -248,7 +248,7 @@ namespace PTL.Mathematics
         }
         protected static double[] MatrixDot(double[,] array1, double[] array2)
         {
-            int r1, c1, i, j, k;
+            int r1, c1, i, k;
             r1 = array1.GetUpperBound(0);  // UBound
             c1 = array1.GetUpperBound(1);  // UBound
 

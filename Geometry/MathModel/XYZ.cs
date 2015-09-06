@@ -9,7 +9,7 @@ namespace PTL.Geometry.MathModel
 {
     public class XYZ : PTL.Mathematics.Math2, ICloneable
     {
-        public new double[] Value = new double[3] { 0, 0, 0 };
+        public double[] Value = new double[3] { 0, 0, 0 };
         public double X
         {
             get
