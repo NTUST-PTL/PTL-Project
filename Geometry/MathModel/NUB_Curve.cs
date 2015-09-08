@@ -18,7 +18,6 @@ namespace PTL.Geometry.MathModel
         public double[][,] Ni;
         public double[] delta_i;
         public int LastSegmentIndex;
-        bool DataOutput = false;
 
         public NUB_Curve(XYZ[]dataPoints, bool closed = false)
         {
@@ -42,7 +41,7 @@ namespace PTL.Geometry.MathModel
             delta_i[n+1+1] = 0;
             for (int i = 0; i < n - 1; i++)
             {
-                delta_i[i + 2] = Norm((DataPoints[i + 1] - DataPoints[i]).Value);
+                delta_i[i + 2] = Norm((DataPoints[i + 1] - DataPoints[i]).Values);
             }
             #endregion
 

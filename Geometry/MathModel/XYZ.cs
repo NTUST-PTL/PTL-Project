@@ -9,49 +9,53 @@ namespace PTL.Geometry.MathModel
 {
     public class XYZ : PTL.Mathematics.Math2, ICloneable
     {
-        public double[] Value = new double[3] { 0, 0, 0 };
+        public double[] Values = new double[3] { 0, 0, 0 };
+
+        [Newtonsoft.Json.JsonIgnore]
         public double X
         {
             get
             {
-                return this.Value[0];
+                return this.Values[0];
             }
             set
             {
-                this.Value[0] = value;
+                this.Values[0] = value;
             }
         }
+        [Newtonsoft.Json.JsonIgnore]
         public double Y
         {
             get
             {
-                return this.Value[1];
+                return this.Values[1];
             }
             set
             {
-                this.Value[1] = value;
+                this.Values[1] = value;
             }
         }
+        [Newtonsoft.Json.JsonIgnore]
         public double Z
         {
             get
             {
-                return this.Value[2];
+                return this.Values[2];
             }
             set
             {
-                this.Value[2] = value;
+                this.Values[2] = value;
             }
         }
         public double this[int index]
         {
             get
             {
-                return this.Value[index];
+                return this.Values[index];
             }
             set
             {
-                this.Value[index] = value;
+                this.Values[index] = value;
             }
         }
 
@@ -137,7 +141,7 @@ namespace PTL.Geometry.MathModel
         }
         public static implicit operator double[](XYZ p1)
         {
-            return p1.Value;
+            return p1.Values;
         }
         public static implicit operator XYZ(double[] p1)
         {
@@ -166,17 +170,17 @@ namespace PTL.Geometry.MathModel
 
         public void Transform3(double[,] TransformMatrix)
         {
-            this.Value = TransCoordinate3(TransformMatrix, this.Value);
+            this.Values = TransCoordinate3(TransformMatrix, this.Values);
         }
 
         public void Transform4(double[,] TransformMatrix)
         {
-            this.Value = TransCoordinate4(TransformMatrix, this.Value);
+            this.Values = TransCoordinate4(TransformMatrix, this.Values);
         }
 
         public double[] ToArray()
         {
-            return this.Value;
+            return this.Values;
         }
     }
 }

@@ -207,7 +207,7 @@ namespace PTL.Mathematics
         }
         protected static double Norm(XYZ input)
         {
-            return Norm(input.Value);
+            return Norm(input.Values);
         }
         protected static double Norm<T>(T p1) where T : Vector, new()
         {
