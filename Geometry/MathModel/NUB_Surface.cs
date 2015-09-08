@@ -10,8 +10,8 @@ namespace PTL.Geometry.MathModel
     public class NUB_Surface : PTL.Mathematics.Math2
     {
         public XYZ[][] DataPoints;
-        public NUB_Curve[] uCurve;
-        public NUB_Curve[] vCurve;
+        public NUB_Curve[] uCurves;
+        public NUB_Curve[] vCurves;
         public int LastSegmentIndexU;
         public int LastSegmentIndexV;
 
@@ -27,17 +27,17 @@ namespace PTL.Geometry.MathModel
             this.LastSegmentIndexV = dataPoints.Length - 2;
 
             //計算uCurve
-            uCurve = new NUB_Curve[dataPoints.Length];
+            uCurves = new NUB_Curve[dataPoints.Length];
             for (int i = 0; i < dataPoints.Length; i++)
-               uCurve[i] = new NUB_Curve(dataPoints[i]);
+               uCurves[i] = new NUB_Curve(dataPoints[i]);
 
             //計算vCurve
-            vCurve = new NUB_Curve[uCurve[0].ControlPoints.Length];
-            for (int i = 0; i < uCurve[0].ControlPoints.Length; i++)
+            vCurves = new NUB_Curve[uCurves[0].ControlPoints.Length];
+            for (int i = 0; i < uCurves[0].ControlPoints.Length; i++)
             {
-                XYZ[] vDatapoints = (from curve in uCurve
+                XYZ[] vDatapoints = (from curve in uCurves
                                     select curve.ControlPoints[i]).ToArray();
-                vCurve[i] = new NUB_Curve(vDatapoints);
+                vCurves[i] = new NUB_Curve(vDatapoints);
             }
         }
 
@@ -91,15 +91,15 @@ namespace PTL.Geometry.MathModel
             int sIndexV = mappedPara.Item3;
             double localV = mappedPara.Item4;
 
-            XYZ[] uControlPoint = new XYZ[4];
+            XYZ[] uControlPoints = new XYZ[4];
             for (int i = 0; i < 4; i++)
             {
-                uControlPoint[i] = vCurve[sIndexU + i].CurveFunc(v);
+                uControlPoints[i] = vCurves[sIndexU + i].CurveFunc(v);
             }
 
-            double[,] Nc = uCurve[sIndexV].Ni[sIndexU];
+            double[,] Nc = uCurves[sIndexV].Ni[sIndexU];
 
-            XYZ p = NUB_Curve.Blending(localU, Nc, uControlPoint);
+            XYZ p = NUB_Curve.Blending(localU, Nc, uControlPoints);
 
             return p;
         }
@@ -115,10 +115,10 @@ namespace PTL.Geometry.MathModel
             XYZ[] uControlPoint = new XYZ[4];
             for (int i = 0; i < 4; i++)
             {
-                uControlPoint[i] = vCurve[sIndexU + i].CurveFunc(v);
+                uControlPoint[i] = vCurves[sIndexU + i].CurveFunc(v);
             }
 
-            double[,] Nc = uCurve[sIndexV].Ni[sIndexU];
+            double[,] Nc = uCurves[sIndexV].Ni[sIndexU];
 
             XYZ p = NUB_Curve.TangentBlending(localU, Nc, uControlPoint);
 
@@ -136,10 +136,10 @@ namespace PTL.Geometry.MathModel
             XYZ[] uControlPoint = new XYZ[4];
             for (int i = 0; i < 4; i++)
             {
-                uControlPoint[i] = vCurve[sIndexU + i].TangentFunc(v);
+                uControlPoint[i] = vCurves[sIndexU + i].TangentFunc(v);
             }
 
-            double[,] Nc = uCurve[sIndexV].Ni[sIndexU];
+            double[,] Nc = uCurves[sIndexV].Ni[sIndexU];
 
             XYZ p = NUB_Curve.Blending(localU, Nc, uControlPoint);
 
