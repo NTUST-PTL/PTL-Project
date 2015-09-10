@@ -6,31 +6,6 @@ using System.Threading.Tasks;
 
 namespace PTL.Definitions
 {
-    /// <summary>
-    /// X Y Z 軸的枚舉
-    /// </summary>
-    public enum Axis
-    {
-        X,
-        Y,
-        Z
-    }
-
-    public enum Dimension
-    {
-        OneDimention,
-        TwoDimension,
-        ThreeDimension
-    }
-
-    public enum LineType : ushort
-    {
-        Solid = 0xFFFF,//實線
-        Dashed = 0xF0F0,//虛線 1111000011110000
-        DotDashed = 0xE4E4,//中心線 1110010011100100
-        Null = 0x0000
-    }
-
     public class DXFLineTypeConverter
     {
         public static netDxf.Tables.LineType Convert(LineType aLineType)

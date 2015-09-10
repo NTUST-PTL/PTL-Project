@@ -276,3 +276,4 @@ C:\Data\SourceTree\PTL-Project\obj\Debug\PTL.Properties.Resources.resources
 C:\Data\SourceTree\PTL-Project\obj\Debug\PTL.csproj.GenerateResource.Cache
 C:\Data\SourceTree\PTL-Project\obj\Debug\PTL.exe
 C:\Data\SourceTree\PTL-Project\obj\Debug\PTL.pdb
+C:\Data\GitHub\PTL-Project\bin\Debug\MathNet.Numerics.pdb

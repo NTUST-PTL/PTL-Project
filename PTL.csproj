@@ -37,9 +37,6 @@
     <Reference Include="csgl">
       <HintPath>dll\OpenGL\csgl.dll</HintPath>
     </Reference>
-    <Reference Include="MathNet.Numerics">
-      <HintPath>dll\MathNet\MathNet.Numerics.dll</HintPath>
-    </Reference>
     <Reference Include="netDxf, Version=1.0.1.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>dll\netDxf_1.0.3\bin\Release\netDxf.dll</HintPath>
@@ -91,8 +88,11 @@
     <Compile Include="Base\Bind.cs" />
     <Compile Include="Base\DataType\DataType.cs" />
     <Compile Include="Base\DelayEvent.cs" />
-    <Compile Include="Definitions\Definitions.cs" />
+    <Compile Include="Definitions\Axis.cs" />
+    <Compile Include="Definitions\DXFLineTypeConverter.cs" />
     <Compile Include="Base\Unit\Unit.cs" />
+    <Compile Include="Definitions\Dimension.cs" />
+    <Compile Include="Definitions\LineType.cs" />
     <Compile Include="Geometry\02_ICollection.cs" />
     <Compile Include="Geometry\06_IDXF.cs" />
     <Compile Include="Geometry\01_IGeometry.cs" />
@@ -115,15 +115,15 @@
     <Compile Include="OpenGL\Plot\03_PlotSub.cs" />
     <Compile Include="Math.cs" />
     <Compile Include="SolidWorks\SolidWorksAppAdapter.cs" />
-    <Compile Include="Tools\DebugTools\MonitoringPlot.cs" />
-    <Compile Include="Tools\DebugTools\Plot.cs" />
-    <Compile Include="Tools\FileOperation\00_StringFormat.cs" />
-    <Compile Include="Tools\FileOperation\01_XML.cs" />
-    <Compile Include="Tools\FileOperation\02_JSON.cs" />
-    <Compile Include="Tools\FileOperation\03_STLReader.cs" />
-    <Compile Include="Tools\FileOperation\10_DXFExporter.cs" />
-    <Compile Include="Tools\BinaryReaderExtentionMethods\BinaryReader_TryReadExtention.cs" />
-    <Compile Include="Tools\Measurement\STLMeasuringTool.cs" />
+    <Compile Include="DebugTools\MonitoringPlot.cs" />
+    <Compile Include="DebugTools\Plot.cs" />
+    <Compile Include="FileOperation\00_StringFormat.cs" />
+    <Compile Include="FileOperation\01_XML.cs" />
+    <Compile Include="FileOperation\02_JSON.cs" />
+    <Compile Include="FileOperation\03_STLReader.cs" />
+    <Compile Include="FileOperation\10_DXFExporter.cs" />
+    <Compile Include="FileOperation\BinaryReaderExtentionMethods\BinaryReader_TryReadExtention.cs" />
+    <Compile Include="Measurement\STLMeasuringTool.cs" />
     <Compile Include="Tools\Security.cs" />
     <Compile Include="Tools\SystemInfo.cs" />
     <Compile Include="Windows\Controls\01_OpenGLWindow.cs">
@@ -243,6 +243,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Mathnet-Numerics\src\Numerics\Numerics.csproj">
+      <Project>{b7cae5f4-a23f-4438-b5be-41226618b695}</Project>
+      <Name>Numerics</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

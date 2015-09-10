@@ -7,7 +7,7 @@ using System.Drawing;
 using System.Windows;
 using PTL.Geometry;
 
-namespace PTL.Tools.DebugTools
+namespace PTL.DebugTools
 {
     public class Plot
     {
@@ -105,6 +105,18 @@ namespace PTL.Tools.DebugTools
             Window.View.RemoveSomeThing2Show(things);
         }
 
+        public void Log(String message = null)
+        {
+            this.Window.LogTextBox.AppendText(message);
+            this.Window.LogTextBox.AppendText("\r\n");
+        }
+
+        public void Log(String message = null, params object[] options)
+        {
+            this.Window.LogTextBox.AppendText(String.Format(message, options));
+            this.Window.LogTextBox.AppendText("\r\n");
+        }
+
         public void Clear()
         {
             Window.View.ClearThings2Show();
@@ -121,11 +133,13 @@ namespace PTL.Tools.DebugTools
             Application.Current.Dispatcher.BeginInvoke(BeginPlot);
         }
 
+        
+
         #region Invoke
         public async static Task<Plot> InvokeCreat(Action<PTL.Windows.DebugWindow_Plot> WindowSetter = null)
         {
             Plot newPlot = null;
-            await Application.Current.Dispatcher.BeginInvoke(new Action(() => newPlot = new PTL.Tools.DebugTools.Plot()));
+            await Application.Current.Dispatcher.BeginInvoke(new Action(() => newPlot = new PTL.DebugTools.Plot()));
             return newPlot;
         }
         public async Task InvokePlot2D(Func<double, double> Function, double start, double end, int slices, Action<PolyLine> PolyLineSetter = null)
@@ -183,6 +197,22 @@ namespace PTL.Tools.DebugTools
                 new Action(() =>
                 {
                     ReplaceAll(things);
+                }));
+        }
+        public async Task InvokeLog(String message = null)
+        {
+            await Application.Current.Dispatcher.BeginInvoke(
+                new Action(() =>
+                {
+                    Log(message);
+                }));
+        }
+        public async Task InvokeLog(String message = null, params object[] options)
+        {
+            await Application.Current.Dispatcher.BeginInvoke(
+                new Action(() =>
+                {
+                    Log(message, options);
                 }));
         }
         public async Task InvokeClear()

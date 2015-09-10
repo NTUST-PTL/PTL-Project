@@ -148,7 +148,6 @@ namespace PTL.Geometry
                 if (this.axisStart != value)
                 {
                     this.axisStart = value;
-                    RenderGeometry();
                 }
             }
         }
@@ -160,7 +159,6 @@ namespace PTL.Geometry
                 if (this.axisEnd != value)
                 {
                     this.axisEnd = value;
-                    RenderGeometry();
                 }
             }
         }
@@ -172,7 +170,6 @@ namespace PTL.Geometry
                 if (this.radius != value)
                 {
                     this.radius = value;
-                    RenderGeometry();
                 }
             }
         }
@@ -183,7 +180,6 @@ namespace PTL.Geometry
                 if (this.sliceNumber != value)
                 {
                     this.sliceNumber = value;
-                    RenderGeometry();
                 }
             }
         }
@@ -249,7 +245,7 @@ namespace PTL.Geometry
 
         public override void PlotInOpenGL()
         {
-            if (this.Visible == true)
+            if (this.Visible == true && this.face != null)
             {
                 if (this.CoordinateSystem != null)
                 {

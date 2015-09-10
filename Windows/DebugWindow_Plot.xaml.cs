@@ -154,5 +154,28 @@ namespace PTL.Windows
         }
 
         #endregion
+
+        private void Button_Clear_Click(object sender, RoutedEventArgs e)
+        {
+            this.LogTextBox.Text = null;
+        }
+
+        private void LogTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (this.AutoScrollCheckBox.IsChecked == true)
+            {
+                TextBox tb = sender as TextBox;
+                tb.ScrollToEnd();
+            }
+        }
+
+        private void WrapCheckBox_Checked(object sender, RoutedEventArgs e)
+        {
+            CheckBox chb = sender as CheckBox;
+            if (chb.IsChecked == true)
+                this.LogTextBox.TextWrapping = TextWrapping.Wrap;
+            else if (chb.IsChecked == false)
+                this.LogTextBox.TextWrapping = TextWrapping.NoWrap;
+        }
     }
 }

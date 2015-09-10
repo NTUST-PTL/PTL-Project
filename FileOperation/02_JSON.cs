@@ -5,7 +5,7 @@ using System.Text;
 using System.IO;
 using Newtonsoft.Json;
 
-namespace PTL.Tools.FileOperation
+namespace PTL.FileOperation
 {
     /// <summary>
     /// 具備將物件序列化並以Json格式存成文字檔的靜態方法。

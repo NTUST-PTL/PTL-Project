@@ -6,7 +6,7 @@ using System.Xml.Serialization;
 using System.Windows.Forms;
 using System.IO;
 
-namespace PTL.Tools.FileOperation
+namespace PTL.FileOperation
 {
     public class XML
     {

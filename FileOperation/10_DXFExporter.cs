@@ -9,7 +9,7 @@ using System.Diagnostics;
 using System.Drawing;
 using PTL.Geometry;
 
-namespace PTL.Tools.FileOperation
+namespace PTL.FileOperation
 {
     public interface IDXFExporter
     {

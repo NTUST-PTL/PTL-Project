@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 
-namespace PTL.Tools.BinaryExtentionMethods
+namespace PTL.BinaryExtentionMethods
 {
     public static class BinaryReaderExtentions
     {

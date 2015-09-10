@@ -5,10 +5,10 @@ using System.Text;
 using System.Windows.Forms;
 using System.IO;
 using PTL.Geometry;
-using PTL.Tools.BinaryExtentionMethods;
+using PTL.BinaryExtentionMethods;
 using System.Threading.Tasks;
 
-namespace PTL.Tools.FileOperation
+namespace PTL.FileOperation
 {
     public class STLReader
     {

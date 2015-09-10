@@ -7,7 +7,7 @@ using System.Drawing;
 using System.Windows;
 using PTL.Geometry;
 
-namespace PTL.Tools.DebugTools
+namespace PTL.DebugTools
 {
     public class MonitoringPlot
     {

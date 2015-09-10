@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Drawing;
 
-namespace PTL.Tools.FileOperation
+namespace PTL.FileOperation
 {
     public static class StringFormat
     {

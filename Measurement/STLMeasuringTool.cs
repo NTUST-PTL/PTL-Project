@@ -8,7 +8,7 @@ using System.Reflection;
 using PTL.Geometry;
 using PTL.Definitions;
 
-namespace PTL.Tools.Measurement
+namespace PTL.Measurement
 {
     public class STLMeasuringTool_MultiThread : STLMeasuringTool, ISTLMeasurement_NeedNormals
     {
