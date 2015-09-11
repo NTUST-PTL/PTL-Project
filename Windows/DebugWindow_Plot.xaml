@@ -67,7 +67,10 @@
                     <CheckBox DockPanel.Dock="Right" IsChecked="False" Checked="WrapCheckBox_Checked" Unchecked="WrapCheckBox_Checked">Wrap</CheckBox>
                     <Button Click="Button_Clear_Click">Clear</Button>
                 </DockPanel>
-                <TextBox x:Name="LogTextBox" x:FieldModifier="public" Grid.Column="0" Grid.Row="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" AcceptsReturn="True" AcceptsTab="True" AutoWordSelection="True" TextChanged="LogTextBox_TextChanged"/>
+                <Grid x:Name="LogGrid"  Grid.Column="0" Grid.Row="1" >
+                    <Grid.RowDefinitions>
+                    </Grid.RowDefinitions>
+                </Grid>
                 <GridSplitter Grid.RowSpan="2" Width="3"/>
                 <WindowsFormsHost x:Name="WindowsFormsHost" Grid.Column="1" Grid.RowSpan="2" Background="#FFFDFDFD">
                 </WindowsFormsHost>

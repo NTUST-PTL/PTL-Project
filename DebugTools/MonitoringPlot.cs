@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
 using System.Windows;
+using System.Windows.Controls;
 using PTL.Geometry;
 
 namespace PTL.DebugTools
@@ -14,6 +15,9 @@ namespace PTL.DebugTools
         public PTL.Windows.DebugWindow_Plot Window;
 
         public Dictionary<String, PolyLine> MonitorRecords = new Dictionary<String, PolyLine>();
+        public Dictionary<String, System.Windows.Controls.TextBox> MonitorLogTextBoxs = new Dictionary<String, System.Windows.Controls.TextBox>();
+
+        public String StringFormat = "E6";
 
         /// <summary>
         /// If set to zero, there is no limits for MaxRecords.
@@ -52,22 +56,29 @@ namespace PTL.DebugTools
             this.Window.View.ReplaceThing2Show(MonitorRecords.Values.ToArray());
         }
 
-        public void AddNewMonitor(String Name = "", Action<PolyLine> Setter = null)
+        public void CreateNewMonitor(String Name, System.Drawing.Color color, Action<PolyLine> Setter = null)
         {
-            PolyLine newRecord = new PolyLine();
-
             if (String.IsNullOrEmpty(Name))
                 Name = "Monitor " + MonitorRecords.Count;
+
+            PolyLine newRecord = new PolyLine() { Name = Name, Color = color };
 
             if (Setter != null)
                 Setter(newRecord);
 
+            System.Windows.Controls.TextBox tb = this.Window.CreateNewLogTextBox(Name, color);
+
+
             MonitorRecords.Add(Name, newRecord);
+            MonitorLogTextBoxs.Add(Name, tb);
         }
 
         public void RemoveMonitor(String Name)
         {
+            this.Window.LogGrid.Children.Remove(
+                (UIElement)MonitorLogTextBoxs[Name].Parent);
             MonitorRecords.Remove(Name);
+            MonitorLogTextBoxs.Remove(Name);
         }
 
         public void RemoveMonitor(int index)
@@ -76,7 +87,7 @@ namespace PTL.DebugTools
             RemoveMonitor(key);
         }
 
-        public void Push(double value, int index)
+        public void Push(int index, double value)
         {
             PolyLine targetMonitor = MonitorRecords.Values.ElementAt(index);
             int recordCount = targetMonitor.Points.Count;
@@ -91,9 +102,13 @@ namespace PTL.DebugTools
                 PointD lastValue = targetMonitor.Points.Last();
                 targetMonitor.Points.Add(new PointD(lastValue.X + 1, value, 0));
             }
+
+            TextBox targetLogTextBox = MonitorLogTextBoxs.Values.ElementAt(index);
+            targetLogTextBox.AppendText(value.ToString(this.StringFormat));
+            targetLogTextBox.AppendText("\r\n");
         }
 
-        public void Push(double value, String MonitorName)
+        public void Push(String MonitorName, double value)
         {
             PolyLine targetMonitor = MonitorRecords[MonitorName];
             int recordCount = targetMonitor.Points.Count;
@@ -107,6 +122,10 @@ namespace PTL.DebugTools
             {
                 PointD lastValue = targetMonitor.Points.Last();
                 targetMonitor.Points.Add(new PointD(lastValue.X + 1, value, 0));
+
+                TextBox targetLogTextBox = MonitorLogTextBoxs[MonitorName];
+                targetLogTextBox.AppendText(value.ToString(this.StringFormat));
+                targetLogTextBox.AppendText("\r\n");
             }
         }
 
@@ -145,12 +164,12 @@ namespace PTL.DebugTools
             await Application.Current.Dispatcher.BeginInvoke(new Action(() => Monitor = new MonitoringPlot()));
             return Monitor;
         }
-        public async Task InvokeAddNewMonitor(String Name = "", Action<PolyLine> Setter = null)
+        public async Task InvokeCreateNewMonitor(String Name, System.Drawing.Color color, Action<PolyLine> Setter = null)
         {
             await Application.Current.Dispatcher.BeginInvoke(
                  new Action(() =>
                  {
-                     AddNewMonitor(Name, Setter);
+                     CreateNewMonitor(Name, color, Setter);
                  }));
         }
         public async Task InvokeRemoveMonitor(String Name)
@@ -169,20 +188,20 @@ namespace PTL.DebugTools
                      RemoveMonitor(index);
                  }));
         }
-        public async Task InvokePush(double value, int index)
+        public async Task InvokePush(int index, double value)
         {
             await Application.Current.Dispatcher.BeginInvoke(
                  new Action(() =>
                  {
-                     Push(value, index);
+                     Push(index, value);
                  }));
         }
-        public async Task InvokePush(double value, String MonitorName)
+        public async Task InvokePush(String MonitorName, double value)
         {
             await Application.Current.Dispatcher.BeginInvoke(
                  new Action(() =>
                  {
-                     Push(value, MonitorName);
+                     Push(MonitorName, value);
                  }));
         }
         public async Task InvokeAddSomethings(params ICanPlotInOpenGL[] polyline)

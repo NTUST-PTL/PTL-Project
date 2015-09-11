@@ -170,12 +170,12 @@ namespace PTL.Geometry.MathModel
 
         public void Transform3(double[,] TransformMatrix)
         {
-            this.Values = TransCoordinate3(TransformMatrix, this.Values);
+            this.Values = Transport3(TransformMatrix, this.Values);
         }
 
         public void Transform4(double[,] TransformMatrix)
         {
-            this.Values = TransCoordinate4(TransformMatrix, this.Values);
+            this.Values = Transport4(TransformMatrix, this.Values);
         }
 
         public double[] ToArray()

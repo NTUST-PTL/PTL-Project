@@ -14,6 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Windows.Interop;
+using PTL.Windows.UIExtention;
 
 namespace PTL.Windows
 {
@@ -38,12 +39,34 @@ namespace PTL.Windows
             this.WindowsFormsHost.Child = this.OpenGLWindow;
         }
 
-        //public static async Task<DebugWindow_Plot> InvokeCreatWindows()
-        //{
-        //    Action run => () => {
+        public TextBox CreateNewLogTextBox(string name, System.Drawing.Color textColor)
+        {
+            TextBox newTextBox = new TextBox();
+            newTextBox.Name = name;
+            newTextBox.Foreground = new SolidColorBrush(Color.FromArgb(textColor.A, textColor.R, textColor.G, textColor.B));
+            newTextBox.Margin = new Thickness(0, 2.5, 0, 2.5);
+            newTextBox.HorizontalScrollBarVisibility = ScrollBarVisibility.Auto;
+            newTextBox.VerticalScrollBarVisibility = ScrollBarVisibility.Auto;
+            newTextBox.AcceptsReturn = true;
+            newTextBox.AcceptsTab = true;
+            newTextBox.AutoWordSelection = true;
+            newTextBox.TextChanged += LogTextBox_TextChanged;
 
-        //    }
-        //}
+            TextBlock title = new TextBlock();
+            title.Text = name;
+
+            DockPanel newStackPanel = new DockPanel();
+            newStackPanel.Children.Add(title);
+            newStackPanel.Children.Add(newTextBox);
+
+            RowDefinition newRow = new RowDefinition();
+            newRow.Height = new GridLength(1, GridUnitType.Star);
+            this.LogGrid.RowDefinitions.Add(newRow);
+            this.LogGrid.Children.Add(newStackPanel);
+            Grid.SetRow(newStackPanel, this.LogGrid.RowDefinitions.Count - 1);
+
+            return newTextBox;
+        }
 
         #region 外觀介面控制
         private const int WM_SYSCOMMAND = 0x112;
@@ -157,7 +180,8 @@ namespace PTL.Windows
 
         private void Button_Clear_Click(object sender, RoutedEventArgs e)
         {
-            this.LogTextBox.Text = null;
+            foreach (var item in this.LogGrid.FindVisualChildren<TextBox>())
+                item.Text = null;
         }
 
         private void LogTextBox_TextChanged(object sender, TextChangedEventArgs e)
@@ -172,10 +196,11 @@ namespace PTL.Windows
         private void WrapCheckBox_Checked(object sender, RoutedEventArgs e)
         {
             CheckBox chb = sender as CheckBox;
-            if (chb.IsChecked == true)
-                this.LogTextBox.TextWrapping = TextWrapping.Wrap;
-            else if (chb.IsChecked == false)
-                this.LogTextBox.TextWrapping = TextWrapping.NoWrap;
+            TextWrapping wrapingType = TextWrapping.Wrap;
+            if (chb.IsChecked == false)
+                wrapingType = TextWrapping.NoWrap;
+            foreach (TextBox item in this.LogGrid.Children)
+                item.TextWrapping = wrapingType;
         }
     }
 }

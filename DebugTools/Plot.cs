@@ -12,10 +12,13 @@ namespace PTL.DebugTools
     public class Plot
     {
         public PTL.Windows.DebugWindow_Plot Window;
+        public System.Windows.Controls.TextBox LogTextBox;
+
 
         public Plot(Action<PTL.Windows.DebugWindow_Plot> WindowSetter = null)
         {
             Window = new Windows.DebugWindow_Plot();
+            LogTextBox = Window.CreateNewLogTextBox("Log", System.Drawing.Color.White);
             if (WindowSetter != null)
                 WindowSetter(Window);
             Window.Show();
@@ -107,14 +110,14 @@ namespace PTL.DebugTools
 
         public void Log(String message = null)
         {
-            this.Window.LogTextBox.AppendText(message);
-            this.Window.LogTextBox.AppendText("\r\n");
+            this.LogTextBox.AppendText(message);
+            this.LogTextBox.AppendText("\r\n");
         }
 
         public void Log(String message = null, params object[] options)
         {
-            this.Window.LogTextBox.AppendText(String.Format(message, options));
-            this.Window.LogTextBox.AppendText("\r\n");
+            this.LogTextBox.AppendText(String.Format(message, options));
+            this.LogTextBox.AppendText("\r\n");
         }
 
         public void Clear()

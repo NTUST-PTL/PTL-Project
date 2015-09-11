@@ -7,73 +7,72 @@ using PTL.Geometry;
 using PTL.Definitions;
 using PTL.Geometry.MathModel;
 
-namespace PTL.Mathematics
+namespace PTL.MathExtension
 {
-    public class Math2
+    public static class MathExtension
     {
-        protected static double delChk = 0.002;
         #region 三角函數
-        protected static double Cos(double trad)
+        public static double Cos(this object obj, double trad)
         {
             double tvalue;
             tvalue = System.Math.Cos(trad);
             return tvalue;
         }
-        protected static double Sin(double trad)
+        public static double Sin(this object obj, double trad)
         {
             double tvalue;
             tvalue = System.Math.Sin(trad);
             return tvalue;
         }
-        protected static double Tan(double trad)
+        public static double Tan(this object obj, double trad)
         {
             double tvalue;
             tvalue = System.Math.Tan(trad);
             return tvalue;
         }
-        protected static double Sec(double trad)
+        public static double Sec(this object obj, double trad)
         {
             double tvalue;
             tvalue = 1 / System.Math.Cos(trad);
             return tvalue;
         }
-        protected static double Acos(double tv)
+        public static double Acos(this object obj, double tv)
         {
             double tvalue;
             tvalue = System.Math.Acos(tv);
             return tvalue;
         }
-        protected static double Atan2(double y, double x)
+        public static double Atan2(this object obj, double y, double x)
         {
             double tvalue;
             tvalue = System.Math.Atan2(y, x);
             return tvalue;
         }
-        protected static double Atan(double tv)
+        public static double Atan(this object obj, double tv)
         {
             double tvalue;
             tvalue = System.Math.Atan(tv);
             return tvalue;
         }
-        protected static double Asin(double tv)
+        public static double Asin(this object obj, double tv)
         {
             double tvalue;
             tvalue = System.Math.Asin(tv);
             return tvalue;
         }
-        protected static double Asec(double tv)
+        public static double Asec(this object obj, double tv)
         {
             double tvalue;
             tvalue = System.Math.Acos(1.0 / tv);
             return tvalue;
         }
-        protected static double Csc(double trad)
+        public static double Csc(this object obj, double trad)
         {
             double tvalue;
             tvalue = 1 / System.Math.Sin(trad);
             return tvalue;
         }
-        protected static double Cot(double trad)
+        public static double Cot(this object obj, double trad)
         {
             double tvalue;
             tvalue = 1 / System.Math.Tan(trad);
@@ -82,31 +81,31 @@ namespace PTL.Mathematics
         #endregion
 
         #region 單位轉換
-        protected static double DegToRad(double tdeg)
+        public static double DegToRad(this object obj, double tdeg)
         {
             double trad;
             trad = tdeg / 180.0 * System.Math.PI;
             return trad;
         }
-        protected static double RadToDeg(double trad)
+        public static double RadToDeg(this object obj, double trad)
         {
             double tdeg;
             tdeg = trad / System.Math.PI * 180.0;
             return tdeg;
         }
-        protected static double mmToInch(double tmm)
+        public static double mmToInch(this object obj, double tmm)
         {
             double tInch;
             tInch = tmm / 25.4;
             return tInch;
         }
-        protected static double InchTomm(double tInch)
+        public static double InchTomm(this object obj, double tInch)
         {
             double tmm;
             tmm = tInch * 25.4;
             return tmm;
         }
-        protected static string DegToDMS(double x)
+        public static string DegToDMS(this object obj, double x)
         {
             int x1 = (int)x;
             int x2 = (int)((x - x1) * 60);
@@ -115,9 +114,9 @@ namespace PTL.Mathematics
             ss = String.Format("{0}", x1) + "d" + String.Format("{0,3}", x2) + "m" + String.Format("{0,3}", x3) + "s";
             return ss;
         }
-        protected static string DegToDMS(double x,short n)
+        public static string DegToDMS(this object obj, double x,short n)
         {
-            double absx = Abs(x);
+            double absx = Abs(obj, x);
             int x1 = (int)absx;
             int x2 = (int)((absx - x1) * 60);
             int x3 = (int)((((absx - x1) * 60) - x2) * 60);
@@ -154,70 +153,70 @@ namespace PTL.Mathematics
 
             return ss;
         }
-        protected static string RadToDMS(double y)
+        public static string RadToDMS(this object obj, double y)
         {
-            string ss = DegToDMS(RadToDeg(y));
+            string ss = DegToDMS(obj, RadToDeg(obj, y));
             return ss;
         }
-        protected static string RadToDMS(double y,short n)
+        public static string RadToDMS(this object obj, double y,short n)
         {
-            string ss = DegToDMS(RadToDeg(y),n);
+            string ss = DegToDMS(obj, RadToDeg(obj, y),n);
             return ss;
         }
-        protected static double DMSToDeg(double dd, double mm, double ss)
+        public static double DMSToDeg(this object obj, double dd, double mm, double ss)
         {
             double deg = dd + mm / 60.0 + ss / 3600.0;
             return deg;
         }
-        protected static double DMSToRad(double dd, double mm, double ss)
+        public static double DMSToRad(this object obj, double dd, double mm, double ss)
         {
-            double rad = DegToRad(DMSToDeg(dd, mm, ss));
+            double rad = DegToRad(obj, DMSToDeg(obj, dd, mm, ss));
             return rad;
         }
         #endregion
 
         #region Matrix & Vector
-        protected static T Normalize<T>(T r1) where T : Vector, new()
+        public static T Normalize<T>(this object obj, T r1) where T : Vector, new()
         {
-            double len = Sqrt(r1.X * r1.X + r1.Y * r1.Y + r1.Z * r1.Z);
+            double len = Sqrt(obj, r1.X * r1.X + r1.Y * r1.Y + r1.Z * r1.Z);
             T r2 = new T() { X = r1.X / len, Y = r1.Y / len, Z = r1.Z / len };
             return r2;
         }
-        protected static double GetLength(double[] input)
+        public static double GetLength(this object obj, double[] input)
         {
             double sum = 0;
             for (int i = 0; i <= input.GetUpperBound(0); i++)
             {
                 sum = sum + System.Math.Pow(input[i], 2);
             }
-            double len = Sqrt(sum);
+            double len = Sqrt(obj, sum);
 
             return len;
         }
-        protected static double Norm(double[] input)
+        public static double Norm(this object obj, double[] input)
         {
             double sum = 0;
             for (int i = 0; i <= input.GetUpperBound(0); i++)
             {
                 sum = sum + System.Math.Pow(input[i], 2);
             }
-            double len = Sqrt(sum);
+            double len = Sqrt(obj, sum);
 
             return len;
         }
-        protected static double Norm(XYZ input)
+        public static double Norm(this object obj, XYZ input)
         {
-            return Norm(input.Values);
+            return Norm(obj, input.Values);
         }
-        protected static double Norm<T>(T p1) where T : Vector, new()
+        public static double Norm<T>(this object obj, T p1) where T : Vector, new()
         {
             double sum = p1.X * p1.X + p1.Y * p1.Y + p1.Z * p1.Z;
-            double len = Sqrt(sum);
+            double len = Sqrt(obj, sum);
 
             return len;
         }
 
-        protected static double[] MatrixDot(double[] array1, double[] array2)
+        public static double[] MatrixDot(this object obj, double[] array1, double[] array2)
         {
             int r1 = array1.Length;  // UBound
 
@@ -228,7 +227,7 @@ namespace PTL.Mathematics
             }
             return outptr;
         }
-        protected static double[] MatrixDot(double[] array1, double[,] array2)
+        public static double[] MatrixDot(this object obj, double[] array1, double[,] array2)
         {
             int r2 = array2.GetLength(0);  // UBound
             int c2 = array2.GetLength(1);  // UBound
@@ -246,7 +245,7 @@ namespace PTL.Mathematics
             }
             return outptr;
         }
-        protected static double[] MatrixDot(double[,] array1, double[] array2)
+        public static double[] MatrixDot(this object obj, double[,] array1, double[] array2)
         {
             int r1, c1, i, k;
             r1 = array1.GetUpperBound(0);  // UBound
@@ -269,7 +268,7 @@ namespace PTL.Mathematics
             }
             return outptr;
         }
-        protected static double[,] MatrixDot(double[,] array1, double[,] array2)
+        public static double[,] MatrixDot(this object obj, double[,] array1, double[,] array2)
         {
             int r1, c1, c2, i, j, k;
             r1 = array1.GetUpperBound(0);  // UBound
@@ -299,7 +298,7 @@ namespace PTL.Mathematics
             }
             return outptr;
         }
-        protected static double[,] MatrixDot(params double[][,] arrarys)
+        public static double[,] MatrixDot(this object obj, params double[][,] arrarys)
         {
             for (int i = 0; i < arrarys.Length - 1; i++)
                 if (arrarys[i].GetLength(1) != arrarys[i + 1].GetLength(0))
@@ -311,7 +310,7 @@ namespace PTL.Mathematics
             }
             return outputArray;
         }
-        protected static double[,] MatrixAdd(params double[][,] arrarys)
+        public static double[,] MatrixAdd(this object obj, params double[][,] arrarys)
         {
             for (int i = 0; i < arrarys.Length - 1; i++)
                 if (arrarys[i].GetLength(0) != arrarys[i + 1].GetLength(0) && arrarys[i].GetLength(1) != arrarys[i + 1].GetLength(1))
@@ -343,7 +342,7 @@ namespace PTL.Mathematics
             }
             return outputArray;
         }
-        protected static double[] Cross(double[] ptr1, double[] ptr2)
+        public static double[] Cross(this object obj, double[] ptr1, double[] ptr2)
         {
             double[] outptr = new double[3];
             outptr[0] = ptr1[1] * ptr2[2] - ptr1[2] * ptr2[1];
@@ -351,7 +350,7 @@ namespace PTL.Mathematics
             outptr[2] = ptr1[0] * ptr2[1] - ptr1[1] * ptr2[0];
             return outptr;
         }
-        protected static XYZ Cross(XYZ ptr1, XYZ ptr2)
+        public static XYZ Cross(this object obj, XYZ ptr1, XYZ ptr2)
         {
             XYZ outptr = new XYZ();
             outptr[0] = ptr1[1] * ptr2[2] - ptr1[2] * ptr2[1];
@@ -359,7 +358,7 @@ namespace PTL.Mathematics
             outptr[2] = ptr1[0] * ptr2[1] - ptr1[1] * ptr2[0];
             return outptr;
         }
-        protected static T Cross<T>(T p1, T p2) where T : Vector, new()
+        public static T Cross<T>(this object obj, T p1, T p2) where T : Vector, new()
         {
             T p3 = new T();
 
@@ -369,7 +368,7 @@ namespace PTL.Mathematics
 
             return p3;
         }
-        protected static double Dot(double[] ptr1, double[] ptr2)
+        public static double Dot(this object obj, double[] ptr1, double[] ptr2)
         {
             double value = 0.0;
 
@@ -379,7 +378,7 @@ namespace PTL.Mathematics
             }
             return value;
         }
-        protected static double Dot(Vector p1, Vector p2)
+        public static double Dot(this object obj, Vector p1, Vector p2)
         {
             double value;
 
@@ -387,7 +386,7 @@ namespace PTL.Mathematics
 
             return value;
         }
-        protected static T MatrixDot3<T>(double[,] tMatrix, T tp1) where T : Vector, new()
+        public static T MatrixDot3<T>(this object obj, double[,] tMatrix, T tp1) where T : Vector, new()
         {
             if (tMatrix == null)
                 return tp1.Clone() as T;
@@ -405,7 +404,7 @@ namespace PTL.Mathematics
             T p2 = new T() { X = tr2[0], Y = tr2[1], Z = tr2[2] };
             return p2;
         }
-        protected static T MatrixDot4<T>(double[,] tMatrix, T tp1) where T : Vector, new()
+        public static T MatrixDot4<T>(this object obj, double[,] tMatrix, T tp1) where T : Vector, new()
         {
             if (tMatrix == null)
                 return tp1.Clone() as T;
@@ -423,7 +422,7 @@ namespace PTL.Mathematics
             T p2 = new T() { X = tr2[0], Y = tr2[1], Z = tr2[2] };
             return p2;
         }
-        protected static double[] MatrixDot3(double[,] tMatrix, double[] tr1)
+        public static double[] MatrixDot3(this object obj, double[,] tMatrix, double[] tr1)
         {
             double[] tr2 = new double[3];
 
@@ -436,7 +435,7 @@ namespace PTL.Mathematics
             }
             return tr2;
         }
-        protected static double[] MatrixDot4(double[,] tMatrix, double[] tr1)
+        public static double[] MatrixDot4(this object obj, double[,] tMatrix, double[] tr1)
         {
             double[] tr2 = new double[4];
 
@@ -449,7 +448,7 @@ namespace PTL.Mathematics
             }
             return tr2;
         }
-        protected static double[,] MatrixScale(double[,] tMatrix, double tscale)
+        public static double[,] MatrixScale(this object obj, double[,] tMatrix, double tscale)
         {
             PointD p2 = new PointD();
 
@@ -465,7 +464,7 @@ namespace PTL.Mathematics
             return MatrixNew;
         }
 
-        protected static double[,] IdentityMatrix(int tn)
+        public static double[,] IdentityMatrix(this object obj, int tn)
         {
             double[,] tMatrix = new double[tn, tn];
 
@@ -483,7 +482,7 @@ namespace PTL.Mathematics
             }
             return tMatrix;
         }
-        protected static double[,] ZeroMatrix(int dimension1, int dimention2)
+        public static double[,] ZeroMatrix(this object obj, int dimension1, int dimention2)
         {
             double[,] matrix = new double[dimension1, dimention2];
             for (int i = 0; i < dimension1; i++)
@@ -495,7 +494,7 @@ namespace PTL.Mathematics
             }
             return matrix;
         }
-        protected static System.Array InitializedMatrix<T>(T value, params int[] dimensions)
+        public static System.Array InitializedMatrix<T>(this object obj, T value, params int[] dimensions)
         {
             //定義Array每個維度的起始索引值(起始值可以不為0)
             int[] lowerBounds = new int[dimensions.Length];
@@ -524,14 +523,14 @@ namespace PTL.Mathematics
             }
             return newArray;
         }
-        protected static int[] ArrayGetDimension(System.Array Array)
+        public static int[] ArrayGetDimension(this object obj, System.Array Array)
         {
             int[] dimensions = new int[Array.Rank];
             for (int i = 0; i < Array.Rank; i++)
                 dimensions[i] = Array.GetLength(i);
             return dimensions;
         }
-        protected static System.Array ArrayReshape(System.Array Matrix, params int[] dimensions)
+        public static System.Array ArrayReshape(this object obj, System.Array Matrix, params int[] dimensions)
         {
             System.Type elementType = Matrix.GetType().GetElementType();
             //定義Array每個維度的起始索引值(起始值可以不為0)
@@ -559,7 +558,7 @@ namespace PTL.Mathematics
             }
             return newArray;
         }
-        protected static System.Array ArrayTake(System.Array Matrix, int[] startIndex, int[] endIndex)
+        public static System.Array ArrayTake(this object obj, System.Array Matrix, int[] startIndex, int[] endIndex)
         {
             System.Type elementType = Matrix.GetType().GetElementType();
             //定義Array每個維度的起始索引值(起始值可以不為0)
@@ -599,7 +598,7 @@ namespace PTL.Mathematics
             }
             return newArray;
         }
-        protected static void ArrayPut(System.Array Matrix, System.Array TargetMatrix, int[] startIndex)
+        public static void ArrayPut(this object obj, System.Array Matrix, System.Array TargetMatrix, int[] startIndex)
         {
             if (Matrix != null && TargetMatrix != null)
             {
@@ -641,99 +640,99 @@ namespace PTL.Mathematics
             }
         }
 
-        protected static double[,] RotateMatrix(Axis axis, double theta)
+        public static double[,] RotateMatrix(this object obj, Axis axis, double theta)
         {
-            double[,] Mr = IdentityMatrix(4);
+            double[,] Mr = IdentityMatrix(obj, 4);
             switch (axis)
             {
                 case Axis.X:
-                    Mr[1, 1] = Cos(theta);
-                    Mr[2, 2] = Cos(theta);
-                    Mr[1, 2] = -Sin(theta);
-                    Mr[2, 1] = Sin(theta);
+                    Mr[1, 1] = Cos(obj, theta);
+                    Mr[2, 2] = Cos(obj, theta);
+                    Mr[1, 2] = -Sin(obj, theta);
+                    Mr[2, 1] = Sin(obj, theta);
                     break;
                 case Axis.Y:
-                    Mr[0, 0] = Cos(theta);
-                    Mr[2, 2] = Cos(theta);
-                    Mr[0, 2] = -Sin(theta);
-                    Mr[2, 0] = Sin(theta);
+                    Mr[0, 0] = Cos(obj, theta);
+                    Mr[2, 2] = Cos(obj, theta);
+                    Mr[0, 2] = -Sin(obj, theta);
+                    Mr[2, 0] = Sin(obj, theta);
                     break;
                 case Axis.Z:
-                    Mr[0, 0] = Cos(theta);
-                    Mr[1, 1] = Cos(theta);
-                    Mr[0, 1] = -Sin(theta);
-                    Mr[1, 0] = Sin(theta);
+                    Mr[0, 0] = Cos(obj, theta);
+                    Mr[1, 1] = Cos(obj, theta);
+                    Mr[0, 1] = -Sin(obj, theta);
+                    Mr[1, 0] = Sin(obj, theta);
                     break;
             }
             return Mr;
         }
-        protected static double[,] RotateMatrix(double thetax, double thetay, double thetaz)
+        public static double[,] RotateMatrix(this object obj, double thetax, double thetay, double thetaz)
         {
-            double[,] MRx = RotateMatrix(Axis.X, thetax);
-            double[,] MRy = RotateMatrix(Axis.Y, thetay);
-            double[,] MRz = RotateMatrix(Axis.Z, thetaz);
+            double[,] MRx = RotateMatrix(obj, Axis.X, thetax);
+            double[,] MRy = RotateMatrix(obj, Axis.Y, thetay);
+            double[,] MRz = RotateMatrix(obj, Axis.Z, thetaz);
 
             double[,] Mr = MatrixDot(MRx, MRy, MRz);
 
             return Mr;
         }
-        protected static double[,] RotateMatrix(Vector tRotateAxis, double theta)
+        public static double[,] RotateMatrix(this object obj, Vector tRotateAxis, double theta)
         {
-            double angleZ = Atan2(tRotateAxis.Y, tRotateAxis.X);
-            double angleY = Atan2(tRotateAxis.Z, tRotateAxis.X * tRotateAxis.X + tRotateAxis.Y * tRotateAxis.Y);
-            double[,] A21 = RotateMatrix(Axis.Z, -angleZ);
-            double[,] A32 = RotateMatrix(Axis.Y, angleY);
-            double[,] ARotate = RotateMatrix(Axis.X, theta);
-            double[,] A23 = MatrixTranspose(A32);
-            double[,] A12 = MatrixTranspose(A21);
+            double angleZ = Atan2(obj, tRotateAxis.Y, tRotateAxis.X);
+            double angleY = Atan2(obj, tRotateAxis.Z, tRotateAxis.X * tRotateAxis.X + tRotateAxis.Y * tRotateAxis.Y);
+            double[,] A21 = RotateMatrix(obj, Axis.Z, -angleZ);
+            double[,] A32 = RotateMatrix(obj, Axis.Y, angleY);
+            double[,] ARotate = RotateMatrix(obj, Axis.X, theta);
+            double[,] A23 = MatrixTranspose(obj, A32);
+            double[,] A12 = MatrixTranspose(obj, A21);
 
             return MatrixDot(A12, A23, ARotate, A32, A21);
         }
-        protected static T RotatePointZ<T>(T pnt, double theta) where T : Vector, new()
+        public static T RotatePointZ<T>(this object obj, T pnt, double theta) where T : Vector, new()
         {
-            T pntnew = MatrixDot4(RotateMatrix(Axis.Z, theta), pnt);
+            T pntnew = MatrixDot4(obj, RotateMatrix(obj, Axis.Z, theta), pnt);
             return pntnew;
         }
-        protected static T[,] RotatePointZ<T>(T[,] pnt, double theta) where T : Vector, new()
+        public static T[,] RotatePointZ<T>(this object obj, T[,] pnt, double theta) where T : Vector, new()
         {
-            return RotatePoints(RotateMatrix(Axis.Z, theta), pnt);
+            return RotatePoints(obj, RotateMatrix(obj, Axis.Z, theta), pnt);
         }
-        protected static double[,] TranslateMatrix(PointD p1)
+        public static double[,] TranslateMatrix(this object obj, PointD p1)
         {
             double[,] tMatrix = new double[4, 4];
 
-            tMatrix = IdentityMatrix(4);
+            tMatrix = IdentityMatrix(obj, 4);
             tMatrix[0, 3] = p1.X;
             tMatrix[1, 3] = p1.Y;
             tMatrix[2, 3] = p1.Z;
 
             return tMatrix;
         }
-        protected static T RotatePoint<T>(double[,] M21, T pnt) where T : Vector, new()
+        public static T RotatePoint<T>(this object obj, double[,] M21, T pnt) where T : Vector, new()
         {
-            T pntnew = MatrixDot4(M21, pnt);
+            T pntnew = MatrixDot4(obj, M21, pnt);
             return pntnew;
         }
-        protected static T[] RotatePoints<T>(double[,] M21, T[] pset) where T : Vector, new()
+        public static T[] RotatePoints<T>(this object obj, double[,] M21, T[] pset) where T : Vector, new()
         {
             int nump = pset.Length;
             T[] pseta = new T[nump];
 
             for (short k = 0; k < nump; k++)
-                pseta[k] = MatrixDot4(M21, pset[k]);
+                pseta[k] = MatrixDot4(obj, M21, pset[k]);
 
             return pseta;
         }
-        protected static List<T> RotatePoints<T>(double[,] M21, IEnumerable<T> pset) where T : Vector, new()
+        public static List<T> RotatePoints<T>(this object obj, double[,] M21, IEnumerable<T> pset) where T : Vector, new()
         {
             List<T> pseta = new List<T>();
 
             foreach (var p in pset)
-                pseta.Add(MatrixDot4(M21, p));
+                pseta.Add(MatrixDot4(obj, M21, p));
 
             return pseta;
         }
-        protected static T[,] RotatePoints<T>(double[,] M21, T[,] pset) where T : Vector, new()
+        public static T[,] RotatePoints<T>(this object obj, double[,] M21, T[,] pset) where T : Vector, new()
         {
             int nump0 = pset.GetLength(0);
             int nump1 = pset.GetLength(1);
@@ -741,14 +740,14 @@ namespace PTL.Mathematics
 
             for (short i = 0; i < nump0; i++)
                 for (int j = 0; j < nump1; j++)
-                    pseta[i, j] = MatrixDot4(M21, pset[i, j]);
+                    pseta[i, j] = MatrixDot4(obj, M21, pset[i, j]);
 
             return pseta;
         }
 
         //新寫法20150409
         //Homogeneous與非Homogeneous適用、傳遞參數數目傳不固定
-        protected static T TransformPoint<T>(double[,] M21, T pset) where T : Vector, new()
+        public static T TransformPoint<T>(this object obj, double[,] M21, T pset) where T : Vector, new()
         {
             if (M21 == null || pset == null)
                 return pset;
@@ -785,33 +784,33 @@ namespace PTL.Mathematics
             T p2 = new T() { X = tr2[0], Y = tr2[1], Z = tr2[2] };
             return p2;
         }
-        protected static List<T> TransformPoints<T>(double[,] M21, List<T> pset) where T : Vector, new()
+        public static List<T> TransformPoints<T>(this object obj, double[,] M21, List<T> pset) where T : Vector, new()
         {
             List<T> pseta = new List<T>();
 
             int k = 0;
             foreach (var p in pset)
             {
-                pseta.Add(TransformPoint(M21, p));
+                pseta.Add(TransformPoint(obj, M21, p));
                 k++;
             }
 
             return pseta;
         }
-        protected static List<T> TransformPoints<T>(double[,] M21, params T[] pset) where T : Vector, new()
+        public static List<T> TransformPoints<T>(this object obj, double[,] M21, params T[] pset) where T : Vector, new()
         {
             List<T> pseta = new List<T>();
 
             int k = 0;
             foreach (var p in pset)
             {
-                pseta.Add(TransformPoint(M21, p));
+                pseta.Add(TransformPoint(obj, M21, p));
                 k++;
             }
 
             return pseta;
         }
-        protected static T[,] TransformPoints<T>(double[,] M21, T[,] pset) where T : Vector, new()
+        public static T[,] TransformPoints<T>(this object obj, double[,] M21, T[,] pset) where T : Vector, new()
         {
             int dim1 = pset.GetLength(0);
             int dim2 = pset.GetLength(1);
@@ -821,12 +820,12 @@ namespace PTL.Mathematics
             {
                 for (int j = 0; j < dim2; j++)
                 {
-                    newPset[i, j] = TransformPoint(M21, pset[i, j]);
+                    newPset[i, j] = TransformPoint(obj, M21, pset[i, j]);
                 }
             }
             return newPset;
         }
-        protected static double[] Transport3(double[,] tMatrix, double[] tr1)
+        public static double[] Transport3(this object obj, double[,] tMatrix, double[] tr1)
         {
             double[] tr2 = new double[3];
 
@@ -839,9 +838,9 @@ namespace PTL.Mathematics
             }
             return tr2;
         }
-        protected static double[] Transport4(double[,] tMatrix, double[] tr1)
+        public static double[] Transport4(this object obj, double[,] tMatrix, double[] tr1)
         {
-            double[] tr2 = Transport3(tMatrix, tr1);
+            double[] tr2 = Transport3(obj, tMatrix, tr1);
             tr2[0] += tMatrix[0, 3];
             tr2[1] += tMatrix[1, 3];
             tr2[2] += tMatrix[2, 3];
@@ -854,10 +853,10 @@ namespace PTL.Mathematics
         /// <param name="dMatrix">矩陣</param>
         /// <param name="Level">矩陣的維度</param>
         /// <returns></returns>
-        protected static double[,] MatrixInverse(double[,] dMatrix)
+        public static double[,] MatrixInverse(this object obj, double[,] dMatrix)
         {
             int Level = dMatrix.GetLength(0);
-            double dMatrixValue = MatrixDeterminant(dMatrix);
+            double dMatrixValue = MatrixDeterminant(obj, dMatrix);
             // 判斷行列式是否為0 ( < allowError )
             double allowError = 0.000000000001;
             if (dMatrixValue > -allowError && dMatrixValue < allowError)
@@ -929,7 +928,7 @@ namespace PTL.Mathematics
                     dReturn[i, j] = dReverseMatrix[i, j + Level];
             return dReturn;
         }
-        protected static double MatrixDeterminant(double[,] MatrixList)
+        public static double MatrixDeterminant(this object obj, double[,] MatrixList)
         {
             int Level = MatrixList.GetLength(0);
             double[,] dMatrix = new double[Level, Level];
@@ -980,7 +979,7 @@ namespace PTL.Mathematics
             }
             return k * sn;
         }
-        protected static T[,] MatrixTranspose<T>(T[,] Matrix)
+        public static T[,] MatrixTranspose<T>(this object obj, T[,] Matrix)
         {
             int r1, c1;
             r1 = Matrix.GetUpperBound(0) + 1;  //UBound
@@ -994,58 +993,58 @@ namespace PTL.Mathematics
         #endregion
 
         #region 基本工具
-        protected static double Sphive(double tphi, double tgammab)
+        public static double Sphive(this object obj, double tphi, double tgammab)
         {
             double tsphive;
             tsphive = System.Math.Atan(System.Math.Tan(tphi) * System.Math.Sin(tgammab)) / System.Math.Sin(tgammab) - tphi;
             return tsphive;
         }
-        protected static double Involute(double alpha)
+        public static double Involute(this object obj, double alpha)
         {
 
             return (System.Math.Tan(alpha) - alpha);
 
         }
-        protected static double Pow(double tx, double td)
+        public static double Pow(this object obj, double tx, double td)
         {
             return System.Math.Pow(tx, td);
         }
-        protected static double Floor(double x, double a)
+        public static double Floor(this object obj, double x, double a)
         {
             double xx = x / a;
             int xx1 = (int)xx;
             return xx1 * a;
         }
-        protected static double Sqrt(double ta)
+        public static double Sqrt(this object obj, double ta)
         {
             return System.Math.Sqrt(ta);
         }
-        protected static double PI
+        public static double PI()
         {
-            get { return System.Math.PI; }
+            return System.Math.PI;
         }
-        protected static double Abs(double ta)
+        public static double Abs(this object obj, double ta)
         {
             return System.Math.Abs(ta);
         }
-        protected static double Round(double ta, double tb)
+        public static double Round(this object obj, double ta, double tb)
         {
             return System.Math.Round(ta / tb) * tb;
         }
-        protected static double Mod(double ta, double tb)
+        public static double Mod(this object obj, double ta, double tb)
         {
-            double tc = ta - Floor(ta / tb, 1.0) * tb;
+            double tc = ta - Floor(obj, ta / tb, 1.0) * tb;
             return tc;
         }
-        protected static PointD CalcuCenterXY(PointD p1,PointD p2, double radius, short ctype)
+        public static PointD CalcuCenterXY(this object obj, PointD p1,PointD p2, double radius, short ctype)
         {
-            double ra = Abs(radius);
+            double ra = Abs(obj, radius);
             short Flag = (short)(radius / ra);
             PointD za = new PointD(0.0,0.0,1.0);
-            PointD v1 = Normalize(p2-p1);
-            PointD v2 = Cross(v1,za);
-            double dist = Norm(p2 - p1);
-            double xx = Sqrt(ra*ra - (dist / 2.0) * (dist / 2.0));
+            PointD v1 = Normalize(obj, p2 -p1);
+            PointD v2 = Cross(obj, v1,za);
+            double dist = Norm(obj, p2 - p1);
+            double xx = Sqrt(obj, ra * ra - (dist / 2.0) * (dist / 2.0));
 
              PointD pc;
             if(ctype==2)
@@ -1055,7 +1054,7 @@ namespace PTL.Mathematics
 
             return pc;
         }
-        protected static void Compare_Boundary(PointD[] Boundary,PointD point2Check)
+        public static void Compare_Boundary(PointD[] Boundary,PointD point2Check)
         {
             if (point2Check.X > Boundary[1].X) { Boundary[1].X = point2Check.X; }
             else if (point2Check.X < Boundary[0].X) { Boundary[0].X = point2Check.X; }
@@ -1064,7 +1063,7 @@ namespace PTL.Mathematics
             if (point2Check.Z > Boundary[1].Z) { Boundary[1].Z = point2Check.Z; }
             else if (point2Check.Z < Boundary[0].Z) { Boundary[0].Z = point2Check.Z; }
         }
-        protected static int[] Sign(params double[] values)
+        public static int[] Sign(params double[] values)
         {
             int[] signs = new int[values.Length];
             for (int i = 0; i < values.Length; i++)
@@ -1079,509 +1078,6 @@ namespace PTL.Mathematics
             return signs;
         }
         #endregion
-
-        protected static class NonlinearFindRoot
-        {
-            public static string nError = "";
-            public static TimeSpan TimeSpanLimit = new TimeSpan(0, 0, 5);
-            public delegate void EquationSet(double[] input, double[] output);
-
-            /// <summary>
-            /// return item1:root item2:{times up, check}
-            /// </summary>
-            /// <param name="Equation"></param>
-            /// <param name="InitialGuest"></param>
-            /// <returns></returns>
-            public static Tuple<double, bool[]> FindRoot(Func<double, double> Equation, double InitialGuest)
-            {
-                double[] x = new double[] { InitialGuest };
-                EquationSet aEquationSet = (double[] xx, double[] yy) => { yy[0] = Equation(xx[0]); };
-                Boolean[] Result = FindRoot(x, aEquationSet);
-                return new Tuple<double, bool[]>(x[0], Result);
-            }
-
-            /// <summary>
-            /// return item1:root item2:{times up, check}
-            /// </summary>
-            /// <param name="Equation"></param>
-            /// <param name="InitialGuest"></param>
-            /// <returns></returns>
-            public static Tuple<double[], bool[]> FindRoot(Func<double[], double[]> Equation, double[] InitialGuest)
-            {
-                double[] x = new double[InitialGuest.Length];
-                InitialGuest.CopyTo(x, 0);
-                EquationSet aEquationSet = (double[] xx, double[] yy) => 
-                    {
-                        double[] current = Equation(xx);
-                        yy[0] = current[0];
-                        yy[1] = current[1];
-                    };
-                Boolean[] Result = FindRoot(x, aEquationSet);
-                return new Tuple<double[],bool[]> (x, Result);
-            }
-            public static bool[] FindRoot(double[] x, EquationSet objEquationSet)
-            {
-                bool Check = false;
-                bool timesUP = newt(x, objEquationSet, Check);
-                bool[] states = new bool[]{timesUP, Check};
-
-                return states;
-            }
-            private static bool newt(double[] x, EquationSet objEquationSet, bool Check)
-            {
-                const int MAXITS = 200;
-                const double TOLF = 1E-08;
-                const double TOLMIN = 1E-10;
-                const int STPMX = 100;
-                const double TOLX = 1E-11;
-
-                bool timsUP = false;
-
-                double den, f, fold, stpmax, sum, temp, test;
-                double d = 0;
-                int n = x.Length;
-                int[] indx = new int[n];
-                double[] g = new double[n];
-                double[] p = new double[n];
-                double[] xold = new double[n];
-                double[,] fjac = new double[n, n];
-                double[] fvec = new double[n];
-
-                f = fmin(x, fvec, objEquationSet);
-                test = 0.0;
-                for (int i = 0; i < n; i++)
-                    if ((Abs(fvec[i]) > test)) test = Abs(fvec[i]);
-                if (test < 0.01 * TOLF)
-                {
-                    Check = false;
-                    return timsUP;
-                }
-                sum = 0;
-                for (int i = 0; i < n; i++) sum = sum + x[i] * x[i];
-                stpmax = STPMX * Max(Sqrt(sum), Convert.ToDouble(n));
-                for (int its = 0; its < MAXITS; its++)
-                {
-                    fdjac(x, fvec, fjac, objEquationSet);
-                    for (int i = 0; i < n; i++)
-                    {
-                        sum = 0;
-                        for (int j = 0; j < n; j++) sum = sum + fjac[j, i] * fvec[j];
-                        g[i] = sum;
-                    }
-                    for (int i = 0; i < n; i++) xold[i] = x[i];
-                    fold = f;
-                    for (int i = 0; i < n; i++) p[i] = -fvec[i];
-                    ludcmp(fjac, indx, d);
-                    lubksb(fjac, indx, p);
-                    timsUP = lnsrch(xold, fold, g, p, x, f, stpmax, Check, fvec, objEquationSet);
-                    if (timsUP)
-                    {
-                        x[0] = 0;
-                        return timsUP;
-                    } 
-                    test = 0.0;
-                    for (int i = 0; i < n; i++)
-                        if (Abs(fvec[i]) > test) test = Abs(fvec[i]);
-                    if (test < TOLF)
-                    {
-                        Check = false;
-                        return timsUP;
-                    }
-                    if (Check)
-                    {
-                        test = 0.0;
-                        den = Max(f, 0.5 * n);
-                        for (int i = 0; i < n; i++)
-                        {
-                            temp = Abs(g[i]) * Max(Abs(x[i]), 1.0) / den;
-                            if (temp > test) test = temp;
-                        }
-                        Check = (test < TOLMIN);
-                        return timsUP;
-                    }
-                    test = 0.0;
-                    for (int i = 0; i < n; i++)
-                    {
-                        temp = (Abs(x[i] - xold[i])) / Max(Abs(x[i]), 1.0);
-                        if (temp > test) test = temp;
-                    }
-                    if (test < TOLX) return timsUP;
-                }
-                return timsUP;
-            }
-            private static void ludcmp(double[,] a, int[] indx, double d)
-            {
-                const double TINY = 1E-20;
-                int imax = 0;
-                double big, dum, sum, temp;
-
-                int n = a.GetLength(0);
-                double[] vv = new double[n];
-
-                d = 1;
-
-                for (int i = 0; i < n; i++)
-                {
-                    big = 0;
-                    for (int j = 0; j < n; j++)
-                        if ((temp = Abs(a[i, j])) > big) big = temp;
-                    if (big == 0) nError = "Singular matrix in routine ludcmp";
-                    vv[i] = 1 / big;
-                }
-                for (int j = 0; j < n; j++)
-                {
-                    for (int i = 0; i < j; i++)
-                    {
-                        sum = a[i, j];
-                        for (int k = 0; k < i; k++) sum = sum - a[i, k] * a[k, j];
-                        a[i, j] = sum;
-                    }
-                    big = 0.0;
-                    for (int i = j; i < n; i++)
-                    {
-                        sum = a[i, j];
-                        for (int k = 0; k < j; k++) sum = sum - a[i, k] * a[k, j];
-                        a[i, j] = sum;
-                        dum = vv[i] * Abs(sum);
-                        if ((dum = vv[i] * Abs(sum)) >= big)
-                        {
-                            big = dum;
-                            imax = i;
-                        }
-                    }
-                    if (j != imax)
-                    {
-                        for (int k = 0; k < n; k++)
-                        {
-                            dum = a[imax, k];
-                            a[imax, k] = a[j, k];
-                            a[j, k] = dum;
-                        }
-                        d = -d;
-                        vv[imax] = vv[j];
-                    }
-                    indx[j] = imax;
-                    if (a[j, j] == 0) a[j, j] = TINY;
-
-                    if (j != n - 1)
-                    {
-                        dum = 1.0 / a[j, j];
-                        for (int i = j + 1; i < n; i++) a[i, j] = a[i, j] * dum;
-                    }
-                }
-            }
-            private static void lubksb(double[,] a, int[] indx, double[] b)
-            {
-                int ii = 0, ip;
-                double sum;
-
-                int n = a.GetLength(0);
-                for (int i = 0; i < n; i++)
-                {
-                    ip = indx[i];
-                    sum = b[ip];
-                    b[ip] = b[i];
-                    if (ii != 0)
-                        for (int j = ii - 1; j < i; j++) sum = sum - a[i, j] * b[j];
-                    else if (sum != 0) ii = i + 1;
-                    b[i] = sum;
-                }
-                for (int i = n - 1; i >= 0; i--)
-                {
-                    sum = b[i];
-                    for (int j = i + 1; j < n; j++) sum = sum - a[i, j] * b[j];
-                    b[i] = sum / a[i, i];
-                }
-            }
-            private static bool lnsrch(double[] xold, double fold, double[] g, double[] p, double[] x, double f, double stpmax, bool Check, double[] fvec, EquationSet objEquationSet)
-            {
-                const double ALF = 1E-08;
-                const double TOLX = 1E-11;
-
-                double a, alam, alam2 = 0.0, alamin, b, disc, f2 = 0.0;
-                double rhs1, rhs2, slope, sum, temp, test, tmplam;
-
-                int n = xold.Length;
-                Check = false;
-                sum = 0.0;
-                for (int i = 0; i < n; i++) sum = sum + p[i] * p[i];
-                sum = Sqrt(sum);
-                if (sum > stpmax)
-                    for (int i = 0; i < n; i++) p[i] = p[i] * stpmax / sum;
-                slope = 0.0;
-                for (int i = 0; i < n; i++) slope = slope + g[i] * p[i];
-                if (slope >= 0.0) nError = "Roundoff problem in lnsrch.";
-                test = 0.0;
-                for (int i = 0; i < n; i++)
-                {
-                    temp = Abs(p[i]) / Max(Abs(xold[i]), 1);
-                    if (temp > test) test = temp;
-                }
-                alamin = TOLX / test;
-                alam = 1.0;
-                DateTime startT = DateTime.Now;
-                int i_times = 0;
-                while(true)
-                {
-                    if (i_times == 100)
-                    {
-                        i_times = 0;
-                        if (DateTime.Now - startT > TimeSpanLimit)
-                        {
-                            Debug.WriteLine("NonLinear Find Root Overtime({0}s)", TimeSpanLimit.Seconds);
-                            return true;
-                        }
-                    }
-
-                    for (int i = 0; i < n; i++) x[i] = xold[i] + alam * p[i];
-                    f = fmin(x, fvec, objEquationSet);
-                    if (alam < alamin)
-                    {
-                        for (int i = 0; i < n; i++) x[i] = xold[i];
-                        Check = true;
-                        return false;
-                    }
-                    else if (f <= fold + ALF * alam * slope) return false;
-                    else
-                    {
-                        if (alam == 1.0) tmplam = -slope / (2.0 * (f - fold - slope));
-                        else
-                        {
-                            rhs1 = f - fold - alam * slope;
-                            rhs2 = f2 - fold - alam2 * slope;
-                            a = (rhs1 / (alam * alam) - rhs2 / (alam2 * alam2)) / (alam - alam2);
-                            b = (-alam2 * rhs1 / (alam * alam) + alam * rhs2 / (alam2 * alam2)) / (alam - alam2);
-
-                            if (a == 0.0) tmplam = -slope / (2.0 * b);
-                            else
-                            {
-                                disc = b * b - 3.0 * a * slope;
-                                if (disc < 0.0) tmplam = 0.5 * alam;
-                                else if (b <= 0.0) tmplam = (-b + Sqrt(disc)) / (3.0 * a);
-                                else tmplam = -slope / (b + Sqrt(disc));
-                            }
-                            if (tmplam > 0.5 * alam) tmplam = 0.5 * alam;
-                        }
-                    }
-
-                    alam2 = alam;
-                    f2 = f;
-                    alam = Max(tmplam, 0.1 * alam);
-
-                    i_times++;
-                }
-            }
-            private static void fdjac(double[] x, double[] fvec, double[,] df, EquationSet objEquationSet)
-            {
-                const double EPS = 1E-08;
-
-                double h, temp;
-
-                int n = x.Length;
-                double[] f = new double[n];
-
-                for (int j = 0; j < n; j++)
-                {
-                    temp = x[j];
-                    h = EPS * Abs(temp);
-                    if (h == 0) h = EPS;
-                    x[j] = temp + h;
-                    h = x[j] - temp;
-                    objEquationSet(x, f);
-                    x[j] = temp;
-                    for (int i = 0; i < n; i++) df[i, j] = (f[i] - fvec[i]) / h;
-                }
-            }
-            private static double fmin(double[] x, double[] fvec, EquationSet objEquationSet)
-            {
-                objEquationSet(x, fvec);
-
-                int n = x.Length;
-                double sum = 0.0;
-                for (int i = 0; i < n; i++) sum = sum + fvec[i] * fvec[i];
-                return 0.5 * sum;
-            }
-            private static double Max(double a, double b)
-            {
-                double tMax = a;
-                if (tMax < b) tMax = b;
-                return tMax;
-            }
-        }
-
-        protected static class Differential
-        {
-            public static double Mid2PDiff(Func<double, double> f, double xi, double h)
-            {
-                double dfdx = (f(xi - h) - f(xi + h)) / 2 / h;
-                return dfdx;
-            }
-        }
-
-        protected static class Integration
-        {
-            const int JMAX = 20, JMAXP = JMAX + 1, K = 5;
-            const double EPS = 1.0e-10;
-            public delegate double Equation(double input);
-
-
-            static double s = 0;
-
-            public static double trapzd(Equation func, double a, double b, int n)
-            {
-                double x, tnm, sum, del;
-                //double s=0;
-
-                int it, j;
-
-                if (n == 1)
-                {
-                    return (s = 0.5 * (b - a) * (func(a) + func(b)));
-                }
-                else
-                {
-                    for (it = 1, j = 1; j < n - 1; j++) it <<= 1;
-                    tnm = it;
-                    del = (b - a) / tnm;
-                    x = a + 0.5 * del;
-                    for (sum = 0.0, j = 0; j < it; j++, x += del) sum += func(x);
-                    s = 0.5 * (s + (b - a) * sum / tnm);
-                    return s;
-                }
-            }
-
-            public static void polint(double[] xa, double[] ya, double x, ref double y, ref double dy)
-            {
-                int i, m, ns = 0;
-                double den, dif, dift, ho, hp, w;
-
-                int n = xa.Length;
-                double[] c = new double[n];
-                double[] d = new double[n];
-
-                dif = Abs(x - xa[0]);
-                for (i = 0; i < n; i++)
-                {
-                    if ((dift = Abs(x - xa[i])) < dif)
-                    {
-                        ns = i;
-                        dif = dift;
-                    }
-                    c[i] = ya[i];
-                    d[i] = ya[i];
-                }
-                y = ya[ns--];
-                for (m = 1; m < n; m++)
-                {
-                    for (i = 0; i < n - m; i++)
-                    {
-                        ho = xa[i] - x;
-                        hp = xa[i + m] - x;
-                        w = c[i + 1] - d[i];
-                        den = ho - hp;
-                        //if ((den=ho-hp) == 0.0) nrerror("Error in routine polint");
-                        den = w / den;
-                        d[i] = hp * den;
-                        c[i] = ho * den;
-                    }
-                    y += (dy = (2 * (ns + 1) < (n - m) ? c[ns + 1] : d[ns--]));
-                }
-            }
-
-            public static double qromb(Equation func, double a, double b)
-            {
-
-                double ss = 0, dss = 0;
-                double[] s = new double[JMAX];
-                double[] h = new double[JMAXP];
-                double[] s_t = new double[K];
-                double[] h_t = new double[K];
-                int i, j;
-
-                h[0] = 1.0;
-                for (j = 1; j <= JMAX; j++)
-                {
-                    s[j - 1] = trapzd(func, a, b, j);
-                    if (j >= K)
-                    {
-                        for (i = 0; i < K; i++)
-                        {
-                            h_t[i] = h[j - K + i];
-                            s_t[i] = s[j - K + i];
-                        }
-                        polint(h_t, s_t, 0.0, ref ss, ref dss);
-                        if (Abs(dss) <= EPS * Abs(ss)) return ss;
-                    }
-                    h[j] = 0.25 * h[j - 1];
-                }
-                //nrerror("Too many steps in routine qromb");
-                return 0.0;
-            }
-        }
-
-        protected class RootFinding : PTL.Mathematics.RootFinding
-        {
-            public static double[] OthogonalBroyden(List<Func<double[], double>> fs, double[] initialGuess, int maxIteration = 100, int[] maxIterations = null, double accuracy = 1e-008, Action<double> progressRepoter = null)
-            {
-                int times = 0;
-                int N = initialGuess.Length;
-                double[] errors = new double[N];
-                for (int i = 0; i < N; i++)
-                    errors[i] = accuracy * 10;
-
-                Func<double, bool> ConditionMet = (thresholds) =>
-                #region
-                {
-                    bool result = true;
-                    if (times <= maxIteration)
-                    {
-                        //Console.Write("Errors: \t");
-                        for (int i = 0; i < N; i++)
-                        {
-                            errors[i] = Abs(fs[i](initialGuess));
-                            //Console.Write(errors[i].ToString("N8") + "\t");
-                            if (errors[i] > thresholds)
-                            {
-                                result = false;
-                                break;
-                            }
-                        }
-                        //Console.WriteLine();
-                        if (progressRepoter != null)
-                        {
-                            double percentage = Pow(accuracy * N / errors.Sum(), 0.25);
-                            progressRepoter(percentage);
-                        }
-                    }
-                    return result;
-                };
-                #endregion
-                Func<double[], double, int, double[]> arrReplacer = (array, value, index) =>
-                #region
-                {
-                    array[index] = value;
-                    return array;
-                };
-                #endregion
-
-                while (!ConditionMet(accuracy))
-                {
-                    for (int i = 0; i < N; i++)
-                    {
-                        int timesLimit = maxIterations != null ? maxIterations[i] : maxIteration;
-                        double[] root = MathNet.Numerics.RootFinding.Broyden.FindRoot(
-                            (x) => new double[] { fs[i](arrReplacer(initialGuess, x[0], i)) },
-                            new double[] { initialGuess[i] },
-                            accuracy,
-                            timesLimit);
-                        initialGuess[i] = root[0];
-                    }
-                    times++;
-                }
-
-                return initialGuess;
-            }
-        }
     }
 
     

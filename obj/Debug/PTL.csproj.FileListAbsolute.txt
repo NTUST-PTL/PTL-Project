@@ -198,8 +198,6 @@ C:\Data\GitHub\PTL-Project\bin\Debug\MathNet.Numerics.dll
 C:\Data\GitHub\PTL-Project\bin\Debug\Newtonsoft.Json.dll
 C:\Data\GitHub\PTL-Project\bin\Debug\Tao.OpenGl.dll
 C:\Data\GitHub\PTL-Project\bin\Debug\Tao.Platform.Windows.dll
-C:\Data\GitHub\PTL-Project\bin\Debug\netDxf.pdb
-C:\Data\GitHub\PTL-Project\bin\Debug\netDxf.xml
 C:\Data\GitHub\PTL-Project\bin\Debug\Newtonsoft.Json.pdb
 C:\Data\GitHub\PTL-Project\bin\Debug\Newtonsoft.Json.xml
 C:\Data\GitHub\PTL-Project\obj\Debug\PTL.csprojResolveAssemblyReference.cache
