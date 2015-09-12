@@ -247,7 +247,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Mathnet-Numerics\src\Numerics\Numerics.csproj">
+    <ProjectReference Include="..\mathnet-PTL\src\Numerics\Numerics.csproj">
       <Project>{b7cae5f4-a23f-4438-b5be-41226618b695}</Project>
       <Name>Numerics</Name>
     </ProjectReference>

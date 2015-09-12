@@ -667,6 +667,7 @@ namespace PTL.OpenGL.Plot
             viewBoundary[1].X = this.centerPoint.X + (viewBoundary[1].X - this.centerPoint.X) / this.XScale;
             viewBoundary[0].Y = this.centerPoint.Y + (viewBoundary[0].Y - this.centerPoint.Y) / this.YScale;
             viewBoundary[1].Y = this.centerPoint.Y + (viewBoundary[1].Y - this.centerPoint.Y) / this.YScale;
+            
             #endregion 計算格線範圍
         }
 
@@ -677,7 +678,12 @@ namespace PTL.OpenGL.Plot
             int i = 0;
             int j = 0;
             bool findPicth = false;
-            while (true)
+            while (!double.IsNaN(viewBoundary[0].X)
+                && !double.IsNegativeInfinity(viewBoundary[0].X)
+                && !double.IsPositiveInfinity(viewBoundary[0].X)
+                && !double.IsNaN(viewBoundary[1].X)
+                && !double.IsNegativeInfinity(viewBoundary[1].X)
+                && !double.IsPositiveInfinity(viewBoundary[1].X))
             {
                 for (j = 0; j < gridPitchOption.Length; j++)
                     if (openGLWindow.Width / ((viewBoundary[1].X - viewBoundary[0].X) / (gridPitchOption[j] * Pow(10, i))) >= minGridPitch)
@@ -722,7 +728,13 @@ namespace PTL.OpenGL.Plot
             i = 0;
             j = 0;
             findPicth = false;
-            while (true)
+            while (
+                   !double.IsNaN(viewBoundary[0].Y)
+                && !double.IsNegativeInfinity(viewBoundary[0].Y)
+                && !double.IsPositiveInfinity(viewBoundary[0].Y)
+                && !double.IsNaN(viewBoundary[1].Y)
+                && !double.IsNegativeInfinity(viewBoundary[1].Y)
+                && !double.IsPositiveInfinity(viewBoundary[1].Y))
             {
                 for (j = 0; j < gridPitchOption.Length; j++)
                     if (openGLWindow.Height / ((viewBoundary[1].Y - viewBoundary[0].Y) / (gridPitchOption[j] * Pow(10, i))) >= minGridPitch)

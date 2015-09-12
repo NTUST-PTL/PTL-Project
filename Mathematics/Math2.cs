@@ -1573,7 +1573,8 @@ namespace PTL.Mathematics
                             (x) => new double[] { fs[i](arrReplacer(initialGuess, x[0], i)) },
                             new double[] { initialGuess[i] },
                             accuracy,
-                            timesLimit);
+                            timesLimit,
+                            1);
                         initialGuess[i] = root[0];
                     }
                     times++;
