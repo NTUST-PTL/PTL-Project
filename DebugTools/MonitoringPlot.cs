@@ -141,7 +141,10 @@ namespace PTL.DebugTools
 
         public void Clear()
         {
-            Window.View.ClearThings2Show();
+            MonitorRecords = new Dictionary<String, PolyLine>();
+            MonitorLogTextBoxs = new Dictionary<String, System.Windows.Controls.TextBox>();
+            this.Window.LogGrid.Children.Clear();
+            this.Window.LogGrid.RowDefinitions.Clear();
         }
 
         public void Close()

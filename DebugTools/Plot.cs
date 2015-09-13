@@ -122,6 +122,7 @@ namespace PTL.DebugTools
 
         public void Clear()
         {
+            this.LogTextBox.Text = null;
             Window.View.ClearThings2Show();
         }
 
