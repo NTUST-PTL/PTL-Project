@@ -463,6 +463,13 @@ namespace PTL.OpenGL.Plot
             GL.glEnable(GL.GL_SMOOTH);
             GL.glEnable(GL.GL_LINE_SMOOTH);
             GL.glFlush();
+
+            //GL.glDisable(GL.GL_LINE_SMOOTH);
+            //畫DXFD
+            if (Things2Show.V.Count != 0)
+                foreach (var item in Things2Show.V)
+                    item.PlotInOpenGL();
+
             ////計算網格
             if (this.PlotGrid == true || this.PlotGraduation == true)
             {
@@ -472,12 +479,6 @@ namespace PTL.OpenGL.Plot
                 if (this.PlotGraduation)
                     graduationLayer.PlotInOpenGL();
             }
-
-            //GL.glDisable(GL.GL_LINE_SMOOTH);
-            //畫DXFD
-            if (Things2Show.V.Count != 0)
-                foreach (var item in Things2Show.V)
-                    item.PlotInOpenGL();
         }
 
         protected virtual void GanerateGridLayer(Color gridColor1, Color gridColor2, Color graduationColor)

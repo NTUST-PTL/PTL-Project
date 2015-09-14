@@ -61,7 +61,7 @@ namespace PTL.DebugTools
             if (String.IsNullOrEmpty(Name))
                 Name = "Monitor " + MonitorRecords.Count;
 
-            PolyLine newRecord = new PolyLine() { Name = Name, Color = color };
+            PolyLine newRecord = new PolyLine() { Name = Name, Color = color, LineWidth = 2.0f };
 
             if (Setter != null)
                 Setter(newRecord);
