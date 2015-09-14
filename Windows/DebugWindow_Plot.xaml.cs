@@ -56,7 +56,9 @@ namespace PTL.Windows
             title.Text = name;
 
             DockPanel newStackPanel = new DockPanel();
+            DockPanel.SetDock(title, Dock.Top);
             newStackPanel.Children.Add(title);
+            DockPanel.SetDock(newTextBox, Dock.Top);
             newStackPanel.Children.Add(newTextBox);
 
             RowDefinition newRow = new RowDefinition();
