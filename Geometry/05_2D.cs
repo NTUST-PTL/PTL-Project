@@ -325,7 +325,7 @@ namespace PTL.Geometry
 
         public void SovleNormalVector()
         {
-            if (Points != null && Points.Length > 4)
+            if (Points != null && Points.Length >= 4)
             {
                 Normals = new Vector[Points.GetLength(0), Points.GetLength(1)];
                 double a = 0, b = 0, c = 0, m = 0, n = 0, l = 0;
