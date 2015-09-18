@@ -9,6 +9,7 @@ using CsGL.OpenGL;
 using Tao.Platform.Windows;
 using PTL;
 using PTL.Geometry;
+using PTL.Geometry.MathModel;
 using PTL.Definitions;
 using PTL.OpenGL;
 using PTL.OpenGL.Plot;
@@ -40,11 +41,11 @@ namespace PTL.OpenGL.Plot
         //邊框、格線、刻度欄位
         protected Double minGridPitch = 30; //unit：pixel
         protected Double[] gridPitchOption = new double[] { 1, 2, 5 };//格線間距選項
-        protected PointD centerPoint = new PointD();
-        protected PointD[] geometryBoundary;
-        protected PointD[] viewBoundary;
-        protected PointD geometrySize;
-        protected PointD gridSize;
+        protected XYZ4 centerPoint = new XYZ4();
+        protected XYZ4[] geometryBoundary;
+        protected XYZ4[] viewBoundary;
+        protected XYZ4 geometrySize;
+        protected XYZ4 gridSize;
         protected Double xGridPitch;
         protected Double yGridPitch;
         protected Double graphicRangeX;
@@ -200,12 +201,12 @@ namespace PTL.OpenGL.Plot
 
         private void CheckBoundary()
         {
-            this.geometryBoundary = new PointD[2];
+            this.geometryBoundary = new XYZ4[2];
             foreach (var item in Things2Show.V)
             {
                 if (item is IHaveBoundary)
                 {
-                    PointD[] itemboundary = (item as IHaveBoundary).Boundary;
+                    XYZ4[] itemboundary = (item as IHaveBoundary).Boundary;
                     if (this.geometryBoundary[0] == null && itemboundary != null)
                         this.geometryBoundary = (item as IHaveBoundary).Boundary;
                     else
@@ -384,8 +385,8 @@ namespace PTL.OpenGL.Plot
             this.Things2Show.V = new HashSet<ICanPlotInOpenGL>();
 
 
-            this.geometryBoundary = new PointD[2];
-            this.viewBoundary = new PointD[2];
+            this.geometryBoundary = new XYZ4[2];
+            this.viewBoundary = new XYZ4[2];
             this.BackGroundColor = Color.FromArgb(90, 90, 90);
 
             this.BoundaryGap = 0.2;
@@ -506,8 +507,8 @@ namespace PTL.OpenGL.Plot
             {
                 double xSpace = (viewBoundary[1].X - viewBoundary[0].X) / this.openGLWindow.Width * GraduationHeight;
                 double ySpace = (viewBoundary[1].Y - viewBoundary[0].Y) / this.openGLWindow.Height * GraduationHeight;
-                gridBoundary[0] = viewBoundary[0] + new PointD(2.0 * xSpace, ySpace, 0);
-                gridBoundary[1] = viewBoundary[1] - new PointD(xSpace, ySpace, 0);
+                gridBoundary[0] = viewBoundary[0] + new XYZ4(2.0 * xSpace, ySpace, 0);
+                gridBoundary[1] = viewBoundary[1] - new XYZ4(xSpace, ySpace, 0);
             }
             //移動格線位置至內容的最後方，避免格線擋住顯示內容
             if (gridBoundary != null)
@@ -651,13 +652,13 @@ namespace PTL.OpenGL.Plot
         {
             #region 計算視野範圍
             viewBoundary[0] = centerPoint
-                - new PointD((Double)openGLWindow.M_Translation.X, (Double)openGLWindow.M_Translation.Y, 0) / (Double)openGLWindow.M_Scale
-                - new PointD(Range,
+                - new XYZ4((Double)openGLWindow.M_Translation.X, (Double)openGLWindow.M_Translation.Y, 0) / (Double)openGLWindow.M_Scale
+                - new XYZ4(Range,
                             Range * ((Double)openGLWindow.Height / (Double)openGLWindow.Width),
                             0) / (Double)openGLWindow.M_Scale;
             viewBoundary[1] = centerPoint
-                - new PointD((Double)openGLWindow.M_Translation.X, (Double)openGLWindow.M_Translation.Y, 0) / (Double)openGLWindow.M_Scale
-                + new PointD(Range,
+                - new XYZ4((Double)openGLWindow.M_Translation.X, (Double)openGLWindow.M_Translation.Y, 0) / (Double)openGLWindow.M_Scale
+                + new XYZ4(Range,
                             Range * ((Double)openGLWindow.Height / (Double)openGLWindow.Width),
                             0) / (Double)openGLWindow.M_Scale;
 

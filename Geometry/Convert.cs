@@ -20,7 +20,7 @@ namespace PTL.Geometry
             {
                 uint NRow = xslices + 1;
                 uint NCol = yslices + 1;
-                topoFace = new TopoFace() { Points = new PointD[NRow, NCol] };
+                topoFace = new TopoFace() { Points = new XYZ4[NRow, NCol] };
 
                 //確認方向
                 if (xstart > xend)
@@ -80,7 +80,7 @@ namespace PTL.Geometry
             Action<TopoFace> TopoFaceSetter = null)
         {
             return ToTopoFace(
-                (u, v) => new PointD(nub_Surface.SurfaceFunc(u, v)),
+                (u, v) => new PointD(nub_Surface.Position(u, v)),
                 xstart, xend, xslices,
                 ystart, yend, yslices,
                 TopoFaceSetter

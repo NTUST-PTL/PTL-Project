@@ -131,13 +131,13 @@ namespace PTL.OpenGL.Plot
                                               Mab[0, 3], Mab[1, 3], Mab[2, 3], Mab[3, 3]};
             GL.glMultMatrixd(Mab1D);
         }
-        public static void Translated(Vector p1)
+        public static void Translated(double[] p1)
         {
-            GL.glTranslated(p1.X, p1.Y, p1.Z);
+            GL.glTranslated(p1[0], p1[1], p1[2]);
         }
-        public static void Vertex3d(Vector p1)
+        public static void Vertex3d(double[] p1)
         {
-            GL.glVertex3d(p1.X, p1.Y, p1.Z);
+            GL.glVertex3d(p1[0], p1[1], p1[2]);
         }
         #endregion
 

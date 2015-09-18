@@ -5,18 +5,19 @@ using System.Text;
 using System.Threading.Tasks;
 using CsGL.OpenGL;
 using PTL.OpenGL.Plot;
+using PTL.Geometry.MathModel;
 
 namespace PTL.Geometry
 {
     public class CubicClassifier : PTL.Mathematics.Math2, ICanPlotInOpenGL
     {
         private int _n = 100;
-        private PointD[] _Boundary;
+        private XYZ4[] _Boundary;
         private double[] _Dimentions;
         private double[] _CubeDimentions;
         private int[] _CubeArrayDimentions;
         private int[] _CubeArrayLastIndex;
-        private PointD[, ,] _Nodes;
+        private XYZ4[, ,] _Nodes;
         private CubicSpace[, ,] _CubeSpaces;
 
         public int n 
@@ -24,7 +25,7 @@ namespace PTL.Geometry
             get { return _n; }
             protected set { this._n = value; }
         }
-        public PointD[] Boundary
+        public XYZ4[] Boundary
         {
             get { return _Boundary; }
             protected set { this._Boundary = value; }
@@ -49,7 +50,7 @@ namespace PTL.Geometry
             get { return _CubeArrayLastIndex; }
             protected set { this._CubeArrayLastIndex = value; }
         }
-        public PointD[, ,] Nodes
+        public XYZ4[, ,] Nodes
         {
             get { return _Nodes; }
             protected set { this._Nodes = value; }
@@ -63,7 +64,7 @@ namespace PTL.Geometry
         public void CubicClassify(EntityCollection part)
         {
             this.Boundary = part.Boundary;
-            this.Dimentions =  (Boundary[1] - Boundary[0]).ToArray();
+            this.Dimentions =  (Boundary[1] - Boundary[0]).Values;
             double longEdgeLength = this.Dimentions.Max();
             double unit = longEdgeLength / this.n;
             this.CubeDimentions = new double[] { unit, unit, unit };
@@ -77,7 +78,7 @@ namespace PTL.Geometry
                 CubeArrayDimentions[2] - 1 };
             
             //計算節點
-            this.Nodes = new PointD[CubeArrayDimentions[0] + 1, CubeArrayDimentions[1] + 1, CubeArrayDimentions[2] + 1];
+            this.Nodes = new XYZ4[CubeArrayDimentions[0] + 1, CubeArrayDimentions[1] + 1, CubeArrayDimentions[2] + 1];
             for (int i = 0; i < CubeArrayDimentions[0] + 1; i++)
             {
                 for (int j = 0; j < CubeArrayDimentions[1] + 1; j++)
@@ -108,7 +109,7 @@ namespace PTL.Geometry
 
             foreach (Entity entity in part.Entities.Values)
             {
-                PointD[] boundary = entity.Boundary;
+                XYZ4[] boundary = entity.Boundary;
                 int[] startCubeIndex = GetCubicSpaceIndex(boundary[0]);
                 int[] endCubeIndex = GetCubicSpaceIndex(boundary[1]);
 
@@ -125,9 +126,9 @@ namespace PTL.Geometry
             }
         }
 
-        public PointD GetStanderCoordinate(PointD p)
+        public XYZ4 GetStanderCoordinate(XYZ4 p)
         {
-            PointD p1 = p - this.Boundary[0];
+            XYZ4 p1 = p - this.Boundary[0];
             //if (p1.Z / CubeDimentions[2] >= CubeArrayDimentions[2])
             //{
             //    int a = 0;
@@ -190,7 +191,7 @@ namespace PTL.Geometry
         //    int[] Dquadrant = Sign(direction.ToArray());
         //    int[] startIndex = GetCubicSpaceIndex(position);
         //    int[] nextIndex = GetCubicSpaceIndex(position);
-        //    PointD nextsP = ssP.Clone() as PointD;
+        //    PointD nextsP = ssP.Clone();
         //    if (!(startIndex[0] < 0 || startIndex[0] >= CubeArrayDimentions[0]
         //        || startIndex[1] < 0 || startIndex[1] >= CubeArrayDimentions[1]
         //        || startIndex[2] < 0 || startIndex[2] >= CubeArrayDimentions[2]))
@@ -249,7 +250,7 @@ namespace PTL.Geometry
 
 
         //        //int[] lastIndex = (int[])ArrayTake(nextIndex, new int[] { 0 }, new int[] { 2 });
-        //        //PointD lastSP = nextsP.Clone() as PointD;
+        //        //PointD lastSP = nextsP.Clone();
 
 
         //        nextIndex[rate[0].i % 3] += Dquadrant[rate[0].i % 3];

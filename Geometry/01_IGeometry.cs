@@ -4,9 +4,11 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using System.Drawing;
+using PTL.Base;
 using PTL.Definitions;
 using PTL.OpenGL.Plot;
 using CsGL.OpenGL;
+using PTL.Geometry.MathModel;
 
 namespace PTL.Geometry
 {
@@ -16,7 +18,7 @@ namespace PTL.Geometry
     }
     public interface IHaveBoundary 
     {
-        PointD[] Boundary { get; }
+        XYZ4[] Boundary { get; }
     }
     public interface IHaveColor : IHaveVisibility
     {
@@ -64,7 +66,7 @@ namespace PTL.Geometry
     }
     public interface IHomogeneous { }
 
-    public abstract class Entity : PlotSub, IHaveBoundary, IHaveName, ICloneable, IHaveCoordinateSystem, ICanPlotInOpenGL, IHaveColor, IHaveParent, ITransformable
+    public abstract class Entity: PlotSub, IHaveBoundary, IHaveName, ICloneable, IHaveCoordinateSystem, ICanPlotInOpenGL, IHaveColor, IHaveParent, ITransformable
     {
         public virtual String Name { get; set; }
         private EntityCollection fParent;
@@ -158,7 +160,7 @@ namespace PTL.Geometry
                 }
             }
         }
-        public abstract PointD[] Boundary { get; }
+        public abstract XYZ4[] Boundary { get; }
 
         public abstract object Clone();
 

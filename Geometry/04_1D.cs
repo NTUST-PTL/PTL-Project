@@ -8,6 +8,7 @@ using System.Drawing;
 using PTL.Definitions;
 using PTL.OpenGL.Plot;
 using CsGL.OpenGL;
+using PTL.Geometry.MathModel;
 
 namespace PTL.Geometry
 {
@@ -19,8 +20,8 @@ namespace PTL.Geometry
         #region Constructor and Destructor
         public Line(PointD tstartpnt, PointD tendpnt)
         {
-            this.p1 = tstartpnt.Clone() as PointD;
-            this.p2 = tendpnt.Clone() as PointD;
+            this.p1 = (PointD)tstartpnt.Clone();
+            this.p2 = (PointD)tendpnt.Clone();
         }
         public Line(PointD tstartpnt, PointD tendpnt, Color tcolor, LineType ttype, float twidth)
         {
@@ -28,16 +29,16 @@ namespace PTL.Geometry
             this.LineType = ttype;
             this.LineWidth = twidth;
 
-            this.p1 = tstartpnt.Clone() as PointD;
-            this.p2 = tendpnt.Clone() as PointD;
+            this.p1 = (PointD)tstartpnt.Clone();
+            this.p2 = (PointD)tendpnt.Clone();
         }
         public Line(PointD tstartpnt, PointD tendpnt, Color tcolor, float twidth)
         {
             this.Color = tcolor;
             this.LineWidth = twidth;
 
-            this.p1 = tstartpnt.Clone() as PointD;
-            this.p2 = tendpnt.Clone() as PointD;
+            this.p1 = (PointD)tstartpnt.Clone();
+            this.p2 = (PointD)tendpnt.Clone();
         }
         public Line(Line tline, Color tcolor, LineType ttype, float twidth)
         {
@@ -47,23 +48,23 @@ namespace PTL.Geometry
             this.LineType = ttype;
             this.LineWidth = twidth;
 
-            this.p1 = tline.p1.Clone() as PointD;
-            this.p2 = tline.p2.Clone() as PointD;
+            this.p1 = (PointD)tline.p1.Clone();
+            this.p2 = (PointD)tline.p2.Clone();
         }
         public Line()
         {
         }
         #endregion
 
-        public override PointD[] Boundary
+        public override XYZ4[] Boundary
         {
             get
             {
-                PointD[] boundary;
-                boundary = new PointD[2] { this.p1.Clone() as PointD, this.p1.Clone() as PointD };
+                XYZ4[] boundary;
+                boundary = new XYZ4[2] { (PointD)this.p1.Clone(), (PointD)this.p1.Clone() };
                 Compare_Boundary(boundary, p2);
                 if (this.CoordinateSystem != null)
-                    boundary = TransformPoints(this.CoordinateSystem, boundary).ToArray();
+                    boundary = Transport(this.CoordinateSystem, boundary).ToArray();
                 return boundary;
             }
         }
@@ -133,15 +134,15 @@ namespace PTL.Geometry
             aLine.LineType = this.LineType;
             aLine.LineWidth = this.LineWidth;
 
-            aLine.p1 = this.p1.Clone() as PointD;
-            aLine.p2 = this.p2.Clone() as PointD;
+            aLine.p1 = (PointD)this.p1.Clone();
+            aLine.p2 = (PointD)this.p2.Clone();
             return aLine;
         }
 
         public override void Transform(double[,] TransformMatrix)
         {
-            this.p1 = RotatePoint(TransformMatrix, this.p1);
-            this.p2 = RotatePoint(TransformMatrix, this.p2);
+            this.p1 = Transport4(TransformMatrix, this.p1);
+            this.p2 = Transport4(TransformMatrix, this.p2);
         }
 
         public netDxf.Entities.EntityObject ToDXFEntity()
@@ -157,7 +158,7 @@ namespace PTL.Geometry
     }
     public class PolyLine : LineArchitectureEntity, ICanBeWritedToDXFFile, ICanBeWritedToScriptFile, IToDXFEntity
     {
-        public List<PointD> Points = new List<PointD>();
+        public List<XYZ4> Points = new List<XYZ4>();
 
         #region Constructor and Destructor
         public PolyLine(Color tcolor, LineType ttype, float twidth)
@@ -175,9 +176,9 @@ namespace PTL.Geometry
         {
             int nump = tpoints.Length;
             for (int i = 0; i < nump; i++)
-                Points.Add(tpoints[i].Clone() as PointD);
+                Points.Add((PointD)tpoints[i].Clone());
         }
-        public PolyLine(MathModel.XYZ[] tpoints)
+        public PolyLine(MathModel.XYZ4[] tpoints)
         {
             int nump = tpoints.Length;
             for (int i = 0; i < nump; i++)
@@ -191,7 +192,7 @@ namespace PTL.Geometry
 
             int nump = tpoints.Length;
             for (int i = 0; i < nump; i++)
-                Points.Add(tpoints[i].Clone() as PointD);
+                Points.Add((PointD)tpoints[i].Clone());
         }
         public PolyLine()
         {
@@ -200,25 +201,25 @@ namespace PTL.Geometry
 
         public void AddPoint(PointD tpoint)
         {
-            Points.Add(tpoint.Clone() as PointD);
+            Points.Add((PointD)tpoint.Clone());
         }
 
-        public override PointD[] Boundary
+        public override XYZ4[] Boundary
         {
             get
             {
-                PointD[] boundary = null;
+                XYZ4[] boundary = null;
                 if (Points.Count > 0)
                 {
                     if (this.CoordinateSystem != null)
                     {
-                        boundary = new PointD[2] { MatrixDot4(this.CoordinateSystem, Points[0]), MatrixDot4(this.CoordinateSystem, Points[0]) };
+                        boundary = new XYZ4[2] { Transport4(this.CoordinateSystem, Points[0]), Transport4(this.CoordinateSystem, Points[0]) };
                         foreach (PointD p in this.Points)
-                            Compare_Boundary(boundary, MatrixDot4(this.CoordinateSystem, p));
+                            Compare_Boundary(boundary, Transport4(this.CoordinateSystem, p));
                     }
                     else
                     {
-                        boundary = new PointD[2] { this.Points[0].Clone() as PointD, this.Points[0].Clone() as PointD };
+                        boundary = new XYZ4[2] { this.Points[0].Clone() as XYZ4, this.Points[0].Clone() as XYZ4 };
                         foreach (PointD p in this.Points)
                             Compare_Boundary(boundary, p);
                     }
@@ -304,22 +305,22 @@ namespace PTL.Geometry
             aPolyLine.LineWidth = this.LineWidth;
 
             int nump = this.Points.Count;
-            aPolyLine.Points = new List<PointD>();
+            aPolyLine.Points = new List<XYZ4>();
             for (int i = 0; i < nump; i++)
-                aPolyLine.Points.Add(this.Points[i].Clone() as PointD);
+                aPolyLine.Points.Add(this.Points[i].Clone() as XYZ4);
             return aPolyLine;
         }
 
         public override void Transform(double[,] TransformMatrix)
         {
-            this.Points = TransformPoints(TransformMatrix, this.Points);
+            this.Points = Transport(TransformMatrix, this.Points.ToArray()).ToList();
         }
 
         public netDxf.Entities.EntityObject ToDXFEntity()
         {
             List<netDxf.Entities.PolylineVertex> ps = new List<netDxf.Entities.PolylineVertex>();
             foreach (var p in Points)
-                ps.Add(new netDxf.Entities.PolylineVertex(p.ToDXFVertex3()));
+                ps.Add(new netDxf.Entities.PolylineVertex(((PointD)p).ToDXFVertex3()));
             netDxf.Entities.Polyline pl = new netDxf.Entities.Polyline()
             {
                 Vertexes = ps,
@@ -365,7 +366,7 @@ namespace PTL.Geometry
                 };
             else
                 this.transformedFunction = this.function;
-            this.Points = new List<PointD>();
+            this.Points = new List<XYZ4>();
             foreach (var t in this.TT)
                 this.Points.Add(transformedFunction(t));
         }
@@ -380,9 +381,9 @@ namespace PTL.Geometry
             aParaLine.TT = new List<double>();
             foreach (var t in this.TT)
                 aParaLine.TT.Add(t);
-            aParaLine.Points = new List<PointD>();
+            aParaLine.Points = new List<XYZ4>();
             for (int i = 0; i < Points.Count; i++)
-                aParaLine.Points.Add(this.Points[i].Clone() as PointD);
+                aParaLine.Points.Add(this.Points[i].Clone() as XYZ4);
             return aParaLine;
         }
 
@@ -409,7 +410,7 @@ namespace PTL.Geometry
         #region Constructor and Destructor
         public Circle(PointD tcenter, double tradius)
         {
-            Center = tcenter.Clone() as PointD;
+            Center = (PointD)tcenter.Clone();
             Radius = tradius;
         }
         public Circle(PointD tcenter, double tradius, Color tcolor, LineType ttype, float twidth)
@@ -418,7 +419,7 @@ namespace PTL.Geometry
             this.LineType = ttype;
             this.LineWidth = twidth;
 
-            this.Center = tcenter.Clone() as PointD;
+            this.Center = (PointD)tcenter.Clone();
             this.Radius = tradius;
         }
         public Circle()
@@ -427,21 +428,21 @@ namespace PTL.Geometry
         #endregion
 
         #region DXFEntity
-        public override PointD[] Boundary
+        public override XYZ4[] Boundary
         {
             get
             {
-                PointD[] boundary;
+                XYZ4[] boundary;
                 if (this.CoordinateSystem != null)
                 {
-                    boundary = new PointD[2] { MatrixDot4(this.CoordinateSystem, Center + new PointD(Radius, 0, 0)), MatrixDot4(this.CoordinateSystem, Center + new PointD(Radius, 0, 0)) };
-                    Compare_Boundary(boundary, MatrixDot4(this.CoordinateSystem, Center + new PointD(-Radius, 0, 0)));
-                    Compare_Boundary(boundary, MatrixDot4(this.CoordinateSystem, Center + new PointD(0, Radius, 0)));
-                    Compare_Boundary(boundary, MatrixDot4(this.CoordinateSystem, Center + new PointD(0, -Radius, 0)));
+                    boundary = new XYZ4[2] { Transport4(this.CoordinateSystem, Center + new PointD(Radius, 0, 0)), Transport4(this.CoordinateSystem, Center + new PointD(Radius, 0, 0)) };
+                    Compare_Boundary(boundary, Transport4(this.CoordinateSystem, Center + new PointD(-Radius, 0, 0)));
+                    Compare_Boundary(boundary, Transport4(this.CoordinateSystem, Center + new PointD(0, Radius, 0)));
+                    Compare_Boundary(boundary, Transport4(this.CoordinateSystem, Center + new PointD(0, -Radius, 0)));
                 }
                 else
                 {
-                    boundary = new PointD[2] { Center + new PointD(Radius, 0, 0), Center + new PointD(Radius, 0, 0) };
+                    boundary = new XYZ4[2] { Center + new PointD(Radius, 0, 0), Center + new PointD(Radius, 0, 0) };
                     Compare_Boundary(boundary, Center + new PointD(-Radius, 0, 0));
                     Compare_Boundary(boundary, Center + new PointD(0, Radius, 0));
                     Compare_Boundary(boundary, Center + new PointD(0, -Radius, 0));
@@ -519,7 +520,7 @@ namespace PTL.Geometry
             aCircle.LineType = this.LineType;
             aCircle.LineWidth = this.LineWidth;
 
-            aCircle.Center = this.Center.Clone() as PointD;
+            aCircle.Center = (PointD)this.Center.Clone();
             aCircle.Radius = this.Radius;
             return aCircle;
         }
@@ -563,7 +564,7 @@ namespace PTL.Geometry
         #region Constructor and Destructor
         public Arc(PointD tcenter, double tradius)
         {
-            Center = tcenter.Clone() as PointD;
+            Center = (PointD)tcenter.Clone();
             Radius = tradius;
         }
         public Arc(PointD tcenter, double tradius, double tStartAng, double tEndAng, Color tcolor, LineType ttype, float twidth)
@@ -572,7 +573,7 @@ namespace PTL.Geometry
             this.LineType = ttype;
             this.LineWidth = twidth;
 
-            Center = tcenter.Clone() as PointD;
+            Center = (PointD)tcenter.Clone();
             Radius = tradius;
             StartAng = tStartAng;
             EndAng = tEndAng;
@@ -583,21 +584,21 @@ namespace PTL.Geometry
         #endregion
 
         #region DXFEntity
-        public override PointD[] Boundary
+        public override XYZ4[] Boundary
         {
             get
             {
-                PointD[] boundary;
+                XYZ4[] boundary;
                 PointD startPoint;
                 PointD endPoint;
                 startPoint = Center + new PointD(Radius * Cos(StartAng), Radius * Sin(StartAng), 0);
                 endPoint = Center + new PointD(Radius * Cos(EndAng), Radius * Sin(EndAng), 0);
                 if (this.CoordinateSystem != null)
                 {
-                    startPoint = MatrixDot4(this.CoordinateSystem, startPoint);
-                    endPoint = MatrixDot4(this.CoordinateSystem, endPoint);
+                    startPoint = Transport4(this.CoordinateSystem, startPoint);
+                    endPoint = Transport4(this.CoordinateSystem, endPoint);
                 }
-                boundary = new PointD[2] { startPoint.Clone() as PointD, startPoint.Clone() as PointD };
+                boundary = new XYZ4[2] { (PointD)startPoint.Clone(), (PointD)startPoint.Clone() };
                 Compare_Boundary(boundary, startPoint);
                 Compare_Boundary(boundary, endPoint);
                 if (Abs(StartAng - EndAng) > PI / 4.0)
@@ -678,7 +679,7 @@ namespace PTL.Geometry
             aArc.LineType = this.LineType;
             aArc.LineWidth = this.LineWidth;
 
-            aArc.Center = this.Center.Clone() as PointD;
+            aArc.Center = (PointD)this.Center.Clone();
             aArc.Radius = this.Radius;
             aArc.StartAng = this.StartAng;
             aArc.EndAng = this.EndAng;
@@ -781,7 +782,7 @@ namespace PTL.Geometry
             set
             {
                 double Ra = Norm(fEndPointOfMajorAxis);
-                this.fEndPointOfMajorAxis = Ra * Normalize(value);
+                this.fEndPointOfMajorAxis = Ra * (Vector)Normalize(value);
             }
         }
         public Vector MinorDirection
@@ -793,7 +794,7 @@ namespace PTL.Geometry
             }
         }
         public double Ra
-        { get { return Norm(fEndPointOfMajorAxis); } set { this.fEndPointOfMajorAxis = value * Normalize(fEndPointOfMajorAxis); } }
+        { get { return Norm(fEndPointOfMajorAxis); } set { this.fEndPointOfMajorAxis = value * (Vector)Normalize(fEndPointOfMajorAxis); } }
         public double Rb
         { get { return fRatio * Norm(fEndPointOfMajorAxis); } set { this.fRatio = value / Norm(fEndPointOfMajorAxis); } }
 
@@ -802,14 +803,14 @@ namespace PTL.Geometry
         public Ellipse(PointD center, Vector majorDirection, Vector minorDirection, Double ra, double rb)
         {
             this.fCenter = center;
-            this.fEndPointOfMajorAxis = Normalize(majorDirection) * Ra;
+            this.fEndPointOfMajorAxis = (Vector)Normalize(majorDirection) * Ra;
             this.fNormal = Cross(majorDirection, minorDirection);
             this.fRatio = rb / ra;
         }
         public Ellipse(PointD center, Vector majorDirection, Vector minorDirection, Double ra, double rb, Color color, LineType lineType, float width)
         {
             this.fCenter = center;
-            this.fEndPointOfMajorAxis = Normalize(majorDirection) * ra;
+            this.fEndPointOfMajorAxis = (Vector)Normalize(majorDirection) * ra;
             this.fNormal = Cross(majorDirection, minorDirection);
             this.fRatio = rb / ra;
             this.Color = color;
@@ -838,21 +839,21 @@ namespace PTL.Geometry
         }
         #endregion
 
-        public override PointD[] Boundary
+        public override XYZ4[] Boundary
         {
             get
             {
-                PointD[] boundary;
+                XYZ4[] boundary;
                 if (this.CoordinateSystem != null)
                 {
-                    boundary = new PointD[2] { MatrixDot4(this.CoordinateSystem, Center + fEndPointOfMajorAxis), MatrixDot4(this.CoordinateSystem, Center + fEndPointOfMajorAxis) };
-                    Compare_Boundary(boundary, MatrixDot4(this.CoordinateSystem, Center - fEndPointOfMajorAxis));
-                    Compare_Boundary(boundary, MatrixDot4(this.CoordinateSystem, Center + MinorDirection * Rb));
-                    Compare_Boundary(boundary, MatrixDot4(this.CoordinateSystem, Center - MinorDirection * Rb));
+                    boundary = new XYZ4[2] { Transport4(this.CoordinateSystem, Center + fEndPointOfMajorAxis), Transport4(this.CoordinateSystem, Center + fEndPointOfMajorAxis) };
+                    Compare_Boundary(boundary, Transport4(this.CoordinateSystem, Center - fEndPointOfMajorAxis));
+                    Compare_Boundary(boundary, Transport4(this.CoordinateSystem, Center + MinorDirection * Rb));
+                    Compare_Boundary(boundary, Transport4(this.CoordinateSystem, Center - MinorDirection * Rb));
                 }
                 else
                 {
-                    boundary = new PointD[2] { Center + fEndPointOfMajorAxis, Center + fEndPointOfMajorAxis };
+                    boundary = new XYZ4[2] { Center + fEndPointOfMajorAxis, Center + fEndPointOfMajorAxis };
                     Compare_Boundary(boundary, Center - fEndPointOfMajorAxis);
                     Compare_Boundary(boundary, Center + MinorDirection * Rb);
                     Compare_Boundary(boundary, Center - MinorDirection * Rb);
@@ -899,8 +900,8 @@ namespace PTL.Geometry
                 double step = 2 * PI / (nump - 1);
 
                 PointD center = this.Center;
-                PointD e1 = this.MajorDirection.Clone() as PointD;
-                PointD e2 = this.MinorDirection.Clone() as PointD;
+                Vector e1 = (Vector)this.MajorDirection.Clone();
+                Vector e2 = (Vector)this.MinorDirection.Clone();
                 double ra = this.Ra;
                 double rb = this.Rb;
 
@@ -947,7 +948,7 @@ namespace PTL.Geometry
         public Text(string value, PointD point, Color color, string justtype, string style, int rotateang, uint fontWeight)
         {
             Value = value;
-            RefPoint = point.Clone() as PointD;
+            RefPoint = (PointD)point.Clone();
             Color = color;
             JustType = justtype;
             FontStyle = style;
@@ -957,7 +958,7 @@ namespace PTL.Geometry
         public Text(string value, PointD point, Color color, String style, double textHieght)
         {
             this.Value = value;
-            this.RefPoint = point.Clone() as PointD;
+            this.RefPoint = (PointD)point.Clone();
             this.Color = color;
             this.FontStyle = style;
             this.TextHieght = textHieght;
@@ -965,13 +966,13 @@ namespace PTL.Geometry
         public Text(string value, PointD point, Color color)
         {
             this.Value = value;
-            this.RefPoint = point.Clone() as PointD;
+            this.RefPoint = (PointD)point.Clone();
             this.Color = color;
         }
         public Text(string value, PointD point)
         {
             Value = value;
-            RefPoint = point.Clone() as PointD;
+            RefPoint = (PointD)point.Clone();
         }
         public Text()
         {
@@ -979,15 +980,15 @@ namespace PTL.Geometry
         #endregion
 
         #region DXFEntity
-        public override PointD[] Boundary
+        public override XYZ4[] Boundary
         {
             get
             {
-                PointD[] boundary;
+                XYZ4[] boundary;
                 if (this.CoordinateSystem != null)
-                    boundary = new PointD[2] { MatrixDot4(this.CoordinateSystem, this.RefPoint), MatrixDot4(this.CoordinateSystem, this.RefPoint) };  
+                    boundary = new XYZ4[2] { Transport4(this.CoordinateSystem, this.RefPoint), Transport4(this.CoordinateSystem, this.RefPoint) };  
                 else
-                    boundary = new PointD[2] { this.RefPoint.Clone() as PointD, this.RefPoint.Clone() as PointD };
+                    boundary = new XYZ4[2] { (PointD)this.RefPoint.Clone(), (PointD)this.RefPoint.Clone() };
                 return boundary;
             }
         }
@@ -1041,7 +1042,7 @@ namespace PTL.Geometry
                 aText.Name = this.Name;
             aText.Value = this.Value;
             aText.TextHieght = this.TextHieght;
-            aText.RefPoint = this.RefPoint.Clone() as PointD;
+            aText.RefPoint = (PointD)this.RefPoint.Clone();
             aText.JustType = this.JustType;
             aText.FontStyle = this.FontStyle;
             aText.Orietation = this.Orietation;
@@ -1101,10 +1102,10 @@ namespace PTL.Geometry
         #region Constructor and Destructor
         public AlignedDimension(PointD tStartpn, PointD tEndpn, PointD tTextReferpn, string tText, double tArrowSize)
         {
-            Startpn = tStartpn.Clone() as PointD;
-            Endpn = tEndpn.Clone() as PointD;
+            Startpn = (PointD)tStartpn.Clone();
+            Endpn = (PointD)tEndpn.Clone();
 
-            TextReferP = tTextReferpn.Clone() as PointD;
+            TextReferP = (PointD)tTextReferpn.Clone();
             PointD v1 = Normalize(Cross(new PointD(0, 0, 1), Endpn - Startpn));
             double refheight = Dot(v1, tTextReferpn - Endpn);
             HieghtReferP = Endpn + v1 * refheight;
@@ -1114,9 +1115,9 @@ namespace PTL.Geometry
         }
         public AlignedDimension(PointD tStartpn, PointD tEndpn, PointD tTextReferpn, double tArrowSize)
         {
-            Startpn = tStartpn.Clone() as PointD;
-            Endpn = tEndpn.Clone() as PointD;
-            TextReferP = tTextReferpn.Clone() as PointD;
+            Startpn = (PointD)tStartpn.Clone();
+            Endpn = (PointD)tEndpn.Clone();
+            TextReferP = (PointD)tTextReferpn.Clone();
 
             PointD v1 = Normalize(Cross(new PointD(0, 0, 1), Endpn - Startpn));
             double refheight = Abs(Dot(v1, tTextReferpn - Endpn));
@@ -1126,8 +1127,8 @@ namespace PTL.Geometry
         }
         public AlignedDimension(PointD tStartpn, PointD tEndpn, double refheight, double tArrowSize)
         {
-            Startpn = tStartpn.Clone() as PointD;
-            Endpn = tEndpn.Clone() as PointD;
+            Startpn = (PointD)tStartpn.Clone();
+            Endpn = (PointD)tEndpn.Clone();
 
             ArrowSize = tArrowSize;
 
@@ -1137,8 +1138,8 @@ namespace PTL.Geometry
         }
         public AlignedDimension(PointD tStartpn, PointD tEndpn)
         {
-            Startpn = tStartpn.Clone() as PointD;
-            Endpn = tEndpn.Clone() as PointD;
+            Startpn = (PointD)tStartpn.Clone();
+            Endpn = (PointD)tEndpn.Clone();
 
             PointD v1 = Normalize(Cross(new PointD(0, 0, 1), Endpn - Startpn));
             TextReferP = (Startpn + Endpn) / 2 + v1 * ArrowSize * 0.5;
@@ -1150,22 +1151,22 @@ namespace PTL.Geometry
         #endregion
 
         #region DXFEntity
-        public override PointD[] Boundary
+        public override XYZ4[] Boundary
         {
             get
             {
-                PointD[] boundary;
+                XYZ4[] boundary;
                 if (this.CoordinateSystem != null)
                 {
-                    boundary = new PointD[2] {MatrixDot4(this.CoordinateSystem, this.Startpn), MatrixDot4(this.CoordinateSystem, this.Startpn) };
-                    Compare_Boundary(boundary, MatrixDot4(this.CoordinateSystem, Endpn));
-                    Compare_Boundary(boundary, MatrixDot4(this.CoordinateSystem, HieghtReferP));
-                    Compare_Boundary(boundary, MatrixDot4(this.CoordinateSystem, TextReferP));
-                    Compare_Boundary(boundary, MatrixDot4(this.CoordinateSystem, HieghtReferP + (Startpn - Endpn)));
+                    boundary = new XYZ4[2] {Transport4(this.CoordinateSystem, this.Startpn), Transport4(this.CoordinateSystem, this.Startpn) };
+                    Compare_Boundary(boundary, Transport4(this.CoordinateSystem, Endpn));
+                    Compare_Boundary(boundary, Transport4(this.CoordinateSystem, HieghtReferP));
+                    Compare_Boundary(boundary, Transport4(this.CoordinateSystem, TextReferP));
+                    Compare_Boundary(boundary, Transport4(this.CoordinateSystem, HieghtReferP + (Startpn - Endpn)));
                 }
                 else
                 {
-                    boundary = new PointD[2] { this.Startpn.Clone() as PointD, this.Startpn.Clone() as PointD };
+                    boundary = new XYZ4[2] { (PointD)this.Startpn.Clone(), (PointD)this.Startpn.Clone() };
                     Compare_Boundary(boundary, Endpn);
                     Compare_Boundary(boundary, HieghtReferP);
                     Compare_Boundary(boundary, TextReferP);
@@ -1240,10 +1241,10 @@ namespace PTL.Geometry
             AlignedDimension aAligD = new AlignedDimension();
             if (this.Name != null)
                 aAligD.Name = this.Name;
-            aAligD.Startpn = this.Startpn.Clone() as PointD;
-            aAligD.Endpn = this.Endpn.Clone() as PointD;
-            aAligD.TextReferP = this.TextReferP.Clone() as PointD;
-            aAligD.HieghtReferP = this.HieghtReferP.Clone() as PointD;
+            aAligD.Startpn = (PointD)this.Startpn.Clone();
+            aAligD.Endpn = (PointD)this.Endpn.Clone();
+            aAligD.TextReferP = (PointD)this.TextReferP.Clone();
+            aAligD.HieghtReferP = (PointD)this.HieghtReferP.Clone();
             aAligD.Color = this.color;
 
             aAligD.Text = this.Text;
@@ -1404,7 +1405,7 @@ namespace PTL.Geometry
         {
             double angle = DegToRad(refDirection);
             PointD V1 = (new PointD(Cos(angle), Sin(angle), 0)) * aCircle.Radius;
-            Startpn = aCircle.Center.Clone() as PointD;
+            Startpn = (PointD)aCircle.Center.Clone();
             Endpn = aCircle.Center + V1;
             TextReferP = (Startpn + Endpn) / 2;
             LeaderLength = Norm((this.Startpn - this.TextReferP)) - Value;
@@ -1415,9 +1416,9 @@ namespace PTL.Geometry
         {
             double angle = DegToRad(refDirection);
             PointD V1 = (new PointD(Cos(angle), Sin(angle), 0)) * aCircle.Radius;
-            Startpn = aCircle.Center.Clone() as PointD;
+            Startpn = (PointD)aCircle.Center.Clone();
             Endpn = aCircle.Center + V1;
-            TextReferP = tTextReferpn.Clone() as PointD;
+            TextReferP = (PointD)tTextReferpn.Clone();
             LeaderLength = Norm((this.Startpn - this.TextReferP)) - Value;
             if (LeaderLength < 0) LeaderLength = 0;
             ArrowSize = tArrowSize;
@@ -1426,9 +1427,9 @@ namespace PTL.Geometry
         {
             double angle = DegToRad(refDirection);
             PointD V1 = (new PointD(Cos(angle), Sin(angle), 0)) * aCircle.Radius;
-            Startpn = aCircle.Center.Clone() as PointD;
+            Startpn = (PointD)aCircle.Center.Clone();
             Endpn = aCircle.Center + V1;
-            TextReferP = tTextReferpn.Clone() as PointD;
+            TextReferP = (PointD)tTextReferpn.Clone();
             LeaderLength = Norm((this.Startpn - this.TextReferP)) - Value;
             if (LeaderLength < 0) LeaderLength = 0;
             ArrowSize = tArrowSize;
@@ -1440,20 +1441,20 @@ namespace PTL.Geometry
         #endregion
 
         #region Method
-        public override PointD[] Boundary
+        public override XYZ4[] Boundary
         {
             get
             {
-                PointD[] boundary;
+                XYZ4[] boundary;
                 if (this.CoordinateSystem != null)
                 {
-                    boundary = new PointD[2] {MatrixDot4(this.CoordinateSystem, this.Startpn), MatrixDot4(this.CoordinateSystem, this.Startpn) };
-                    Compare_Boundary(boundary, MatrixDot4(this.CoordinateSystem, Endpn));
-                    Compare_Boundary(boundary, MatrixDot4(this.CoordinateSystem, TextReferP));
+                    boundary = new XYZ4[2] {Transport4(this.CoordinateSystem, this.Startpn), Transport4(this.CoordinateSystem, this.Startpn) };
+                    Compare_Boundary(boundary, Transport4(this.CoordinateSystem, Endpn));
+                    Compare_Boundary(boundary, Transport4(this.CoordinateSystem, TextReferP));
                 }
                 else
                 {
-                    boundary = new PointD[2] { this.Startpn.Clone() as PointD, this.Startpn.Clone() as PointD };
+                    boundary = new XYZ4[2] { (PointD)this.Startpn.Clone(), (PointD)this.Startpn.Clone() };
                     Compare_Boundary(boundary, Endpn);
                     Compare_Boundary(boundary, TextReferP);
                 }
@@ -1521,9 +1522,9 @@ namespace PTL.Geometry
             RadialDimension aAligD = new RadialDimension();
             if (this.Name != null)
                 aAligD.Name = this.Name;
-            aAligD.Startpn = this.Startpn.Clone() as PointD;
-            aAligD.Endpn = this.Endpn.Clone() as PointD;
-            aAligD.TextReferP = this.TextReferP.Clone() as PointD;
+            aAligD.Startpn = (PointD)this.Startpn.Clone();
+            aAligD.Endpn = (PointD)this.Endpn.Clone();
+            aAligD.TextReferP = (PointD)this.TextReferP.Clone();
             aAligD.Color = this.color;
             aAligD.LeaderLength = this.LeaderLength;
 
@@ -1640,7 +1641,7 @@ namespace PTL.Geometry
             PointD V1 = (new PointD(Cos(angle), Sin(angle), 0)) * aCircle.Radius;
             Startpn = aCircle.Center - V1;
             Endpn = aCircle.Center + V1;
-            TextReferP = tTextReferpn.Clone() as PointD;
+            TextReferP = (PointD)tTextReferpn.Clone();
             LeaderLength = Norm((this.TextReferP - (this.Startpn + this.Endpn) / 2.0)) - Value / 2.0;
             if (LeaderLength < 0) LeaderLength = 0;
             ArrowSize = tArrowSize;
@@ -1651,7 +1652,7 @@ namespace PTL.Geometry
             PointD V1 = (new PointD(Cos(angle), Sin(angle), 0)) * aCircle.Radius;
             Startpn = aCircle.Center - V1;
             Endpn = aCircle.Center + V1;
-            TextReferP = tTextReferpn.Clone() as PointD;
+            TextReferP = (PointD)tTextReferpn.Clone();
             LeaderLength = Norm((this.TextReferP - (this.Startpn + this.Endpn) / 2.0)) - Value / 2.0;
             if (LeaderLength < 0) LeaderLength = 0;
             ArrowSize = tArrowSize;
@@ -1663,20 +1664,20 @@ namespace PTL.Geometry
         #endregion
 
         #region Method
-        public override PointD[] Boundary
+        public override XYZ4[] Boundary
         {
             get
             {
-                PointD[] boundary;
+                XYZ4[] boundary;
                 if (this.CoordinateSystem != null)
                 {
-                    boundary = new PointD[2] {MatrixDot4(this.CoordinateSystem, this.Startpn), MatrixDot4(this.CoordinateSystem, this.Startpn) };
-                    Compare_Boundary(boundary, MatrixDot4(this.CoordinateSystem, Endpn));
-                    Compare_Boundary(boundary, MatrixDot4(this.CoordinateSystem, TextReferP));
+                    boundary = new XYZ4[2] {Transport4(this.CoordinateSystem, this.Startpn), Transport4(this.CoordinateSystem, this.Startpn) };
+                    Compare_Boundary(boundary, Transport4(this.CoordinateSystem, Endpn));
+                    Compare_Boundary(boundary, Transport4(this.CoordinateSystem, TextReferP));
                 }
                 else
                 {
-                    boundary = new PointD[2] { this.Startpn.Clone() as PointD, this.Startpn.Clone() as PointD };
+                    boundary = new XYZ4[2] { (PointD)this.Startpn.Clone(), (PointD)this.Startpn.Clone() };
                     Compare_Boundary(boundary, Endpn);
                     Compare_Boundary(boundary, TextReferP);
                 }
@@ -1745,9 +1746,9 @@ namespace PTL.Geometry
             DiametricDimension aAligD = new DiametricDimension();
             if (this.Name != null)
                 aAligD.Name = this.Name;
-            aAligD.Startpn = this.Startpn.Clone() as PointD;
-            aAligD.Endpn = this.Endpn.Clone() as PointD;
-            aAligD.TextReferP = this.TextReferP.Clone() as PointD;
+            aAligD.Startpn = (PointD)this.Startpn.Clone();
+            aAligD.Endpn = (PointD)this.Endpn.Clone();
+            aAligD.TextReferP = (PointD)this.TextReferP.Clone();
             aAligD.Color = this.color;
             aAligD.LeaderLength = this.LeaderLength;
 

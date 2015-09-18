@@ -8,28 +8,29 @@ using System.Drawing;
 using PTL.Definitions;
 using PTL.OpenGL.Plot;
 using CsGL.OpenGL;
+using PTL.Geometry.MathModel;
 
 namespace PTL.Geometry
 {
     public class Triangle : SurfaceEntity
     {
-        public PointD P1, P2, P3;
-        public Vector N1, N2, N3;
+        public XYZ4 P1, P2, P3;
+        public XYZ3 N1, N2, N3;
 
-        public override PointD[] Boundary
+        public override XYZ4[] Boundary
         {
             get
             {
-                PointD[] boundary;
+                XYZ4[] boundary;
                 if (this.CoordinateSystem != null)
                 {
-                    boundary = new PointD[2] { MatrixDot4(this.CoordinateSystem, P1), MatrixDot4(this.CoordinateSystem, P1) };
-                    Compare_Boundary(boundary, MatrixDot4(this.CoordinateSystem, P2));
-                    Compare_Boundary(boundary, MatrixDot4(this.CoordinateSystem, P3));
+                    boundary = new XYZ4[2] { Transport(this.CoordinateSystem, P1), Transport(this.CoordinateSystem, P1) };
+                    Compare_Boundary(boundary, Transport(this.CoordinateSystem, P2));
+                    Compare_Boundary(boundary, Transport(this.CoordinateSystem, P3));
                 }
                 else
                 {
-                    boundary = new PointD[2] { (P1.Clone()) as PointD, (P1.Clone()) as PointD };
+                    boundary = new XYZ4[2] { (XYZ4)(P1.Clone()), (XYZ4)(P1.Clone()) };
                     Compare_Boundary(boundary, P2);
                     Compare_Boundary(boundary, P3);
                 }
@@ -109,29 +110,29 @@ namespace PTL.Geometry
                 Visible = this.Visible
             };
             if (this.P1 != null)
-                newTriangle.P1 = this.P1.Clone() as PointD;
+                newTriangle.P1 = this.P1.Clone() as XYZ4;
             if (this.P2 != null)
-                newTriangle.P2 = this.P2.Clone() as PointD;
+                newTriangle.P2 = this.P2.Clone() as XYZ4;
             if (this.P3 != null)
-                newTriangle.P3 = this.P3.Clone() as PointD;
+                newTriangle.P3 = this.P3.Clone() as XYZ4;
             if (this.N1 != null)
-                newTriangle.N1 = this.N1.Clone() as PointD;
+                newTriangle.N1 = this.N1.Clone() as XYZ3;
             if (this.N2 != null)
-                newTriangle.N2 = this.N2.Clone() as PointD;
+                newTriangle.N2 = this.N2.Clone() as XYZ3;
             if (this.N3 != null)
-                newTriangle.N3 = this.N3.Clone() as PointD;
+                newTriangle.N3 = this.N3.Clone() as XYZ3;
 
             return newTriangle;
         }
 
         public override void Transform(double[,] TransformMatrix)
         {
-            this.P1.Transform(TransformMatrix);
-            this.P2.Transform(TransformMatrix);
-            this.P3.Transform(TransformMatrix);
-            if (this.N1 != null) this.N1.Transform(TransformMatrix);
-            if (this.N2 != null) this.N2.Transform(TransformMatrix);
-            if (this.N3 != null) this.N3.Transform(TransformMatrix);
+            this.P1 = Transport(TransformMatrix, this.P1);
+            this.P2 = Transport(TransformMatrix, this.P2);
+            this.P3 = Transport(TransformMatrix, this.P3);
+            if (this.N1 != null) this.N1 = Transport(TransformMatrix, this.N1);
+            if (this.N1 != null) this.N2 = Transport(TransformMatrix, this.N2);
+            if (this.N1 != null) this.N3 = Transport(TransformMatrix, this.N3);
         }
     }
     public class Cylinder : SurfaceEntity
@@ -186,14 +187,14 @@ namespace PTL.Geometry
 
         TopoFace face;
 
-        public override PointD[] Boundary
+        public override XYZ4[] Boundary
         {
             get
             {
-                PointD[] boundary;
+                XYZ4[] boundary;
 
-                PointD p1 = TransformPoint(this.CoordinateSystem, this.AxisStart);
-                PointD p2 = TransformPoint(this.CoordinateSystem, this.AxisEnd);
+                PointD p1 = Transport4(this.CoordinateSystem, this.AxisStart);
+                PointD p2 = Transport4(this.CoordinateSystem, this.AxisEnd);
                 Vector N1 = Cross(Cross(new Vector(0, 0, 1), p2 - p1), p2 - p1);
                 Vector N2 = Cross(N1, p2 - p1);
                 List<PointD> pp = new List<PointD>();
@@ -206,9 +207,9 @@ namespace PTL.Geometry
                 pp.Add(p2 + N2);
                 pp.Add(p2 - N2);
 
-                boundary = new PointD[2] { MatrixDot4(this.CoordinateSystem, pp[0]), MatrixDot4(this.CoordinateSystem, pp[0]) };
+                boundary = new XYZ4[2] { Transport4(this.CoordinateSystem, pp[0]), Transport4(this.CoordinateSystem, pp[0]) };
                 for (int i = 1; i < pp.Count; i++)
-                    Compare_Boundary(boundary, MatrixDot4(this.CoordinateSystem, pp[i]));
+                    Compare_Boundary(boundary, Transport4(this.CoordinateSystem, pp[i]));
                 
                 return boundary;
             }
@@ -218,7 +219,7 @@ namespace PTL.Geometry
         {
             if (this.axisStart != null && axisEnd != null && this.radius != 0 && this.sliceNumber != 0)
             {
-                this.face = new TopoFace() { Points = new PointD[2, sliceNumber], Normals = new Vector[2, sliceNumber]};
+                this.face = new TopoFace() { Points = new XYZ4[2, sliceNumber], Normals = new XYZ3[2, sliceNumber]};
 
                 Vector axisDirection = AxisEnd - AxisStart;
                 Vector N1 = Cross(new Vector(0, 0, 1), axisDirection);
@@ -232,7 +233,7 @@ namespace PTL.Geometry
                 for (int i = 0; i < sliceNumber; i++)
                 {
                     M = RotateMatrix(axisDirection, dTheta * i);
-                    Vector n = RotatePoint(M, N1);
+                    Vector n = Transport4(M, N1);
                     Vector r = n * this.Radius;
 
                     this.face.Normals[0, i] = n;
@@ -294,25 +295,25 @@ namespace PTL.Geometry
     }
     public class TopoFace : SurfaceEntity,IToDXFEntity , IToDXFEntities
     {
-        public PointD[,] Points;
-        public Vector[,] Normals;
+        public XYZ4[,] Points;
+        public XYZ3[,] Normals;
         public int Dim1Length { get { return Points.GetLength(0); } }
         public int Dim2Length { get { return Points.GetLength(1); } }
-        public override PointD[] Boundary
+        public override XYZ4[] Boundary
         {
             get
             {
-                PointD[] boundary;
+                XYZ4[] boundary;
                 if (this.CoordinateSystem != null)
                 {
-                    boundary = new PointD[2] { MatrixDot4(this.CoordinateSystem, this.Points[0, 0]), MatrixDot4(this.CoordinateSystem, this.Points[0, 0]) };
-                    foreach (PointD p in this.Points)
-                        Compare_Boundary(boundary, MatrixDot4(this.CoordinateSystem, p));
+                    boundary = new XYZ4[2] { Transport4(this.CoordinateSystem, this.Points[0, 0]), Transport4(this.CoordinateSystem, this.Points[0, 0]) };
+                    foreach (XYZ4 p in this.Points)
+                        Compare_Boundary(boundary, Transport4(this.CoordinateSystem, p));
                 }
                 else
                 {
-                    boundary = new PointD[2] { this.Points[0, 0].Clone() as PointD, this.Points[0, 0].Clone() as PointD };
-                    foreach (PointD p in this.Points)
+                    boundary = new XYZ4[2] { (XYZ4)this.Points[0, 0].Clone(), (XYZ4)this.Points[0, 0].Clone() };
+                    foreach (XYZ4 p in this.Points)
                         Compare_Boundary(boundary, p);
                 }
                 return boundary;
@@ -327,7 +328,7 @@ namespace PTL.Geometry
         {
             if (Points != null && Points.Length >= 4)
             {
-                Normals = new Vector[Points.GetLength(0), Points.GetLength(1)];
+                Normals = new XYZ3[Points.GetLength(0), Points.GetLength(1)];
                 double a = 0, b = 0, c = 0, m = 0, n = 0, l = 0;
                 for (int i = 0; i < Points.GetLength(0); i++)
                 {
@@ -535,8 +536,8 @@ namespace PTL.Geometry
                 {
                     netDxf.Entities.Line line =
                         new netDxf.Entities.Line(
-                            new netDxf.Vector3(this.Points[i, j].ToArray()),
-                            new netDxf.Vector3((this.Points[i, j] + this.Normals[i, j]*0.5).ToArray()));
+                            new netDxf.Vector3(this.Points[i, j].Values),
+                            new netDxf.Vector3((this.Points[i, j] + this.Normals[i, j]*0.5).Values));
                     line.Color = netDxf.AciColor.Red;
                     entityList.Add(line);
                 }
@@ -552,25 +553,25 @@ namespace PTL.Geometry
                 newTopoFace.CoordinateSystem = this.CoordinateSystem;
             if (this.Points != null)
             {
-                newTopoFace.Points = new PointD[this.Points.GetLength(0), this.Points.GetLength(1)];
+                newTopoFace.Points = new XYZ4[this.Points.GetLength(0), this.Points.GetLength(1)];
                 for (int i = 0; i < this.Points.GetLength(0); i++)
                 {
                     for (int j = 0; j < this.Points.GetLength(1); j++)
                     {
                         if (this.Points[i, j] != null)
-                            newTopoFace.Points[i, j] = this.Points[i, j].Clone() as PointD;
+                            newTopoFace.Points[i, j] = this.Points[i, j].Clone() as XYZ4;
                     }
                 }
             }
             if (this.Normals != null)
             {
-                newTopoFace.Normals = new Vector[this.Normals.GetLength(0), this.Normals.GetLength(1)];
+                newTopoFace.Normals = new XYZ3[this.Normals.GetLength(0), this.Normals.GetLength(1)];
                 for (int i = 0; i < this.Normals.GetLength(0); i++)
                 {
                     for (int j = 0; j < this.Normals.GetLength(1); j++)
                     {
                         if (this.Normals[i, j] != null)
-                            newTopoFace.Normals[i, j] = this.Normals[i, j].Clone() as Vector;
+                            newTopoFace.Normals[i, j] = this.Normals[i, j].Clone() as XYZ3;
                     }
                 }
             }
@@ -579,8 +580,15 @@ namespace PTL.Geometry
 
         public override void Transform(double[,] TransformMatrix)
         {
-            this.Points = TransformPoints(TransformMatrix, this.Points);
-            if (this.Normals != null) this.Normals = TransformPoints(TransformMatrix, this.Normals);
+            for (int i = 0; i < Dim1Length; i++)
+                for (int j = 0; j < Dim2Length; j++)
+                    this.Points[i, j] = Transport4(TransformMatrix, this.Points[i, j]);
+            if (this.Normals != null)
+            {
+                for (int i = 0; i < Dim1Length; i++)
+                    for (int j = 0; j < Dim2Length; j++)
+                        this.Normals[i, j] = Transport3(TransformMatrix, this.Normals[i, j]);
+            }
         }
 
         public double[][,][] ToDoubleArray()
@@ -590,7 +598,7 @@ namespace PTL.Geometry
             {
                 for (int j = 0; j < this.Points.GetLength(1); j++)
                 {
-                    pointArray[i, j] = this.Points[i, j].ToArray();
+                    pointArray[i, j] = this.Points[i, j];
                 }
             }
 
@@ -599,7 +607,7 @@ namespace PTL.Geometry
             {
                 for (int j = 0; j < this.Normals.GetLength(1); j++)
                 {
-                    normalArray[i, j] = this.Normals[i, j].ToArray();
+                    normalArray[i, j] = this.Normals[i, j];
                 }
             }
 

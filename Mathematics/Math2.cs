@@ -177,11 +177,16 @@ namespace PTL.Mathematics
         #endregion
 
         #region Matrix & Vector
-        protected static T Normalize<T>(T r1) where T : Vector, new()
+        protected static double[] Normalize(double[] r)
         {
-            double len = Sqrt(r1.X * r1.X + r1.Y * r1.Y + r1.Z * r1.Z);
-            T r2 = new T() { X = r1.X / len, Y = r1.Y / len, Z = r1.Z / len };
-            return r2;
+            double rr = 0;
+            for (int i = 0; i < r.Length; i++)
+                rr += r[i] * r[i];
+            double len = 1 / Sqrt(rr);
+            double[] nr = new double[r.Length];
+            for (int i = 0; i < r.Length; i++)
+                nr[i] = r[i] * len;
+            return nr;
         }
         protected static double GetLength(double[] input)
         {
@@ -201,17 +206,6 @@ namespace PTL.Mathematics
             {
                 sum = sum + System.Math.Pow(input[i], 2);
             }
-            double len = Sqrt(sum);
-
-            return len;
-        }
-        protected static double Norm(XYZ input)
-        {
-            return Norm(input.Values);
-        }
-        protected static double Norm<T>(T p1) where T : Vector, new()
-        {
-            double sum = p1.X * p1.X + p1.Y * p1.Y + p1.Z * p1.Z;
             double len = Sqrt(sum);
 
             return len;
@@ -351,24 +345,6 @@ namespace PTL.Mathematics
             outptr[2] = ptr1[0] * ptr2[1] - ptr1[1] * ptr2[0];
             return outptr;
         }
-        protected static XYZ Cross(XYZ ptr1, XYZ ptr2)
-        {
-            XYZ outptr = new XYZ();
-            outptr[0] = ptr1[1] * ptr2[2] - ptr1[2] * ptr2[1];
-            outptr[1] = ptr1[2] * ptr2[0] - ptr1[0] * ptr2[2];
-            outptr[2] = ptr1[0] * ptr2[1] - ptr1[1] * ptr2[0];
-            return outptr;
-        }
-        protected static T Cross<T>(T p1, T p2) where T : Vector, new()
-        {
-            T p3 = new T();
-
-            p3.X = p1.Y * p2.Z - p1.Z * p2.Y;
-            p3.Y = p1.Z * p2.X - p1.X * p2.Z;
-            p3.Z = p1.X * p2.Y - p1.Y * p2.X;
-
-            return p3;
-        }
         protected static double Dot(double[] ptr1, double[] ptr2)
         {
             double value = 0.0;
@@ -378,76 +354,6 @@ namespace PTL.Mathematics
                 value = value + ptr1[i] * ptr2[i];
             }
             return value;
-        }
-        protected static double Dot(Vector p1, Vector p2)
-        {
-            double value;
-
-            value = p1.X * p2.X + p1.Y * p2.Y + p1.Z * p2.Z;
-
-            return value;
-        }
-        protected static T MatrixDot3<T>(double[,] tMatrix, T tp1) where T : Vector, new()
-        {
-            if (tMatrix == null)
-                return tp1.Clone() as T;
-            double[] tr1 = new double[3] { tp1.X, tp1.Y, tp1.Z, };
-            double[] tr2 = new double[3];
-
-            for (int i = 0; i < 3; i++)
-            {
-                for (int k = 0; k < 3; k++)
-                {
-                    tr2[i] = tr2[i] + tMatrix[i, k] * tr1[k];
-                }
-            }
-
-            T p2 = new T() { X = tr2[0], Y = tr2[1], Z = tr2[2] };
-            return p2;
-        }
-        protected static T MatrixDot4<T>(double[,] tMatrix, T tp1) where T : Vector, new()
-        {
-            if (tMatrix == null)
-                return tp1.Clone() as T;
-            double[] tr1 = new double[4] { tp1.X, tp1.Y, tp1.Z, 1.0 };
-            double[] tr2 = new double[4];
-
-            for (int i = 0; i < 4; i++)
-            {
-                for (int k = 0; k < 4; k++)
-                {
-                    tr2[i] = tr2[i] + tMatrix[i, k] * tr1[k];
-                }
-            }
-
-            T p2 = new T() { X = tr2[0], Y = tr2[1], Z = tr2[2] };
-            return p2;
-        }
-        protected static double[] MatrixDot3(double[,] tMatrix, double[] tr1)
-        {
-            double[] tr2 = new double[3];
-
-            for (int i = 0; i < 3; i++)
-            {
-                for (int k = 0; k < 3; k++)
-                {
-                    tr2[i] = tr2[i] + tMatrix[i, k] * tr1[k];
-                }
-            }
-            return tr2;
-        }
-        protected static double[] MatrixDot4(double[,] tMatrix, double[] tr1)
-        {
-            double[] tr2 = new double[4];
-
-            for (int i = 0; i < 4; i++)
-            {
-                for (int k = 0; k < 4; k++)
-                {
-                    tr2[i] = tr2[i] + tMatrix[i, k] * tr1[k];
-                }
-            }
-            return tr2;
         }
         protected static double[,] MatrixScale(double[,] tMatrix, double tscale)
         {
@@ -689,171 +595,99 @@ namespace PTL.Mathematics
 
             return MatrixDot(A12, A23, ARotate, A32, A21);
         }
-        protected static T RotatePointZ<T>(T pnt, double theta) where T : Vector, new()
+
+        protected static double[] RotateX(double theta, double[] tr1)
         {
-            T pntnew = MatrixDot4(RotateMatrix(Axis.Z, theta), pnt);
-            return pntnew;
+            double[,] m = RotateMatrix(Axis.X, theta);
+            return Transport3(m, tr1);
         }
-        protected static T[,] RotatePointZ<T>(T[,] pnt, double theta) where T : Vector, new()
+        protected static double[] RotateY(double theta, double[] tr1)
         {
-            return RotatePoints(RotateMatrix(Axis.Z, theta), pnt);
+            double[,] m = RotateMatrix(Axis.Y, theta);
+            return Transport3(m, tr1);
         }
-        protected static double[,] TranslateMatrix(PointD p1)
+        protected static double[] RotateZ(double theta, double[] tr1)
         {
-            double[,] tMatrix = new double[4, 4];
-
-            tMatrix = IdentityMatrix(4);
-            tMatrix[0, 3] = p1.X;
-            tMatrix[1, 3] = p1.Y;
-            tMatrix[2, 3] = p1.Z;
-
-            return tMatrix;
+            double[,] m = RotateMatrix(Axis.Z, theta);
+            return Transport3(m, tr1);
         }
-        protected static T RotatePoint<T>(double[,] M21, T pnt) where T : Vector, new()
+        protected static double[] Transport3(double[,] tMatrix, double[] tr1)
         {
-            T pntnew = MatrixDot4(M21, pnt);
-            return pntnew;
-        }
-        protected static T[] RotatePoints<T>(double[,] M21, T[] pset) where T : Vector, new()
-        {
-            int nump = pset.Length;
-            T[] pseta = new T[nump];
-
-            for (short k = 0; k < nump; k++)
-                pseta[k] = MatrixDot4(M21, pset[k]);
-
-            return pseta;
-        }
-        protected static List<T> RotatePoints<T>(double[,] M21, IEnumerable<T> pset) where T : Vector, new()
-        {
-            List<T> pseta = new List<T>();
-
-            foreach (var p in pset)
-                pseta.Add(MatrixDot4(M21, p));
-
-            return pseta;
-        }
-        protected static T[,] RotatePoints<T>(double[,] M21, T[,] pset) where T : Vector, new()
-        {
-            int nump0 = pset.GetLength(0);
-            int nump1 = pset.GetLength(1);
-            T[,] pseta = new T[nump0, nump1];
-
-            for (short i = 0; i < nump0; i++)
-                for (int j = 0; j < nump1; j++)
-                    pseta[i, j] = MatrixDot4(M21, pset[i, j]);
-
-            return pseta;
-        }
-
-        //新寫法20150409
-        //Homogeneous與非Homogeneous適用、傳遞參數數目傳不固定
-        protected static T TransformPoint<T>(double[,] M21, T pset) where T : Vector, new()
-        {
-            if (M21 == null || pset == null)
-                return pset;
-
-            double[] tr1;
-            double[] tr2;
-            if (pset is IHomogeneous)
+            if (tMatrix != null)
             {
-                tr1 = new double[4] { pset.X, pset.Y, pset.Z, 1};
-                tr2 = new double[4];
-
-                for (int i = 0; i < 4; i++)
-                {
-                    for (int k = 0; k < 4; k++)
-                    {
-                        tr2[i] += M21[i, k] * tr1[k];
-                    }
-                }
-            }
-            else
-            {
-                tr1 = new double[3] { pset.X, pset.Y, pset.Z };
-                tr2 = new double[3];
+                double[] tr2 = new double[3];
 
                 for (int i = 0; i < 3; i++)
                 {
                     for (int k = 0; k < 3; k++)
                     {
-                        tr2[i] += M21[i, k] * tr1[k];
+                        tr2[i] = tr2[i] + tMatrix[i, k] * tr1[k];
                     }
                 }
+                return tr2;
             }
-
-            T p2 = new T() { X = tr2[0], Y = tr2[1], Z = tr2[2] };
-            return p2;
-        }
-        protected static List<T> TransformPoints<T>(double[,] M21, List<T> pset) where T : Vector, new()
-        {
-            List<T> pseta = new List<T>();
-
-            int k = 0;
-            foreach (var p in pset)
-            {
-                pseta.Add(TransformPoint(M21, p));
-                k++;
-            }
-
-            return pseta;
-        }
-        protected static List<T> TransformPoints<T>(double[,] M21, params T[] pset) where T : Vector, new()
-        {
-            List<T> pseta = new List<T>();
-
-            int k = 0;
-            foreach (var p in pset)
-            {
-                pseta.Add(TransformPoint(M21, p));
-                k++;
-            }
-
-            return pseta;
-        }
-        protected static T[,] TransformPoints<T>(double[,] M21, T[,] pset) where T : Vector, new()
-        {
-            int dim1 = pset.GetLength(0);
-            int dim2 = pset.GetLength(1);
-
-            T[,] newPset = new T[dim1, dim2];
-            for (int i = 0; i < dim1; i++)
-            {
-                for (int j = 0; j < dim2; j++)
-                {
-                    newPset[i, j] = TransformPoint(M21, pset[i, j]);
-                }
-            }
-            return newPset;
-        }
-        protected static double[] Transport3(double[,] tMatrix, double[] tr1)
-        {
-            double[] tr2 = new double[3];
-
-            for (int i = 0; i < 3; i++)
-            {
-                for (int k = 0; k < 3; k++)
-                {
-                    tr2[i] = tr2[i] + tMatrix[i, k] * tr1[k];
-                }
-            }
-            return tr2;
+            return tr1;
         }
         protected static double[] Transport4(double[,] tMatrix, double[] tr1)
         {
-            double[] tr2 = Transport3(tMatrix, tr1);
-            tr2[0] += tMatrix[0, 3];
-            tr2[1] += tMatrix[1, 3];
-            tr2[2] += tMatrix[2, 3];
-            return tr2;
+            if (tMatrix != null)
+            {
+                double[] tr2 = Transport3(tMatrix, tr1);
+                tr2[0] += tMatrix[0, 3];
+                tr2[1] += tMatrix[1, 3];
+                tr2[2] += tMatrix[2, 3];
+                return tr2;
+            }
+            return tr1;
+        }
+        protected static T Transport<T>(double[,] tMatrix, T p) where T : IXYZ, new()
+        {
+            double[] result;
+            if (p.IsHomogeneous)
+                result = Transport4(tMatrix, p.Values);
+            else
+                result = Transport3(tMatrix, p.Values);
+            T newP = new T() { X = result [0], Y = result[1] , Z = result[2] };
+            return newP;
         }
 
-        /// <summary>
-        /// 反矩陣
-        /// </summary>
-        /// <param name="dMatrix">矩陣</param>
-        /// <param name="Level">矩陣的維度</param>
-        /// <returns></returns>
+        protected static IEnumerable<double[]> RotateX(double theta,params double[][] tr1)
+        {
+            double[,] m = RotateMatrix(Axis.X, theta);
+            return Transport3(m, tr1);
+        }
+        protected static IEnumerable<double[]> RotateY(double theta, params double[][] tr1)
+        {
+            double[,] m = RotateMatrix(Axis.Y, theta);
+            return Transport3(m, tr1);
+        }
+        protected static IEnumerable<double[]> RotateZ(double theta, params double[][] tr1)
+        {
+            double[,] m = RotateMatrix(Axis.Z, theta);
+            return Transport3(m, tr1);
+        }
+        protected static IEnumerable<double[]> Transport3(double[,] tMatrix,params double[][] tr1)
+        {
+            foreach (var r in tr1)
+            {
+                yield return Transport3(tMatrix, r);
+            }
+        }
+        protected static IEnumerable<double[]> Transport4(double[,] tMatrix, params double[][] tr1)
+        {
+            foreach (var r in tr1)
+            {
+                yield return Transport4(tMatrix, r);
+            }
+        }
+        protected static IEnumerable<T> Transport<T>(double[,] tMatrix, params T[] p) where T : IXYZ, new()
+        {
+            foreach (var r in p)
+            {
+                yield return Transport(tMatrix, r);
+            }
+        }
+
         protected static double[,] MatrixInverse(double[,] dMatrix)
         {
             int Level = dMatrix.GetLength(0);
@@ -1055,7 +889,7 @@ namespace PTL.Mathematics
 
             return pc;
         }
-        protected static void Compare_Boundary(PointD[] Boundary,PointD point2Check)
+        protected static void Compare_Boundary(XYZ4[] Boundary, XYZ4 point2Check)
         {
             if (point2Check.X > Boundary[1].X) { Boundary[1].X = point2Check.X; }
             else if (point2Check.X < Boundary[0].X) { Boundary[0].X = point2Check.X; }

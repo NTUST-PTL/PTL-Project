@@ -155,6 +155,22 @@ namespace PTL.Geometry
 
             return po;
         }
+        public static implicit operator XYZ3(Vector v)
+        {
+            return new XYZ3(v.Value);
+        }
+        public static implicit operator Vector(XYZ3 v)
+        {
+            return new Vector(v.Values);
+        }
+        public static implicit operator Vector(double[] p)
+        {
+            return new Vector(p);
+        }
+        public static implicit operator double[] (Vector p)
+        {
+            return p.Value;
+        }
         #endregion
 
         public override object Clone()
@@ -176,7 +192,7 @@ namespace PTL.Geometry
             return "{" + this.X.ToString(Format) + "," + this.Y.ToString(Format) + "," + this.Z.ToString(Format) + "}";
         }
 
-        public override PointD[] Boundary
+        public override XYZ4[] Boundary
         {
             get { return null; }
         }
@@ -191,7 +207,7 @@ namespace PTL.Geometry
 
         public override void Transform(double[,] TransformMatrix)
         {
-            Vector newPoint = TransformPoint(TransformMatrix, this);
+            Vector newPoint = Transport3(TransformMatrix, this);
             this.X = newPoint.X;
             this.Y = newPoint.Y;
             this.Z = newPoint.Z;
@@ -329,16 +345,32 @@ namespace PTL.Geometry
 
             return po;
         }
+        public static implicit operator XYZ4(PointD p)
+        {
+            return new XYZ4(p.Value);
+        }
+        public static implicit operator PointD(XYZ4 p)
+        {
+            return new PointD(p.Values);
+        }
+        public static implicit operator PointD(double[] p)
+        {
+            return new PointD(p);
+        }
+        public static implicit operator double[](PointD p)
+        {
+            return p.Value;
+        }
         #endregion
 
-        public override PointD[] Boundary
+        public override XYZ4[] Boundary
         {
-            get { return new PointD[] { this.Clone() as PointD, this.Clone() as PointD }; }
+            get { return new XYZ4[] { (PointD)this.Clone(), (PointD)this.Clone() }; }
         }
 
         public override void Transform(double[,] TransformMatrix)
         {
-            PointD newPoint = TransformPoint(TransformMatrix, this);
+            PointD newPoint = Transport4(TransformMatrix, this);
             this.X = newPoint.X;
             this.Y = newPoint.Y;
             this.Z = newPoint.Z;
@@ -346,7 +378,7 @@ namespace PTL.Geometry
 
         public virtual Vector ToVector()
         {
-            return new Vector(this);
+            return new Vector(this.Value);
         }
     }
 }

@@ -104,14 +104,14 @@
     <Compile Include="Geometry\02_Collection.cs" />
     <Compile Include="Geometry\Convert.cs" />
     <Compile Include="Geometry\CubicClassifier.cs" />
-    <Compile Include="Geometry\BSplin.cs" />
+    <Compile Include="Geometry\MathModel\IXYZ.cs" />
+    <Compile Include="Geometry\MathModel\IParametricSurface.cs" />
     <Compile Include="Geometry\MathModel\NUB_Curve.cs" />
-    <Compile Include="Geometry\MathModel\XYZ.cs" />
+    <Compile Include="Geometry\MathModel\XYZ3.cs" />
     <Compile Include="Geometry\MathModel\NUB_Surface.cs" />
+    <Compile Include="Geometry\MathModel\XYZ4.cs" />
     <Compile Include="Geometry\RadialAngleClassifier.cs" />
-    <Compile Include="MathExtention\Math.cs" />
     <Compile Include="Mathematics\Math2.cs" />
-    <Compile Include="Mathematics\RootFinding.cs" />
     <Compile Include="OpenGL\Plot\02_View.cs" />
     <Compile Include="OpenGL\Plot\03_PlotSub.cs" />
     <Compile Include="Math.cs" />
@@ -245,12 +245,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\mathnet-PTL\src\Numerics\Numerics.csproj">
-      <Project>{b7cae5f4-a23f-4438-b5be-41226618b695}</Project>
-      <Name>Numerics</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

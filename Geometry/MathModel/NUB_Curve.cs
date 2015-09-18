@@ -13,24 +13,24 @@ namespace PTL.Geometry.MathModel
 {
     public class NUB_Curve : PTL.Mathematics.Math2
     {
-        public XYZ[] DataPoints;
-        public XYZ[] ControlPoints;
+        public XYZ4[] DataPoints;
+        public XYZ4[] ControlPoints;
         public double[][,] Ni;
         public double[] delta_i;
         public int LastSegmentIndex;
 
-        public NUB_Curve(XYZ[]dataPoints, bool closed = false)
+        public NUB_Curve(XYZ4[]dataPoints, bool closed = false)
         {
             Calculate_NURBS_Curve(dataPoints, closed);
         }
 
-        public void Calculate_NURBS_Curve(XYZ[] dataPoints, bool closed = false)
+        public void Calculate_NURBS_Curve(XYZ4[] dataPoints, bool closed = false)
         {
             DataPoints = dataPoints.ToArray();
             int n = DataPoints.Length;
             this.LastSegmentIndex = n - 2;
             double[,] M = ZeroMatrix(n + 2, n + 2);
-            XYZ[,] R = new XYZ[n + 2, 1];
+            XYZ4[,] R = new XYZ4[n + 2, 1];
             double[,] invM;
 
             #region 計算弦長
@@ -81,16 +81,16 @@ namespace PTL.Geometry.MathModel
             }
             else
             {
-                XYZ a0 = DataPoints[1] - DataPoints[0];
-                XYZ b0 = DataPoints[2] - DataPoints[0];
-                XYZ c0 = Cross(a0, b0);
-                XYZ r0 = (Norm(a0) * Norm(a0) * Cross(b0, c0) + Norm(b0) * Norm(b0) * Cross(c0, a0)) / (2 * GetLength(c0) * GetLength(c0));
-                R[0, 0] = GetLength(a0) * Cross(r0, c0) / GetLength(Cross(r0, c0));
-                XYZ an = DataPoints[n - 2] - DataPoints[n - 1];
-                XYZ bn = DataPoints[n - 3] - DataPoints[n - 1];
-                XYZ cn = Cross(an, bn);
-                XYZ rn = (GetLength(an) * GetLength(an) * Cross(bn, cn) + GetLength(bn) * GetLength(bn) * Cross(cn, an)) / (2 * GetLength(cn) * GetLength(cn));
-                R[n + 1, 0] = -1.0 * GetLength(an) * Cross(rn, cn) / GetLength(Cross(rn, cn));
+                XYZ4 a0 = DataPoints[1] - DataPoints[0];
+                XYZ4 b0 = DataPoints[2] - DataPoints[0];
+                XYZ4 c0 = Cross(a0, b0);
+                XYZ4 r0 = (Norm(a0) * Norm(a0) * (XYZ4)Cross(b0, c0) + Norm(b0) * Norm(b0) * (XYZ4)Cross(c0, a0)) / (2 * GetLength(c0) * GetLength(c0));
+                R[0, 0] = GetLength(a0) * (XYZ4)Cross(r0, c0) / GetLength(Cross(r0, c0));
+                XYZ4 an = DataPoints[n - 2] - DataPoints[n - 1];
+                XYZ4 bn = DataPoints[n - 3] - DataPoints[n - 1];
+                XYZ4 cn = Cross(an, bn);
+                XYZ4 rn = (GetLength(an) * GetLength(an) * (XYZ4)Cross(bn, cn) + GetLength(bn) * GetLength(bn) * (XYZ4)Cross(cn, an)) / (2 * GetLength(cn) * GetLength(cn));
+                R[n + 1, 0] = -1.0 * GetLength(an) * (XYZ4)Cross(rn, cn) / GetLength(Cross(rn, cn));
             }
 
             for (int i = 0; i < n; i++)
@@ -112,14 +112,14 @@ namespace PTL.Geometry.MathModel
             invM = MatrixInverse(M);
             if (n == 2)
             {
-                ControlPoints = new XYZ[] { DataPoints[0], DataPoints[0], DataPoints[1], DataPoints[1] };
+                ControlPoints = new XYZ4[] { DataPoints[0], DataPoints[0], DataPoints[1], DataPoints[1] };
             }
             else
             {
-                ControlPoints = new XYZ[n + 2];
+                ControlPoints = new XYZ4[n + 2];
                 for (int i = 0; i < ControlPoints.GetLength(0); i++)
                 {
-                    ControlPoints[i] = new XYZ();
+                    ControlPoints[i] = new XYZ4();
                     for (int j = 0; j < ControlPoints.GetLength(0); j++)
                     {
                         ControlPoints[i] += invM[i, j] * R[j, 0];
@@ -283,14 +283,14 @@ namespace PTL.Geometry.MathModel
             return null;
         }
 
-        public static XYZ Blending(double para, double[,] Nci, XYZ[] cp)
+        public static XYZ4 Blending(double para, double[,] Nci, XYZ4[] cp)
         {
             //tou
             double[] tou = new Double[] { 1, para, para * para, para * para * para };
             //bending
             double[] blending = MatrixDot(tou, Nci);
             //ControlPoint
-            XYZ p = new XYZ();
+            XYZ4 p = new XYZ4();
             for (int i = 0; i < blending.Length; i++)
             {
                 p += blending[i] * cp[i];
@@ -298,17 +298,17 @@ namespace PTL.Geometry.MathModel
             return p;
         }
 
-        public static XYZ TangentBlending(double para, double[,] Nci, XYZ[] cp)
+        public static XYZ3 TangentBlending(double para, double[,] Nci, XYZ4[] cp)
         {
             //tou
             double[] tou = new Double[] { 0, 1, para, para * para };
             //bending
             double[] blending = MatrixDot(tou, Nci);
             //ControlPoint
-            XYZ p = new XYZ();
+            XYZ3 p = new XYZ3();
             for (int i = 0; i < blending.Length; i++)
             {
-                p += blending[i] * cp[i];
+                p = p + (blending[i] * cp[i]);
             }
             return p;
         }
@@ -333,33 +333,33 @@ namespace PTL.Geometry.MathModel
             return new Tuple<int, double>(sIndexU, localU);
         }
 
-        public XYZ CurveFunc(double para)
+        public XYZ4 CurveFunc(double para)
         {
             Tuple<int, double> mappedParas = Param_Mapping(para);
             int sIndexU = mappedParas.Item1;
             double localU = mappedParas.Item2;
 
             //Control Points
-            XYZ[] cP = new XYZ[] { ControlPoints[sIndexU], ControlPoints[sIndexU + 1], ControlPoints[sIndexU + 2], ControlPoints[sIndexU + 3] };
+            XYZ4[] cP = new XYZ4[] { ControlPoints[sIndexU], ControlPoints[sIndexU + 1], ControlPoints[sIndexU + 2], ControlPoints[sIndexU + 3] };
             //Nci
             double[,] Nci = Ni[sIndexU];
 
-            XYZ p = Blending(localU, Nci, cP);
+            XYZ4 p = Blending(localU, Nci, cP);
             return p;
         }
 
-        public XYZ TangentFunc(double para)
+        public XYZ3 TangentFunc(double para)
         {
             Tuple<int, double> mappedParas = Param_Mapping(para);
             int sIndexU = mappedParas.Item1;
             double localU = mappedParas.Item2;
 
             //Control Points
-            XYZ[] cP = new XYZ[] { ControlPoints[sIndexU], ControlPoints[sIndexU + 1], ControlPoints[sIndexU + 2], ControlPoints[sIndexU + 3] };
+            XYZ4[] cP = new XYZ4[] { ControlPoints[sIndexU], ControlPoints[sIndexU + 1], ControlPoints[sIndexU + 2], ControlPoints[sIndexU + 3] };
             //Nci
             double[,] Nci = Ni[sIndexU];
 
-            XYZ p = TangentBlending(localU, Nci, cP);
+            XYZ3 p = TangentBlending(localU, Nci, cP);
             return p;
         }
     }

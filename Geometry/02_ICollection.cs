@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.IO;
 using System.Drawing;
 using PTL.Definitions;
+using PTL.Geometry.MathModel;
 using PTL.OpenGL.Plot;
 using CsGL.OpenGL;
 
@@ -66,21 +67,21 @@ namespace PTL.Geometry
         }
         #endregion
 
-        public override PointD[] Boundary
+        public override XYZ4[] Boundary
         {
             get
             {
-                PointD[] boundary = new PointD[2] { new PointD(), new PointD() };
+                XYZ4[] boundary = new XYZ4[2] { new XYZ4(), new XYZ4() };
                 if (Entities.Count != 0)
                 {
                     Entity[] entities = Entities.Values.ToArray();
                     if (this.CoordinateSystem != null)
                     {
-                        boundary = TransformPoints(this.CoordinateSystem, entities[0].Boundary).ToArray();
-                        PointD[] eboundary;
+                        boundary = Transport(this.CoordinateSystem, entities[0].Boundary).ToArray();
+                        XYZ4[] eboundary;
                         foreach (Entity aEntity in entities)
                         {
-                            eboundary = TransformPoints(this.CoordinateSystem, aEntity.Boundary).ToArray();
+                            eboundary = Transport(this.CoordinateSystem, aEntity.Boundary).ToArray();
                             Compare_Boundary(boundary, eboundary[0]);
                             Compare_Boundary(boundary, eboundary[1]);
                         }
@@ -88,7 +89,7 @@ namespace PTL.Geometry
                     else
                     {
                         boundary = entities[0].Boundary;
-                        PointD[] eboundary;
+                        XYZ4[] eboundary;
                         foreach (Entity aEntity in entities)
                         {
                             eboundary = aEntity.Boundary;

@@ -7,7 +7,7 @@ using PTL.Base.Unit;
 
 namespace PTL.Base.DataType
 {
-    public interface INVU<T> : IBindable, ICloneable
+    public interface INVU<T> : IBindable
     {
         String Name { get; set; }
         T V { get; set; }
@@ -19,7 +19,7 @@ namespace PTL.Base.DataType
         void ChangeUnit(IUnit newUnit);
     }
 
-    public class IntNVU : INVU<int>
+    public class IntNVU : INVU<int>, ICloneable
     {
         String name;
         int value;
@@ -177,14 +177,14 @@ namespace PTL.Base.DataType
 
         #region ICloneable 成員
 
-        public object Clone()
+        public Object Clone()
         {
             return new IntNVU() { name = this.name, value = this.value, unit = this.unit };
         }
 
         #endregion
     }
-    public class DoubleNVU : INVU<double>
+    public class DoubleNVU : INVU<double>, ICloneable
     {
         String name;
         double value;
@@ -332,14 +332,14 @@ namespace PTL.Base.DataType
 
         #region ICloneable 成員
 
-        public object Clone()
+        public Object Clone()
         {
             return new DoubleNVU() { name = this.name, value = this.value, unit = this.unit };
         }
 
         #endregion
     }
-    public class StringNVU : INVU<string>
+    public class StringNVU : INVU<string>, ICloneable
     {
         String name;
         String value;
@@ -487,7 +487,7 @@ namespace PTL.Base.DataType
         #endregion
 
         #region ICloneable 成員
-        public object Clone()
+        public Object Clone()
         {
             return new StringNVU() { name = this.name, value = this.value, unit = this.unit };
         }
@@ -498,7 +498,7 @@ namespace PTL.Base.DataType
             return this.V;
         }
     }
-    public class BooleanNVU : INVU<Boolean>
+    public class BooleanNVU : INVU<Boolean>, ICloneable
     {
         String name;
         Boolean value;
@@ -601,7 +601,7 @@ namespace PTL.Base.DataType
         #endregion
 
         #region ICloneable 成員
-        public object Clone()
+        public Object Clone()
         {
             return new BooleanNVU() { name = this.name, value = this.value, unit = this.unit };
         }

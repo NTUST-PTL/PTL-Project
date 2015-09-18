@@ -5,7 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using System.Drawing;
+using PTL.Base;
 using PTL.Definitions;
+using PTL.Geometry.MathModel;
 using PTL.OpenGL.Plot;
 using CsGL.OpenGL;
 
@@ -140,7 +142,7 @@ namespace PTL.Geometry
 
         public netDxf.DxfDocument ToDXFDocument()
         {
-            PointD[] boundary = this.Boundary;
+            XYZ4[] boundary = this.Boundary;
             PointD sizeP = boundary[1] - boundary[0];
             double longLength = sizeP.ToArray().Max();
             netDxf.DxfDocument doc = new netDxf.DxfDocument(netDxf.Header.DxfVersion.AutoCad2007);

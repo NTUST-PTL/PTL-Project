@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Reflection;
 using PTL.Geometry;
 using PTL.Definitions;
+using PTL.Geometry.MathModel;
 
 namespace PTL.Measurement
 {
@@ -38,7 +39,7 @@ namespace PTL.Measurement
         public List<STLMeasuringTool> STLMeasurent_Objects;
 
         protected STLMeasuringTool_MultiThread() { }
-        public STLMeasuringTool_MultiThread(STL STL2Measure, List<PointD> P, List<Vector> N, int ThreadNumber, EventHandler OnFinish, STLMeasuringTool objSTLMeasurement)
+        public STLMeasuringTool_MultiThread(STL STL2Measure, List<XYZ4> P, List<Vector> N, int ThreadNumber, EventHandler OnFinish, STLMeasuringTool objSTLMeasurement)
         {
             this.STL2Measure = STL2Measure;
             this.MeasurePoints = P;
@@ -78,7 +79,7 @@ namespace PTL.Measurement
                 
                 for (int i = 0; i < sliceIndex.Count - 1; i++)
                 {
-                    PointD[] PartoalPoints = new PointD[sliceIndex[i + 1] - sliceIndex[i]];
+                    XYZ4[] PartoalPoints = new XYZ4[sliceIndex[i + 1] - sliceIndex[i]];
                     for (int j = 0; j < sliceIndex[i + 1] - sliceIndex[i]; j++)
                         PartoalPoints[j] = this.MeasurePoints[j + sliceIndex[i]];
                     STLMeasuringTool aSTLMeasurementObject = (STLMeasuringTool)Activator.CreateInstance(this.STLMeasurentReferenceObject.GetType());
@@ -120,7 +121,7 @@ namespace PTL.Measurement
         protected virtual void OnThreadFinished(object sender, EventArgs e)
         {
             this.FinishedThreadNumber++;
-            this.TouchPoints = new List<PointD>();
+            this.TouchPoints = new List<XYZ4>();
             if (this.FinishedThreadNumber == this.ThreadNumber)
             {
                 foreach (var item in STLMeasurent_Objects)
@@ -170,11 +171,11 @@ namespace PTL.Measurement
         /// <summary>
         /// 量測點
         /// </summary>
-        public virtual List<PointD> MeasurePoints { get; set; }
+        public virtual List<XYZ4> MeasurePoints { get; set; }
         /// <summary>
         /// 搜尋結果，最近點
         /// </summary>
-        public virtual List<PointD> TouchPoints { get; protected set; }
+        public virtual List<XYZ4> TouchPoints { get; protected set; }
         /// <summary>
         /// 搜尋結果，最近的三角面
         /// </summary>
@@ -266,16 +267,16 @@ namespace PTL.Measurement
                 this.Percentage = 0;
                 this.StartTime = DateTime.Now;
 
-                this.TouchPoints = new List<PointD>();
+                this.TouchPoints = new List<XYZ4>();
                 this.TouchedTriangles = new List<Triangle>();
                 Entity[] AllTriangle = STL2Measure.Entities.Values.ToArray();
 
                 for (int pointsIndex = 0; pointsIndex < MeasurePoints.Count; pointsIndex++)
                 {
-                    PointD P = MeasurePoints[pointsIndex];
+                    XYZ4 P = MeasurePoints[pointsIndex];
                     bool alreadyFound = false;
                     //尋找所有通過的三角面及相交的點
-                    Dictionary<PointD, Triangle> Interaction_Points_Triangles = new Dictionary<PointD, Triangle>();
+                    Dictionary<XYZ4, Triangle> Interaction_Points_Triangles = new Dictionary<XYZ4, Triangle>();
                     for (int TriangleIndex = 0; TriangleIndex < STL2Measure.Entities.Count && !alreadyFound; TriangleIndex++)
                     {
                         ///進度報告
@@ -287,10 +288,10 @@ namespace PTL.Measurement
 
                         int LastNearPNum = Interaction_Points_Triangles.Count;
                         Triangle aTriangle = AllTriangle[TriangleIndex] as Triangle;
-                        PointD N = Cross(aTriangle.P2 - aTriangle.P1, aTriangle.P3 - aTriangle.P1);
-                        PointD XC = aTriangle.P1 - P;
-                        PointD YC = aTriangle.P2 - P;
-                        PointD ZC = aTriangle.P3 - P;
+                        XYZ3 N = Cross(aTriangle.P2 - aTriangle.P1, aTriangle.P3 - aTriangle.P1);
+                        XYZ4 XC = aTriangle.P1 - P;
+                        XYZ4 YC = aTriangle.P2 - P;
+                        XYZ4 ZC = aTriangle.P3 - P;
 
                         //Coordinate System, use Point P as Origin
                         double[,] csPT = new double[,]
@@ -306,13 +307,13 @@ namespace PTL.Measurement
                         if (inv == null)//在平面上
                         {
                             //判斷是P否在三角形內
-                            PointD v1 = aTriangle.P1 - P;
-                            PointD v2 = aTriangle.P2 - P;
-                            PointD v3 = aTriangle.P3 - P;
+                            XYZ4 v1 = aTriangle.P1 - P;
+                            XYZ4 v2 = aTriangle.P2 - P;
+                            XYZ4 v3 = aTriangle.P3 - P;
 
-                            PointD n1 = Cross(v1, v2);
-                            PointD n2 = Cross(v2, v3);
-                            PointD n3 = Cross(v3, v1);
+                            XYZ4 n1 = Cross(v1, v2);
+                            XYZ4 n2 = Cross(v2, v3);
+                            XYZ4 n3 = Cross(v3, v1);
                             if (((n1.Y >= 0 && n2.Y >= 0 && n3.Y >= 0) || (n1.Y <= 0 && n2.Y <= 0 && n3.Y <= 0)) && !(n1.Y == 0 && n2.Y == 0 && n3.Y == 0))
                             {
                                 Interaction_Points_Triangles.Add(P, aTriangle);
@@ -322,7 +323,7 @@ namespace PTL.Measurement
                         else//不在平面上但法向投影點在三角形中
                         {
                             //向量 N 在 csPT 上的X,Y, Z分量
-                            PointD component = MatrixDot3(inv, N);
+                            XYZ4 component = Transport(inv, N);
                             if ((component.X >= -0 && component.Y >= -0 && component.Z >= -0) ||
                                 (component.X <= 0 && component.Y <= 0 && component.Z <= 0))
                             {
@@ -334,15 +335,15 @@ namespace PTL.Measurement
                         //解距邊線和定點的最近距離
                         if (Interaction_Points_Triangles.Count == LastNearPNum && !alreadyFound)
                         {
-                            PointD v11 = Normalize(aTriangle.P2 - aTriangle.P1);
-                            PointD V12 = P - aTriangle.P1;
-                            PointD v21 = Normalize(aTriangle.P3 - aTriangle.P2);
-                            PointD V22 = P - aTriangle.P2;
-                            PointD v31 = Normalize(aTriangle.P1 - aTriangle.P3);
-                            PointD V32 = P - aTriangle.P3;
+                            XYZ4 v11 = Normalize(aTriangle.P2 - aTriangle.P1);
+                            XYZ4 V12 = P - aTriangle.P1;
+                            XYZ4 v21 = Normalize(aTriangle.P3 - aTriangle.P2);
+                            XYZ4 V22 = P - aTriangle.P2;
+                            XYZ4 v31 = Normalize(aTriangle.P1 - aTriangle.P3);
+                            XYZ4 V32 = P - aTriangle.P3;
 
                             //P距離邊線1的最近點
-                            PointD Near1 = Cross(Cross(V12, v11), v11) + P;
+                            XYZ4 Near1 = (XYZ4)Cross(Cross(V12, v11), v11) + P;
                             double ratio = Dot((Near1 - aTriangle.P1), v11) / Norm(aTriangle.P2 - aTriangle.P1);
                             if (ratio < 0 || ratio > 1)
                             {
@@ -352,7 +353,7 @@ namespace PTL.Measurement
                                     Near1 = aTriangle.P2;
                             }
                             //P距離邊線1的最近點
-                            PointD Near2 = Cross(Cross(V22, v21), v21) + P;
+                            XYZ4 Near2 = (XYZ4)Cross(Cross(V22, v21), v21) + P;
                             ratio = Dot((Near2 - aTriangle.P2), v21) / Norm(aTriangle.P3 - aTriangle.P2);
                             if (ratio < 0 || ratio > 1)
                             {
@@ -362,7 +363,7 @@ namespace PTL.Measurement
                                     Near2 = aTriangle.P3;
                             }
                             //P距離邊線1的最近點
-                            PointD Near3 = Cross(Cross(V32, v31), v31) + P;
+                            XYZ4 Near3 = (XYZ4)Cross(Cross(V32, v31), v31) + P;
                             ratio = Dot((Near3 - aTriangle.P3), v31) / Norm(aTriangle.P1 - aTriangle.P3);
                             if (ratio < 0 || ratio > 1)
                             {
@@ -373,7 +374,7 @@ namespace PTL.Measurement
                             }
 
                             //找出Near1,Near2,Near3之中的最近點
-                            PointD Near = Near1;
+                            XYZ4 Near = Near1;
                             if (Norm(Near2 - P) < Norm(Near - P))
                                 Near = Near2;
                             if (Norm(Near3 - P) < Norm(Near - P))
@@ -386,10 +387,10 @@ namespace PTL.Measurement
 
 
                     //篩選出最近點
-                    PointD[] nearestPoints = Interaction_Points_Triangles.Keys.ToArray();
+                    XYZ4[] nearestPoints = Interaction_Points_Triangles.Keys.ToArray();
                     if (nearestPoints.Length > 0)
                     {
-                        PointD nearPoint = nearestPoints[0];
+                        XYZ4 nearPoint = nearestPoints[0];
 
                         for (int i = 1; i < Interaction_Points_Triangles.Count; i++)
                         {
@@ -444,14 +445,14 @@ namespace PTL.Measurement
                 this.Percentage = 0;
                 this.StartTime = DateTime.Now;
 
-                this.TouchPoints = new List<PointD>();
+                this.TouchPoints = new List<XYZ4>();
                 this.TouchedTriangles = new List<Triangle>();
                 //Entity[] AllTriangle = STL2Measure.Entities.Values.ToArray();
 
                 for (int pointsIndex = 0; pointsIndex < MeasurePoints.Count; pointsIndex++)
                 {
                     //Console.WriteLine(pointsIndex);
-                    PointD P = MeasurePoints[pointsIndex];
+                    XYZ4 P = MeasurePoints[pointsIndex];
                     Vector N = MeasurePointNormals[pointsIndex];
                     bool alreadyFound = false;
 
@@ -464,14 +465,14 @@ namespace PTL.Measurement
                     Entity[] AllTriangle = STLCubicClassifier.GetEntities2(P, N).ToArray();
 
                     //所有通過的三角面及相交的點
-                    Dictionary<PointD, Triangle> Interaction_Points_Triangles = new Dictionary<PointD, Triangle>();
+                    Dictionary<XYZ4, Triangle> Interaction_Points_Triangles = new Dictionary<XYZ4, Triangle>();
                     for (int TriangleIndex = 0; TriangleIndex < AllTriangle.Length && !alreadyFound; TriangleIndex++)
                     {
                         int LastNearPNum = Interaction_Points_Triangles.Count;
                         Triangle aTriangle = AllTriangle[TriangleIndex] as Triangle;
-                        PointD XC = aTriangle.P1 - P;
-                        PointD YC = aTriangle.P2 - P;
-                        PointD ZC = aTriangle.P3 - P;
+                        XYZ4 XC = aTriangle.P1 - P;
+                        XYZ4 YC = aTriangle.P2 - P;
+                        XYZ4 ZC = aTriangle.P3 - P;
 
                         //Coordinate System, use Point P as Origin
                         double[,] csPT = new double[,]
@@ -487,13 +488,13 @@ namespace PTL.Measurement
                         if (inv == null)//在平面上
                         {
                             //判斷是P否在三角形內
-                            PointD v1 = aTriangle.P1 - P;
-                            PointD v2 = aTriangle.P2 - P;
-                            PointD v3 = aTriangle.P3 - P;
+                            XYZ4 v1 = aTriangle.P1 - P;
+                            XYZ4 v2 = aTriangle.P2 - P;
+                            XYZ4 v3 = aTriangle.P3 - P;
 
-                            PointD n1 = Cross(v1, v2);
-                            PointD n2 = Cross(v2, v3);
-                            PointD n3 = Cross(v3, v1);
+                            XYZ4 n1 = Cross(v1, v2);
+                            XYZ4 n2 = Cross(v2, v3);
+                            XYZ4 n3 = Cross(v3, v1);
                             if (((n1.Y >= 0 && n2.Y >= 0 && n3.Y >= 0) || (n1.Y <= 0 && n2.Y <= 0 && n3.Y <= 0)) && !(n1.Y == 0 && n2.Y == 0 && n3.Y == 0))
                             {
                                 Interaction_Points_Triangles.Add(P, aTriangle);
@@ -503,7 +504,7 @@ namespace PTL.Measurement
                         else
                         {
                             //向量 N 在 csPT 上的X,Y, Z分量
-                            Vector component = MatrixDot3(inv, N);
+                            Vector component = Transport3(inv, N);
                             if ((component.X >= -0 && component.Y >= -0 && component.Z >= -0) ||
                                 (component.X <= 0 && component.Y <= 0 && component.Z <= 0))
                             {
@@ -516,10 +517,10 @@ namespace PTL.Measurement
 
 
                     //篩選出最近點
-                    PointD[] nearestPoints = Interaction_Points_Triangles.Keys.ToArray();
+                    XYZ4[] nearestPoints = Interaction_Points_Triangles.Keys.ToArray();
                     if (nearestPoints.Length > 0)
                     {
-                        PointD nearPoint = nearestPoints[0];
+                        XYZ4 nearPoint = nearestPoints[0];
 
                         for (int i = 1; i < nearestPoints.Length; i++)
                         {
@@ -574,18 +575,18 @@ namespace PTL.Measurement
                 this.Percentage = 0;
                 this.StartTime = DateTime.Now;
 
-                this.TouchPoints = new List<PointD>();
+                this.TouchPoints = new List<XYZ4>();
                 this.TouchedTriangles = new List<Triangle>();
                 Entity[] AllTriangle = STL2Measure.Entities.Values.ToArray();
 
                 for (int pointsIndex = 0; pointsIndex < MeasurePoints.Count; pointsIndex++)
                 {
                     //Console.WriteLine(pointsIndex);
-                    PointD P = MeasurePoints[pointsIndex];
+                    XYZ4 P = MeasurePoints[pointsIndex];
                     bool alreadyFound = false;
 
                     //所有通過的三角面及相交的點
-                    Dictionary<PointD, Triangle> Interaction_Points_Triangles = new Dictionary<PointD, Triangle>();
+                    Dictionary<XYZ4, Triangle> Interaction_Points_Triangles = new Dictionary<XYZ4, Triangle>();
                     for (int TriangleIndex = 0; TriangleIndex < AllTriangle.Length && !alreadyFound; TriangleIndex++)
                     {
                         //進度報告
@@ -597,7 +598,7 @@ namespace PTL.Measurement
 
                         Triangle aTriangle = AllTriangle[TriangleIndex] as Triangle;
 
-                        PointD TriangleNormal = Cross(aTriangle.P2 - aTriangle.P1, aTriangle.P3 - aTriangle.P1);
+                        XYZ4 TriangleNormal = Cross(aTriangle.P2 - aTriangle.P1, aTriangle.P3 - aTriangle.P1);
                         double r = Sqrt(P.X * P.X + P.Y * P.Y);
                         double L = Sqrt((TriangleNormal.X) * r * (TriangleNormal.X) * r + (TriangleNormal.Y) * r * (TriangleNormal.Y) * r);
                         double C = (Dot(aTriangle.P1, TriangleNormal) - TriangleNormal.Z * P.Z) / L;
@@ -607,15 +608,15 @@ namespace PTL.Measurement
 
                         for (int i = 0; i < thetas.Length; i++)
                         {
-                            PointD ans = new PointD(r * Cos(thetas[i]), r * Sin(thetas[i]), P.Z);
+                            XYZ4 ans = new XYZ4(r * Cos(thetas[i]), r * Sin(thetas[i]), P.Z);
 
-                            PointD v1 = aTriangle.P1 - ans;
-                            PointD v2 = aTriangle.P2 - ans;
-                            PointD v3 = aTriangle.P3 - ans;
+                            XYZ4 v1 = aTriangle.P1 - ans;
+                            XYZ4 v2 = aTriangle.P2 - ans;
+                            XYZ4 v3 = aTriangle.P3 - ans;
 
-                            PointD n1 = Cross(v1, v2);
-                            PointD n2 = Cross(v2, v3);
-                            PointD n3 = Cross(v3, v1);
+                            XYZ4 n1 = Cross(v1, v2);
+                            XYZ4 n2 = Cross(v2, v3);
+                            XYZ4 n3 = Cross(v3, v1);
                             if (((n1.Y >= 0 && n2.Y >= 0 && n3.Y >= 0) || (n1.Y <= 0 && n2.Y <= 0 && n3.Y <= 0)) && !(n1.Y == 0 && n2.Y == 0 && n3.Y == 0))
                                 Interaction_Points_Triangles.Add(ans, aTriangle);
                         }
@@ -623,11 +624,11 @@ namespace PTL.Measurement
 
 
                     //篩選出最近點
-                    PointD[] Interaction_Points = Interaction_Points_Triangles.Keys.ToArray();
+                    XYZ4[] Interaction_Points = Interaction_Points_Triangles.Keys.ToArray();
                     Triangle[] Interaction_Triangles = Interaction_Points_Triangles.Values.ToArray();
                     if (Interaction_Points.Length > 0)
                     {
-                        PointD nearestPoint = Interaction_Points[0];
+                        XYZ4 nearestPoint = Interaction_Points[0];
                         Triangle nearestTriangle = Interaction_Triangles[0];
                         for (int i = 1; i < Interaction_Points.Length; i++)
                         {
@@ -666,14 +667,14 @@ namespace PTL.Measurement
     {
         public virtual TopoFace TopoFace1 { get; set; }
         public virtual TopoFace TopoFace2 { get; set; }
-        public virtual PointD PitchPoint1 { get; set; }
-        public virtual PointD PitchPoint2 { get; set; }
+        public virtual XYZ4 PitchPoint1 { get; set; }
+        public virtual XYZ4 PitchPoint2 { get; set; }
         /// <summary>
         /// 
         /// </summary>
-        public virtual Dictionary<PointD, double> RotateAngles { get; private set; }
-        public virtual Dictionary<PointD, double> RotateDistance { get; private set; }
-        public virtual Dictionary<PointD, PointD> RotatedPitchPoint { get; private set; }
+        public virtual Dictionary<XYZ4, double> RotateAngles { get; private set; }
+        public virtual Dictionary<XYZ4, double> RotateDistance { get; private set; }
+        public virtual Dictionary<XYZ4, XYZ4> RotatedPitchPoint { get; private set; }
         public virtual double[,] Distance1 { get; private set; }
         public virtual double[,] Distance2 { get; private set; }
         public virtual RotationOptions RotationOption { get; set; }
@@ -712,7 +713,7 @@ namespace PTL.Measurement
         /// <param name="PitchPoint2">第二拓樸面的PitchPoint</param>
         /// <param name="ThreadNumber">執行緒數目</param>
         /// <param name="OnFinish">計算完成時的後續動作</param>
-        public STLMeasuringTool_P40_SingleTooth(STL STL2Measure, TopoFace TopoFace1, TopoFace TopoFace2, PointD PitchPoint1, PointD PitchPoint2, int ThreadNumber, EventHandler OnFinish)
+        public STLMeasuringTool_P40_SingleTooth(STL STL2Measure, TopoFace TopoFace1, TopoFace TopoFace2, XYZ4 PitchPoint1, XYZ4 PitchPoint2, int ThreadNumber, EventHandler OnFinish)
         {
             this.STL2Measure = STL2Measure;
             this.TopoFace1 = TopoFace1;
@@ -732,12 +733,12 @@ namespace PTL.Measurement
             }
 
             this.FinishedThreadNumber = 0;
-            this.RotateAngles = new Dictionary<PointD, double>();
-            this.RotateDistance = new Dictionary<PointD, double>();
-            this.RotatedPitchPoint = new Dictionary<PointD, PointD>();
+            this.RotateAngles = new Dictionary<XYZ4, double>();
+            this.RotateDistance = new Dictionary<XYZ4, double>();
+            this.RotatedPitchPoint = new Dictionary<XYZ4, XYZ4>();
             this.STLMeasurent_Objects = new List<STLMeasuringTool>();
             STLMeasuringTool_ZAngle aSTLMeasuringTool_ZAngle;
-            aSTLMeasuringTool_ZAngle = new STLMeasuringTool_ZAngle() { STL2Measure = this.STL2Measure, MeasurePoints = new List<PointD>() { this.PitchPoint1, this.PitchPoint2 } };
+            aSTLMeasuringTool_ZAngle = new STLMeasuringTool_ZAngle() { STL2Measure = this.STL2Measure, MeasurePoints = new List<XYZ4>() { this.PitchPoint1, this.PitchPoint2 } };
             aSTLMeasuringTool_ZAngle.OnFinish += aSTLMeasuringTool_ZAngle_OnFinish;
             aSTLMeasuringTool_ZAngle.StartMeasure();
         }
@@ -747,30 +748,26 @@ namespace PTL.Measurement
             STLMeasuringTool_ZAngle STLMeasuringTool_ZAngle = sender as STLMeasuringTool_ZAngle;
             if (STLMeasuringTool_ZAngle.TouchPoints[0] != null && STLMeasuringTool_ZAngle.TouchPoints[1] != null)
             {
-                PointD measurePoint, touchPoint;
+                XYZ4 measurePoint, touchPoint;
                 //讀取第一個PitchPoint的旋轉角
                 measurePoint = this.PitchPoint1;
                 touchPoint = STLMeasuringTool_ZAngle.TouchPoints[0];
-                touchPoint.OpenGLDisplaySize = 0.001;
                 RotateAngles.Add(measurePoint, Atan2(touchPoint.Y, touchPoint.X) - Atan2(measurePoint.Y, measurePoint.X));
-                RotateDistance.Add(measurePoint, Norm(measurePoint - new PointD(0, 0, measurePoint.Z)) * RotateAngles[measurePoint]);
+                RotateDistance.Add(measurePoint, Norm(measurePoint - new XYZ4(0, 0, measurePoint.Z)) * RotateAngles[measurePoint]);
                 RotatedPitchPoint.Add(measurePoint, STLMeasuringTool_ZAngle.TouchPoints[0]);
                 //讀取第二個PitchPoint的旋轉角
                 measurePoint = this.PitchPoint2;
                 touchPoint = STLMeasuringTool_ZAngle.TouchPoints[1];
-                touchPoint.OpenGLDisplaySize = 0.001;
                 RotateAngles.Add(measurePoint, Atan2(touchPoint.Y, touchPoint.X) - Atan2(measurePoint.Y, measurePoint.X));
-                RotateDistance.Add(measurePoint, Norm(measurePoint - new PointD(0, 0, measurePoint.Z)) * RotateAngles[measurePoint]);
+                RotateDistance.Add(measurePoint, Norm(measurePoint - new XYZ4(0, 0, measurePoint.Z)) * RotateAngles[measurePoint]);
                 RotatedPitchPoint.Add(measurePoint, STLMeasuringTool_ZAngle.TouchPoints[1]);
 
                 //根據旋轉兩個旋轉角旋轉拓樸面
                 double rotateAngle;
                 rotateAngle = RotateAngles[this.PitchPoint1];
-                TopoFace1.Points = TransformPoints(RotateMatrix(Axis.Z, rotateAngle), TopoFace1.Points);
-                TopoFace1.Normals = TransformPoints(RotateMatrix(Axis.Z, rotateAngle), TopoFace1.Normals);
+                TopoFace1.Transform(RotateMatrix(Axis.Z, rotateAngle));
                 rotateAngle = RotateAngles[this.PitchPoint2];
-                TopoFace2.Points = TransformPoints(RotateMatrix(Axis.Z, rotateAngle), TopoFace2.Points);
-                TopoFace2.Normals = TransformPoints(RotateMatrix(Axis.Z, rotateAngle), TopoFace2.Normals);
+                TopoFace2.Transform(RotateMatrix(Axis.Z, rotateAngle));
                 Solve();
             }
         }
@@ -778,7 +775,7 @@ namespace PTL.Measurement
         protected override void Solve()
         {
             //提取所有拓樸點
-            PointD[] allTopoPoints = new PointD[this.TopoFace1.Points.Length + this.TopoFace2.Points.Length];
+            XYZ4[] allTopoPoints = new XYZ4[this.TopoFace1.Points.Length + this.TopoFace2.Points.Length];
             Vector[] allTopoPointNormals = new Vector[this.TopoFace1.Normals.Length + this.TopoFace2.Normals.Length];
             int index;
             index = 0;
@@ -813,7 +810,7 @@ namespace PTL.Measurement
             for (int i = 0; i < this.ThreadNumber; i++)
             {
                 //取出計算範圍內的點
-                PointD[] PartoalPoints = new PointD[sliceIndex[i + 1] - sliceIndex[i]];
+                XYZ4[] PartoalPoints = new XYZ4[sliceIndex[i + 1] - sliceIndex[i]];
                 for (int j = 0; j < sliceIndex[i + 1] - sliceIndex[i]; j++)
                     PartoalPoints[j] = allTopoPoints[j + sliceIndex[i]];
                 Vector[] PartoalNormals = new Vector[sliceIndex[i + 1] - sliceIndex[i]];
@@ -846,9 +843,9 @@ namespace PTL.Measurement
             if (this.FinishedThreadNumber == this.ThreadNumber)
             {
                 //抓取結果
-                this.MeasurePoints = new List<PointD>();
+                this.MeasurePoints = new List<XYZ4>();
                 this.MeasurePointNormals = new List<Vector>();
-                this.TouchPoints = new List<PointD>();
+                this.TouchPoints = new List<XYZ4>();
                 this.TouchedTriangles = new List<Triangle>();
                 foreach (var item in STLMeasurent_Objects)
                 {
@@ -891,7 +888,7 @@ namespace PTL.Measurement
     public class STLMeasuringTool_P40 : PTL.Mathematics.Math2
     {
         public virtual List<TopoFace[]> TopoFaces { get; set; }
-        public virtual List<PointD[]> PitchPoints { get; set; }
+        public virtual List<XYZ4[]> PitchPoints { get; set; }
         public virtual STL STL2Measure { get; set; }
 
         public virtual CubicClassifier STLCubicClassifier { get; set; }
@@ -937,7 +934,7 @@ namespace PTL.Measurement
         public STLMeasuringTool_P40(
             STL STL2Measure,
             List<TopoFace[]> topoFaces,
-            List<PointD[]> pitchPoints
+            List<XYZ4[]> pitchPoints
             )
         {
             this.STL2Measure = STL2Measure;

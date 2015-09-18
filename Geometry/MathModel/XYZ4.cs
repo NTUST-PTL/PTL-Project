@@ -4,12 +4,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-
 namespace PTL.Geometry.MathModel
 {
-    public class XYZ : PTL.Mathematics.Math2, ICloneable
+    public class XYZ4 : PTL.Mathematics.Math2, IXYZ
     {
-        public double[] Values = new double[3] { 0, 0, 0 };
+        protected double[] values = new double[3] { 0, 0, 0 };
+        public double[] Values
+        {
+            get { return values; }
+            set { values = value; }
+        }
 
         [Newtonsoft.Json.JsonIgnore]
         public double X
@@ -47,6 +51,7 @@ namespace PTL.Geometry.MathModel
                 this.Values[2] = value;
             }
         }
+
         public double this[int index]
         {
             get
@@ -59,39 +64,38 @@ namespace PTL.Geometry.MathModel
             }
         }
 
-        public static XYZ ZeroVector { get { return new XYZ(0, 0, 0); } }
+        public bool IsHomogeneous
+        {
+            get
+            {
+                return true;
+            }
+        }
 
         #region Constructor and Destructor
-        public XYZ(double x, double y, double z)
+        public XYZ4(double x, double y, double z)
         {
             this.X = x;
             this.Y = y;
             this.Z = z;
         }
 
-        public XYZ(double[] direction)
+        public XYZ4(double[] direction)
         {
             this.X = direction[0];
             this.Y = direction[1];
             this.Z = direction[2];
         }
 
-        public XYZ()
+        public XYZ4()
         {
-        }
-
-        public XYZ(XYZ p)
-        {
-            this.X = p.X;
-            this.Y = p.Y;
-            this.Z = p.Z;
         }
         #endregion
 
         #region Operation
-        public static XYZ operator -(XYZ p1, XYZ p2)
+        public static XYZ4 operator -(XYZ4 p1, XYZ4 p2)
         {
-            XYZ p3 = new XYZ();
+            XYZ4 p3 = new XYZ4();
 
             p3.X = p1.X - p2.X;
             p3.Y = p1.Y - p2.Y;
@@ -99,9 +103,29 @@ namespace PTL.Geometry.MathModel
 
             return p3;
         }
-        public static XYZ operator +(XYZ p1, XYZ p2)
+        public static XYZ4 operator -(XYZ4 p1, XYZ3 p2)
         {
-            XYZ p3 = new XYZ();
+            XYZ4 p3 = new XYZ4();
+
+            p3.X = p1.X - p2.X;
+            p3.Y = p1.Y - p2.Y;
+            p3.Z = p1.Z - p2.Z;
+
+            return p3;
+        }
+        public static XYZ4 operator -(XYZ3 p1, XYZ4 p2)
+        {
+            XYZ4 p3 = new XYZ4();
+
+            p3.X = p1.X - p2.X;
+            p3.Y = p1.Y - p2.Y;
+            p3.Z = p1.Z - p2.Z;
+
+            return p3;
+        }
+        public static XYZ4 operator +(XYZ4 p1, XYZ4 p2)
+        {
+            XYZ4 p3 = new XYZ4();
 
             p3.X = p1.X + p2.X;
             p3.Y = p1.Y + p2.Y;
@@ -109,9 +133,29 @@ namespace PTL.Geometry.MathModel
 
             return p3;
         }
-        public static XYZ operator *(double scale, XYZ p1)
+        public static XYZ4 operator +(XYZ4 p1, XYZ3 p2)
         {
-            XYZ po = new XYZ();
+            XYZ4 p3 = new XYZ4();
+
+            p3.X = p1.X + p2.X;
+            p3.Y = p1.Y + p2.Y;
+            p3.Z = p1.Z + p2.Z;
+
+            return p3;
+        }
+        public static XYZ4 operator +(XYZ3 p1, XYZ4 p2)
+        {
+            XYZ4 p3 = new XYZ4();
+
+            p3.X = p1.X + p2.X;
+            p3.Y = p1.Y + p2.Y;
+            p3.Z = p1.Z + p2.Z;
+
+            return p3;
+        }
+        public static XYZ4 operator *(double scale, XYZ4 p1)
+        {
+            XYZ4 po = new XYZ4();
 
             po.X = scale * p1.X;
             po.Y = scale * p1.Y;
@@ -119,9 +163,9 @@ namespace PTL.Geometry.MathModel
 
             return po;
         }
-        public static XYZ operator *(XYZ p1, double scale)
+        public static XYZ4 operator *(XYZ4 p1, double scale)
         {
-            XYZ po = new XYZ();
+            XYZ4 po = new XYZ4();
 
             po.X = scale * p1.X;
             po.Y = scale * p1.Y;
@@ -129,9 +173,9 @@ namespace PTL.Geometry.MathModel
 
             return po;
         }
-        public static XYZ operator /(XYZ p1, double denominator)
+        public static XYZ4 operator /(XYZ4 p1, double denominator)
         {
-            XYZ po = new XYZ();
+            XYZ4 po = new XYZ4();
 
             po.X = p1.X / denominator;
             po.Y = p1.Y / denominator;
@@ -139,19 +183,28 @@ namespace PTL.Geometry.MathModel
 
             return po;
         }
-        public static implicit operator double[](XYZ p1)
+        public static implicit operator double[] (XYZ4 p1)
         {
             return p1.Values;
         }
-        public static implicit operator XYZ(double[] p1)
+        public static implicit operator XYZ4(double[] p1)
         {
-            return new XYZ(p1);
+            return new XYZ4(p1);
+        }
+        public static implicit operator XYZ3(XYZ4 p1)
+        {
+            return new XYZ3(p1.values);
         }
         #endregion
 
-        public object Clone()
+        public void Transform(double[,] M)
         {
-            XYZ aCoordinate = new XYZ();
+            Values = Transport4(M, Values);
+        }
+
+        public virtual object Clone()
+        {
+            XYZ4 aCoordinate = new XYZ4();
             aCoordinate.X = this.X;
             aCoordinate.Y = this.Y;
             aCoordinate.Z = this.Z;
@@ -166,21 +219,6 @@ namespace PTL.Geometry.MathModel
         public string ToString(string Format)
         {
             return "{" + this.X.ToString(Format) + "," + this.Y.ToString(Format) + "," + this.Z.ToString(Format) + "}";
-        }
-
-        public void Transform3(double[,] TransformMatrix)
-        {
-            this.Values = Transport3(TransformMatrix, this.Values);
-        }
-
-        public void Transform4(double[,] TransformMatrix)
-        {
-            this.Values = Transport4(TransformMatrix, this.Values);
-        }
-
-        public double[] ToArray()
-        {
-            return this.Values;
         }
     }
 }

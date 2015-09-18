@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using PTL.Geometry.MathModel;
 
 namespace PTL.Geometry
 {
     class RadialAngleClassifier : PTL.Mathematics.Math2
     {
         private int _n = 100;
-        private PointD[] _Boundary;
+        private XYZ4[] _Boundary;
         private double[] _Dimentions;
         private double[] _CubeDimentions;
         private int[] _CubeArrayDimentions;
@@ -21,7 +22,7 @@ namespace PTL.Geometry
             get { return _n; }
             protected set { this._n = value; }
         }
-        public PointD[] Boundary
+        public XYZ4[] Boundary
         {
             get { return _Boundary; }
             protected set { this._Boundary = value; }
@@ -55,7 +56,7 @@ namespace PTL.Geometry
         public void CubicClassify(EntityCollection part)
         {
             this.Boundary = part.Boundary;
-            this.Dimentions = (Boundary[1] - Boundary[0]).ToArray();
+            this.Dimentions = (Boundary[1] - Boundary[0]);
             double longEdgeLength = (new double[] { Norm(new PointD(this.Dimentions[0], this.Dimentions[1], 0)), this.Dimentions[2] }).Max();
             double unit = longEdgeLength / this.n;
             this.CubeDimentions = new double[] { unit, unit, unit };
@@ -99,7 +100,7 @@ namespace PTL.Geometry
             //}
         }
 
-        public PointD GetStanderCoordinate(PointD p)
+        public PointD GetStanderCoordinate(XYZ4 p)
         {
             PointD p1 = p - this.Boundary[0];
             return new PointD(
@@ -153,7 +154,7 @@ namespace PTL.Geometry
             int[] Dquadrant = Sign(direction.ToArray());
             int[] startIndex = GetCubicSpaceIndex(position);
             int[] nextIndex = GetCubicSpaceIndex(position);
-            PointD nextsP = ssP.Clone() as PointD;
+            PointD nextsP = (PointD)ssP.Clone();
             if (startIndex[0] > 0 && startIndex[0] < CubeArrayDimentions[0]
                 && startIndex[1] > 0 && startIndex[1] < CubeArrayDimentions[1]
                 && startIndex[2] > 0 && startIndex[2] < CubeArrayDimentions[2])

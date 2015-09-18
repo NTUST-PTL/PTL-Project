@@ -7,20 +7,21 @@ using PTL.Geometry.MathModel;
 
 namespace PTL.Geometry.MathModel
 {
-    public class NUB_Surface : PTL.Mathematics.Math2
+    public class NUB_Surface : PTL.Mathematics.Math2, IParametricSurface
     {
-        public XYZ[][] DataPoints;
+        public XYZ4[][] DataPoints;
         public NUB_Curve[] uCurves;
         public NUB_Curve[] vCurves;
         public int LastSegmentIndexU;
         public int LastSegmentIndexV;
+        public bool ReverseNormalVectorDirection = false;
 
-        public NUB_Surface(XYZ[][] dataPoints)
+        public NUB_Surface(XYZ4[][] dataPoints)
         {
             Calulate(dataPoints);
         }
 
-        public void Calulate(XYZ[][] dataPoints)
+        public void Calulate(XYZ4[][] dataPoints)
         {
             this.DataPoints = dataPoints;
             this.LastSegmentIndexU = dataPoints[0].Length - 2;
@@ -35,7 +36,7 @@ namespace PTL.Geometry.MathModel
             vCurves = new NUB_Curve[uCurves[0].ControlPoints.Length];
             for (int i = 0; i < uCurves[0].ControlPoints.Length; i++)
             {
-                XYZ[] vDatapoints = (from curve in uCurves
+                XYZ4[] vDatapoints = (from curve in uCurves
                                     select curve.ControlPoints[i]).ToArray();
                 vCurves[i] = new NUB_Curve(vDatapoints);
             }
@@ -83,7 +84,7 @@ namespace PTL.Geometry.MathModel
             return new Tuple<int,double,int,double>(sIndexU, localU, sIndexV, localV);
         }
 
-        public XYZ SurfaceFunc(double u, double v)
+        public XYZ4 Position(double u, double v)
         {
             Tuple<int,double,int,double> mappedPara = Param_Mapping(u, v);
             int sIndexU = mappedPara.Item1;
@@ -91,7 +92,7 @@ namespace PTL.Geometry.MathModel
             int sIndexV = mappedPara.Item3;
             double localV = mappedPara.Item4;
 
-            XYZ[] uControlPoints = new XYZ[4];
+            XYZ4[] uControlPoints = new XYZ4[4];
             for (int i = 0; i < 4; i++)
             {
                 uControlPoints[i] = vCurves[sIndexU + i].CurveFunc(v);
@@ -99,12 +100,12 @@ namespace PTL.Geometry.MathModel
 
             double[,] Nc = uCurves[sIndexV].Ni[sIndexU];
 
-            XYZ p = NUB_Curve.Blending(localU, Nc, uControlPoints);
+            XYZ4 p = NUB_Curve.Blending(localU, Nc, uControlPoints);
 
             return p;
         }
 
-        public XYZ U_TangentFunc(double u, double v)
+        public XYZ3 U_Tangent(double u, double v)
         {
             Tuple<int, double, int, double> mappedPara = Param_Mapping(u, v);
             int sIndexU = mappedPara.Item1;
@@ -112,7 +113,7 @@ namespace PTL.Geometry.MathModel
             int sIndexV = mappedPara.Item3;
             double localV = mappedPara.Item4;
 
-            XYZ[] uControlPoint = new XYZ[4];
+            XYZ4[] uControlPoint = new XYZ4[4];
             for (int i = 0; i < 4; i++)
             {
                 uControlPoint[i] = vCurves[sIndexU + i].CurveFunc(v);
@@ -120,12 +121,12 @@ namespace PTL.Geometry.MathModel
 
             double[,] Nc = uCurves[sIndexV].Ni[sIndexU];
 
-            XYZ p = NUB_Curve.TangentBlending(localU, Nc, uControlPoint);
+            XYZ3 p = NUB_Curve.TangentBlending(localU, Nc, uControlPoint);
 
             return p;
         }
 
-        public XYZ V_TangentFunc(double u, double v)
+        public XYZ3 V_Tangent(double u, double v)
         {
             Tuple<int, double, int, double> mappedPara = Param_Mapping(u, v);
             int sIndexU = mappedPara.Item1;
@@ -133,7 +134,7 @@ namespace PTL.Geometry.MathModel
             int sIndexV = mappedPara.Item3;
             double localV = mappedPara.Item4;
 
-            XYZ[] uControlPoint = new XYZ[4];
+            XYZ4[] uControlPoint = new XYZ4[4];
             for (int i = 0; i < 4; i++)
             {
                 uControlPoint[i] = vCurves[sIndexU + i].TangentFunc(v);
@@ -141,14 +142,24 @@ namespace PTL.Geometry.MathModel
 
             double[,] Nc = uCurves[sIndexV].Ni[sIndexU];
 
-            XYZ p = NUB_Curve.Blending(localU, Nc, uControlPoint);
+            XYZ3 p = NUB_Curve.Blending(localU, Nc, uControlPoint);
 
             return p;
         }
 
-        public XYZ NormalFunc(double u, double v)
+        public XYZ3 Normal(double u, double v)
         {
-            XYZ normal = Cross(U_TangentFunc(u, v), V_TangentFunc(u, v));
+            XYZ3 normal;
+            if (ReverseNormalVectorDirection)
+                normal = Cross(U_Tangent(u, v), V_Tangent(u, v));
+            else
+                normal = Cross(V_Tangent(u, v), U_Tangent(u, v));
+            return normal;
+        }
+
+        public XYZ3 UnitNormal(double u, double v)
+        {
+            XYZ3 normal = Normal(u, v);
             return normal / Norm(normal);
         }
     }
