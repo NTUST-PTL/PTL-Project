@@ -62,20 +62,13 @@ namespace PTL.Geometry
 
         public static Vector ZeroVector { get { return new Vector(0, 0, 0); } }
 
-        protected double openGLDisplaySize = 0.1;
+        protected double openGLDisplaySize = 10;
         public double OpenGLDisplaySize
         {
             get { return openGLDisplaySize; }
             set { this.openGLDisplaySize = value; }
         }
-        public Action<Vector> OpenGLDisplayFunction = (Vector p) =>
-        {
-            glColor4d(p.Color);
-            GL.glPushMatrix();
-            Translated(p);
-            GL.glutSolidSphere(p.OpenGLDisplaySize, 20, 20);
-            GL.glPopMatrix();
-        };
+        public Action<Vector> OpenGLDisplayFunction = PlotAsPoint;
 
         #region Constructor and Destructor
         public Vector(double x, double y, double z)
@@ -195,6 +188,33 @@ namespace PTL.Geometry
         public override XYZ4[] Boundary
         {
             get { return null; }
+        }
+
+        public static void PlotAsPoint(Vector v)
+        {
+            glColor4d(v.Color);
+            GL.glPointSize(Convert.ToSingle(v.openGLDisplaySize));
+            GL.glBegin(GL.GL_POINTS);
+            GL.glVertex3d(v.X, v.Y, v.Z);
+            GL.glEnd();
+        }
+
+        public static void PlotAsShpere(Vector v)
+        {
+            glColor4d(v.Color);
+            GL.glPushMatrix();
+            Translated(v);
+            GL.glutSolidSphere(v.OpenGLDisplaySize, 20, 20);
+            GL.glPopMatrix();
+        }
+
+        public static void PlotAsCube(Vector v)
+        {
+            glColor4d(v.Color);
+            GL.glPushMatrix();
+            Translated(v);
+            GL.glutSolidCube(v.OpenGLDisplaySize);
+            GL.glPopMatrix();
         }
 
         public override void PlotInOpenGL()

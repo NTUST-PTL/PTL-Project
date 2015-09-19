@@ -80,7 +80,7 @@ namespace PTL.Geometry
             Action<TopoFace> TopoFaceSetter = null)
         {
             return ToTopoFace(
-                (u, v) => new PointD(nub_Surface.Position(u, v)),
+                (u, v) => new PointD(nub_Surface.R(u, v)),
                 xstart, xend, xslices,
                 ystart, yend, yslices,
                 TopoFaceSetter

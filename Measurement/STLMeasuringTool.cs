@@ -159,7 +159,7 @@ namespace PTL.Measurement
     }
 
 
-    public abstract class STLMeasuringTool : PTL.Mathematics.Math2
+    public abstract class STLMeasuringTool : PTL.Mathematics.Math
     {
         /// <summary>
         /// 要量測的STL
@@ -885,7 +885,7 @@ namespace PTL.Measurement
         }
     }
 
-    public class STLMeasuringTool_P40 : PTL.Mathematics.Math2
+    public class STLMeasuringTool_P40 : PTL.Mathematics.Math
     {
         public virtual List<TopoFace[]> TopoFaces { get; set; }
         public virtual List<XYZ4[]> PitchPoints { get; set; }

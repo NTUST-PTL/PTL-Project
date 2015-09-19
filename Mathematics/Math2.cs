@@ -9,7 +9,7 @@ using PTL.Geometry.MathModel;
 
 namespace PTL.Mathematics
 {
-    public class Math2
+    public class Math
     {
         protected static double delChk = 0.002;
         #region 三角函數
@@ -586,12 +586,12 @@ namespace PTL.Mathematics
         protected static double[,] RotateMatrix(Vector tRotateAxis, double theta)
         {
             double angleZ = Atan2(tRotateAxis.Y, tRotateAxis.X);
-            double angleY = Atan2(tRotateAxis.Z, tRotateAxis.X * tRotateAxis.X + tRotateAxis.Y * tRotateAxis.Y);
+            double angleY = Atan2(tRotateAxis.Z, Sqrt(tRotateAxis.X * tRotateAxis.X + tRotateAxis.Y * tRotateAxis.Y));
             double[,] A21 = RotateMatrix(Axis.Z, -angleZ);
-            double[,] A32 = RotateMatrix(Axis.Y, angleY);
+            double[,] A32 = RotateMatrix(Axis.Y, -angleY);
             double[,] ARotate = RotateMatrix(Axis.X, theta);
-            double[,] A23 = MatrixTranspose(A32);
-            double[,] A12 = MatrixTranspose(A21);
+            double[,] A23 = RotateMatrix(Axis.Y, angleY);
+            double[,] A12 = RotateMatrix(Axis.Z, angleZ);
 
             return MatrixDot(A12, A23, ARotate, A32, A21);
         }
@@ -640,14 +640,15 @@ namespace PTL.Mathematics
             }
             return tr1;
         }
-        protected static T Transport<T>(double[,] tMatrix, T p) where T : IXYZ, new()
+        protected static T Transport<T>(double[,] tMatrix, T p) where T : IXYZ
         {
             double[] result;
             if (p.IsHomogeneous)
                 result = Transport4(tMatrix, p.Values);
             else
                 result = Transport3(tMatrix, p.Values);
-            T newP = new T() { X = result [0], Y = result[1] , Z = result[2] };
+            T newP = (T)p.New();
+            newP.Values = result;
             return newP;
         }
 
@@ -680,7 +681,7 @@ namespace PTL.Mathematics
                 yield return Transport4(tMatrix, r);
             }
         }
-        protected static IEnumerable<T> Transport<T>(double[,] tMatrix, params T[] p) where T : IXYZ, new()
+        protected static IEnumerable<T> Transport<T>(double[,] tMatrix, params T[] p) where T : IXYZ
         {
             foreach (var r in p)
             {

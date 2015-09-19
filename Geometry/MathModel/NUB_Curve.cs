@@ -4,14 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DoubleArrayExtension
-{
-    
-}
-
 namespace PTL.Geometry.MathModel
 {
-    public class NUB_Curve : PTL.Mathematics.Math2
+    public class NUB_Curve : PTL.Mathematics.Math
     {
         public XYZ4[] DataPoints;
         public XYZ4[] ControlPoints;
@@ -283,10 +278,10 @@ namespace PTL.Geometry.MathModel
             return null;
         }
 
-        public static XYZ4 Blending(double para, double[,] Nci, XYZ4[] cp)
+        public static XYZ4 Blending(double u, double[,] Nci, XYZ4[] cp)
         {
             //tou
-            double[] tou = new Double[] { 1, para, para * para, para * para * para };
+            double[] tou = new Double[] { 1, u, u * u, u * u * u };
             //bending
             double[] blending = MatrixDot(tou, Nci);
             //ControlPoint
@@ -298,10 +293,10 @@ namespace PTL.Geometry.MathModel
             return p;
         }
 
-        public static XYZ3 TangentBlending(double para, double[,] Nci, XYZ4[] cp)
+        public static XYZ3 dU_Blending(double u, double[,] Nci, XYZ4[] cp)
         {
             //tou
-            double[] tou = new Double[] { 0, 1, para, para * para };
+            double[] tou = new Double[] { 0, 1, 2.0 * u, 3.0 * u * u };
             //bending
             double[] blending = MatrixDot(tou, Nci);
             //ControlPoint
@@ -313,9 +308,24 @@ namespace PTL.Geometry.MathModel
             return p;
         }
 
-        public Tuple<int, double> Param_Mapping(double para)
+        public static XYZ3 dU2_Blending(double u, double[,] Nci, XYZ4[] cp)
         {
-            double globalU = para * (DataPoints.Length - 1);
+            //tou
+            double[] tou = new Double[] { 0, 0, 2.0, 6.0 * u };
+            //bending
+            double[] blending = MatrixDot(tou, Nci);
+            //ControlPoint
+            XYZ3 p = new XYZ3();
+            for (int i = 0; i < blending.Length; i++)
+            {
+                p = p + (blending[i] * cp[i]);
+            }
+            return p;
+        }
+
+        public Tuple<int, double> Param_Mapping(double u)
+        {
+            double globalU = u * (DataPoints.Length - 1);
             double localU = globalU % 1;
             int sIndexU = (int)(globalU > 0 ? System.Math.Floor(globalU) : System.Math.Ceiling(globalU));
             if (sIndexU > LastSegmentIndex)
@@ -332,10 +342,10 @@ namespace PTL.Geometry.MathModel
 
             return new Tuple<int, double>(sIndexU, localU);
         }
-
-        public XYZ4 CurveFunc(double para)
+        
+        public XYZ4 R(double u)
         {
-            Tuple<int, double> mappedParas = Param_Mapping(para);
+            Tuple<int, double> mappedParas = Param_Mapping(u);
             int sIndexU = mappedParas.Item1;
             double localU = mappedParas.Item2;
 
@@ -348,9 +358,9 @@ namespace PTL.Geometry.MathModel
             return p;
         }
 
-        public XYZ3 TangentFunc(double para)
+        public XYZ3 dU(double u)
         {
-            Tuple<int, double> mappedParas = Param_Mapping(para);
+            Tuple<int, double> mappedParas = Param_Mapping(u);
             int sIndexU = mappedParas.Item1;
             double localU = mappedParas.Item2;
 
@@ -359,7 +369,22 @@ namespace PTL.Geometry.MathModel
             //Nci
             double[,] Nci = Ni[sIndexU];
 
-            XYZ3 p = TangentBlending(localU, Nci, cP);
+            XYZ3 p = dU_Blending(localU, Nci, cP);
+            return p;
+        }
+
+        public XYZ3 dU2(double u)
+        {
+            Tuple<int, double> mappedParas = Param_Mapping(u);
+            int sIndexU = mappedParas.Item1;
+            double localU = mappedParas.Item2;
+
+            //Control Points
+            XYZ4[] cP = new XYZ4[] { ControlPoints[sIndexU], ControlPoints[sIndexU + 1], ControlPoints[sIndexU + 2], ControlPoints[sIndexU + 3] };
+            //Nci
+            double[,] Nci = Ni[sIndexU];
+
+            XYZ3 p = dU2_Blending(localU, Nci, cP);
             return p;
         }
     }

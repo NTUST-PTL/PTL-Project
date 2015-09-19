@@ -7,7 +7,7 @@ using PTL.Geometry.MathModel;
 
 namespace PTL.Geometry.MathModel
 {
-    public class NUB_Surface : PTL.Mathematics.Math2, IParametricSurface
+    public class NUB_Surface : PTL.Mathematics.Math, IParametricSurface
     {
         public XYZ4[][] DataPoints;
         public NUB_Curve[] uCurves;
@@ -84,7 +84,7 @@ namespace PTL.Geometry.MathModel
             return new Tuple<int,double,int,double>(sIndexU, localU, sIndexV, localV);
         }
 
-        public XYZ4 Position(double u, double v)
+        public XYZ4 R(double u, double v)
         {
             Tuple<int,double,int,double> mappedPara = Param_Mapping(u, v);
             int sIndexU = mappedPara.Item1;
@@ -95,7 +95,7 @@ namespace PTL.Geometry.MathModel
             XYZ4[] uControlPoints = new XYZ4[4];
             for (int i = 0; i < 4; i++)
             {
-                uControlPoints[i] = vCurves[sIndexU + i].CurveFunc(v);
+                uControlPoints[i] = vCurves[sIndexU + i].R(v);
             }
 
             double[,] Nc = uCurves[sIndexV].Ni[sIndexU];
@@ -105,7 +105,7 @@ namespace PTL.Geometry.MathModel
             return p;
         }
 
-        public XYZ3 U_Tangent(double u, double v)
+        public XYZ3 dU(double u, double v)
         {
             Tuple<int, double, int, double> mappedPara = Param_Mapping(u, v);
             int sIndexU = mappedPara.Item1;
@@ -116,17 +116,17 @@ namespace PTL.Geometry.MathModel
             XYZ4[] uControlPoint = new XYZ4[4];
             for (int i = 0; i < 4; i++)
             {
-                uControlPoint[i] = vCurves[sIndexU + i].CurveFunc(v);
+                uControlPoint[i] = vCurves[sIndexU + i].R(v);
             }
 
             double[,] Nc = uCurves[sIndexV].Ni[sIndexU];
 
-            XYZ3 p = NUB_Curve.TangentBlending(localU, Nc, uControlPoint);
+            XYZ3 p = NUB_Curve.dU_Blending(localU, Nc, uControlPoint);
 
             return p;
         }
 
-        public XYZ3 V_Tangent(double u, double v)
+        public XYZ3 dU2(double u, double v)
         {
             Tuple<int, double, int, double> mappedPara = Param_Mapping(u, v);
             int sIndexU = mappedPara.Item1;
@@ -137,7 +137,28 @@ namespace PTL.Geometry.MathModel
             XYZ4[] uControlPoint = new XYZ4[4];
             for (int i = 0; i < 4; i++)
             {
-                uControlPoint[i] = vCurves[sIndexU + i].TangentFunc(v);
+                uControlPoint[i] = vCurves[sIndexU + i].R(v);
+            }
+
+            double[,] Nc = uCurves[sIndexV].Ni[sIndexU];
+
+            XYZ3 p = NUB_Curve.dU2_Blending(localU, Nc, uControlPoint);
+
+            return p;
+        }
+
+        public XYZ3 dV(double u, double v)
+        {
+            Tuple<int, double, int, double> mappedPara = Param_Mapping(u, v);
+            int sIndexU = mappedPara.Item1;
+            double localU = mappedPara.Item2;
+            int sIndexV = mappedPara.Item3;
+            double localV = mappedPara.Item4;
+
+            XYZ4[] uControlPoint = new XYZ4[4];
+            for (int i = 0; i < 4; i++)
+            {
+                uControlPoint[i] = vCurves[sIndexU + i].dU(v);
             }
 
             double[,] Nc = uCurves[sIndexV].Ni[sIndexU];
@@ -147,19 +168,61 @@ namespace PTL.Geometry.MathModel
             return p;
         }
 
-        public XYZ3 Normal(double u, double v)
+        public XYZ3 dV2(double u, double v)
+        {
+            Tuple<int, double, int, double> mappedPara = Param_Mapping(u, v);
+            int sIndexU = mappedPara.Item1;
+            double localU = mappedPara.Item2;
+            int sIndexV = mappedPara.Item3;
+            double localV = mappedPara.Item4;
+
+            XYZ4[] uControlPoint = new XYZ4[4];
+            for (int i = 0; i < 4; i++)
+            {
+                uControlPoint[i] = vCurves[sIndexU + i].dU2(v);
+            }
+
+            double[,] Nc = uCurves[sIndexV].Ni[sIndexU];
+
+            XYZ3 p = NUB_Curve.Blending(localU, Nc, uControlPoint);
+
+            return p;
+        }
+
+        public XYZ3 dUdV(double u, double v)
+        {
+            Tuple<int, double, int, double> mappedPara = Param_Mapping(u, v);
+            int sIndexU = mappedPara.Item1;
+            double localU = mappedPara.Item2;
+            int sIndexV = mappedPara.Item3;
+            double localV = mappedPara.Item4;
+
+            XYZ4[] uControlPoint = new XYZ4[4];
+            for (int i = 0; i < 4; i++)
+            {
+                uControlPoint[i] = vCurves[sIndexU + i].dU(v);
+            }
+
+            double[,] Nc = uCurves[sIndexV].Ni[sIndexU];
+
+            XYZ3 p = NUB_Curve.dU_Blending(localU, Nc, uControlPoint);
+
+            return p;
+        }
+
+        public XYZ3 N(double u, double v)
         {
             XYZ3 normal;
             if (ReverseNormalVectorDirection)
-                normal = Cross(U_Tangent(u, v), V_Tangent(u, v));
+                normal = Cross(dU(u, v), dV(u, v));
             else
-                normal = Cross(V_Tangent(u, v), U_Tangent(u, v));
+                normal = Cross(dV(u, v), dU(u, v));
             return normal;
         }
 
-        public XYZ3 UnitNormal(double u, double v)
+        public XYZ3 n(double u, double v)
         {
-            XYZ3 normal = Normal(u, v);
+            XYZ3 normal = N(u, v);
             return normal / Norm(normal);
         }
     }

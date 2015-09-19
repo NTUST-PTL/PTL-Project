@@ -14,5 +14,7 @@ namespace PTL.Geometry.MathModel
         double Z { get; set; }
         double this[int index] { get; set; }
         bool IsHomogeneous { get; }
+
+        object New();
     }
 }

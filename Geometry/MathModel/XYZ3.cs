@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace PTL.Geometry.MathModel
 {
-    public class XYZ3 : PTL.Mathematics.Math2, IXYZ
+    public class XYZ3 : PTL.Mathematics.Math, IXYZ
     {
         protected double[] values = new double[3] { 0, 0, 0 };
         public double[] Values {
@@ -89,6 +89,11 @@ namespace PTL.Geometry.MathModel
 
         public XYZ3()
         {
+        }
+
+        public object New()
+        {
+            return new XYZ3();
         }
         #endregion
 

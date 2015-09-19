@@ -459,6 +459,7 @@ namespace PTL.OpenGL.Plot
             //Default Tanslation
             Translated(centerPoint * -1);//平移原點DXF中心
             //開啟平滑模式
+            GL.glEnable(GL.GL_POINT_SMOOTH);
             GL.glEnable(GL.GL_BLEND);
             GL.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA);
             GL.glEnable(GL.GL_SMOOTH);

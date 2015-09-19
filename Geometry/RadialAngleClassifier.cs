@@ -7,7 +7,7 @@ using PTL.Geometry.MathModel;
 
 namespace PTL.Geometry
 {
-    class RadialAngleClassifier : PTL.Mathematics.Math2
+    class RadialAngleClassifier : PTL.Mathematics.Math
     {
         private int _n = 100;
         private XYZ4[] _Boundary;

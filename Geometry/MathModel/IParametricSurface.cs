@@ -8,10 +8,13 @@ namespace PTL.Geometry.MathModel
 {
     public interface IParametricSurface
     {
-        XYZ4 Position(double u, double v);
-        XYZ3 U_Tangent(double u, double v);
-        XYZ3 V_Tangent(double u, double v);
-        XYZ3 Normal(double u, double v);
-        XYZ3 UnitNormal(double u, double v);
+        XYZ4 R(double u, double v);
+        XYZ3 dU(double u, double v);
+        XYZ3 dV(double u, double v);
+        XYZ3 dU2(double u, double v);
+        XYZ3 dV2(double u, double v);
+        XYZ3 dUdV(double u, double v);
+        XYZ3 N(double u, double v);
+        XYZ3 n(double u, double v);
     }
 }

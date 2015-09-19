@@ -114,7 +114,7 @@ namespace PTL.DebugTools
             this.LogTextBox.AppendText("\r\n");
         }
 
-        public void Log(String message = null, params object[] options)
+        public void Log(String message, params object[] options)
         {
             this.LogTextBox.AppendText(String.Format(message, options));
             this.LogTextBox.AppendText("\r\n");
