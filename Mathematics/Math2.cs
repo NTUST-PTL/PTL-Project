@@ -626,7 +626,7 @@ namespace PTL.Mathematics
                 }
                 return tr2;
             }
-            return tr1;
+            return (double[])tr1.Clone();
         }
         protected static double[] Transport4(double[,] tMatrix, double[] tr1)
         {
@@ -638,7 +638,7 @@ namespace PTL.Mathematics
                 tr2[2] += tMatrix[2, 3];
                 return tr2;
             }
-            return tr1;
+            return (double[])tr1.Clone();
         }
         protected static T Transport<T>(double[,] tMatrix, T p) where T : IXYZ
         {
