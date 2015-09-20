@@ -890,6 +890,10 @@ namespace PTL.Mathematics
 
             return pc;
         }
+        protected static bool Compare(double a, double b, double precision)
+        {
+            return Abs(a - b) <= precision;
+        }
         protected static void Compare_Boundary(XYZ4[] Boundary, XYZ4 point2Check)
         {
             if (point2Check.X > Boundary[1].X) { Boundary[1].X = point2Check.X; }
