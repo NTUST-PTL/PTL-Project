@@ -101,5 +101,17 @@ namespace PTL.FileOperation
 
             return result;
         }
+
+        public static String MergeString(String[,] strArray)
+        {
+            StringBuilder result = new StringBuilder();
+            for (int i = 0; i < strArray.GetLength(0); i++)
+            {
+                for (int j = 0; j < strArray.GetLength(1); j++)
+                    result.Append(strArray[i, j]);
+                result.Append("\r\n");
+            }
+            return result.ToString();
+        }
     }
 }
