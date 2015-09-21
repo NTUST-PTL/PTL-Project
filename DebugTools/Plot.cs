@@ -57,7 +57,7 @@ namespace PTL.DebugTools
         public void ParameterPlot(Func<double, double[]> Function, double start, double end, uint slices, Action<PolyLine> PolyLineSetter = null)
         {
             PolyLine polyline = PTL.Geometry.PTLConvert.ToPolyLine(
-                Function, start, end, slices, PolyLineSetter
+                (u) => Function(u), start, end, slices, PolyLineSetter
                 );
 
             Window.View.AddSomeThing2Show(polyline);
@@ -66,7 +66,7 @@ namespace PTL.DebugTools
         public void ParameterPlot(Func<double, PointD> Function, double start, double end, uint slices, Action<PolyLine> PolyLineSetter = null)
         {
             PolyLine polyline = PTL.Geometry.PTLConvert.ToPolyLine(
-                Function, start, end, slices, PolyLineSetter
+                (u) => Function(u), start, end, slices, PolyLineSetter
                 );
 
             Window.View.AddSomeThing2Show(polyline);
@@ -75,7 +75,7 @@ namespace PTL.DebugTools
         public void ParameterPlot(Func<double, double, PointD> Function, double xstart, double xend, uint xslices, double ystart, double yend, uint yslices, Action<TopoFace> TopoFaceSetter = null)
         {
             TopoFace topoFace = PTL.Geometry.PTLConvert.ToTopoFace(
-                Function,
+                (u, v) => Function(u, v),
                 xstart, xend, xslices,
                 ystart, yend, yslices,
                 TopoFaceSetter);
@@ -86,7 +86,7 @@ namespace PTL.DebugTools
         public void ParameterPlot(Func<double, double, double[]> Function, double xstart, double xend, uint xslices, double ystart, double yend, uint yslices, Action<TopoFace> TopoFaceSetter = null)
         {
             TopoFace topoFace = PTL.Geometry.PTLConvert.ToTopoFace(
-                Function,
+                (u, v) => Function(u, v),
                 xstart, xend, xslices,
                 ystart, yend, yslices,
                 TopoFaceSetter);

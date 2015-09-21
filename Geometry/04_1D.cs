@@ -199,9 +199,9 @@ namespace PTL.Geometry
         }
         #endregion
 
-        public void AddPoint(PointD tpoint)
+        public void AddPoint(XYZ4 tpoint)
         {
-            Points.Add((PointD)tpoint.Clone());
+            Points.Add((XYZ4)tpoint.Clone());
         }
 
         public override XYZ4[] Boundary

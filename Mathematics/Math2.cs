@@ -647,8 +647,7 @@ namespace PTL.Mathematics
                 result = Transport4(tMatrix, p.Values);
             else
                 result = Transport3(tMatrix, p.Values);
-            T newP = (T)p.New();
-            newP.Values = result;
+            T newP = (T)p.New(result);
             return newP;
         }
 

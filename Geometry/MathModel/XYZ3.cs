@@ -9,7 +9,7 @@ namespace PTL.Geometry.MathModel
 {
     public class XYZ3 : PTL.Mathematics.Math, IXYZ
     {
-        protected double[] values = new double[3] { 0, 0, 0 };
+        protected double[] values;
         public double[] Values {
             get { return values; }
             set { values = value; }
@@ -75,25 +75,25 @@ namespace PTL.Geometry.MathModel
         #region Constructor and Destructor
         public XYZ3(double x, double y, double z)
         {
-            this.X = x;
-            this.Y = y;
-            this.Z = z;
+            this.Values = new double[3] { x, y, z };
         }
 
-        public XYZ3(double[] direction)
+        public XYZ3(double[] XYZ)
         {
-            this.X = direction[0];
-            this.Y = direction[1];
-            this.Z = direction[2];
+            this.Values = XYZ;
+            //this.X = XYZ[0];
+            //this.Y = XYZ[1];
+            //this.Z = XYZ[2];
         }
 
         public XYZ3()
         {
+            this.Values = new double[3] { 0, 0, 0 };
         }
 
-        public object New()
+        public object New(double[] XYZ)
         {
-            return new XYZ3();
+            return new XYZ3(XYZ);
         }
         #endregion
 

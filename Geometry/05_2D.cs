@@ -195,17 +195,23 @@ namespace PTL.Geometry
 
                 PointD p1 = Transport4(this.CoordinateSystem, this.AxisStart);
                 PointD p2 = Transport4(this.CoordinateSystem, this.AxisEnd);
-                Vector N1 = Cross(Cross(new Vector(0, 0, 1), p2 - p1), p2 - p1);
-                Vector N2 = Cross(N1, p2 - p1);
+                XYZ3 axis = Normalize(p2 - p1);
+                Vector Nx = Cross(Cross(new XYZ3(1, 0, 0), axis), axis * radius);
+                Vector Ny = Cross(Cross(new XYZ3(0, 1, 0), axis), axis * radius);
+                Vector Nz = Cross(Cross(new XYZ3(0, 0, 1), axis), axis * radius);
                 List<PointD> pp = new List<PointD>();
-                pp.Add(p1 + N1);
-                pp.Add(p1 - N1);
-                pp.Add(p1 + N2);
-                pp.Add(p1 - N2);
-                pp.Add(p2 + N1);
-                pp.Add(p2 - N1);
-                pp.Add(p2 + N2);
-                pp.Add(p2 - N2);
+                pp.Add(p1 + Nx);
+                pp.Add(p1 - Nx);
+                pp.Add(p2 + Nx);
+                pp.Add(p2 - Nx);
+                pp.Add(p1 + Ny);
+                pp.Add(p1 - Ny);
+                pp.Add(p2 + Ny);
+                pp.Add(p2 - Ny);
+                pp.Add(p1 + Nz);
+                pp.Add(p1 - Nz);
+                pp.Add(p2 + Nz);
+                pp.Add(p2 - Nz);
 
                 boundary = new XYZ4[2] { Transport4(this.CoordinateSystem, pp[0]), Transport4(this.CoordinateSystem, pp[0]) };
                 for (int i = 1; i < pp.Count; i++)
@@ -559,7 +565,7 @@ namespace PTL.Geometry
                     for (int j = 0; j < this.Points.GetLength(1); j++)
                     {
                         if (this.Points[i, j] != null)
-                            newTopoFace.Points[i, j] = this.Points[i, j].Clone() as XYZ4;
+                            newTopoFace.Points[i, j] = (XYZ4)this.Points[i, j].Clone();
                     }
                 }
             }

@@ -9,8 +9,27 @@ namespace PTL.Geometry
 {
     public class PTLConvert
     {
+        public static NUB_Surface ToNUB_Surface(TopoFace tf)
+        {
+            return ToNUB_Surface(tf.Points);
+        }
+
+        public static NUB_Surface ToNUB_Surface(XYZ4[,] tf)
+        {
+            int NRow = tf.GetLength(0);
+            int NCol = tf.GetLength(1);
+            XYZ4[][] Points = new XYZ4[NRow][];
+            for (int i = 0; i < NRow; i++)
+            {
+                Points[i] = new XYZ4[NCol];
+                for (int j = 0; j < NCol; j++)
+                    Points[i][j] = tf[i, j];
+            }
+            return new NUB_Surface(Points);
+        }
+
         public static TopoFace ToTopoFace(
-            Func<double, double, PointD> Function, 
+            Func<double, double, XYZ4> Function, 
             double xstart, double xend, uint xslices, 
             double ystart, double yend, uint yslices, 
             Action<TopoFace> TopoFaceSetter = null)
@@ -60,27 +79,13 @@ namespace PTL.Geometry
         }
 
         public static TopoFace ToTopoFace(
-            Func<double, double, double[]> Function,
-            double xstart, double xend, uint xslices,
-            double ystart, double yend, uint yslices,
-            Action<TopoFace> TopoFaceSetter = null)
-        {
-            return ToTopoFace(
-                (u, v) => new PointD(Function(u,v)),
-                xstart, xend, xslices,
-                ystart, yend, yslices,
-                TopoFaceSetter
-                );
-        }
-
-        public static TopoFace ToTopoFace(
             NUB_Surface nub_Surface,
             double xstart = 0, double xend = 1, uint xslices = 100,
             double ystart = 0, double yend = 1, uint yslices = 100,
             Action<TopoFace> TopoFaceSetter = null)
         {
             return ToTopoFace(
-                (u, v) => new PointD(nub_Surface.R(u, v)),
+                (u, v) => nub_Surface.R(u, v),
                 xstart, xend, xslices,
                 ystart, yend, yslices,
                 TopoFaceSetter
@@ -88,7 +93,7 @@ namespace PTL.Geometry
         }
 
         public static PolyLine ToPolyLine(
-            Func<double, PointD> Function,
+            Func<double, XYZ4> Function,
             double start, double end, uint slices,
             Action<PolyLine> PolyLineSetter = null)
         {
@@ -119,12 +124,12 @@ namespace PTL.Geometry
         }
 
         public static PolyLine ToPolyLine(
-            Func<double, double[]> Function,
+            NUB_Curve nub_curve,
             double start, double end, uint slices,
             Action<PolyLine> PolyLineSetter = null)
         {
             PolyLine polyline = ToPolyLine(
-                (x) => new PointD(Function(x)),
+                nub_curve.R,
                 start, end, slices,
                 PolyLineSetter
                 );

@@ -8,7 +8,7 @@ namespace PTL.Geometry.MathModel
 {
     public class XYZ4 : PTL.Mathematics.Math, IXYZ
     {
-        protected double[] values = new double[3] { 0, 0, 0 };
+        protected double[] values;
         public double[] Values
         {
             get { return values; }
@@ -75,25 +75,25 @@ namespace PTL.Geometry.MathModel
         #region Constructor and Destructor
         public XYZ4(double x, double y, double z)
         {
-            this.X = x;
-            this.Y = y;
-            this.Z = z;
+            this.Values = new double[3] { x, y, z };
         }
 
-        public XYZ4(double[] direction)
+        public XYZ4(double[] XYZ)
         {
-            this.X = direction[0];
-            this.Y = direction[1];
-            this.Z = direction[2];
+            this.values = XYZ;
+            //this.X = XYZ[0];
+            //this.Y = XYZ[1];
+            //this.Z = XYZ[2];
         }
 
         public XYZ4()
         {
+            this.Values = new double[3] { 0, 0, 0 };
         }
 
-        public object New()
+        public object New(double[] XYZ)
         {
-            return new XYZ4();
+            return new XYZ4(XYZ);
         }
         #endregion
 
