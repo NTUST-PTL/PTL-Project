@@ -433,11 +433,12 @@ namespace PTL.OpenGL.Plot
                             Convert.ToSingle(this.BackGroundColor.B / 255.0),
                             Convert.ToSingle(this.BackGroundColor.A / 255.0));
             GL.glFlush();
+            
             //打光與材質
             if (LightOn)
                 PlotSub.Light();
             GL.glDisable(GL.GL_CULL_FACE);
-
+            
             #region 設定畫布與視野大小
             int width = openGLWindow.Width;
             int height = openGLWindow.Height;
@@ -456,15 +457,18 @@ namespace PTL.OpenGL.Plot
             openGLWindow.MouseMoveInOpenGLPaint();
             //x,y,z軸比例縮放
             GL.glScaled(XScale, YScale, ZScale);
+
             //Default Tanslation
             Translated(centerPoint * -1);//平移原點DXF中心
             //開啟平滑模式
+            //GL.glEnable(GL.GL_NORMALIZE);
             GL.glEnable(GL.GL_POINT_SMOOTH);
             GL.glEnable(GL.GL_BLEND);
             GL.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA);
             GL.glEnable(GL.GL_SMOOTH);
             GL.glEnable(GL.GL_LINE_SMOOTH);
-            GL.glFlush();
+            //GL.glFlush();
+            
 
             //GL.glDisable(GL.GL_LINE_SMOOTH);
             //畫DXFD
@@ -481,6 +485,7 @@ namespace PTL.OpenGL.Plot
                 if (this.PlotGraduation)
                     graduationLayer.PlotInOpenGL();
             }
+            
         }
 
         protected virtual void GanerateGridLayer(Color gridColor1, Color gridColor2, Color graduationColor)

@@ -292,7 +292,7 @@ namespace PTL.Geometry
         {
             PointD ssP = GetStanderCoordinate(position);
             Vector ssD = Normalize(GetStanderVector(direction));
-            int[] Dquadrant = Sign(direction.ToArray());
+            int[] Dquadrant = EachSign(direction.ToArray()).ToArray();
             int[] startIndex = GetCubicSpaceIndex(position);
             int[] currentIndex = GetCubicSpaceIndex(position);
 

@@ -151,7 +151,7 @@ namespace PTL.Geometry
             PointD ssP = GetStanderCoordinate(position);
             Vector ssD = Normalize(GetStanderVector(direction));
             HashSet<CubicSpace> IntersectedCubicSpace = new HashSet<CubicSpace>();
-            int[] Dquadrant = Sign(direction.ToArray());
+            int[] Dquadrant = EachSign(direction.ToArray()).ToArray();
             int[] startIndex = GetCubicSpaceIndex(position);
             int[] nextIndex = GetCubicSpaceIndex(position);
             PointD nextsP = (PointD)ssP.Clone();

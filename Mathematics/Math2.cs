@@ -902,19 +902,16 @@ namespace PTL.Mathematics
             if (point2Check.Z > Boundary[1].Z) { Boundary[1].Z = point2Check.Z; }
             else if (point2Check.Z < Boundary[0].Z) { Boundary[0].Z = point2Check.Z; }
         }
-        protected static int[] Sign(params double[] values)
+        protected static int Sign(double values)
         {
-            int[] signs = new int[values.Length];
-            for (int i = 0; i < values.Length; i++)
+            return System.Math.Sign(values);
+        }
+        protected static IEnumerable<int> EachSign(IEnumerable<double> values)
+        {
+            foreach (var item in values)
             {
-                if (values[i] > 0)
-                    signs[i] = 1;
-                else if (values[i] < 0)
-                    signs[i] = -1;
-                else
-                    signs[i] = 0;
+                yield return Math.Sign(item);
             }
-            return signs;
         }
         #endregion
 
