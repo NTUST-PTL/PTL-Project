@@ -561,8 +561,8 @@ namespace PTL.Mathematics
                 case Axis.Y:
                     Mr[0, 0] = Cos(theta);
                     Mr[2, 2] = Cos(theta);
-                    Mr[0, 2] = -Sin(theta);
-                    Mr[2, 0] = Sin(theta);
+                    Mr[0, 2] = Sin(theta);
+                    Mr[2, 0] = -Sin(theta);
                     break;
                 case Axis.Z:
                     Mr[0, 0] = Cos(theta);
@@ -583,10 +583,10 @@ namespace PTL.Mathematics
 
             return Mr;
         }
-        protected static double[,] RotateMatrix(Vector tRotateAxis, double theta)
+        protected static double[,] RotateMatrix(double[] tRotateAxis, double theta)
         {
-            double angleZ = Atan2(tRotateAxis.Y, tRotateAxis.X);
-            double angleY = Atan2(tRotateAxis.Z, Sqrt(tRotateAxis.X * tRotateAxis.X + tRotateAxis.Y * tRotateAxis.Y));
+            double angleZ = Atan2(tRotateAxis[1], tRotateAxis[0]);
+            double angleY = Atan2(tRotateAxis[2], Sqrt(tRotateAxis[0] * tRotateAxis[0] + tRotateAxis[1] * tRotateAxis[1]));
             double[,] A21 = RotateMatrix(Axis.Z, -angleZ);
             double[,] A32 = RotateMatrix(Axis.Y, -angleY);
             double[,] ARotate = RotateMatrix(Axis.X, theta);
