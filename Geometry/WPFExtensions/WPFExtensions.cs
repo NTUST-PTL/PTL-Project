@@ -244,7 +244,6 @@ namespace PTL.Geometry.WPFExtensions
         public static GeometryModel3D ToWPFGeometryModel3D(this TopoFace face)
         {
             MeshGeometry3D mesh = new MeshGeometry3D();
-
             //判斷方向
             bool direct = false;
             XYZ3 v1112 = face.Points[0, 1] - face.Points[0, 0];
@@ -332,64 +331,20 @@ namespace PTL.Geometry.WPFExtensions
             return geomatry;
         }
 
-        public static GeometryModel3D ToWPFGeometryModel3D(this PolyLine pline)
+        public static Model3DGroup ToWPFGeometryModel3D(this PolyLine pline)
         {
-            int pointNum = pline.Points.Count;
-            int N = 20;
-            double r = pline.LineWidth / 2.0;
-
-
-            XYZ4[,] points = new XYZ4[pointNum, N];
-            XYZ3[,] normals = new XYZ3[pointNum, N];
-            for (int k = 1; k < pointNum - 1; k++)
+            Model3DGroup geomatry = new Model3DGroup();
+            for (int i = 0; i < pline.Points.Count - 1; i++)
             {
-                XYZ4 p0 = pline.Points[k - 1];
-                XYZ4 p1 = pline.Points[k];
-                XYZ4 p2 = pline.Points[k + 1];
-                XYZ3 V1 = p0 - p1;
-                XYZ3 V2 = p2 - p1;
-                XYZ3 t1 = PTLM.Normalize(V1);
-                XYZ3 t2 = PTLM.Normalize(V2);
-                XYZ3 n1 = (t1 + t2) / 2.0;
-                if (PTLM.Norm(n1) < 1e-5)
-                    n1 = GetAnyNormal(t2);
-
-                XYZ3 n2 = PTLM.Cross(n1, t2);
-                n2 = PTLM.Normalize(n2);
-
-                for (int i = 0; i < N; i++)
-                {
-                    double theta = i * PTLM.PI / (N - 1);
-                    points[k, i] = r * n1 * PTLM.Cos(theta) + r * n2 * PTLM.Sin(theta);
-                }
+                Line line = new Line() {
+                    p1 = pline.Points[i],
+                    p2 = pline.Points[i + 1],
+                    Color = pline.Color,
+                    LineWidth = pline.LineWidth,
+                    CoordinateSystem = pline.CoordinateSystem
+                };
+                geomatry.Children.Add(line.ToWPFGeometryModel3D());
             }
-
-
-
-            Material material = new DiffuseMaterial(
-                new SolidColorBrush(Color.FromArgb(
-                    pline.Color.A,
-                    pline.Color.R,
-                    pline.Color.G,
-                    pline.Color.B)));
-            GeometryModel3D geomatry = new GeometryModel3D(mesh, material);
-            //geomatry.BackMaterial = material;
-
-            if (pline.CoordinateSystem != null)
-            {
-                double[,] M = pline.CoordinateSystem;
-                geomatry.Transform = new Transform3DGroup();
-                MatrixTransform3D transform =
-                new MatrixTransform3D(
-                    new Matrix3D(
-                    M[0, 0], M[1, 0], M[2, 0], M[2, 0],
-                    M[0, 1], M[1, 1], M[2, 1], M[2, 1],
-                    M[0, 2], M[1, 2], M[2, 2], M[2, 2],
-                    M[0, 3], M[1, 3], M[2, 3], M[2, 3])
-                    );
-            }
-
-
             return geomatry;
         }
     }
