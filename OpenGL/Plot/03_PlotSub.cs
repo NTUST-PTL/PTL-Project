@@ -8,7 +8,7 @@ using PTL.Geometry;
 
 namespace PTL.OpenGL.Plot
 {
-    public class PlotSub : PTL.Mathematics.Math
+    public class PlotSub : PTL.Mathematics.ProtectedPTLM
     {
         #region OpenGL 基本程式
         public static void PlotBackground(float colorR, float colorG, float colorB)

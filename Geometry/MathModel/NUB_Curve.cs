@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PTL.Geometry.MathModel
 {
-    public class NUB_Curve : PTL.Mathematics.Math
+    public class NUB_Curve : PTL.Mathematics.ProtectedPTLM
     {
         public XYZ4[] DataPoints;
         public XYZ4[] ControlPoints;

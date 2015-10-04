@@ -13,62 +13,6 @@ using CsGL.OpenGL;
 
 namespace PTL.Geometry
 {
-    public class Layer : EntityCollection, ICanBeWritedToDXFFile
-    {
-        public Layer(String Name)
-            : base()
-        {
-            this.Name = Name;
-            this.Visible = true;
-        }
-        public Layer()
-            : base()
-        {
-            this.Name = "EntityCollection";
-            this.Visible = true;
-        }
-
-        #region IDXFMember 成員
-
-        public void WriteToFileInDxfFormat(StreamWriter sw)
-        {
-            foreach (ICanBeWritedToDXFFile item in Entities.Values)
-                item.WriteToFileInDxfFormat(sw);
-        }
-
-        #endregion
-
-        public override object Clone()
-        {
-            Layer aDXFLayer = new Layer();
-            if (this.Name != null)
-                aDXFLayer.Name = this.Name;
-            aDXFLayer.Visible = this.Visible;
-            aDXFLayer.Color = this._color;
-            Entity[] entities = this.Entities.Values.ToArray();
-            for (int i = 0; i < entities.Length; i++)
-                aDXFLayer.AddEntity(entities[i].Clone() as Entity);
-            return aDXFLayer;
-        }
-
-        public Tuple<netDxf.Tables.Layer, List<netDxf.Entities.EntityObject>> ToDxfEntitiesAndLayer()
-        {
-            List<netDxf.Entities.EntityObject> entities = this.ToDXFEntities();
-            netDxf.Tables.Layer dxfLayer = new netDxf.Tables.Layer(this.Name) { Color = new netDxf.AciColor(this.Color) };
-            if (this._color.A == 255
-                && this._color.R == 255
-                && this._color.G == 255
-                && this._color.B == 255)
-            {
-                dxfLayer.Color = new netDxf.AciColor(7);
-            }
-            foreach (var item in entities)
-            {
-                item.Layer = dxfLayer;
-            }
-            return new Tuple<netDxf.Tables.Layer, List<netDxf.Entities.EntityObject>>(dxfLayer, entities);
-        }
-    }
     public class Part : EntityCollection, IDXF, IToDXFDocument
     {
         #region SystemColor_DXFColor
@@ -199,47 +143,6 @@ namespace PTL.Geometry
             }
 
             return doc;
-        }
-    }
-    public class STL : EntityCollection
-    {
-        public STL()
-            : base()
-        {
-            
-        }
-
-        public override void AddEntity(params Entity[] Entities)
-        {
-            foreach (var aEntity in Entities)
-            {
-                if (aEntity is Triangle)
-                {
-                    aEntity.Parent = this;
-                }
-            }
-        }
-
-        public override void RemoveEntity(params Entity[] Entities)
-        {
-            foreach (var aEntity in Entities)
-            {
-                if (this.Entities.ContainsValue(aEntity))
-                {
-                    aEntity.Parent = null;
-                }
-            }
-            
-        }
-
-        public override object Clone()
-        {
-            STL aSTL = new STL() { Name = this.Name, Visible = this.Visible, CoordinateSystem = this.CoordinateSystem, Color = this._color};
-            Entity[] entities = this.Entities.Values.ToArray();
-            for (int i = 0; i < entities.Length; i++)
-                aSTL.AddEntity(entities[i].Clone() as Entity);
-
-            return aSTL;
         }
     }
 }

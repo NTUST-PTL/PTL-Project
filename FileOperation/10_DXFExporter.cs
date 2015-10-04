@@ -19,7 +19,7 @@ namespace PTL.FileOperation
         void ExportScript(Part DXF2Export, string filename, bool openFolder);
     }
 
-    public class DXFExporter : PTL.Math
+    public class DXFExporter : PTL.Mathematics.ProtectedPTLM
     {
         /// <summary>
         /// System.Drawing.Color對應DXF索引顏色的Dictionary

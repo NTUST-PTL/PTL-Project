@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{6808380D-A59B-46C9-AA13-DCB968182DC3}</ProjectGuid>
-    <OutputType>WinExe</OutputType>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>PTL</RootNamespace>
     <AssemblyName>PTL</AssemblyName>
@@ -33,7 +33,13 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
   <ItemGroup>
+    <Reference Include="3DTools">
+      <HintPath>dll\WPF_3DTools\3DTools.dll</HintPath>
+    </Reference>
     <Reference Include="csgl">
       <HintPath>dll\OpenGL\csgl.dll</HintPath>
     </Reference>
@@ -78,10 +84,6 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
-    <ApplicationDefinition Include="App.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </ApplicationDefinition>
     <Compile Include="Base\SequenceSync.cs" />
     <Compile Include="Base\Source.cs" />
     <Compile Include="Base\Link.cs" />
@@ -93,15 +95,18 @@
     <Compile Include="Base\Unit\Unit.cs" />
     <Compile Include="Definitions\Dimension.cs" />
     <Compile Include="Definitions\LineType.cs" />
-    <Compile Include="Geometry\02_ICollection.cs" />
+    <Compile Include="Geometry\Part.cs" />
+    <Compile Include="Geometry\STL.cs" />
+    <Compile Include="Geometry\ICollection.cs" />
     <Compile Include="Geometry\06_IDXF.cs" />
-    <Compile Include="Geometry\01_IGeometry.cs" />
+    <Compile Include="Geometry\IGeometry.cs" />
     <Compile Include="Geometry\07_IScript.cs" />
-    <Compile Include="Geometry\00_Rules.cs" />
+    <Compile Include="Geometry\SurfaceDisplayOptions.cs" />
+    <Compile Include="Geometry\Visibility.cs" />
     <Compile Include="Geometry\03_0D.cs" />
     <Compile Include="Geometry\04_1D.cs" />
     <Compile Include="Geometry\05_2D.cs" />
-    <Compile Include="Geometry\02_Collection.cs" />
+    <Compile Include="Geometry\Layer.cs" />
     <Compile Include="Geometry\Convert.cs" />
     <Compile Include="Geometry\CubicClassifier.cs" />
     <Compile Include="Geometry\MathModel\IXYZ.cs" />
@@ -111,7 +116,9 @@
     <Compile Include="Geometry\MathModel\NUB_Surface.cs" />
     <Compile Include="Geometry\MathModel\XYZ4.cs" />
     <Compile Include="Geometry\RadialAngleClassifier.cs" />
-    <Compile Include="Mathematics\Math2.cs" />
+    <Compile Include="Geometry\WPFExtensions\WPFExtensions.cs" />
+    <Compile Include="Mathematics\ProtectedMath.cs" />
+    <Compile Include="Mathematics\Math.cs" />
     <Compile Include="OpenGL\Plot\02_View.cs" />
     <Compile Include="OpenGL\Plot\03_PlotSub.cs" />
     <Compile Include="Math.cs" />
@@ -138,6 +145,9 @@
     <Compile Include="Windows\Controls\BTextBlock.cs" />
     <Compile Include="Windows\Controls\BTextBox.xaml.cs">
       <DependentUpon>BTextBox.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\Controls\CAD_Like_ViewPort3D.xaml.cs">
+      <DependentUpon>CAD_Like_ViewPort3D.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\Controls\LTextBox.xaml.cs">
       <DependentUpon>LTextBox.xaml</DependentUpon>
@@ -169,10 +179,6 @@
     <Compile Include="Windows\DebugWindow_Plot.xaml.cs">
       <DependentUpon>DebugWindow_Plot.xaml</DependentUpon>
     </Compile>
-    <Compile Include="App.xaml.cs">
-      <DependentUpon>App.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Windows\UIExtention\UIHelper.cs" />
     <Page Include="Windows\Controls\BComboBox.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -181,6 +187,10 @@
     <Page Include="Windows\Controls\BTextBox.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Windows\Controls\CAD_Like_ViewPort3D.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\Controls\LTextBox.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -242,9 +252,6 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <AppDesigner Include="Properties\" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

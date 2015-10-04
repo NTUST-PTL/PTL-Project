@@ -7,7 +7,7 @@ using PTL.Geometry.MathModel;
 
 namespace PTL.Geometry.MathModel
 {
-    public class NUB_Surface : PTL.Mathematics.Math, IParametricSurface
+    public class NUB_Surface : PTL.Mathematics.ProtectedPTLM, IParametricSurface
     {
         public XYZ4[][] DataPoints;
         public NUB_Curve[] uCurves;

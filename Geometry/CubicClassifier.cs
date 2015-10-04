@@ -9,7 +9,7 @@ using PTL.Geometry.MathModel;
 
 namespace PTL.Geometry
 {
-    public class CubicClassifier : PTL.Mathematics.Math, ICanPlotInOpenGL
+    public class CubicClassifier : PTL.Mathematics.ProtectedPTLM, ICanPlotInOpenGL
     {
         private int _n = 100;
         private XYZ4[] _Boundary;

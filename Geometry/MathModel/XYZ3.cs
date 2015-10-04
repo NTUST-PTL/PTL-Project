@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace PTL.Geometry.MathModel
 {
-    public class XYZ3 : PTL.Mathematics.Math, IXYZ
+    public class XYZ3 : PTL.Mathematics.ProtectedPTLM, IXYZ
     {
         protected double[] values;
         public double[] Values {

@@ -9,7 +9,7 @@ using PTL.Geometry.MathModel;
 
 namespace PTL.Mathematics
 {
-    public class Math
+    public class ProtectedPTLM
     {
         protected static double delChk = 0.002;
         #region 三角函數
@@ -910,7 +910,7 @@ namespace PTL.Mathematics
         {
             foreach (var item in values)
             {
-                yield return Math.Sign(item);
+                yield return ProtectedPTLM.Sign(item);
             }
         }
         #endregion

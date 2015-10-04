@@ -12,11 +12,4 @@ namespace PTL.Geometry
         Visible,
         Invisible
     }
-    public enum SurfaceDisplayOptions
-    {
-        Null,
-        SurfaceOnly,
-        EdgeOnly,
-        SurfaceAndEdge
-    }
 }
