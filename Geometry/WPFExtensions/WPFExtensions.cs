@@ -26,14 +26,14 @@ namespace PTL.Geometry.WPFExtensions
             XYZ4 position,
             XYZ3 lineDirect,
             double linewidth,
-            XYZ3 lookDirection,
-            XYZ3 upDirection,
+            XYZ3 look,
+            XYZ3 up,
             double cemeraRange,
-            double totalPixelWidth
+            int totalWidthPixel
             )
         {
-            XYZ3 LookDirection = PTLM.Normalize(lookDirection);
-            XYZ3 UpDirection = PTLM.Normalize(upDirection);
+            XYZ3 LookDirection = PTLM.Normalize(look);
+            XYZ3 UpDirection = PTLM.Normalize(up);
             lineDirect = PTLM.Normalize(lineDirect);
             XYZ3 pn = PTLM.Cross(LookDirection, lineDirect);
 
@@ -41,9 +41,14 @@ namespace PTL.Geometry.WPFExtensions
             if (PTLM.Norm(pn) < 1e-5)
                 return null;
 
-            double trueWidth = linewidth * (cemeraRange / totalPixelWidth);
+            double trueWidth = linewidth * (cemeraRange / totalWidthPixel);
 
             pn = PTLM.Normalize(pn);
+            //Console.WriteLine("look:" + look.ToString());
+            //Console.WriteLine("up:" + up.ToString());
+            //Console.WriteLine("look.pn:" + PTLM.Dot(look, pn));
+            //Console.WriteLine("lineDirect.pn:" + PTLM.Dot(lineDirect, pn));
+            Console.WriteLine();
             XYZ4 p1, p2;
             if (PTLM.Dot(pn, UpDirection) > 0)
             {
@@ -58,12 +63,12 @@ namespace PTL.Geometry.WPFExtensions
             return new XYZ4[] { p1, p2 };
         }
 
-        public static Tuple<Model3D, Action<XYZ3, XYZ3, double, double>> ToWPFGeometryModel3D(
+        public static Tuple<Model3D, Action<XYZ3, XYZ3, double, int>> ToWPFGeometryModel3D(
             this PolyLine pline,
             XYZ3 lookDirection,
             XYZ3 upDirection,
             double cameraRange,
-            double totalPixelWidth)
+            int totalWidthPixel)
         {
             Material material = new DiffuseMaterial(
                 new SolidColorBrush(Color.FromArgb(
@@ -73,7 +78,7 @@ namespace PTL.Geometry.WPFExtensions
                     pline.Color.B)));
             GeometryModel3D geomatry = new GeometryModel3D();
             geomatry.Material = material;
-            geomatry.BackMaterial = material;
+            //geomatry.BackMaterial = material;
 
             if (pline.CoordinateSystem != null)
             {
@@ -89,7 +94,7 @@ namespace PTL.Geometry.WPFExtensions
                     );
             }
 
-            Action<XYZ3, XYZ3, double, double> RefreshMesh = (look, up, range, pixelNum) =>
+            Action<XYZ3, XYZ3, double, int> RefreshMesh = (look, up, range, pixelNum) =>
             {
                 int pointNum = pline.Points.Count;
                 List<XYZ4[]> points = new List<XYZ4[]>();
@@ -120,22 +125,23 @@ namespace PTL.Geometry.WPFExtensions
                 XYZ3 normal = -1 * look;
 
                 #region Debug
-                XYZ4[,] pointArray = new XYZ4[points.Count, 2];
-                XYZ3[,] normalArray = new XYZ3[points.Count, 2];
-                for (int i = 0; i < points.Count; i++)
-                {
-                    pointArray[i, 0] = points[i][0];
-                    pointArray[i, 1] = points[i][1];
-                    normalArray[i, 0] = normal;
-                    normalArray[i, 1] = normal;
-                }
+                //XYZ4[,] pointArray = new XYZ4[points.Count, 2];
+                //XYZ3[,] normalArray = new XYZ3[points.Count, 2];
+                //for (int i = 0; i < points.Count; i++)
+                //{
+                //    pointArray[i, 0] = points[i][0];
+                //    pointArray[i, 1] = points[i][1];
+                //    normalArray[i, 0] = normal;
+                //    normalArray[i, 1] = normal;
+                //}
 
-                DebugTools.Plot plot = new DebugTools.Plot();
-                plot.Window.View.AutoScale = false;
-                plot.AddSomethings(new TopoFace() { Points = pointArray, Normals = normalArray });
+                //DebugTools.Plot plot = new DebugTools.Plot();
+                //plot.Window.View.AutoScale = false;
+                //plot.AddSomethings(new TopoFace() { Points = pointArray, Normals = normalArray });
                 #endregion Debug
 
                 MeshGeometry3D mesh = new MeshGeometry3D();
+                int meshSegmentNum = points.Count - 1;
                 for (int i = 0; i < points.Count; i++)
                 {
                     mesh.Positions.Add(new Point3D(points[i][0].X, points[i][0].Y, points[i][0].Z));
@@ -143,7 +149,7 @@ namespace PTL.Geometry.WPFExtensions
                     mesh.Normals.Add(new Vector3D(normal.X, normal.Y, normal.Z));
                     mesh.Normals.Add(new Vector3D(normal.X, normal.Y, normal.Z));
                 }
-                for (int i = 0; i < pointNum; i++)
+                for (int i = 0; i < meshSegmentNum; i++)
                 {
                     int s1 = i * 2;
                     int s2 = s1 + 1;
@@ -153,17 +159,25 @@ namespace PTL.Geometry.WPFExtensions
                     mesh.TriangleIndices.Add(s2);
                     mesh.TriangleIndices.Add(s3);
 
+                    mesh.TriangleIndices.Add(s1);
+                    mesh.TriangleIndices.Add(s3);
+                    mesh.TriangleIndices.Add(s2);
+
                     mesh.TriangleIndices.Add(s3);
                     mesh.TriangleIndices.Add(s2);
                     mesh.TriangleIndices.Add(s4);
+
+                    mesh.TriangleIndices.Add(s3);
+                    mesh.TriangleIndices.Add(s4);
+                    mesh.TriangleIndices.Add(s2);
                 }
 
                 geomatry.Geometry = mesh;
             };
 
-            RefreshMesh(lookDirection, upDirection, cameraRange, totalPixelWidth);
+            RefreshMesh(lookDirection, upDirection, cameraRange, totalWidthPixel);
 
-            return new Tuple<Model3D, Action<XYZ3, XYZ3, double, double>>(geomatry, RefreshMesh);
+            return new Tuple<Model3D, Action<XYZ3, XYZ3, double, int>>(geomatry, RefreshMesh);
         }
 
         public static TopoFace GenerateHemisphere(XYZ4 center, XYZ3 direction, double radius, int segment1, int segment2, XYZ3 segment2StartDirection, bool counterClock)

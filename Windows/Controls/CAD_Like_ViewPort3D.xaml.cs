@@ -15,6 +15,7 @@ using System.Windows.Shapes;
 using System.Windows.Media.Media3D;
 using PTL.Windows.UIExtentions;
 using PTL.Geometry.MathModel;
+using PTL.Mathematics;
 
 namespace PTL.Windows.Controls
 {
@@ -23,12 +24,7 @@ namespace PTL.Windows.Controls
     /// </summary>
     public partial class CAD_Like_ViewPort3D : UserControl
     {
-        private Model3DGroup allModels = new Model3DGroup() { Transform = new Transform3DGroup() };
-        public Model3DGroup AllModels
-        {
-            get { return allModels; }
-        }
-
+        private Model3DGroup AllModels = new Model3DGroup() { Transform = new Transform3DGroup() };
         private Dictionary<GeometryModel3D, Material> OriginalColor = new Dictionary<GeometryModel3D, Material>();
         private Material selecetColor = new DiffuseMaterial(new SolidColorBrush(Color.FromArgb(255, 50, 125, 200)));
         private Model3DGroup SelectedModels = new Model3DGroup();
@@ -127,7 +123,7 @@ namespace PTL.Windows.Controls
 
             GeometryModel3D mGeometry = new GeometryModel3D(mesh, new DiffuseMaterial(Brushes.YellowGreen));
             mGeometry.Transform = new Transform3DGroup();
-            AddModelAsUI(mGeometry);
+            AddModel(mGeometry);
         }
 
         #region Change Item
@@ -144,7 +140,7 @@ namespace PTL.Windows.Controls
                 rotateCenter = getModelCenter(AllModels);
         }
 
-        public void AddModelAsUI(params Model3D[] models)
+        public void AddModel(params Model3D[] models)
         {
             Viewport.Children.Remove(UI3DGroup);
             foreach (var model in models)
@@ -156,23 +152,28 @@ namespace PTL.Windows.Controls
                 UIModel.MouseUp += UI_MouseUp;
 
                 UI3DGroup.Children.Add(UIModel);
-                allModels.Children.Add(model);
+                AllModels.Children.Add(model);
             }
             Viewport.Children.Add(UI3DGroup);
         }
 
-        public void AddWireframeModelAsUI(params Tuple<Model3D, Action<XYZ3, XYZ3, double, double>>[] models)
+        public void AddWireframeModel(params Tuple<Model3D, Action<XYZ3, XYZ3, double, int>>[] models)
         {
-            Model3D[] allModels = new Model3D[models.Length];
-            Action<XYZ3, XYZ3, double, double> refreshFunction = null;
-            for (int i = 0; i < models.Length; i++)
+            Viewport.Children.Remove(UI3DGroup);
+            foreach (var model in models)
             {
-                allModels[i] = models[i].Item1;
-                refreshFunction += models[i].Item2;
+                ModelUIElement3D UIModel = new ModelUIElement3D();
+                UIModel.Model = model.Item1;
+                UIModel.MouseEnter += UI_MouseEnter;
+                UIModel.MouseLeave += UI_MouseLeave;
+                UIModel.MouseUp += UI_MouseUp;
+
+                UI3DGroup.Children.Add(UIModel);
+                AllModels.Children.Add(model.Item1);
+                WireframeModelUI3D.Add(UIModel);
+                WireframeRefreshFuncs.Add(model.Item2);
             }
-            RefreshWireframe(refreshFunction);
-            AddModelAsUI(allModels);
-            WireframeRefreshFunction += refreshFunction;
+            Viewport.Children.Add(UI3DGroup);
         }
 
         public void Clear()
@@ -208,11 +209,74 @@ namespace PTL.Windows.Controls
         #endregion Change Item
 
         #region Wireframe Refresh
-        Action<XYZ3, XYZ3, double, double> WireframeRefreshFunction;
+        List<ModelUIElement3D> WireframeModelUI3D = new List<ModelUIElement3D>();
+        List<Action<XYZ3, XYZ3, double, int>> WireframeRefreshFuncs = new List<Action<XYZ3, XYZ3, double, int>>();
 
-        public void RefreshWireframe(Action<XYZ3, XYZ3, double, double> refreshFunction)
+        public void RefreshWireframe()
         {
-            Viewport.TransformToAncestor(UI3DGroup.Children[0]);
+            List<Tuple<ModelUIElement3D, Transform3D>> allModelUI = FindVisualChildrenTransform<ModelUIElement3D>(this.Viewport);
+
+            List<Tuple<Transform3D, Action<XYZ3, XYZ3, double, int>>> needRefresh = 
+                (from item in allModelUI
+                 where WireframeModelUI3D.Contains(item.Item1)
+                 select new Tuple<Transform3D, Action<XYZ3, XYZ3, double, int>>(
+                     item.Item2,
+                     WireframeRefreshFuncs[WireframeModelUI3D.IndexOf(item.Item1)])).ToList();
+
+            foreach (var item in needRefresh)
+            {
+                //Tranform relate to Viewport
+                Matrix3D M = item.Item1.Value;
+                double[,] m = new double[,]
+                  { { M.M11, M.M21, M.M31, M.OffsetX },
+                    { M.M12, M.M22, M.M32, M.OffsetY },
+                    { M.M13, M.M23, M.M33, M.OffsetZ },
+                    { M.M14, M.M24, M.M34, M.M44 }};
+                double[,] mi = PTLM.MatrixInverse(m);
+                XYZ3 look = PTLM.Transport(mi, new XYZ3(0, 0, -1));
+                XYZ3 up = PTLM.Transport(mi, new XYZ3(0, 1, 0));
+
+                item.Item1.Value.Invert();
+                //Vector3D vlook = item.Item1.Transform(camera.LookDirection);
+                //Vector3D vup = item.Item1.Transform(camera.UpDirection);
+                //XYZ3 look = new XYZ3(vlook.X, vlook.Y, vlook.Z);
+                //XYZ3 up = new XYZ3(vup.X, vup.Y, vup.Z);
+                item.Item2(look, up, camera.Width, Convert.ToInt32(Viewport.ActualWidth));
+            }
+
+        }
+
+        public List<Tuple<T, Transform3D>> FindVisualChildrenTransform<T>(DependencyObject depObj, Transform3D depObj_Transform = null) where T : DependencyObject
+        {
+            List<Tuple<T, Transform3D>> Result = new List<Tuple<T, Transform3D>>();
+            if (depObj != null)
+            {
+                for (int i = 0; i < VisualTreeHelper.GetChildrenCount(depObj); i++)
+                {
+                    Transform3DGroup CumulativeTransform = new Transform3DGroup();
+                    if (depObj_Transform != null)
+                        CumulativeTransform.Children.Add(depObj_Transform);
+
+                    DependencyObject child = VisualTreeHelper.GetChild(depObj, i);
+                    Transform3D childTransform = null;
+                    var t = child.GetType().GetProperty("Transform")?.GetValue(child);
+                    if (t is Transform3D)
+                        childTransform = (Transform3D)t;
+                    if (childTransform != null)
+                        CumulativeTransform.Children.Add(childTransform);
+
+                    if (child != null && child is T)
+                    {
+                        Result.Add(new Tuple<T, Transform3D>((T)child, CumulativeTransform));
+                    }
+
+                    foreach (var childOfChild in FindVisualChildrenTransform<T>(child, CumulativeTransform))
+                    {
+                        Result.Add(childOfChild);
+                    }
+                }
+            }
+            return Result;
         }
         #endregion Wireframe Refresh
 
@@ -284,38 +348,6 @@ namespace PTL.Windows.Controls
             selectedModelsT.Children.Add(transform);
         }
 
-        public List<Tuple<T, Transform3D>> FindVisualChildrenTransform<T>(DependencyObject depObj, Transform3D depObj_Transform = null) where T : DependencyObject
-        {
-            List<Tuple<T, Transform3D>> Result = new List<Tuple<T, Transform3D>>();
-            if (depObj != null)
-            {
-                for (int i = 0; i < VisualTreeHelper.GetChildrenCount(depObj); i++)
-                {
-                    Transform3DGroup CumulativeTransform = new Transform3DGroup();
-                    if (depObj_Transform != null)
-                        CumulativeTransform.Children.Add(depObj_Transform);
-
-                    DependencyObject child = VisualTreeHelper.GetChild(depObj, i);
-                    Transform3D childTransform = null;
-                    var t = child.GetType().GetProperty("Transform")?.GetValue(child);
-                    if (t is Transform3D)
-                        childTransform = (Transform3D)t;
-                    if (childTransform != null)
-                        CumulativeTransform.Children.Add(childTransform);
-
-                    if (child != null && child is T)
-                    {
-                        Result.Add(new Tuple<T, Transform3D>((T)child, CumulativeTransform));
-                    }
-
-                    foreach (var childOfChild in FindVisualChildrenTransform<T>(child, CumulativeTransform))
-                    {
-                        Result.Add(childOfChild);
-                    }
-                }
-            }
-            return Result;
-        }
         #endregion Transform
 
         #region Mouse Event
@@ -363,6 +395,7 @@ namespace PTL.Windows.Controls
         private void MouseWheelHandler(object sender, MouseWheelEventArgs e)
         {
             camera.Width *= System.Math.Pow(ScaleSensitivity, e.Delta / 120.0);
+            RefreshWireframe();
         }
 
         private void MouseMoveHandler(object sender, MouseEventArgs e)
@@ -398,7 +431,7 @@ namespace PTL.Windows.Controls
                 Transform3D t = new RotateTransform3D(r, rotateCenter);
 
                 TransformAllModel(t);
-
+                RefreshWireframe();
                 mLastPos = actualPos;
             }
             else if (e.MiddleButton == MouseButtonState.Pressed)
@@ -432,15 +465,13 @@ namespace PTL.Windows.Controls
         {
             if (e.LeftButton == MouseButtonState.Pressed)
             {
-                List<DependencyObject> list = Viewport.FindVisualChildren<DependencyObject>().ToList();
-                List<Tuple<ModelUIElement3D, Transform3D>> listT = FindVisualChildrenTransform<ModelUIElement3D>(Viewport, new Transform3DGroup()).ToList();
-                Transform3DGroup t = new Transform3DGroup();
-                t.Children.Add(listT[0].Item2);
-                t.Value.Invert();
-                Transform3DGroup t2 = new Transform3DGroup();
-                t2.Children.Add(listT[0].Item1.Transform);
-                t2.Children.Add(t);
-                listT[0].Item1.Transform = t2;
+                //List<DependencyObject> list = Viewport.FindVisualChildren<DependencyObject>().ToList();
+                //List<Tuple<ModelUIElement3D, Transform3D>> listT = FindVisualChildrenTransform<ModelUIElement3D>(Viewport, new Transform3DGroup()).ToList();
+                //Point3D p0 = listT[0].Item2.Transform(new Point3D(0, 0, 0));
+                //Point3D p1 = listT[0].Item2.Transform(new Point3D(1, 0, 0));
+                //Point3D p2 = listT[0].Item2.Transform(new Point3D(0, 1, 0));
+                //Point3D p3 = listT[0].Item2.Transform(new Point3D(0, 0, 1));
+                //Polyline lineX = new Polyline() { Points = new }
             }
             if (e.RightButton == MouseButtonState.Pressed)
             {
