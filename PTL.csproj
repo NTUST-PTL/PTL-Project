@@ -116,6 +116,7 @@
     <Compile Include="Geometry\MathModel\NUB_Surface.cs" />
     <Compile Include="Geometry\MathModel\XYZ4.cs" />
     <Compile Include="Geometry\RadialAngleClassifier.cs" />
+    <Compile Include="Geometry\WPFExtensions\LineMeshGeometry3D.cs" />
     <Compile Include="Geometry\WPFExtensions\WPFExtensions.cs" />
     <Compile Include="Mathematics\ProtectedMath.cs" />
     <Compile Include="Mathematics\Math.cs" />

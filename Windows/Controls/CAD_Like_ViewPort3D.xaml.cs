@@ -13,6 +13,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Media.Media3D;
+using PTL.Windows.UIExtentions;
+using PTL.Geometry.MathModel;
 
 namespace PTL.Windows.Controls
 {
@@ -41,6 +43,7 @@ namespace PTL.Windows.Controls
         private double YScale = 1;
         private double ZScale = 1;
         private double ScaleSensitivity = 1.1;
+        
 
         public CAD_Like_ViewPort3D()
         {
@@ -141,20 +144,9 @@ namespace PTL.Windows.Controls
                 rotateCenter = getModelCenter(AllModels);
         }
 
-        public void AddModel(params Model3D[] models)
-        {
-            this.Model.Content = null;
-            foreach (var model in models)
-            {
-                ModelGroup.Children.Add(model);
-                allModels.Children.Add(model);
-            }
-            this.Model.Content = ModelGroup;
-        }
-
         public void AddModelAsUI(params Model3D[] models)
         {
-            Viewport.Children.Remove(UIGroup);
+            Viewport.Children.Remove(UI3DGroup);
             foreach (var model in models)
             {
                 ModelUIElement3D UIModel = new ModelUIElement3D();
@@ -163,16 +155,29 @@ namespace PTL.Windows.Controls
                 UIModel.MouseLeave += UI_MouseLeave;
                 UIModel.MouseUp += UI_MouseUp;
 
-                UIGroup.Children.Add(UIModel);
+                UI3DGroup.Children.Add(UIModel);
                 allModels.Children.Add(model);
             }
-            Viewport.Children.Add(UIGroup);
+            Viewport.Children.Add(UI3DGroup);
+        }
+
+        public void AddWireframeModelAsUI(params Tuple<Model3D, Action<XYZ3, XYZ3, double, double>>[] models)
+        {
+            Model3D[] allModels = new Model3D[models.Length];
+            Action<XYZ3, XYZ3, double, double> refreshFunction = null;
+            for (int i = 0; i < models.Length; i++)
+            {
+                allModels[i] = models[i].Item1;
+                refreshFunction += models[i].Item2;
+            }
+            RefreshWireframe(refreshFunction);
+            AddModelAsUI(allModels);
+            WireframeRefreshFunction += refreshFunction;
         }
 
         public void Clear()
         {
-            ModelGroup.Children.Clear();
-            UIGroup.Children.Clear();
+            UI3DGroup.Children.Clear();
             AllModels.Children.Clear();
         }
 
@@ -201,6 +206,15 @@ namespace PTL.Windows.Controls
             OriginalColor.Clear();
         }
         #endregion Change Item
+
+        #region Wireframe Refresh
+        Action<XYZ3, XYZ3, double, double> WireframeRefreshFunction;
+
+        public void RefreshWireframe(Action<XYZ3, XYZ3, double, double> refreshFunction)
+        {
+            Viewport.TransformToAncestor(UI3DGroup.Children[0]);
+        }
+        #endregion Wireframe Refresh
 
         #region Transform
         public void TranslateViewTo(Model3D model)
@@ -248,31 +262,59 @@ namespace PTL.Windows.Controls
 
         public void ResetAllTransform()
         {
-            ModelGroup.Transform = new Transform3DGroup();
-            UIGroup.Transform = new Transform3DGroup();
+            UI3DGroup.Transform = new Transform3DGroup();
             AllModels.Transform = new Transform3DGroup();
             SelectedModels.Transform = new Transform3DGroup();
         }
 
         public void TransformAllModel(Transform3D transform)
         {
-            if (ModelGroup.Transform == null)
-                ModelGroup.Transform = new Transform3DGroup();
-            if (UIGroup.Transform == null)
-                UIGroup.Transform = new Transform3DGroup();
+            if (UI3DGroup.Transform == null)
+                UI3DGroup.Transform = new Transform3DGroup();
             if (AllModels.Transform == null)
                 AllModels.Transform = new Transform3DGroup();
             if (SelectedModels.Transform == null)
                 SelectedModels.Transform = new Transform3DGroup();
 
-            Transform3DGroup uiGroupT = UIGroup.Transform as Transform3DGroup;
-            Transform3DGroup modelGroupT = ModelGroup.Transform as Transform3DGroup;
+            Transform3DGroup uiGroupT = UI3DGroup.Transform as Transform3DGroup;
             Transform3DGroup allModelsT = AllModels.Transform as Transform3DGroup;
             Transform3DGroup selectedModelsT = SelectedModels.Transform as Transform3DGroup;
             uiGroupT.Children.Add(transform);
-            modelGroupT.Children.Add(transform);
             allModelsT.Children.Add(transform);
             selectedModelsT.Children.Add(transform);
+        }
+
+        public List<Tuple<T, Transform3D>> FindVisualChildrenTransform<T>(DependencyObject depObj, Transform3D depObj_Transform = null) where T : DependencyObject
+        {
+            List<Tuple<T, Transform3D>> Result = new List<Tuple<T, Transform3D>>();
+            if (depObj != null)
+            {
+                for (int i = 0; i < VisualTreeHelper.GetChildrenCount(depObj); i++)
+                {
+                    Transform3DGroup CumulativeTransform = new Transform3DGroup();
+                    if (depObj_Transform != null)
+                        CumulativeTransform.Children.Add(depObj_Transform);
+
+                    DependencyObject child = VisualTreeHelper.GetChild(depObj, i);
+                    Transform3D childTransform = null;
+                    var t = child.GetType().GetProperty("Transform")?.GetValue(child);
+                    if (t is Transform3D)
+                        childTransform = (Transform3D)t;
+                    if (childTransform != null)
+                        CumulativeTransform.Children.Add(childTransform);
+
+                    if (child != null && child is T)
+                    {
+                        Result.Add(new Tuple<T, Transform3D>((T)child, CumulativeTransform));
+                    }
+
+                    foreach (var childOfChild in FindVisualChildrenTransform<T>(child, CumulativeTransform))
+                    {
+                        Result.Add(childOfChild);
+                    }
+                }
+            }
+            return Result;
         }
         #endregion Transform
 
@@ -388,6 +430,18 @@ namespace PTL.Windows.Controls
 
         private void MouseDownHandler(object sender, MouseButtonEventArgs e)
         {
+            if (e.LeftButton == MouseButtonState.Pressed)
+            {
+                List<DependencyObject> list = Viewport.FindVisualChildren<DependencyObject>().ToList();
+                List<Tuple<ModelUIElement3D, Transform3D>> listT = FindVisualChildrenTransform<ModelUIElement3D>(Viewport, new Transform3DGroup()).ToList();
+                Transform3DGroup t = new Transform3DGroup();
+                t.Children.Add(listT[0].Item2);
+                t.Value.Invert();
+                Transform3DGroup t2 = new Transform3DGroup();
+                t2.Children.Add(listT[0].Item1.Transform);
+                t2.Children.Add(t);
+                listT[0].Item1.Transform = t2;
+            }
             if (e.RightButton == MouseButtonState.Pressed)
             {
                 if (e.ClickCount == 1)
@@ -427,7 +481,6 @@ namespace PTL.Windows.Controls
                     }
                 }
             }
-            Console.WriteLine(e.ClickCount);
         }
 
         private void MouseUpHandler(object sender, MouseButtonEventArgs e)

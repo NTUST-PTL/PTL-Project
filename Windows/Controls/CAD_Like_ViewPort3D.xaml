@@ -16,12 +16,8 @@
             <Viewport3D.Camera>
                 <OrthographicCamera x:Name="camera"/>
             </Viewport3D.Camera>
-            <ContainerUIElement3D x:Name="UIGroup"  x:FieldModifier="public" />
-            <ModelVisual3D x:Name="Model" x:FieldModifier="public" >
-                <ModelVisual3D.Content>
-                    <Model3DGroup x:Name="ModelGroup" x:FieldModifier="public" >
-                    </Model3DGroup>
-                </ModelVisual3D.Content>
+            <ContainerUIElement3D x:Name="UI3DGroup"  x:FieldModifier="public" />
+            <ModelVisual3D x:Name="Base" x:FieldModifier="public" >
             </ModelVisual3D>
             <ModelVisual3D x:Name="Grid" x:FieldModifier="public" >
                 <ModelVisual3D.Content>
