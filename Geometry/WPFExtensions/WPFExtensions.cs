@@ -91,121 +91,235 @@ namespace PTL.Geometry.WPFExtensions
             return new XYZ4[] { p1, p2 };
         }
 
-        //public static FakeLineGeometryModel3D ToWPFGeometryModel3D(this Line line)
+        //public static XYZ4[] GetLineRenderCircle(
+        //    XYZ4 position,
+        //    XYZ3 lineDirect,
+        //    double linewidth,
+        //    double cemeraRange,
+        //    int totalWidthPixel
+        //    )
         //{
-        //    PolyLine pline = new PolyLine()
+        //    XYZ3 pn = PTLM.Cross(look, lineDirect);
+
+        //    //If lineDirect parallel to camera.LookDirection
+        //    if (PTLM.Norm(pn) < 1e-5)
+        //        return null;
+
+        //    double trueWidth = linewidth * (cemeraRange / totalWidthPixel);
+
+        //    XYZ4 V = trueWidth / 2.0 * (XYZ4)PTLM.Normalize(pn);
+        //    XYZ4 p1, p2;
+        //    if (PTLM.Dot(pn, up) > 0)
         //    {
-        //        Points = new List<XYZ4> { line.p1, line.p2 },
+        //        p1 = position + V;
+        //        p2 = position - V;
+        //    }
+        //    else
+        //    {
+        //        p2 = position + V;
+        //        p1 = position - V;
+        //    }
+        //    return new XYZ4[] { p1, p2 };
+        //}
+
+        public static FakeLineGeometryModel3D ToLineGeometryModel3D(this Line line)
+        {
+            PolyLine pline = new PolyLine()
+            {
+                Points = new List<XYZ4> { line.p1, line.p2 },
+                Color = line.Color,
+                CoordinateSystem = line.CoordinateSystem
+            };
+            return pline.ToLineGeometryModel3D();
+        }
+
+        public static FakeLineGeometryModel3D ToLineGeometryModel3D(this PolyLine pline)
+        {
+            FakeLineGeometryModel3D lineGeometryModel3D = new FakeLineGeometryModel3D();
+
+            Material material = new DiffuseMaterial(
+                new SolidColorBrush(Color.FromArgb(
+                    pline.Color.A,
+                    pline.Color.R,
+                    pline.Color.G,
+                    pline.Color.B)));
+            lineGeometryModel3D.Bone = pline;
+            lineGeometryModel3D.Bone.AbsorbCoordinateSystem();
+            lineGeometryModel3D.Model = new GeometryModel3D();
+            lineGeometryModel3D.Model.Material = material;
+
+            Action<XYZ3, XYZ3, double, int> RefreshMesh = (look, up, range, pixelNum) =>
+            #region
+            {
+                int pointNum = pline.Points.Count;
+                List<XYZ4[]> points = new List<XYZ4[]>();
+
+                Vector3D normal = new Vector3D(-look.X, -look.Y, -look.Z);
+                
+                //Start
+                #region Start
+                {
+                    points.Add(GetLineRenderPoint(pline.Points[0], PTLM.Normalize(pline.Points[1] - pline.Points[0]), pline.LineWidth, look, up, range, pixelNum));
+                }
+                #endregion Start
+                //Mid
+                #region Mid
+                {
+                    for (int i = 1; i < pointNum - 1; i++)
+                    {
+                        points.Add(GetLineRenderPoint(pline.Points[i], PTLM.Normalize(pline.Points[i] - pline.Points[i - 1]), pline.LineWidth, look, up, range, pixelNum));
+                        points.Add(GetLineRenderPoint(pline.Points[i], PTLM.Normalize(pline.Points[i + 1] - pline.Points[i]), pline.LineWidth, look, up, range, pixelNum));
+                    }
+                }
+                #endregion Mid
+                //End
+                #region End
+                {
+                    points.Add(GetLineRenderPoint(pline.Points[pointNum - 1], PTLM.Normalize(pline.Points[pointNum - 1] - pline.Points[pointNum - 2]), pline.LineWidth, look, up, range, pixelNum));
+                }
+                #endregion End
+
+                MeshGeometry3D mesh;
+                int N1 = points.Count;
+                int N1_1 = N1 - 1;
+                if (lineGeometryModel3D.Model.Geometry != null)
+                {
+                    mesh = (MeshGeometry3D)lineGeometryModel3D.Model.Geometry;
+                    lineGeometryModel3D.Model.Geometry = null;
+
+                    mesh.Positions.Clear();
+                    mesh.Normals.Clear();
+
+                    for (int i = 0; i < N1; i++)
+                    {
+                        mesh.Positions.Add(new Point3D(points[i][0].X, points[i][0].Y, points[i][0].Z));
+                        mesh.Positions.Add(new Point3D(points[i][1].X, points[i][1].Y, points[i][1].Z));
+                        mesh.Normals.Add(normal);
+                        mesh.Normals.Add(normal);
+                    }
+                    lineGeometryModel3D.Model.Geometry = mesh;
+                }
+                else
+                {
+                    mesh = new MeshGeometry3D();
+                    for (int i = 0; i < N1; i++)
+                    {
+                        mesh.Positions.Add(new Point3D(points[i][0].X, points[i][0].Y, points[i][0].Z));
+                        mesh.Positions.Add(new Point3D(points[i][1].X, points[i][1].Y, points[i][1].Z));
+                        mesh.Normals.Add(normal);
+                        mesh.Normals.Add(normal);
+                    }
+                    for (int i = 0; i < N1_1; i = i + 2)
+                    {
+                        int s1 = i * 2;
+                        int s2 = s1 + 1;
+                        int s3 = s1 + 2;
+                        int s4 = s1 + 3;
+                        mesh.TriangleIndices.Add(s1);
+                        mesh.TriangleIndices.Add(s2);
+                        mesh.TriangleIndices.Add(s3);
+
+                        mesh.TriangleIndices.Add(s1);
+                        mesh.TriangleIndices.Add(s3);
+                        mesh.TriangleIndices.Add(s2);
+
+                        mesh.TriangleIndices.Add(s3);
+                        mesh.TriangleIndices.Add(s2);
+                        mesh.TriangleIndices.Add(s4);
+
+                        mesh.TriangleIndices.Add(s3);
+                        mesh.TriangleIndices.Add(s4);
+                        mesh.TriangleIndices.Add(s2);
+                    }
+                    lineGeometryModel3D.Model.Geometry = mesh;
+                }
+            };
+            #endregion
+
+            lineGeometryModel3D.ReshreshModelMesh += new FakeLineGeometryModel3D.ReshreshModelMeshFunction(RefreshMesh);
+
+            return lineGeometryModel3D;
+        }
+
+        //public static Model3D ToWPFGeometryModel3D(this Line line)
+        //{
+        //    XYZ4 p1 = line.p1;
+        //    XYZ4 p2 = line.p2;
+        //    XYZ3 V = p2 - p1;
+        //    XYZ3 n = GetAnyNormal(V);
+        //    double r = line.LineWidth / 2.0;
+        //    int N1 = 5;
+        //    int N2 = 9;
+        //    TopoFace sFace = GenerateHemisphere(p1, -1 * V, r, N1, N2, n, true);
+        //    TopoFace eFace = GenerateHemisphere(p2, V, r, N1, N2, n, false);
+        //    TopoFace allFace = new TopoFace()
+        //    {
+        //        Points = new XYZ4[N1 * 2, N2],
+        //        Normals = new XYZ3[N1 * 2, N2],
         //        Color = line.Color,
         //        CoordinateSystem = line.CoordinateSystem
         //    };
-        //    return pline.ToWPFGeometryModel3D();
+
+        //    for (int i = 0; i < N1; i++)
+        //    {
+        //        for (int j = 0; j < N2; j++)
+        //        {
+        //            allFace.Points[i, j] = sFace.Points[N1 - 1 - i, j];
+        //            allFace.Normals[i, j] = sFace.Normals[N1 - 1 - i, j];
+
+        //            allFace.Points[i + N1, j] = eFace.Points[i, j];
+        //            allFace.Normals[i + N1, j] = eFace.Normals[i, j];
+        //        }
+        //    }
+
+        //    return allFace.ToWPFGeometryModel3D();
         //}
 
-        //public static FakeLineGeometryModel3D ToWPFGeometryModel3D(this PolyLine pline)
+        //public static Model3D ToWPFGeometryModel3D(this PolyLine pline)
         //{
-        //    FakeLineGeometryModel3D lineGeometryModel3D = new FakeLineGeometryModel3D();
-
-        //    Material material = new DiffuseMaterial(
-        //        new SolidColorBrush(Color.FromArgb(
-        //            pline.Color.A,
-        //            pline.Color.R,
-        //            pline.Color.G,
-        //            pline.Color.B)));
-        //    lineGeometryModel3D.Bone = pline;
-        //    lineGeometryModel3D.Bone.AbsorbCoordinateSystem();
-        //    lineGeometryModel3D.Model = new GeometryModel3D();
-        //    lineGeometryModel3D.Model.Material = material;
-
-        //    Action<XYZ3, XYZ3, double, int> RefreshMesh = (look, up, range, pixelNum) =>
+        //    int pointNum = pline.Points.Count;
+        //    int segmentNum = pointNum - 1;
+        //    int N1 = 5;
+        //    int N2 = 9;
+        //    TopoFace allFace = new TopoFace()
         //    {
-        //        int pointNum = pline.Points.Count;
-        //        List<XYZ4[]> points = new List<XYZ4[]>();
-                
-        //        XYZ3 normal = -1 * look;
-
-        //        //Start
-        //        #region Start
-        //        {
-        //            points.Add(GetLineRenderPoint(pline.Points[0], PTLM.Normalize(pline.Points[1] - pline.Points[0]), pline.LineWidth, look, up,  range, pixelNum));
-        //        }
-        //        #endregion Start
-        //        //Mid
-        //        #region Mid
-        //        {
-        //            for (int i = 1; i < pointNum - 1; i++)
-        //            {
-        //                points.Add(GetLineRenderPoint(pline.Points[i], PTLM.Normalize(pline.Points[i] - pline.Points[i - 1]), pline.LineWidth, look, up, range, pixelNum));
-        //                points.Add(GetLineRenderPoint(pline.Points[i], PTLM.Normalize(pline.Points[i + 1] - pline.Points[i]), pline.LineWidth, look, up, range, pixelNum));
-        //            }
-        //        }
-        //        #endregion Mid
-        //        //End
-        //        #region End
-        //        {
-        //            points.Add(GetLineRenderPoint(pline.Points[pointNum - 1], PTLM.Normalize(pline.Points[pointNum - 1] - pline.Points[pointNum - 2]), pline.LineWidth, look, up, range, pixelNum));
-        //        }
-        //        #endregion End
-
-                
-
-        //        #region Debug
-        //        //XYZ4[,] pointArray = new XYZ4[points.Count, 2];
-        //        //XYZ3[,] normalArray = new XYZ3[points.Count, 2];
-        //        //for (int i = 0; i < points.Count; i++)
-        //        //{
-        //        //    pointArray[i, 0] = points[i][0];
-        //        //    pointArray[i, 1] = points[i][1];
-        //        //    normalArray[i, 0] = normal;
-        //        //    normalArray[i, 1] = normal;
-        //        //}
-
-        //        //DebugTools.Plot plot = new DebugTools.Plot();
-        //        //plot.Window.View.AutoScale = false;
-        //        //plot.AddSomethings(new TopoFace() { Points = pointArray, Normals = normalArray });
-        //        #endregion Debug
-
-        //        MeshGeometry3D mesh = new MeshGeometry3D();
-        //        int meshSegmentNum = points.Count - 1;
-        //        for (int i = 0; i < points.Count; i++)
-        //        {
-        //            mesh.Positions.Add(new Point3D(points[i][0].X, points[i][0].Y, points[i][0].Z));
-        //            mesh.Positions.Add(new Point3D(points[i][1].X, points[i][1].Y, points[i][1].Z));
-        //            mesh.Normals.Add(new Vector3D(normal.X, normal.Y, normal.Z));
-        //            mesh.Normals.Add(new Vector3D(normal.X, normal.Y, normal.Z));
-        //        }
-        //        for (int i = 0; i < meshSegmentNum; i++)
-        //        {
-        //            int s1 = i * 2;
-        //            int s2 = s1 + 1;
-        //            int s3 = s1 + 2;
-        //            int s4 = s1 + 3;
-        //            mesh.TriangleIndices.Add(s1);
-        //            mesh.TriangleIndices.Add(s2);
-        //            mesh.TriangleIndices.Add(s3);
-
-        //            mesh.TriangleIndices.Add(s1);
-        //            mesh.TriangleIndices.Add(s3);
-        //            mesh.TriangleIndices.Add(s2);
-
-        //            mesh.TriangleIndices.Add(s3);
-        //            mesh.TriangleIndices.Add(s2);
-        //            mesh.TriangleIndices.Add(s4);
-
-        //            mesh.TriangleIndices.Add(s3);
-        //            mesh.TriangleIndices.Add(s4);
-        //            mesh.TriangleIndices.Add(s2);
-        //        }
-
-        //        lineGeometryModel3D.Model.Geometry = mesh;
+        //        Points = new XYZ4[N1 * 2 * segmentNum, N2],
+        //        Normals = new XYZ3[N1 * 2 * segmentNum, N2],
+        //        Color = pline.Color,
+        //        CoordinateSystem = pline.CoordinateSystem
         //    };
 
-        //    lineGeometryModel3D.ReshreshModelMesh += new FakeLineGeometryModel3D.ReshreshModelMeshFunction(RefreshMesh);
+        //    double r = pline.LineWidth / 2.0;
+        //    for (int k = 0; k < segmentNum - 1; k++)
+        //    {
+        //        XYZ4 p1 = pline.Points[k];
+        //        XYZ4 p2 = pline.Points[k + 1];
+        //        XYZ3 V = p2 - p1;
+        //        XYZ3 n = GetAnyNormal(V);
 
-        //    return lineGeometryModel3D;
+        //        TopoFace sFace = GenerateHemisphere(p1, -1 * V, r, N1, N2, n, true);
+        //        TopoFace eFace = GenerateHemisphere(p2, V, r, N1, N2, n, false);
+
+        //        int start = k * 2 * N1;
+        //        for (int i = 0; i < N1; i++)
+        //        {
+        //            for (int j = 0; j < N2; j++)
+        //            {
+        //                int i_index1 = start + i;
+        //                int i_index2 = start + N1 + i;
+        //                allFace.Points[i_index1, j] = sFace.Points[N1 - 1 - i, j];
+        //                allFace.Normals[i_index1, j] = sFace.Normals[N1 - 1 - i, j];
+
+        //                allFace.Points[i_index2 + N1, j] = eFace.Points[i, j];
+        //                allFace.Normals[i_index2 + N1, j] = eFace.Normals[i, j];
+        //            }
+        //        }
+        //    }
+
+        //    return allFace.ToWPFGeometryModel3D();
         //}
 
-        public static Model3D ToWPFGeometryModel3D(this STL stl)
+        public static Model3D ToModel3D(this STL stl)
         {
             int total = stl.Entities.Count;
             int added = 0;
@@ -259,7 +373,7 @@ namespace PTL.Geometry.WPFExtensions
             return geomatry;
         }
 
-        public static Model3D ToWPFGeometryModel3D(this TopoFace face)
+        public static Model3D ToModel3D(this TopoFace face)
         {
             MeshGeometry3D mesh = new MeshGeometry3D();
             //判斷方向
@@ -349,82 +463,6 @@ namespace PTL.Geometry.WPFExtensions
             return geomatry;
         }
 
-        public static Model3D ToWPFGeometryModel3D(this Line line)
-        {
-            XYZ4 p1 = line.p1;
-            XYZ4 p2 = line.p2;
-            XYZ3 V = p2 - p1;
-            XYZ3 n = GetAnyNormal(V);
-            double r = line.LineWidth / 2.0;
-            int N1 = 5;
-            int N2 = 9;
-            TopoFace sFace = GenerateHemisphere(p1, -1 * V, r, N1, N2, n, true);
-            TopoFace eFace = GenerateHemisphere(p2, V, r, N1, N2, n, false);
-            TopoFace allFace = new TopoFace()
-            {
-                Points = new XYZ4[N1 * 2, N2],
-                Normals = new XYZ3[N1 * 2, N2],
-                Color = line.Color,
-                CoordinateSystem = line.CoordinateSystem
-            };
-
-            for (int i = 0; i < N1; i++)
-            {
-                for (int j = 0; j < N2; j++)
-                {
-                    allFace.Points[i, j] = sFace.Points[N1 - 1 - i, j];
-                    allFace.Normals[i, j] = sFace.Normals[N1 - 1 - i, j];
-
-                    allFace.Points[i + N1, j] = eFace.Points[i, j];
-                    allFace.Normals[i + N1, j] = eFace.Normals[i, j];
-                }
-            }
-
-            return allFace.ToWPFGeometryModel3D();
-        }
-
-        public static Model3D ToWPFGeometryModel3D(this PolyLine pline)
-        {
-            int pointNum = pline.Points.Count;
-            int segmentNum = pointNum - 1;
-            int N1 = 5;
-            int N2 = 9;
-            TopoFace allFace = new TopoFace()
-            {
-                Points = new XYZ4[N1 * 2 * segmentNum, N2],
-                Normals = new XYZ3[N1 * 2 * segmentNum, N2],
-                Color = pline.Color,
-                CoordinateSystem = pline.CoordinateSystem
-            };
-
-            double r = pline.LineWidth / 2.0;
-            for (int k = 0; k < segmentNum - 1; k++)
-            {
-                XYZ4 p1 = pline.Points[k];
-                XYZ4 p2 = pline.Points[k + 1];
-                XYZ3 V = p2 - p1;
-                XYZ3 n = GetAnyNormal(V);
-
-                TopoFace sFace = GenerateHemisphere(p1, -1 * V, r, N1, N2, n, true);
-                TopoFace eFace = GenerateHemisphere(p2, V, r, N1, N2, n, false);
-
-                int start = k * 2 * N1;
-                for (int i = 0; i < N1; i++)
-                {
-                    for (int j = 0; j < N2; j++)
-                    {
-                        int i_index1 = start + i;
-                        int i_index2 = start + N1 + i;
-                        allFace.Points[i_index1, j] = sFace.Points[N1 - 1 - i, j];
-                        allFace.Normals[i_index1, j] = sFace.Normals[N1 - 1 - i, j];
-
-                        allFace.Points[i_index2 + N1, j] = eFace.Points[i, j];
-                        allFace.Normals[i_index2 + N1, j] = eFace.Normals[i, j];
-                    }
-                }
-            }
-
-            return allFace.ToWPFGeometryModel3D();
-        }
+        
     }
 }

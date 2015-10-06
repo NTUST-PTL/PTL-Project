@@ -220,6 +220,8 @@ namespace PTL.Windows.Controls
         {
             DateTime startTime = DateTime.Now;
 
+            
+
             List<Tuple<ModelUIElement3D, Transform3D>> allModelUI3D = FindVisualChildrenTransform<ModelUIElement3D>(this.Viewport);
 
             List<Tuple<ModelUIElement3D, Transform3D, FakeLineGeometryModel3D>> needRefresh =
@@ -230,7 +232,7 @@ namespace PTL.Windows.Controls
                      item.Item2,
                      WireframeModel3D[WireframeModelUIElement3D.IndexOf(item.Item1)])).ToList();
 
-            
+
             //Matrix3D M = MovingUIElementsVisual3D.Transform.Value;
             //double[,] m = new double[,]
             //  { { M.M11, M.M21, M.M31, M.OffsetX },
@@ -240,6 +242,8 @@ namespace PTL.Windows.Controls
             //double[,] mi = PTLM.MatrixInverse(m);
             //XYZ3 look = PTLM.Transport(mi, new XYZ3(0, 0, -1));
             //XYZ3 up = PTLM.Transport(mi, new XYZ3(0, 1, 0));
+
+            this.Viewport.Children.Remove(MovingUIElementsVisual3D);
 
             foreach (var item in needRefresh)
             {
@@ -261,6 +265,7 @@ namespace PTL.Windows.Controls
                 //item.Item3.ReshreshModelMesh(look, up, camera.Width, Convert.ToInt32(Viewport.ActualWidth));
             }
 
+            this.Viewport.Children.Add(MovingUIElementsVisual3D);
             DateTime endTime = DateTime.Now;
             TimeSpan dt = endTime - startTime;
             Console.WriteLine(dt.TotalMilliseconds);
