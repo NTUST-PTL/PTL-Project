@@ -13,9 +13,10 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Media.Media3D;
-using PTL.Windows.UIExtentions;
+using PTL.Windows.VisualExtensions;
 using PTL.Geometry.MathModel;
 using PTL.Mathematics;
+using PTL.Windows.Media.Media3D;
 
 namespace PTL.Windows.Controls
 {
@@ -24,7 +25,7 @@ namespace PTL.Windows.Controls
     /// </summary>
     public partial class CAD_Like_ViewPort3D : UserControl
     {
-        private Model3DGroup AllModels = new Model3DGroup() { Transform = new Transform3DGroup() };
+        public Model3DGroup AllModels = new Model3DGroup() { Transform = new Transform3DGroup() };
         private Dictionary<GeometryModel3D, Material> OriginalColor = new Dictionary<GeometryModel3D, Material>();
         private Material selecetColor = new DiffuseMaterial(new SolidColorBrush(Color.FromArgb(255, 50, 125, 200)));
         private Model3DGroup SelectedModels = new Model3DGroup();
@@ -123,7 +124,7 @@ namespace PTL.Windows.Controls
 
             GeometryModel3D mGeometry = new GeometryModel3D(mesh, new DiffuseMaterial(Brushes.YellowGreen));
             mGeometry.Transform = new Transform3DGroup();
-            AddModel(mGeometry);
+            AddInteractiveModel(mGeometry);
         }
 
         #region Change Item
@@ -140,9 +141,9 @@ namespace PTL.Windows.Controls
                 rotateCenter = getModelCenter(AllModels);
         }
 
-        public void AddModel(params Model3D[] models)
+        public void AddInteractiveModel(params Model3D[] models)
         {
-            Viewport.Children.Remove(UI3DGroup);
+            Viewport.Children.Remove(MovingUIElementsVisual3D);
             foreach (var model in models)
             {
                 ModelUIElement3D UIModel = new ModelUIElement3D();
@@ -151,34 +152,37 @@ namespace PTL.Windows.Controls
                 UIModel.MouseLeave += UI_MouseLeave;
                 UIModel.MouseUp += UI_MouseUp;
 
-                UI3DGroup.Children.Add(UIModel);
+                MovingUIElementsVisual3D.Children.Add(UIModel);
                 AllModels.Children.Add(model);
             }
-            Viewport.Children.Add(UI3DGroup);
+            Viewport.Children.Add(MovingUIElementsVisual3D);
         }
 
-        public void AddWireframeModel(params Tuple<Model3D, Action<XYZ3, XYZ3, double, int>>[] models)
+        public void AddInteractiveWireframeModel(params FakeLineGeometryModel3D[] models)
         {
-            Viewport.Children.Remove(UI3DGroup);
+            Viewport.Children.Remove(MovingUIElementsVisual3D);
+            List<ModelUIElement3D> AddedUIModel = new List<ModelUIElement3D>();
             foreach (var model in models)
             {
                 ModelUIElement3D UIModel = new ModelUIElement3D();
-                UIModel.Model = model.Item1;
+                UIModel.Model = model.Model;
                 UIModel.MouseEnter += UI_MouseEnter;
                 UIModel.MouseLeave += UI_MouseLeave;
                 UIModel.MouseUp += UI_MouseUp;
 
-                UI3DGroup.Children.Add(UIModel);
-                AllModels.Children.Add(model.Item1);
-                WireframeModelUI3D.Add(UIModel);
-                WireframeRefreshFuncs.Add(model.Item2);
+                AddedUIModel.Add(UIModel);
+                MovingUIElementsVisual3D.Children.Add(UIModel);
+                WireframeModelUIElement3D.Add(UIModel);
+                WireframeModel3D.Add(model);
+                AllModels.Children.Add(model.Model);
             }
-            Viewport.Children.Add(UI3DGroup);
+            Viewport.Children.Add(MovingUIElementsVisual3D);
+            RefreshWireframe((wf) => AddedUIModel.Contains(wf));
         }
 
         public void Clear()
         {
-            UI3DGroup.Children.Clear();
+            MovingUIElementsVisual3D.Children.Clear();
             AllModels.Children.Clear();
         }
 
@@ -209,41 +213,57 @@ namespace PTL.Windows.Controls
         #endregion Change Item
 
         #region Wireframe Refresh
-        List<ModelUIElement3D> WireframeModelUI3D = new List<ModelUIElement3D>();
-        List<Action<XYZ3, XYZ3, double, int>> WireframeRefreshFuncs = new List<Action<XYZ3, XYZ3, double, int>>();
+        List<ModelUIElement3D> WireframeModelUIElement3D = new List<ModelUIElement3D>();
+        List<FakeLineGeometryModel3D> WireframeModel3D = new List<FakeLineGeometryModel3D>();
 
-        public void RefreshWireframe()
+        public void RefreshWireframe(Predicate<ModelUIElement3D> filter = null)
         {
-            List<Tuple<ModelUIElement3D, Transform3D>> allModelUI = FindVisualChildrenTransform<ModelUIElement3D>(this.Viewport);
+            DateTime startTime = DateTime.Now;
 
-            List<Tuple<Transform3D, Action<XYZ3, XYZ3, double, int>>> needRefresh = 
-                (from item in allModelUI
-                 where WireframeModelUI3D.Contains(item.Item1)
-                 select new Tuple<Transform3D, Action<XYZ3, XYZ3, double, int>>(
+            List<Tuple<ModelUIElement3D, Transform3D>> allModelUI3D = FindVisualChildrenTransform<ModelUIElement3D>(this.Viewport);
+
+            List<Tuple<ModelUIElement3D, Transform3D, FakeLineGeometryModel3D>> needRefresh =
+                (from item in allModelUI3D
+                 where WireframeModelUIElement3D.Contains(item.Item1)
+                 select new Tuple<ModelUIElement3D, Transform3D, FakeLineGeometryModel3D>(
+                     item.Item1,
                      item.Item2,
-                     WireframeRefreshFuncs[WireframeModelUI3D.IndexOf(item.Item1)])).ToList();
+                     WireframeModel3D[WireframeModelUIElement3D.IndexOf(item.Item1)])).ToList();
+
+            
+            //Matrix3D M = MovingUIElementsVisual3D.Transform.Value;
+            //double[,] m = new double[,]
+            //  { { M.M11, M.M21, M.M31, M.OffsetX },
+            //        { M.M12, M.M22, M.M32, M.OffsetY },
+            //        { M.M13, M.M23, M.M33, M.OffsetZ },
+            //        { M.M14, M.M24, M.M34, M.M44 }};
+            //double[,] mi = PTLM.MatrixInverse(m);
+            //XYZ3 look = PTLM.Transport(mi, new XYZ3(0, 0, -1));
+            //XYZ3 up = PTLM.Transport(mi, new XYZ3(0, 1, 0));
 
             foreach (var item in needRefresh)
             {
+                if (filter == null || filter(item.Item1))
+                {
                 //Tranform relate to Viewport
-                Matrix3D M = item.Item1.Value;
-                double[,] m = new double[,]
-                  { { M.M11, M.M21, M.M31, M.OffsetX },
-                    { M.M12, M.M22, M.M32, M.OffsetY },
-                    { M.M13, M.M23, M.M33, M.OffsetZ },
-                    { M.M14, M.M24, M.M34, M.M44 }};
-                double[,] mi = PTLM.MatrixInverse(m);
-                XYZ3 look = PTLM.Transport(mi, new XYZ3(0, 0, -1));
-                XYZ3 up = PTLM.Transport(mi, new XYZ3(0, 1, 0));
+                     Matrix3D M = item.Item2.Value;
+                    double[,] m = new double[,]
+                      { { M.M11, M.M21, M.M31, M.OffsetX },
+                      { M.M12, M.M22, M.M32, M.OffsetY },
+                      { M.M13, M.M23, M.M33, M.OffsetZ },
+                      { M.M14, M.M24, M.M34, M.M44 }};
+                    double[,] mi = PTLM.MatrixInverse(m);
+                    XYZ3 look = PTLM.Transport(mi, new XYZ3(0, 0, -1));
+                    XYZ3 up = PTLM.Transport(mi, new XYZ3(0, 1, 0));
 
-                item.Item1.Value.Invert();
-                //Vector3D vlook = item.Item1.Transform(camera.LookDirection);
-                //Vector3D vup = item.Item1.Transform(camera.UpDirection);
-                //XYZ3 look = new XYZ3(vlook.X, vlook.Y, vlook.Z);
-                //XYZ3 up = new XYZ3(vup.X, vup.Y, vup.Z);
-                item.Item2(look, up, camera.Width, Convert.ToInt32(Viewport.ActualWidth));
+                    item.Item3.ReshreshModelMesh(look, up, camera.Width, Convert.ToInt32(Viewport.ActualWidth));
+                }
+                //item.Item3.ReshreshModelMesh(look, up, camera.Width, Convert.ToInt32(Viewport.ActualWidth));
             }
 
+            DateTime endTime = DateTime.Now;
+            TimeSpan dt = endTime - startTime;
+            Console.WriteLine(dt.TotalMilliseconds);
         }
 
         public List<Tuple<T, Transform3D>> FindVisualChildrenTransform<T>(DependencyObject depObj, Transform3D depObj_Transform = null) where T : DependencyObject
@@ -280,7 +300,7 @@ namespace PTL.Windows.Controls
         }
         #endregion Wireframe Refresh
 
-        #region Transform
+        #region About Transform
         public void TranslateViewTo(Model3D model)
         {
             Rect3D bound = model.Bounds;
@@ -304,14 +324,16 @@ namespace PTL.Windows.Controls
             Point3D center = getModelCenter(model);
             Transform3D t = new TranslateTransform3D(new Point3D(0, 0, center.Z) - center);
             TransformAllModel(t);
-            double scale = Math.Sqrt(sizeX * sizeX + sizeY * sizeY + sizeZ * sizeZ);
+            double scale = System.Math.Sqrt(sizeX * sizeX + sizeY * sizeY + sizeZ * sizeZ);
             camera.Position = new Point3D(0, 0, (model.Bounds.Z + model.Bounds.SizeZ) + scale);
+            RefreshWireframe();
         }
 
         public void ResetViewTo(Model3D model)
         {
             ResetAllTransform();
             TranslateViewTo(model);
+            
         }
 
         public Point3D getModelCenter(Model3D model)
@@ -326,29 +348,36 @@ namespace PTL.Windows.Controls
 
         public void ResetAllTransform()
         {
-            UI3DGroup.Transform = new Transform3DGroup();
+            MovingUIElementsVisual3D.Transform = new Transform3DGroup();
+            MovingModelGroup.Transform = new Transform3DGroup();
             AllModels.Transform = new Transform3DGroup();
             SelectedModels.Transform = new Transform3DGroup();
+            RefreshWireframe();
         }
 
         public void TransformAllModel(Transform3D transform)
         {
-            if (UI3DGroup.Transform == null)
-                UI3DGroup.Transform = new Transform3DGroup();
+            if (MovingUIElementsVisual3D.Transform == null)
+                MovingUIElementsVisual3D.Transform = new Transform3DGroup();
             if (AllModels.Transform == null)
                 AllModels.Transform = new Transform3DGroup();
             if (SelectedModels.Transform == null)
                 SelectedModels.Transform = new Transform3DGroup();
 
-            Transform3DGroup uiGroupT = UI3DGroup.Transform as Transform3DGroup;
+            Transform3DGroup uiGroupT = MovingUIElementsVisual3D.Transform as Transform3DGroup;
             Transform3DGroup allModelsT = AllModels.Transform as Transform3DGroup;
             Transform3DGroup selectedModelsT = SelectedModels.Transform as Transform3DGroup;
             uiGroupT.Children.Add(transform);
             allModelsT.Children.Add(transform);
             selectedModelsT.Children.Add(transform);
+            RefreshWireframe();
         }
 
-        #endregion Transform
+        private void Viewport_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            RefreshWireframe();
+        }
+        #endregion About Transform
 
         #region Mouse Event
         public void UI_MouseEnter(object sender, MouseEventArgs e)
@@ -431,7 +460,6 @@ namespace PTL.Windows.Controls
                 Transform3D t = new RotateTransform3D(r, rotateCenter);
 
                 TransformAllModel(t);
-                RefreshWireframe();
                 mLastPos = actualPos;
             }
             else if (e.MiddleButton == MouseButtonState.Pressed)
@@ -822,5 +850,7 @@ namespace PTL.Windows.Controls
         //    #endregion
         //}
         #endregion Grid
+
+        
     }
 }

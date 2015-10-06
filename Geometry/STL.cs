@@ -27,7 +27,7 @@ namespace PTL.Geometry
             {
                 if (aEntity is Triangle)
                 {
-                    aEntity.Parent = this;
+                    base.AddEntity(aEntity);
                 }
             }
         }
@@ -50,7 +50,6 @@ namespace PTL.Geometry
             Entity[] entities = this.Entities.Values.ToArray();
             for (int i = 0; i < entities.Length; i++)
                 aSTL.AddEntity(entities[i].Clone() as Entity);
-
             return aSTL;
         }
     }

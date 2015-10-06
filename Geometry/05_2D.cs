@@ -127,12 +127,12 @@ namespace PTL.Geometry
 
         public override void Transform(double[,] TransformMatrix)
         {
-            this.P1 = Transport(TransformMatrix, this.P1);
-            this.P2 = Transport(TransformMatrix, this.P2);
-            this.P3 = Transport(TransformMatrix, this.P3);
+            if (this.P1 != null) this.P1 = Transport(TransformMatrix, this.P1);
+            if (this.P2 != null) this.P2 = Transport(TransformMatrix, this.P2);
+            if (this.P3 != null) this.P3 = Transport(TransformMatrix, this.P3);
             if (this.N1 != null) this.N1 = Transport(TransformMatrix, this.N1);
-            if (this.N1 != null) this.N2 = Transport(TransformMatrix, this.N2);
-            if (this.N1 != null) this.N3 = Transport(TransformMatrix, this.N3);
+            if (this.N2 != null) this.N2 = Transport(TransformMatrix, this.N2);
+            if (this.N3 != null) this.N3 = Transport(TransformMatrix, this.N3);
         }
     }
     public class Cylinder : SurfaceEntity

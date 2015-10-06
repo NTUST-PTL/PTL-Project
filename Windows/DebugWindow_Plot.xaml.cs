@@ -14,7 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Windows.Interop;
-using PTL.Windows.UIExtentions;
+using PTL.Windows.VisualExtensions;
 
 namespace PTL.Windows
 {

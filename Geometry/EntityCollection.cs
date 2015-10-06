@@ -26,9 +26,14 @@ namespace PTL.Geometry
             foreach (var aEntity in Entitys)
             {
                 if (aEntity != null)
-                    aEntity.Parent = this; 
+                {
+                    aEntity.Parent = this;
+                    if (boundary != null)
+                        UpdateBoundary(Entitys);
+                    else
+                        CheckBoundary();
+                }
             }
-            
         }
 
         public virtual void RemoveEntity(params Entity[] Entitys)
@@ -37,7 +42,10 @@ namespace PTL.Geometry
             {
                 if (aEntity != null)
                     if (this.Entities.ContainsValue(aEntity))
+                    {
                         aEntity.Parent = null;
+                        CheckBoundary();
+                    }
             }
         }
 
@@ -67,45 +75,94 @@ namespace PTL.Geometry
         }
         #endregion
 
+        public XYZ4[] boundary;
         public override XYZ4[] Boundary
         {
             get
             {
-                XYZ4[] boundary = new XYZ4[2] { new XYZ4(), new XYZ4() };
-                if (Entities.Count != 0)
-                {
-                    Entity[] entities = Entities.Values.ToArray();
-                    if (this.CoordinateSystem != null)
-                    {
-                        boundary = Transport(this.CoordinateSystem, entities[0].Boundary).ToArray();
-                        XYZ4[] eboundary;
-                        foreach (Entity aEntity in entities)
-                        {
-                            eboundary = Transport(this.CoordinateSystem, aEntity.Boundary).ToArray();
-                            Compare_Boundary(boundary, eboundary[0]);
-                            Compare_Boundary(boundary, eboundary[1]);
-                        }
-                    }
-                    else
-                    {
-                        boundary = entities[0].Boundary;
-                        XYZ4[] eboundary;
-                        foreach (Entity aEntity in entities)
-                        {
-                            eboundary = aEntity.Boundary;
-                            Compare_Boundary(boundary, eboundary[0]);
-                            Compare_Boundary(boundary, eboundary[1]);
-                        }
-                    }
-                }
                 return boundary;
             }
+        }
+
+        public void UpdateBoundary(params Entity[] entities)
+        {
+            XYZ4[] newboundary = this.boundary;
+            if (Entities.Count != 0)
+            {
+                if (this.CoordinateSystem != null)
+                {
+                    XYZ4[] eboundary;
+                    foreach (Entity aEntity in entities)
+                    {
+                        eboundary = Transport(this.CoordinateSystem, aEntity.Boundary).ToArray();
+                        Compare_Boundary(newboundary, eboundary[0]);
+                        Compare_Boundary(newboundary, eboundary[1]);
+                    }
+                }
+                else
+                {
+                    XYZ4[] eboundary;
+                    foreach (Entity aEntity in entities)
+                    {
+                        eboundary = aEntity.Boundary;
+                        Compare_Boundary(newboundary, eboundary[0]);
+                        Compare_Boundary(newboundary, eboundary[1]);
+                    }
+                }
+            }
+            this.boundary = newboundary;
+        }
+
+        public void CheckBoundary()
+        {
+            XYZ4[] boundary = new XYZ4[2] { new XYZ4(), new XYZ4() };
+            if (Entities.Count != 0)
+            {
+                Entity[] entities = Entities.Values.ToArray();
+                if (this.CoordinateSystem != null)
+                {
+                    boundary = Transport(this.CoordinateSystem, entities[0].Boundary).ToArray();
+                    XYZ4[] eboundary;
+                    foreach (Entity aEntity in entities)
+                    {
+                        eboundary = Transport(this.CoordinateSystem, aEntity.Boundary).ToArray();
+                        Compare_Boundary(boundary, eboundary[0]);
+                        Compare_Boundary(boundary, eboundary[1]);
+                    }
+                }
+                else
+                {
+                    boundary = entities[0].Boundary;
+                    XYZ4[] eboundary;
+                    foreach (Entity aEntity in entities)
+                    {
+                        eboundary = aEntity.Boundary;
+                        Compare_Boundary(boundary, eboundary[0]);
+                        Compare_Boundary(boundary, eboundary[1]);
+                    }
+                }
+            }
+            this.boundary = boundary;
         }
 
         public override void Transform(double[,] TransformMatrix)
         {
             foreach (var item in this.Entities.Values)
+            {
+                if (item is Triangle)
+                {
+                    Triangle tri = (Triangle)item;
+                    if (tri.P1 == null || tri.P2 == null || tri.P3 == null)
+                    {
+                        Console.WriteLine("Point is null : " + Entities.Values.ToList().IndexOf(tri));
+                    }
+                }
+                else
+                {
+
+                }
                 item.Transform(TransformMatrix);
+            }
         }
 
         public List<netDxf.Entities.EntityObject> ToDXFEntities()

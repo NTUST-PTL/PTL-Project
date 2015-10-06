@@ -8,7 +8,7 @@ using PTL.Definitions;
 
 namespace PTL
 {
-    public class Math1221
+    public class Math
     {
         protected static double delChk = 0.002;
         #region 三角函數

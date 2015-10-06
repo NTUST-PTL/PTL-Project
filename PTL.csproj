@@ -97,7 +97,7 @@
     <Compile Include="Definitions\LineType.cs" />
     <Compile Include="Geometry\Part.cs" />
     <Compile Include="Geometry\STL.cs" />
-    <Compile Include="Geometry\ICollection.cs" />
+    <Compile Include="Geometry\EntityCollection.cs" />
     <Compile Include="Geometry\06_IDXF.cs" />
     <Compile Include="Geometry\IGeometry.cs" />
     <Compile Include="Geometry\07_IScript.cs" />
@@ -116,10 +116,16 @@
     <Compile Include="Geometry\MathModel\NUB_Surface.cs" />
     <Compile Include="Geometry\MathModel\XYZ4.cs" />
     <Compile Include="Geometry\RadialAngleClassifier.cs" />
-    <Compile Include="Geometry\WPFExtensions\LineMeshGeometry3D.cs" />
     <Compile Include="Geometry\WPFExtensions\WPFExtensions.cs" />
     <Compile Include="Mathematics\ProtectedMath.cs" />
     <Compile Include="Mathematics\Math.cs" />
+    <Compile Include="Measurement\STLMeasuringTool_P40.cs" />
+    <Compile Include="Measurement\STLMeasuringTool_P40_SingleTooth.cs" />
+    <Compile Include="Measurement\STLMeasuringTool_ZAngle.cs" />
+    <Compile Include="Measurement\STLMeasuringTool_CMM.cs" />
+    <Compile Include="Measurement\STLMeasuringTool_NearPoint.cs" />
+    <Compile Include="Measurement\ISTLMeasurement_NeedNormals.cs" />
+    <Compile Include="Measurement\STLMeasuringTool.cs" />
     <Compile Include="OpenGL\Plot\02_View.cs" />
     <Compile Include="OpenGL\Plot\03_PlotSub.cs" />
     <Compile Include="Math.cs" />
@@ -132,7 +138,7 @@
     <Compile Include="FileOperation\03_STLReader.cs" />
     <Compile Include="FileOperation\10_DXFExporter.cs" />
     <Compile Include="FileOperation\BinaryReaderExtentionMethods\BinaryReader_TryReadExtention.cs" />
-    <Compile Include="Measurement\STLMeasuringTool.cs" />
+    <Compile Include="Measurement\STLMeasuringTool_MultiThread.cs" />
     <Compile Include="Tools\Security.cs" />
     <Compile Include="Tools\SystemInfo.cs" />
     <Compile Include="Windows\Controls\01_OpenGLWindow.cs">
@@ -180,7 +186,9 @@
     <Compile Include="Windows\DebugWindow_Plot.xaml.cs">
       <DependentUpon>DebugWindow_Plot.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\UIExtention\UIHelper.cs" />
+    <Compile Include="Windows\Media\Media3D\LineGeometry3D.cs" />
+    <Compile Include="Windows\VisualExtensions\VisualTreeExtention.cs" />
+    <Compile Include="Windows\VisualExtensions\HitTest3DExtension.cs" />
     <Page Include="Windows\Controls\BComboBox.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -254,6 +262,7 @@
     </None>
     <AppDesigner Include="Properties\" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

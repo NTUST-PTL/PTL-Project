@@ -132,6 +132,7 @@ namespace PTL.FileOperation
                     }
                 }
                 newSTL = aSTL;
+                newSTL.CheckBoundary();
             }
             catch 
             {
@@ -141,9 +142,9 @@ namespace PTL.FileOperation
             stream.Dispose();
             stream.Close();
 
-            if (newSTL.Entities.Count == 0)
+            if (newSTL?.Entities.Count == 0)
                 newSTL = null;
-
+            
             return newSTL;
 
         }
@@ -175,6 +176,7 @@ namespace PTL.FileOperation
                         else
                         {
                             reader.Close();
+                            aSTL.CheckBoundary();
                             return aSTL;
                         }
                     }
@@ -187,6 +189,7 @@ namespace PTL.FileOperation
                         else
                         {
                             reader.Close();
+                            aSTL.CheckBoundary();
                             return aSTL;
                         }
                     }
@@ -199,6 +202,7 @@ namespace PTL.FileOperation
                         else
                         {
                             reader.Close();
+                            aSTL.CheckBoundary();
                             return aSTL;
                         }
                     }
@@ -211,6 +215,7 @@ namespace PTL.FileOperation
                         else
                         {
                             reader.Close();
+                            aSTL.CheckBoundary();
                             return aSTL;
                         }
                     }
@@ -219,6 +224,7 @@ namespace PTL.FileOperation
                     if (attributeByteCount.Item1 == false)
                     {
                         reader.Close();
+                        aSTL.CheckBoundary();
                         return aSTL;
                     }
 
@@ -237,14 +243,16 @@ namespace PTL.FileOperation
                         aSTL.AddEntity(aTriangle);
                     }
                 }
+                
             }
             catch (Exception)
             {
                 aSTL = null;
             }
 
-            if (aSTL.Entities.Count == 0)
+            if (aSTL?.Entities.Count == 0)
                 aSTL = null;
+                
 
             return aSTL;
         }

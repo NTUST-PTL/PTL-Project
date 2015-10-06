@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
 
-namespace PTL.Windows.UIExtentions
+namespace PTL.Windows.VisualExtensions
 {
-    public static class UIExtention
+    public static class VisualTreeExtention
     {
         public static IEnumerable<T> FindVisualChildren<T>(this DependencyObject depObj) where T : DependencyObject
         {

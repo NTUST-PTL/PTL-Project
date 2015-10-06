@@ -640,10 +640,10 @@ namespace PTL.Mathematics
             }
             return (double[])tr1.Clone();
         }
-        protected static T Transport<T>(double[,] tMatrix, T p) where T : IXYZ
+        protected static T Transport<T>(double[,] tMatrix, T p) where T : IXYZ 
         {
             double[] result;
-            if (p.IsHomogeneous)
+            if (p.IsHomogeneous == true)
                 result = Transport4(tMatrix, p.Values);
             else
                 result = Transport3(tMatrix, p.Values);
