@@ -11,7 +11,7 @@ namespace PTL.Geometry.MathModel
         public XYZ4[] DataPoints;
         public XYZ4[] ControlPoints;
         public double[][,] Ni;
-        public double[] delta_i;
+        public double[] Delta_i;
         public int LastSegmentIndex;
 
         public NUB_Curve(XYZ4[]dataPoints, bool closed = false)
@@ -29,14 +29,14 @@ namespace PTL.Geometry.MathModel
             double[,] invM;
 
             #region 計算弦長
-            delta_i = new double[n + 3];
-            delta_i[0] = 0;
-            delta_i[1] = 0;
-            delta_i[n+1] = 0;
-            delta_i[n+1+1] = 0;
+            Delta_i = new double[n + 3];
+            Delta_i[0] = 0;
+            Delta_i[1] = 0;
+            Delta_i[n+1] = 0;
+            Delta_i[n+1+1] = 0;
             for (int i = 0; i < n - 1; i++)
             {
-                delta_i[i + 2] = Norm((DataPoints[i + 1] - DataPoints[i]).Values);
+                Delta_i[i + 2] = Norm((DataPoints[i + 1] - DataPoints[i]).Values);
             }
             #endregion
 
@@ -52,13 +52,13 @@ namespace PTL.Geometry.MathModel
                 int i_d = i + 2;
                 int i_M = i + 1;
                 //fi
-                M[i_M, i] = Pow(delta_i[i_d], 2)
-                            / (delta_i[i_d - 1] + delta_i[i_d])
-                            / (delta_i[i_d - 2] + delta_i[i_d - 1] + delta_i[i_d]);
+                M[i_M, i] = Pow(Delta_i[i_d], 2)
+                            / (Delta_i[i_d - 1] + Delta_i[i_d])
+                            / (Delta_i[i_d - 2] + Delta_i[i_d - 1] + Delta_i[i_d]);
                 //gi
-                M[i_M, i + 2] = Pow(delta_i[i_d - 1], 2)
-                                / (delta_i[i_d - 1] + delta_i[i_d] + delta_i[i_d + 1])
-                                / (delta_i[i_d - 1] + delta_i[i_d]);
+                M[i_M, i + 2] = Pow(Delta_i[i_d - 1], 2)
+                                / (Delta_i[i_d - 1] + Delta_i[i_d] + Delta_i[i_d + 1])
+                                / (Delta_i[i_d - 1] + Delta_i[i_d]);
                 //hi
                 M[i_M, i + 1] = 1 - M[i_M, i] - M[i_M, i + 2];
             }
@@ -218,28 +218,28 @@ namespace PTL.Geometry.MathModel
             {
                 int i_d = segmentsIndex + 2;
                 double[,] Nci = IdentityMatrix(4);
-                Nci[0, 0] = Pow(delta_i[i_d], 2)
-                            / (delta_i[i_d - 1] + delta_i[i_d])
-                            / (delta_i[i_d - 2] + delta_i[i_d - 1] + delta_i[i_d]);
-                Nci[0, 2] = Pow(delta_i[i_d - 1], 2)
-                            / (delta_i[i_d - 1] + delta_i[i_d] + delta_i[i_d + 1])
-                            / (delta_i[i_d - 1] + delta_i[i_d]);
-                Nci[1, 2] = 3 * delta_i[i_d] * delta_i[i_d - 1]
-                            / (delta_i[i_d - 1] + delta_i[i_d] + delta_i[i_d + 1])
-                            / (delta_i[i_d - 1] + delta_i[i_d]);
-                Nci[2, 2] = 3 * Pow(delta_i[i_d], 2)
-                            / (delta_i[i_d - 1] + delta_i[i_d] + delta_i[i_d + 1])
-                            / (delta_i[i_d - 1] + delta_i[i_d]);
-                Nci[3, 3] = Pow(delta_i[i_d], 2)
-                            / (delta_i[i_d] + delta_i[i_d + 1] + delta_i[i_d + 2])
-                            / (delta_i[i_d] + delta_i[i_d + 1]);
+                Nci[0, 0] = Pow(Delta_i[i_d], 2)
+                            / (Delta_i[i_d - 1] + Delta_i[i_d])
+                            / (Delta_i[i_d - 2] + Delta_i[i_d - 1] + Delta_i[i_d]);
+                Nci[0, 2] = Pow(Delta_i[i_d - 1], 2)
+                            / (Delta_i[i_d - 1] + Delta_i[i_d] + Delta_i[i_d + 1])
+                            / (Delta_i[i_d - 1] + Delta_i[i_d]);
+                Nci[1, 2] = 3 * Delta_i[i_d] * Delta_i[i_d - 1]
+                            / (Delta_i[i_d - 1] + Delta_i[i_d] + Delta_i[i_d + 1])
+                            / (Delta_i[i_d - 1] + Delta_i[i_d]);
+                Nci[2, 2] = 3 * Pow(Delta_i[i_d], 2)
+                            / (Delta_i[i_d - 1] + Delta_i[i_d] + Delta_i[i_d + 1])
+                            / (Delta_i[i_d - 1] + Delta_i[i_d]);
+                Nci[3, 3] = Pow(Delta_i[i_d], 2)
+                            / (Delta_i[i_d] + Delta_i[i_d + 1] + Delta_i[i_d + 2])
+                            / (Delta_i[i_d] + Delta_i[i_d + 1]);
                 Nci[3, 2] = -1 *
                             (
                                   1.0 / 3.0 * Nci[2, 2]
                                 + Nci[3, 3]
-                                + Pow(delta_i[i_d], 2)
-                                  / (delta_i[i_d] + delta_i[i_d + 1])
-                                  / (delta_i[i_d - 1] + delta_i[i_d] + delta_i[i_d + 1])
+                                + Pow(Delta_i[i_d], 2)
+                                  / (Delta_i[i_d] + Delta_i[i_d + 1])
+                                  / (Delta_i[i_d - 1] + Delta_i[i_d] + Delta_i[i_d + 1])
                             );
                 Nci[1, 0] = -3 * Nci[0, 0];
                 Nci[2, 0] = 3 * Nci[0, 0];
