@@ -85,7 +85,7 @@ namespace PTL.Geometry
             Action<TopoFace> TopoFaceSetter = null)
         {
             return ToTopoFace(
-                (u, v) => nub_Surface.R(u, v),
+                (u, v) => nub_Surface.P(u, v),
                 xstart, xend, xslices,
                 ystart, yend, yslices,
                 TopoFaceSetter
@@ -129,7 +129,7 @@ namespace PTL.Geometry
             Action<PolyLine> PolyLineSetter = null)
         {
             PolyLine polyline = ToPolyLine(
-                nub_curve.R,
+                nub_curve.P,
                 start, end, slices,
                 PolyLineSetter
                 );

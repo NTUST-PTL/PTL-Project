@@ -8,7 +8,7 @@ namespace PTL.Geometry.MathModel
 {
     public interface IParametricSurface
     {
-        XYZ4 R(double u, double v);
+        XYZ4 P(double u, double v);
         XYZ3 dU(double u, double v);
         XYZ3 dV(double u, double v);
         XYZ3 dU2(double u, double v);

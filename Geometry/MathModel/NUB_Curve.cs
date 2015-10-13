@@ -96,8 +96,8 @@ namespace PTL.Geometry.MathModel
             #endregion
 
             #region 計算每個線段的N矩陣
-            Ni = new double[n][,];
-            for (int i = 0; i < n; i++)
+            Ni = new double[n-1][,];
+            for (int i = 0; i < n-1; i++)
             {
                 Ni[i] = GetNci(i, false);
             }
@@ -342,8 +342,8 @@ namespace PTL.Geometry.MathModel
 
             return new Tuple<int, double>(sIndexU, localU);
         }
-        
-        public XYZ4 R(double u)
+
+        public XYZ4 P(double u)
         {
             Tuple<int, double> mappedParas = Param_Mapping(u);
             int sIndexU = mappedParas.Item1;
