@@ -6,7 +6,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="40" d:DesignWidth="100">
     <StackPanel>
-        <TextBox x:Name="_TextBox" x:FieldModifier="public" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" TextChanged="TextBox_TextChanged"></TextBox>
+        <TextBox x:Name="_TextBox" x:FieldModifier="public" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"></TextBox>
             <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="1*"/>

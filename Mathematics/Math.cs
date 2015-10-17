@@ -826,7 +826,7 @@ namespace PTL.Mathematics
         }
         #endregion
 
-        #region 基本工具
+        #region 其他
         public static double Sphive(double tphi, double tgammab)
         {
             double tsphive;
@@ -869,24 +869,6 @@ namespace PTL.Mathematics
         {
             double tc = ta - Floor(ta / tb, 1.0) * tb;
             return tc;
-        }
-        public static PointD CalcuCenterXY(PointD p1, PointD p2, double radius, short ctype)
-        {
-            double ra = Abs(radius);
-            short Flag = (short)(radius / ra);
-            PointD za = new PointD(0.0, 0.0, 1.0);
-            PointD v1 = Normalize(p2 - p1);
-            PointD v2 = Cross(v1, za);
-            double dist = Norm(p2 - p1);
-            double xx = Sqrt(ra * ra - (dist / 2.0) * (dist / 2.0));
-
-            PointD pc;
-            if (ctype == 2)
-                pc = p1 + dist / 2.0 * v1 + Flag * xx * v2;
-            else
-                pc = p1 + dist / 2.0 * v1 - Flag * xx * v2;
-
-            return pc;
         }
         public static bool Compare(double a, double b, double precision)
         {

@@ -21,12 +21,10 @@ namespace PTL.Windows.Controls
     /// </summary>
     public partial class LTextBox_double_Arrow : UserControl
     {
-        Link<double> Value = new Link<double>();
         public LTextBox_double_Arrow()
         {
             InitializeComponent();
-            this.GotFocus += (object sender, System.Windows.RoutedEventArgs e) => this._TextBox.SelectAll();
-            this.Value.ValueChanged += Value_Changed;
+            this.GotFocus += (sender, e) => this._TextBox.SelectAll();
         }
 
         public double _Gradiation = 0.1;
@@ -42,51 +40,15 @@ namespace PTL.Windows.Controls
                     this._Gradiation = value;
             }
         }
-        String StringFormat = "";
-
-        public void LinkTo(Source<double> source)
-        {
-            Value.LinkTo(source);
-            Value_Changed();
-        }
 
         private void Button_minus_Click(object sender, RoutedEventArgs e)
         {
-            this.Value.V -= Gradiation;
+            this._TextBox.Text = (Convert.ToDouble(this._TextBox.Text) - Gradiation).ToString();
         }
 
         private void Button_add_Click(object sender, RoutedEventArgs e)
         {
-            this.Value.V += Gradiation;
-        }
-
-        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            try
-            {
-                this.Value.V = Convert.ToDouble(this._TextBox.Text);
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
-
-        private void Value_Changed()
-        {
-            if (CheckAccess())
-            {
-                this._TextBox.TextChanged -= TextBox_TextChanged;
-                if (String.IsNullOrEmpty(StringFormat))
-                    this._TextBox.Text = this.Value.V.ToString();
-                else
-                    this._TextBox.Text = this.Value.V.ToString(StringFormat);
-                this._TextBox.TextChanged += TextBox_TextChanged;
-            }
-            else
-            {
-                Dispatcher.Invoke(Value_Changed);
-            }
+            this._TextBox.Text = (Convert.ToDouble(this._TextBox.Text) + Gradiation).ToString();
         }
     }
 }

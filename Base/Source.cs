@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,7 +8,7 @@ using Newtonsoft.Json;
 
 namespace PTL.Base
 {
-    public class Source<T>
+    public class Source<T> : INotifyPropertyChanged
     {
         public Source()
         {
@@ -22,21 +23,22 @@ namespace PTL.Base
         public virtual T V
         {
             get { return _V; }
-            set {
+            set
+            {
                 this._V = value;
                 NoticeChange();
             }
         }
 
         HashSet<Link<T>> Observers = new HashSet<Link<T>>();
-        public Action ValueChanged;
+        public event PropertyChangedEventHandler PropertyChanged;
 
-        public T GetSourceMethod()
+        public T GetValue()
         {
             return V;
         }
 
-        public void SetSourceMethod(T value)
+        public void SetValue(T value)
         {
             this.V = value;
         }
@@ -44,10 +46,9 @@ namespace PTL.Base
         public void NoticeChange()
         {
             foreach (var observer in Observers)
-                if (observer.ValueChanged != null)
-                    observer.ValueChanged();
-            if (this.ValueChanged != null)
-                this.ValueChanged();
+                observer.NoticeChange();
+            if (this.PropertyChanged != null)
+                this.PropertyChanged(this, new PropertyChangedEventArgs("V"));
         }
 
         public void LinkWith(params Link<T>[] links)
@@ -55,11 +56,11 @@ namespace PTL.Base
             LinkWith(true, links);
         }
 
-        public void LinkWith(bool bilateral, params Link<T>[] links)
+        public void LinkWith(bool TwoWay, params Link<T>[] links)
         {
             foreach (var link in links)
             {
-                if (bilateral)
+                if (TwoWay)
                     link.LinkTo(false, this);
                 this.Observers.Add(link);
             }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,7 +8,7 @@ using Newtonsoft.Json;
 
 namespace PTL.Base
 {
-    public class Link<T>
+    public class Link<T> : INotifyPropertyChanged
     {
         public Link()
         {
@@ -19,14 +20,21 @@ namespace PTL.Base
         }
 
         public Source<T> Source;
-        public Func<T> GetSource;
-        public Action<T> SetSource;
-        public Action ValueChanged;
+        public Func<T> GetSourceValue;
+        public Action<T> SetSourceValue;
+
+        public event PropertyChangedEventHandler PropertyChanged;
 
         public T V
         {
-            get { return GetSource(); }
-            set { SetSource(value); }
+            get { return GetSourceValue(); }
+            set { SetSourceValue(value); }
+        }
+
+        public void NoticeChange()
+        {
+            if (this.PropertyChanged != null)
+                this.PropertyChanged(this, new PropertyChangedEventArgs("V"));
         }
 
         public void LinkTo(Source<T> source)
@@ -38,8 +46,8 @@ namespace PTL.Base
         {
             if (source != null)
             {
-                this.GetSource = source.GetSourceMethod;
-                this.SetSource = source.SetSourceMethod;
+                this.GetSourceValue = source.GetValue;
+                this.SetSourceValue = source.SetValue;
                 this.Source = source;
                 if (bilateral)
                     source.LinkWith(false, this);
@@ -48,8 +56,8 @@ namespace PTL.Base
 
         public void Delink()
         {
-            this.GetSource = null;
-            this.SetSource = null;
+            this.GetSourceValue = null;
+            this.SetSourceValue = null;
             this.Source = null;
             if (this.Source != null)
                 this.Source.DelinkWith(this);

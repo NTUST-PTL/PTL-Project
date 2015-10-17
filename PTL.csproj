@@ -84,7 +84,6 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Base\SequenceSync.cs" />
     <Compile Include="Base\Source.cs" />
     <Compile Include="Base\Link.cs" />
     <Compile Include="Base\Bind.cs" />
@@ -156,9 +155,6 @@
     <Compile Include="Windows\Controls\CAD_Like_ViewPort3D.xaml.cs">
       <DependentUpon>CAD_Like_ViewPort3D.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\Controls\LTextBox.xaml.cs">
-      <DependentUpon>LTextBox.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Windows\Controls\LTextBox_double_Arrow.xaml.cs">
       <DependentUpon>LTextBox_double_Arrow.xaml</DependentUpon>
     </Compile>
@@ -168,21 +164,10 @@
     <Compile Include="Windows\Controls\LStackPanel.xaml.cs">
       <DependentUpon>LStackPanel.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\Controls\LTextBlock_double.xaml.cs">
-      <DependentUpon>LTextBlock_double.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Windows\Controls\LTextBox_double.xaml.cs">
-      <DependentUpon>LTextBox_double.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Windows\Controls\LTextBox_Int.xaml.cs">
-      <DependentUpon>LTextBox_Int.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Windows\Controls\LTextBox_Uint1DArray.xaml.cs">
-      <DependentUpon>LTextBox_Uint1DArray.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Windows\Controls\OpenGLViewer.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="Windows\Data\Array1DConverter.cs" />
     <Compile Include="Windows\DebugWindow_Plot.xaml.cs">
       <DependentUpon>DebugWindow_Plot.xaml</DependentUpon>
     </Compile>
@@ -201,10 +186,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Windows\Controls\LTextBox.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="Windows\Controls\LTextBox_double_Arrow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -214,22 +195,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Windows\Controls\LStackPanel.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Windows\Controls\LTextBlock_double.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Windows\Controls\LTextBox_double.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Windows\Controls\LTextBox_Int.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Windows\Controls\LTextBox_Uint1DArray.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

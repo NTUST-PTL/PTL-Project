@@ -30,7 +30,7 @@ namespace PTL.Windows.Controls
         {
             InitializeComponent();
 
-            Value.ValueChanged = SynchronizeItem;
+            Value.PropertyChanged += (o, e) => SynchronizeItem();
         }
 
         public void SynchronizeItem()
