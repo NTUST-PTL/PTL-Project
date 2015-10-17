@@ -88,10 +88,9 @@
     <Compile Include="Base\Link.cs" />
     <Compile Include="Base\Bind.cs" />
     <Compile Include="Base\DataType\DataType.cs" />
-    <Compile Include="Base\DelayEvent.cs" />
+    <Compile Include="Base\Units\Unit.cs" />
     <Compile Include="Definitions\Axis.cs" />
     <Compile Include="Definitions\DXFLineTypeConverter.cs" />
-    <Compile Include="Base\Unit\Unit.cs" />
     <Compile Include="Definitions\Dimension.cs" />
     <Compile Include="Definitions\LineType.cs" />
     <Compile Include="Geometry\Part.cs" />
