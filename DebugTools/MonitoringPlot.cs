@@ -160,6 +160,11 @@ namespace PTL.DebugTools
 
         }
 
+        public void SetTitle(String title)
+        {
+            Window.TitleTextBlock.Text = title;
+        }
+
         #region Invoke
         public async static Task<MonitoringPlot> InvokeCreate()
         {
@@ -238,6 +243,11 @@ namespace PTL.DebugTools
                  {
                      Close();
                  }));
+        }
+        public async Task InvokeSetTitle(String title)
+        {
+            await Application.Current.Dispatcher.BeginInvoke(
+                new Action(() => SetTitle(title)));
         }
         #endregion
     }

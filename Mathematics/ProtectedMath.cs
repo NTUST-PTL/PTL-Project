@@ -210,6 +210,10 @@ namespace PTL.Mathematics
 
             return len;
         }
+        protected static XYZ3 GetAnyNormal(XYZ3 direction)
+        {
+            return Mathematics.PTLM.GetAnyNormal(direction);
+        }
 
         protected static double[] MatrixDot(double[] array1, double[] array2)
         {

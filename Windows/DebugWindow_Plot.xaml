@@ -16,6 +16,7 @@
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
             <Rectangle Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="3" Grid.RowSpan="3" Margin="0,0,0,0" Stroke="#7F000000" StrokeThickness="2" MouseLeftButtonDown="Rectangle_MouseLeftButtonDown" Fill="#FF636363"/>
+            <TextBlock x:Name="TitleTextBlock" x:FieldModifier="public" Grid.Row="0"  Grid.Column="1" Background="#FF4D0C0C" FontSize="16" FontWeight="Bold" Foreground="White"></TextBlock>
             <Thumb x:Name="ThumbTop" Grid.Column="1" Grid.Row="0" Height="5" VerticalAlignment="Top" PreviewMouseLeftButtonDown="thumb_PreviewMouseLeftButtonDown" Background="#00F0F0F0" Opacity="0.58" Cursor="SizeNS"/>
             <Thumb x:Name="ThumbBottom" Grid.Column="1" Grid.Row="2" Height="5" VerticalAlignment="Bottom" PreviewMouseLeftButtonDown="thumb_PreviewMouseLeftButtonDown" Background="#00F0F0F0" Opacity="0.58" Cursor="SizeNS"/>
             <Thumb x:Name="ThumbLeft" Grid.Column="0" Grid.Row="1" Width="5" HorizontalAlignment="Left" PreviewMouseLeftButtonDown="thumb_PreviewMouseLeftButtonDown" Background="#00F0F0F0" Opacity="0.58" Cursor="SizeWE"/>

@@ -209,6 +209,14 @@ namespace PTL.Mathematics
 
             return len;
         }
+        public static XYZ3 GetAnyNormal(XYZ3 direction)
+        {
+            XYZ3 n1 = PTLM.Cross(new XYZ3(0.0, 0.0, 1.0), direction);
+            if (PTLM.Norm(n1) < 1e-5)
+                n1 = PTLM.Cross(new XYZ3(0.0, 1.0, 0.0), direction);
+            n1 = PTLM.Normalize(n1);
+            return n1;
+        }
 
         public static double[] MatrixDot(double[] array1, double[] array2)
         {

@@ -264,3 +264,5 @@ C:\Data\GitHub\PTL-Project\bin\Debug\3DTools.dll
 C:\Data\GitHub\PTL-Project\bin\Debug\PTL.dll
 C:\Data\GitHub\PTL-Project\obj\Debug\PTL.dll
 C:\Data\GitHub\PTL-Project\obj\Debug\PTL.csprojResolveAssemblyReference.cache
+C:\Data\GitHub\PTL-Project\bin\Debug\MathNet.Numerics.dll
+C:\Data\GitHub\PTL-Project\bin\Debug\MathNet.Numerics.pdb

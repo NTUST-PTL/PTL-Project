@@ -226,7 +226,12 @@
     </None>
     <AppDesigner Include="Properties\" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\mathnet-PTL\src\Numerics\Numerics.csproj">
+      <Project>{b7cae5f4-a23f-4438-b5be-41226618b695}</Project>
+      <Name>Numerics</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
