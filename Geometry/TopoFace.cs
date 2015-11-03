@@ -3,303 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.IO;
-using System.Drawing;
-using PTL.Definitions;
-using PTL.OpenGL.Plot;
 using CsGL.OpenGL;
 using PTL.Geometry.MathModel;
 
 namespace PTL.Geometry
 {
-    public class Triangle : SurfaceEntity
-    {
-        public XYZ4 P1, P2, P3;
-        public XYZ3 N1, N2, N3;
-
-        public override XYZ4[] Boundary
-        {
-            get
-            {
-                XYZ4[] boundary;
-                if (this.CoordinateSystem != null)
-                {
-                    boundary = new XYZ4[2] { Transport(this.CoordinateSystem, P1), Transport(this.CoordinateSystem, P1) };
-                    Compare_Boundary(boundary, Transport(this.CoordinateSystem, P2));
-                    Compare_Boundary(boundary, Transport(this.CoordinateSystem, P3));
-                }
-                else
-                {
-                    boundary = new XYZ4[2] { (XYZ4)(P1.Clone()), (XYZ4)(P1.Clone()) };
-                    Compare_Boundary(boundary, P2);
-                    Compare_Boundary(boundary, P3);
-                }
-                return boundary;
-            }
-        }
-
-        public override void PlotInOpenGL()
-        {
-            if (this.Visible == true)
-            {
-                if (this.CoordinateSystem != null)
-                {
-                    GL.glPushMatrix();
-                    GL.glMatrixMode(GL.GL_MODELVIEW);
-                    MultMatrixd(this.CoordinateSystem);
-                }
-                //顏色
-                GL.glColor4d(this.Color.R / 255.0, this.Color.G / 255.0, this.Color.B / 255.0, this.Color.A / 255.0);
-
-                //面
-                if (this.SurfaceDisplayOption == SurfaceDisplayOptions.SurfaceOnly || this.SurfaceDisplayOption == SurfaceDisplayOptions.SurfaceAndEdge)
-                {
-                    GL.glBegin(GL.GL_TRIANGLES); //三角面起點
-                    if (N1 != null)
-                        GL.glNormal3d(N1.X,
-                                      N1.Y,
-                                      N1.Z);//頂點法向量
-                    GL.glVertex3d(P1.X,
-                                  P1.Y,
-                                  P1.Z);
-                    if (N2 != null)
-                        GL.glNormal3d(N2.X,
-                                      N2.Y,
-                                      N2.Z);//頂點法向量
-                    GL.glVertex3d(P2.X,
-                                  P2.Y,
-                                  P2.Z);
-                    if (N3 != null)
-                        GL.glNormal3d(N3.X,
-                                      N3.Y,
-                                      N3.Z);//頂點法向量
-                    GL.glVertex3d(P3.X,
-                                  P3.Y,
-                                  P3.Z);
-                    GL.glEnd(); //三角面終點
-                }
-                //邊線
-                if (this.SurfaceDisplayOption == SurfaceDisplayOptions.EdgeOnly || this.SurfaceDisplayOption == SurfaceDisplayOptions.SurfaceAndEdge)
-                {
-                    GL.glBegin(GL.GL_LINE_LOOP);
-                    GL.glVertex3d(P1.X,
-                                  P1.Y,
-                                  P1.Z);
-                    GL.glVertex3d(P2.X,
-                                  P2.Y,
-                                  P2.Z);
-                    GL.glVertex3d(P3.X,
-                                  P3.Y,
-                                  P3.Z);
-                    GL.glEnd();
-                }
-
-                if (this.CoordinateSystem != null)
-                {
-                    GL.glPopMatrix();
-                }
-            }
-        }
-
-        public override object Clone()
-        {
-            Triangle newTriangle = new Triangle()
-            {
-                Color = this._color,
-                CoordinateSystem = this.CoordinateSystem,
-                Visible = this.Visible
-            };
-            if (this.P1 != null)
-                newTriangle.P1 = this.P1.Clone() as XYZ4;
-            if (this.P2 != null)
-                newTriangle.P2 = this.P2.Clone() as XYZ4;
-            if (this.P3 != null)
-                newTriangle.P3 = this.P3.Clone() as XYZ4;
-            if (this.N1 != null)
-                newTriangle.N1 = this.N1.Clone() as XYZ3;
-            if (this.N2 != null)
-                newTriangle.N2 = this.N2.Clone() as XYZ3;
-            if (this.N3 != null)
-                newTriangle.N3 = this.N3.Clone() as XYZ3;
-
-            return newTriangle;
-        }
-
-        public override void Transform(double[,] TransformMatrix)
-        {
-            if (this.P1 != null) this.P1 = Transport(TransformMatrix, this.P1);
-            if (this.P2 != null) this.P2 = Transport(TransformMatrix, this.P2);
-            if (this.P3 != null) this.P3 = Transport(TransformMatrix, this.P3);
-            if (this.N1 != null) this.N1 = Transport(TransformMatrix, this.N1);
-            if (this.N2 != null) this.N2 = Transport(TransformMatrix, this.N2);
-            if (this.N3 != null) this.N3 = Transport(TransformMatrix, this.N3);
-        }
-    }
-    public class Cylinder : SurfaceEntity
-    {
-        public PointD axisStart;
-        public PointD axisEnd;
-        public double radius;
-        public int sliceNumber = 60;
-
-        public PointD AxisStart
-        {
-            get { return axisStart; }
-            set {
-                if (this.axisStart != value)
-                {
-                    this.axisStart = value;
-                }
-            }
-        }
-        public PointD AxisEnd
-        {
-            get { return axisEnd; }
-            set
-            {
-                if (this.axisEnd != value)
-                {
-                    this.axisEnd = value;
-                }
-            }
-        }
-        public double Radius
-        {
-            get { return radius; }
-            set
-            {
-                if (this.radius != value)
-                {
-                    this.radius = value;
-                }
-            }
-        }
-        public int SliceNumber
-        {
-            get { return sliceNumber; }
-            set {
-                if (this.sliceNumber != value)
-                {
-                    this.sliceNumber = value;
-                }
-            }
-        }
-
-        TopoFace face;
-
-        public override XYZ4[] Boundary
-        {
-            get
-            {
-                XYZ4[] boundary;
-
-                PointD p1 = Transport4(this.CoordinateSystem, this.AxisStart);
-                PointD p2 = Transport4(this.CoordinateSystem, this.AxisEnd);
-                XYZ3 axis = Normalize(p2 - p1);
-                Vector Nx = Cross(Cross(new XYZ3(1, 0, 0), axis), axis * radius);
-                Vector Ny = Cross(Cross(new XYZ3(0, 1, 0), axis), axis * radius);
-                Vector Nz = Cross(Cross(new XYZ3(0, 0, 1), axis), axis * radius);
-                List<PointD> pp = new List<PointD>();
-                pp.Add(p1 + Nx);
-                pp.Add(p1 - Nx);
-                pp.Add(p2 + Nx);
-                pp.Add(p2 - Nx);
-                pp.Add(p1 + Ny);
-                pp.Add(p1 - Ny);
-                pp.Add(p2 + Ny);
-                pp.Add(p2 - Ny);
-                pp.Add(p1 + Nz);
-                pp.Add(p1 - Nz);
-                pp.Add(p2 + Nz);
-                pp.Add(p2 - Nz);
-
-                boundary = new XYZ4[2] { Transport4(this.CoordinateSystem, pp[0]), Transport4(this.CoordinateSystem, pp[0]) };
-                for (int i = 1; i < pp.Count; i++)
-                    Compare_Boundary(boundary, Transport4(this.CoordinateSystem, pp[i]));
-                
-                return boundary;
-            }
-        }
-
-        public void RenderGeometry()
-        {
-            if (this.axisStart != null && axisEnd != null && this.radius != 0 && this.sliceNumber != 0)
-            {
-                this.face = new TopoFace() { Points = new XYZ4[2, sliceNumber], Normals = new XYZ3[2, sliceNumber]};
-
-                Vector axisDirection = AxisEnd - AxisStart;
-                Vector N1 = Cross(new Vector(0, 0, 1), axisDirection);
-                if (Norm(N1) == 0)
-                    N1 = Cross(new Vector(0, 1, 0), axisDirection);
-                N1 = Normalize(N1);
-
-                double dTheta = PI * 2.0 / (sliceNumber - 1);
-                double[,] M = IdentityMatrix(4);
-
-                for (int i = 0; i < sliceNumber; i++)
-                {
-                    M = RotateMatrix(axisDirection, dTheta * i);
-                    Vector n = Transport4(M, N1);
-                    Vector r = n * this.Radius;
-
-                    this.face.Normals[0, i] = n;
-                    this.face.Normals[1, i] = n;
-                    this.face.Points[0, i] = AxisStart + r;
-                    this.face.Points[1, i] = AxisEnd + r;
-                }
-            }
-        }
-
-        public override void PlotInOpenGL()
-        {
-            if (this.Visible == true && this.face != null)
-            {
-                if (this.CoordinateSystem != null)
-                {
-                    GL.glPushMatrix();
-                    GL.glMatrixMode(GL.GL_MODELVIEW);
-                    MultMatrixd(this.CoordinateSystem);
-                }
-
-                //面
-                if (this.SurfaceDisplayOption == SurfaceDisplayOptions.SurfaceOnly || this.SurfaceDisplayOption == SurfaceDisplayOptions.SurfaceAndEdge)
-                {
-                    if (this.face.Color != this.Color)
-                      this.face.Color = this.Color;
-                    this.face.PlotInOpenGL();
-                }
-                //邊線
-                if (this.SurfaceDisplayOption == SurfaceDisplayOptions.EdgeOnly || this.SurfaceDisplayOption == SurfaceDisplayOptions.SurfaceAndEdge)
-                {
-                    
-                }
-
-                if (this.CoordinateSystem != null)
-                {
-                    GL.glPopMatrix();
-                }
-            }
-        }
-
-        public override object Clone()
-        {
-            return new Cylinder()
-            {
-                AxisStart = this.AxisStart,
-                AxisEnd = this.AxisEnd,
-                Radius = this.Radius,
-                sliceNumber = this.sliceNumber,
-                Color = this._color
-            };
-        }
-
-        public override void Transform(double[,] TransformMatrix)
-        {
-            this.AxisStart.Transform(TransformMatrix);
-            this.AxisEnd.Transform(TransformMatrix);
-        }
-    }
-    public class TopoFace : SurfaceEntity,IToDXFEntity , IToDXFEntities
+    public class TopoFace : SurfaceEntity, IToDXFEntity, IToDXFEntities
     {
         public XYZ4[,] Points;
         public XYZ3[,] Normals;
@@ -446,24 +155,27 @@ namespace PTL.Geometry
             }
         }
 
+        protected void PlotNormal()
+        {
+            //畫法向量
+            glColor4d(System.Drawing.Color.LawnGreen);
+            for (int i = 0; i < Points.GetLength(0); i++)
+            {
+                for (int j = 0; j < Points.GetLength(1); j++)
+                {
+                    PointD p1 = Points[i, j];
+                    PointD p2 = Points[i, j] + Normals[i, j];
+                    GL.glBegin(GL.GL_LINE_STRIP);
+                    GL.glVertex3d(p1.X, p1.Y, p1.Z);
+                    GL.glVertex3d(p2.X, p2.Y, p2.Z);
+                    GL.glEnd();
+                }
+            }
+        }
+
         protected void PlotFace()
         {
             GL.glDisable(GL.GL_CULL_FACE);//關閉表面剔除選項
-
-            //畫法向量
-            //glColor4d(System.Drawing.Color.LawnGreen);
-            //for (int i = 0; i < Points.GetLength(0); i++)
-            //{
-            //    for (int j = 0; j < Points.GetLength(1); j++)
-            //    {
-            //        PointD p1 = Points[i, j];
-            //        PointD p2 = Points[i, j] + Normals[i, j];
-            //        GL.glBegin(GL.GL_LINE_STRIP);
-            //        GL.glVertex3d(p1.X, p1.Y, p1.Z);
-            //        GL.glVertex3d(p2.X, p2.Y, p2.Z);
-            //        GL.glEnd();
-            //    }
-            //}
 
             GL.glColor4d(this.Color.R / 255.0, this.Color.G / 255.0, this.Color.B / 255.0, this.Color.A / 255.0); //顏色
             for (int i = 0; i < (Points.GetLength(0) - 1); i++)
@@ -488,9 +200,6 @@ namespace PTL.Geometry
                 }
                 GL.glEnd();
             }
-
-            
-            
         }
 
         public netDxf.Entities.EntityObject ToDXFEntity()
@@ -543,7 +252,7 @@ namespace PTL.Geometry
                     netDxf.Entities.Line line =
                         new netDxf.Entities.Line(
                             new netDxf.Vector3(this.Points[i, j].Values),
-                            new netDxf.Vector3((this.Points[i, j] + this.Normals[i, j]*0.5).Values));
+                            new netDxf.Vector3((this.Points[i, j] + this.Normals[i, j] * 0.5).Values));
                     line.Color = netDxf.AciColor.Red;
                     entityList.Add(line);
                 }
@@ -619,7 +328,5 @@ namespace PTL.Geometry
 
             return new double[][,][] { pointArray, normalArray };
         }
-
-        
     }
 }

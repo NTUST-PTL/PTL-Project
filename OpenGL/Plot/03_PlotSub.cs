@@ -5,6 +5,7 @@ using System.Runtime.InteropServices;
 using PTL.Definitions;
 using PTL.Windows.Controls;
 using PTL.Geometry;
+using PTL.Geometry.MathModel;
 
 namespace PTL.OpenGL.Plot
 {
@@ -405,6 +406,49 @@ namespace PTL.OpenGL.Plot
             //Plot Arc
             PlotLine(PointSet);
         }
+        public static void PlotBox(XYZ4[] bound)
+        {
+            //畫邊界盒
+            if (bound == null || bound.Length != 2)
+                return;
+
+            glColor4d(System.Drawing.Color.LawnGreen);
+            var p1 = bound[0];
+            var p2 = bound[1];
+            if (p1 == null || p2 == null)
+                return;
+
+            GL.glBegin(GL.GL_LINE_STRIP);
+            GL.glVertex3d(p1.X, p1.Y, p1.Z);
+            GL.glVertex3d(p2.X, p1.Y, p1.Z);
+            GL.glVertex3d(p2.X, p2.Y, p1.Z);
+            GL.glVertex3d(p1.X, p2.Y, p1.Z);
+            GL.glVertex3d(p1.X, p1.Y, p1.Z);
+            GL.glEnd();
+            GL.glBegin(GL.GL_LINE_STRIP);
+            GL.glVertex3d(p1.X, p1.Y, p2.Z);
+            GL.glVertex3d(p2.X, p1.Y, p2.Z);
+            GL.glVertex3d(p2.X, p2.Y, p2.Z);
+            GL.glVertex3d(p1.X, p2.Y, p2.Z);
+            GL.glVertex3d(p1.X, p1.Y, p2.Z);
+            GL.glEnd();
+            GL.glBegin(GL.GL_LINE_STRIP);
+            GL.glVertex3d(p1.X, p1.Y, p1.Z);
+            GL.glVertex3d(p1.X, p1.Y, p2.Z);
+            GL.glEnd();
+            GL.glBegin(GL.GL_LINE_STRIP);
+            GL.glVertex3d(p2.X, p1.Y, p1.Z);
+            GL.glVertex3d(p2.X, p1.Y, p2.Z);
+            GL.glEnd();
+            GL.glBegin(GL.GL_LINE_STRIP);
+            GL.glVertex3d(p1.X, p2.Y, p1.Z);
+            GL.glVertex3d(p1.X, p2.Y, p2.Z);
+            GL.glEnd();
+            GL.glBegin(GL.GL_LINE_STRIP);
+            GL.glVertex3d(p2.X, p2.Y, p1.Z);
+            GL.glVertex3d(p2.X, p2.Y, p2.Z);
+            GL.glEnd();
+        }
         #endregion
-   }
+    }
 }

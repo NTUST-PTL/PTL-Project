@@ -12,7 +12,7 @@ using PTL.Geometry.MathModel;
 
 namespace PTL.Geometry
 {
-    public class Line : LineArchitectureEntity, ICanBeWritedToDXFFile, ICanBeWritedToScriptFile, IToDXFEntity
+    public class Line : LineArchitectureEntity, ICanBeWritedToDXFFile, IScriptFile, IToDXFEntity
     {
         public PointD p1;
         public PointD p2;
@@ -157,7 +157,7 @@ namespace PTL.Geometry
             };
         }
     }
-    public class PolyLine : LineArchitectureEntity, ICanBeWritedToDXFFile, ICanBeWritedToScriptFile, IToDXFEntity
+    public class PolyLine : LineArchitectureEntity, ICanBeWritedToDXFFile, IScriptFile, IToDXFEntity
     {
         public List<XYZ4> Points = new List<XYZ4>();
 
@@ -405,7 +405,7 @@ namespace PTL.Geometry
             this.Function = function2;
         }
     }
-    public class Circle : LineArchitectureEntity, ICanBeWritedToDXFFile, ICanBeWritedToScriptFile, IToDXFEntity
+    public class Circle : LineArchitectureEntity, ICanBeWritedToDXFFile, IScriptFile, IToDXFEntity
     {
         public PointD Center;
         public double Radius;
@@ -546,7 +546,7 @@ namespace PTL.Geometry
             };
         }
     }
-    public class Arc : LineArchitectureEntity, ICanBeWritedToDXFFile, ICanBeWritedToScriptFile, IToDXFEntity
+    public class Arc : LineArchitectureEntity, ICanBeWritedToDXFFile, IScriptFile, IToDXFEntity
     {
         //欄位，作為圓弧的實際定義
         public PointD Center;
@@ -745,7 +745,7 @@ namespace PTL.Geometry
             return dxfArc;
         }
     }
-    public class Ellipse : LineArchitectureEntity, ICanBeWritedToDXFFile, ICanBeWritedToScriptFile
+    public class Ellipse : LineArchitectureEntity, ICanBeWritedToDXFFile, IScriptFile
     {
         //欄位，作為橢圓的實際定義
         private PointD fCenter;
@@ -934,7 +934,7 @@ namespace PTL.Geometry
             this.fNormal.Transform(TransformMatrix);
         }
     }
-    public class Text : Entity, IHaveColor, ICanBeWritedToDXFFile, ICanBeWritedToScriptFile
+    public class Text : Entity, IHaveColor, ICanBeWritedToDXFFile, IScriptFile
     {
         public string Value = "Input Text";//Text
 
@@ -1083,7 +1083,7 @@ namespace PTL.Geometry
             this.RefPoint.Transform(TransformMatrix);
         }
     }
-    public class AlignedDimension : Entity, IHaveColor, ICanBeWritedToDXFFile, ICanBeWritedToScriptFile, IToDXFEntity
+    public class AlignedDimension : Entity, IHaveColor, ICanBeWritedToDXFFile, IScriptFile, IToDXFEntity
     {
         public double Value { get { return Norm(Startpn - Endpn); } }
         public PointD Startpn = new PointD();
@@ -1384,7 +1384,7 @@ namespace PTL.Geometry
             };
         }
     }
-    public class RadialDimension : Entity, IHaveColor, ICanBeWritedToDXFFile, ICanBeWritedToScriptFile, IToDXFEntity
+    public class RadialDimension : Entity, IHaveColor, ICanBeWritedToDXFFile, IScriptFile, IToDXFEntity
     {
         public double Value { get { return Norm(Startpn - Endpn); } }
         public PointD Startpn = new PointD();
@@ -1607,7 +1607,7 @@ namespace PTL.Geometry
             };
         }
     }
-    public class DiametricDimension : Entity, IHaveColor, ICanBeWritedToDXFFile, ICanBeWritedToScriptFile, IToDXFEntity
+    public class DiametricDimension : Entity, IHaveColor, ICanBeWritedToDXFFile, IScriptFile, IToDXFEntity
     {
         public double Value { get { return Norm(Startpn - Endpn); } }
         public PointD Startpn = new PointD();

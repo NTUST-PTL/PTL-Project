@@ -49,7 +49,6 @@ namespace PTL.Geometry
             }
         }
 
-        #region ICanPlotInOpenGL 成員
         public override void PlotInOpenGL()
         {
             if (this.Visible == true)
@@ -66,21 +65,24 @@ namespace PTL.Geometry
                     if (aEntity is ICanPlotInOpenGL)
                         (aEntity as ICanPlotInOpenGL).PlotInOpenGL();
                 }
-
                 if (this.CoordinateSystem != null)
                 {
                     GL.glPopMatrix();
                 }
             }
         }
-        #endregion
 
         public XYZ4[] boundary;
         public override XYZ4[] Boundary
         {
             get
             {
-                return boundary;
+                if (this.CoordinateSystem == null)
+                    return boundary;
+                else
+                {
+                    return Transport(this.CoordinateSystem, boundary).ToArray();
+                }
             }
         }
 
@@ -89,25 +91,12 @@ namespace PTL.Geometry
             XYZ4[] newboundary = this.boundary;
             if (Entities.Count != 0)
             {
-                if (this.CoordinateSystem != null)
+                XYZ4[] eboundary;
+                foreach (Entity aEntity in entities)
                 {
-                    XYZ4[] eboundary;
-                    foreach (Entity aEntity in entities)
-                    {
-                        eboundary = Transport(this.CoordinateSystem, aEntity.Boundary).ToArray();
-                        Compare_Boundary(newboundary, eboundary[0]);
-                        Compare_Boundary(newboundary, eboundary[1]);
-                    }
-                }
-                else
-                {
-                    XYZ4[] eboundary;
-                    foreach (Entity aEntity in entities)
-                    {
-                        eboundary = aEntity.Boundary;
-                        Compare_Boundary(newboundary, eboundary[0]);
-                        Compare_Boundary(newboundary, eboundary[1]);
-                    }
+                    eboundary = aEntity.Boundary;
+                    Compare_Boundary(newboundary, eboundary[0]);
+                    Compare_Boundary(newboundary, eboundary[1]);
                 }
             }
             this.boundary = newboundary;
