@@ -93,6 +93,8 @@
     <Compile Include="Definitions\DXFLineTypeConverter.cs" />
     <Compile Include="Definitions\Dimension.cs" />
     <Compile Include="Definitions\LineType.cs" />
+    <Compile Include="Exceptions\ArraySizeMismatchException.cs" />
+    <Compile Include="Exceptions\TypeMismatchException.cs" />
     <Compile Include="Geometry\Part.cs" />
     <Compile Include="Geometry\STL.cs" />
     <Compile Include="Geometry\EntityCollection.cs" />
@@ -115,6 +117,7 @@
     <Compile Include="Geometry\MathModel\XYZ4.cs" />
     <Compile Include="Geometry\RadialAngleClassifier.cs" />
     <Compile Include="Geometry\WPFExtensions\WPFExtensions.cs" />
+    <Compile Include="Exceptions\ArrayDimensionMismatchException.cs" />
     <Compile Include="Mathematics\ProtectedMath.cs" />
     <Compile Include="Mathematics\Math.cs" />
     <Compile Include="Measurement\STLMeasuringTool_P40.cs" />

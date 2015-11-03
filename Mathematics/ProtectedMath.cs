@@ -550,6 +550,10 @@ namespace PTL.Mathematics
                 }
             }
         }
+        public static Array ArratJoin(Array arr1, Array arr2, int dim = 0)
+        {
+            return PTLM.ArratJoin(arr1, arr2, dim);
+        }
 
         protected static double[,] RotateMatrix(Axis axis, double theta)
         {

@@ -55,6 +55,7 @@ namespace PTL.Geometry
     {
         LineType LineType { get; set; }
         float LineWidth { get; set; }
+        int LineTypefactor { get; set; }
     }
     public interface IHaveParent
     {
@@ -179,6 +180,7 @@ namespace PTL.Geometry
     {
         private LineType fLineType = LineType.Solid;
         private float fLineWidth = 0.8f;
+        private int fLineTypefactor = 3;
 
         public virtual LineType LineType
         {
@@ -201,6 +203,17 @@ namespace PTL.Geometry
                 return this.fLineWidth;
             }
             set { this.fLineWidth = value; }
+        }
+        public virtual int LineTypefactor
+        {
+            get
+            {
+                if (this.fLineTypefactor <= 0 && this.Parent != null)
+                    if (this.Parent is IIsLineArchitecture)
+                        return (this.Parent as IIsLineArchitecture).LineTypefactor;
+                return this.fLineTypefactor;
+            }
+            set { this.fLineTypefactor = value; }
         }
     }
 

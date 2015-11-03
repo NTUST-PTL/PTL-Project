@@ -110,7 +110,7 @@ namespace PTL.Geometry
                 }
                 //Line Style
                 glLineWidth(this.LineWidth);
-                SetLineType(this.LineType);
+                SetLineType(this.LineType, LineTypefactor);
                 glColor4d(this.Color);
 
                 //Draw Line
@@ -133,6 +133,7 @@ namespace PTL.Geometry
             aLine.Color = this._color;
             aLine.LineType = this.LineType;
             aLine.LineWidth = this.LineWidth;
+            aLine.LineTypefactor = this.LineTypefactor;
 
             aLine.p1 = (PointD)this.p1.Clone();
             aLine.p2 = (PointD)this.p2.Clone();
@@ -280,7 +281,7 @@ namespace PTL.Geometry
                 }
                 //Line Style
                 glLineWidth(this.LineWidth);
-                SetLineType(this.LineType);
+                SetLineType(this.LineType, LineTypefactor);
                 glColor3d(this.Color);
 
                 //Draw Line
@@ -303,6 +304,7 @@ namespace PTL.Geometry
             aPolyLine.Color = this._color;
             aPolyLine.LineType = this.LineType;
             aPolyLine.LineWidth = this.LineWidth;
+            aPolyLine.LineTypefactor = this.LineTypefactor;
 
             int nump = this.Points.Count;
             aPolyLine.Points = new List<XYZ4>();
@@ -377,6 +379,7 @@ namespace PTL.Geometry
                 Color = this._color,
                 LineType = this.LineType,
                 LineWidth = this.LineWidth,
+                LineTypefactor = this.LineTypefactor,
                 Function = this.Function};
             aParaLine.TT = new List<double>();
             foreach (var t in this.TT)
@@ -488,7 +491,7 @@ namespace PTL.Geometry
                 }
                 //Line Style
                 glLineWidth(this.LineWidth);
-                SetLineType(this.LineType);
+                SetLineType(this.LineType, this.LineTypefactor);
                 glColor3d(this.Color);
 
                 int nump = 360;
@@ -519,6 +522,7 @@ namespace PTL.Geometry
             aCircle.Color = this._color;
             aCircle.LineType = this.LineType;
             aCircle.LineWidth = this.LineWidth;
+            aCircle.LineTypefactor = this.LineTypefactor;
 
             aCircle.Center = (PointD)this.Center.Clone();
             aCircle.Radius = this.Radius;
@@ -678,6 +682,7 @@ namespace PTL.Geometry
             aArc.Color = this._color;
             aArc.LineType = this.LineType;
             aArc.LineWidth = this.LineWidth;
+            aArc.LineTypefactor = this.LineTypefactor;
 
             aArc.Center = (PointD)this.Center.Clone();
             aArc.Radius = this.Radius;
@@ -699,7 +704,7 @@ namespace PTL.Geometry
                 }
                 //Line Style
                 glLineWidth(this.LineWidth);
-                SetLineType(this.LineType);
+                SetLineType(this.LineType, this.LineTypefactor);
                 glColor3d(this.Color);
 
                 PlotArc(this.Center, this.Radius, this.StartAng, this.EndAng);
@@ -803,7 +808,7 @@ namespace PTL.Geometry
         public Ellipse(PointD center, Vector majorDirection, Vector minorDirection, Double ra, double rb)
         {
             this.fCenter = center;
-            this.fEndPointOfMajorAxis = (Vector)Normalize(majorDirection) * Ra;
+            this.fEndPointOfMajorAxis = (new Vector(Normalize(majorDirection))) * Ra;
             this.fNormal = Cross(majorDirection, minorDirection);
             this.fRatio = rb / ra;
         }
@@ -878,6 +883,7 @@ namespace PTL.Geometry
             aEllipse.Color = this._color;
             aEllipse.LineType = this.LineType;
             aEllipse.LineWidth = this.LineWidth;
+            aEllipse.LineTypefactor = this.LineTypefactor;
             return aEllipse;
         }
 
@@ -893,7 +899,7 @@ namespace PTL.Geometry
                 }
                 //Line Style
                 glLineWidth(this.LineWidth);
-                SetLineType(this.LineType);
+                SetLineType(this.LineType, this.LineTypefactor);
                 glColor3d(this.Color);
 
                 int nump = 21;

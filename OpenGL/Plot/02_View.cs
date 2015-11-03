@@ -387,7 +387,7 @@ namespace PTL.OpenGL.Plot
 
             this.geometryBoundary = new XYZ4[2];
             this.viewBoundary = new XYZ4[2];
-            this.BackGroundColor = Color.FromArgb(90, 90, 90);
+            this.BackGroundColor = Color.FromArgb(50, 50, 50);
 
             this.BoundaryGap = 0.2;
 

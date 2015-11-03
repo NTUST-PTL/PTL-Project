@@ -21,19 +21,55 @@ namespace PTL.Geometry.MathModel
 
         public void Calculate_NURBS_Curve(XYZ4[] dataPoints, bool closed = false)
         {
-            DataPoints = dataPoints.ToArray();
+            #region 計算R矩陣
+            int n = dataPoints.Length;
+            XYZ3 T1, T2;
+            if (n == 2)
+            {
+                T1 = (dataPoints[1] - dataPoints[0]) / 3.0;
+                T2 = (dataPoints[0] - dataPoints[1]) / 3.0;
+            }
+            else if (closed)
+            {
+                XYZ4 a0 = dataPoints[1] - dataPoints[0];
+                XYZ4 b0 = dataPoints[n - 2] - dataPoints[0];
+                XYZ4 c0 = Cross(a0, b0);
+                XYZ4 r0 = (Norm(a0) * Norm(a0) * (XYZ4)Cross(b0, c0) + Norm(b0) * Norm(b0) * (XYZ4)Cross(c0, a0)) / (2 * GetLength(c0) * GetLength(c0));
+                T1 = GetLength(a0) * (XYZ4)Cross(r0, c0) / GetLength(Cross(r0, c0));
+                T2 = T1;
+            }
+            else
+            {
+                XYZ4 a0 = dataPoints[1] - dataPoints[0];
+                XYZ4 b0 = dataPoints[2] - dataPoints[0];
+                XYZ4 c0 = Cross(a0, b0);
+                XYZ4 r0 = (Norm(a0) * Norm(a0) * (XYZ4)Cross(b0, c0) + Norm(b0) * Norm(b0) * (XYZ4)Cross(c0, a0)) / (2 * GetLength(c0) * GetLength(c0));
+                T1 = GetLength(a0) * (XYZ4)Cross(r0, c0) / GetLength(Cross(r0, c0));
+                XYZ4 an = dataPoints[n - 2] - dataPoints[n - 1];
+                XYZ4 bn = dataPoints[n - 3] - dataPoints[n - 1];
+                XYZ4 cn = Cross(an, bn);
+                XYZ4 rn = (GetLength(an) * GetLength(an) * (XYZ4)Cross(bn, cn) + GetLength(bn) * GetLength(bn) * (XYZ4)Cross(cn, an)) / (2 * GetLength(cn) * GetLength(cn));
+                T2 = -1.0 * GetLength(an) * (XYZ4)Cross(rn, cn) / GetLength(Cross(rn, cn));
+            }
+            #endregion
+            Calculate_NURBS_Curve(dataPoints, T1, T2);
+        }
+
+        public void Calculate_NURBS_Curve(XYZ4[] dataPoints, XYZ3 startTangent, XYZ3 endTangent)
+        {
+            DataPoints = dataPoints;
             int n = DataPoints.Length;
             this.LastSegmentIndex = n - 2;
             double[,] M = ZeroMatrix(n + 2, n + 2);
-            XYZ4[,] R = new XYZ4[n + 2, 1];
+            
             double[,] invM;
 
             #region 計算弦長
             Delta_i = new double[n + 3];
             Delta_i[0] = 0;
             Delta_i[1] = 0;
-            Delta_i[n+1] = 0;
-            Delta_i[n+1+1] = 0;
+            Delta_i[n + 1] = 0;
+            Delta_i[n + 1 + 1] = 0;
             for (int i = 0; i < n - 1; i++)
             {
                 Delta_i[i + 2] = Norm((DataPoints[i + 1] - DataPoints[i]).Values);
@@ -44,9 +80,9 @@ namespace PTL.Geometry.MathModel
             M[0, 0] = -3;
             M[0, 1] = 3;
             M[1, 0] = 1;
-            M[n, n+1] = 1;
-            M[n+1, n] = -3;
-            M[n+1, n+1] = 3;
+            M[n, n + 1] = 1;
+            M[n + 1, n] = -3;
+            M[n + 1, n + 1] = 3;
             for (int i = 1; i < n - 1; i++)
             {
                 int i_d = i + 2;
@@ -65,29 +101,9 @@ namespace PTL.Geometry.MathModel
             #endregion
 
             #region 計算R矩陣
-            if (n == 2)
-            {
-                R[0, 0] = (DataPoints[1] - DataPoints[0]) / 3.0;
-                R[n + 1, 0] = (DataPoints[0] - DataPoints[1]) / 3.0;
-            }
-            else if(closed)
-            {
-                throw new NotImplementedException();
-            }
-            else
-            {
-                XYZ4 a0 = DataPoints[1] - DataPoints[0];
-                XYZ4 b0 = DataPoints[2] - DataPoints[0];
-                XYZ4 c0 = Cross(a0, b0);
-                XYZ4 r0 = (Norm(a0) * Norm(a0) * (XYZ4)Cross(b0, c0) + Norm(b0) * Norm(b0) * (XYZ4)Cross(c0, a0)) / (2 * GetLength(c0) * GetLength(c0));
-                R[0, 0] = GetLength(a0) * (XYZ4)Cross(r0, c0) / GetLength(Cross(r0, c0));
-                XYZ4 an = DataPoints[n - 2] - DataPoints[n - 1];
-                XYZ4 bn = DataPoints[n - 3] - DataPoints[n - 1];
-                XYZ4 cn = Cross(an, bn);
-                XYZ4 rn = (GetLength(an) * GetLength(an) * (XYZ4)Cross(bn, cn) + GetLength(bn) * GetLength(bn) * (XYZ4)Cross(cn, an)) / (2 * GetLength(cn) * GetLength(cn));
-                R[n + 1, 0] = -1.0 * GetLength(an) * (XYZ4)Cross(rn, cn) / GetLength(Cross(rn, cn));
-            }
-
+            XYZ4[,] R = new XYZ4[n + 2, 1];
+            R[0, 0] = startTangent;
+            R[n + 1, 0] = endTangent;
             for (int i = 0; i < n; i++)
             {
                 int i_M = i + 1;
@@ -96,8 +112,8 @@ namespace PTL.Geometry.MathModel
             #endregion
 
             #region 計算每個線段的N矩陣
-            Ni = new double[n-1][,];
-            for (int i = 0; i < n-1; i++)
+            Ni = new double[n - 1][,];
+            for (int i = 0; i < n - 1; i++)
             {
                 Ni[i] = GetNci(i, false);
             }
@@ -122,94 +138,6 @@ namespace PTL.Geometry.MathModel
                 }
             }
             #endregion
-
-            #region 長度計算
-            //this.TotalChordLength = delta_i.Sum();
-            ////this.TotalLength = GetTotalLength(10000);
-
-            //this.segmentLengthes = new double[DataPoints.Length - 1];
-            //for (int i = 0; i < DataPoints.Length - 1; i++)
-            //{
-            //    currentSegmentsIndex = i;
-            //    this.segmentLengthes[i] = Integration.trapzd(SpeedFunc4CaIntegration, 0, 1, 10000);
-            //    this.TotalLength += this.segmentLengthes[i];
-            //}
-            #endregion
-
-            #region Debug
-            //if (DataOutput)
-            //{
-            //    //Print Knot spans(chord length)
-            //    Console.WriteLine("");
-            //    Console.WriteLine("Knot spans = ");
-            //    foreach (var item in delta_i)
-            //    {
-            //        Console.WriteLine(item.ToString("0.000000"));
-            //    }
-            //    //Print M
-            //    Console.WriteLine("");
-            //    Console.WriteLine("M = ");
-            //    Console.WriteLine("{");
-            //    for (int i = 0; i < M.GetLength(0); i++)
-            //    {
-            //        Console.Write("{");
-            //        for (int j = 0; j < M.GetLength(1); j++)
-            //        {
-            //            Console.Write("\t");
-            //            Console.Write(M[i, j].ToString("0.000000"));
-            //            if (j != (M.GetLength(1) - 1))
-            //            {
-            //                Console.Write(",");
-            //            }
-            //        }
-            //        Console.Write("}");
-            //        if (i != (M.GetLength(0) - 1))
-            //        {
-            //            Console.WriteLine(",");
-            //        }
-            //    }
-            //    Console.WriteLine("}");
-            //    //Print R
-            //    Console.WriteLine("");
-            //    Console.WriteLine("R = ");
-            //    foreach (var item in R)
-            //    {
-            //        Console.WriteLine("{" + item.X.ToString("0.000000") + ",\t\t" + item.Y.ToString("0.000000") + ",\t\t" + item.Z.ToString("0.000000") + "}");
-            //    }
-            //    Console.WriteLine("}");
-            //    //Print invM
-            //    Console.WriteLine("");
-            //    Console.WriteLine("invM = ");
-            //    Console.WriteLine("{");
-            //    for (int i = 0; i < invM.GetLength(0); i++)
-            //    {
-            //        Console.Write("{");
-            //        for (int j = 0; j < invM.GetLength(1); j++)
-            //        {
-            //            Console.Write("\t");
-            //            Console.Write(invM[i, j].ToString("0.000000"));
-            //            if (j != (invM.GetLength(1) - 1))
-            //            {
-            //                Console.Write(",");
-            //            }
-            //        }
-            //        Console.Write("}");
-            //        if (i != (invM.GetLength(0) - 1))
-            //        {
-            //            Console.WriteLine(",");
-            //        }
-            //    }
-            //    Console.WriteLine("");
-            //    Console.WriteLine("}");
-            //    //Print Control Points
-            //    Console.WriteLine("");
-            //    Console.WriteLine("Control Points = ");
-            //    foreach (var item in ControlPoints)
-            //    {
-            //        Console.WriteLine("{" + item.X.ToString("0.000000") + ",\t\t" + item.Y.ToString("0.000000") + ", \t\t" + item.Z.ToString("0.000000") + "}");
-            //    }
-            //}
-            #endregion Debug
         }
 
         private double[,] GetNci(int segmentsIndex, bool print)
