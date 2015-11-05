@@ -19,14 +19,17 @@ namespace PTL.Base
             this.V = value;
         }
 
-        protected T _V;
+        public T _V;
         public virtual T V
         {
             get { return _V; }
             set
             {
-                this._V = value;
-                NoticeChange();
+                if (this._V?.GetHashCode() != value?.GetHashCode())
+                {
+                    this._V = value;
+                    NoticeChange("V");
+                }
             }
         }
 
@@ -43,12 +46,12 @@ namespace PTL.Base
             this.V = value;
         }
 
-        public void NoticeChange()
+        public void NoticeChange(String propertyName)
         {
             foreach (var observer in Observers)
                 observer.NoticeChange();
             if (this.PropertyChanged != null)
-                this.PropertyChanged(this, new PropertyChangedEventArgs("V"));
+                this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
         }
 
         public void LinkWith(params Link<T>[] links)

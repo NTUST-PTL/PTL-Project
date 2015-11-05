@@ -264,7 +264,7 @@ namespace PTL.OpenGL.Plot
             if (this._Boundary_Changed_NeedCheck)
                 CheckBoundary();
             OpenGLWindow.Refresh();
-            Things2Show.NoticeChange();
+            Things2Show.NoticeChange("V");
         }
 
 

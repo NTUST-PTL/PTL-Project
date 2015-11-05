@@ -7,43 +7,153 @@ using System.Threading.Tasks;
 
 namespace PTL.ReflectionExtensions
 {
-    public class ReflectionExtension
+    public static class ReflectionExtension
     {
-        public static object GetMemberByPath(this object obj, String path)
+        public static object GetValueByPath(this Type type, object obj, String path)
         {
-            Type currentType = o.GetType();
+            if (type == null)
+                throw new ArgumentNullException("type");
+            if (obj == null)
+                throw new ArgumentNullException("obj");
+            if (type != obj.GetType())
+                throw new ArgumentException("type is not type of obj");
+            if (path == null)
+                throw new ArgumentNullException("path");
 
-            foreach (var elementName in path.Split('.'))
+            String[] sectors = path.Split('.');
+            for (int i = 0; i < sectors.Length; i++)
             {
-                MemberInfo elementInfo = currentType.GetMember(elementName).First();
-                switch (elementInfo.MemberType)
+                String elementName = sectors[i];
+                MemberInfo memberInfo = type.GetMember(elementName)?.First();
+
+                switch (memberInfo.MemberType)
                 {
                     case MemberTypes.Constructor:
-                        break;
+                        throw new InvalidOperationException(elementName + " is a Constructor");
                     case MemberTypes.Event:
-                        break;
+                        throw new InvalidOperationException(elementName + " is a Event");
                     case MemberTypes.Field:
+                        obj = ((FieldInfo)memberInfo).GetValue(obj);
                         break;
                     case MemberTypes.Method:
-                        break;
+                        throw new InvalidOperationException(elementName + " is a Constructor");
                     case MemberTypes.Property:
+                        obj = ((PropertyInfo)memberInfo).GetValue(obj);
                         break;
                     case MemberTypes.TypeInfo:
-                        break;
+                        throw new InvalidOperationException(elementName + " is a TypeInfo");
                     case MemberTypes.Custom:
-                        break;
+                        throw new InvalidOperationException(elementName + " is Custom???");
                     case MemberTypes.NestedType:
-                        break;
+                        throw new InvalidOperationException(elementName + " is  NestedType");
                     case MemberTypes.All:
-                        break;
+                        throw new NotSupportedException("Unsure member type");
                     default:
-                        break;
+                        throw new NotSupportedException("Unkown member type");
                 }
-                if (elementInfo.MemberType == MemberTypes.Constructor )
+                if (i == sectors.Length - 1)
                 {
-
-                } 
+                    return obj;
+                }
+                else
+                {
+                    if (obj == null)
+                        throw new NullReferenceException();
+                    type = obj.GetType();
+                }
+                
             }
+            return obj;
+        }
+
+        public static object GetValueByPath(this object obj, String path)
+        {
+            return GetValueByPath(obj.GetType(), obj, path);
+        }
+
+        public static void SetValueByPath(this Type type, object obj, String path, object value)
+        {
+            if (type == null)
+                throw new ArgumentNullException("type");
+            if (obj == null)
+                throw new ArgumentNullException("obj");
+            if (type != obj.GetType())
+                throw new ArgumentException("type is not type of obj");
+            if (path == null)
+                throw new ArgumentNullException("path");
+
+            String[] sectors = path.Split('.');
+            for (int i = 0; i < sectors.Length; i++)
+            {
+                String elementName = sectors[i];
+                MemberInfo memberInfo = type.GetMember(elementName)?.First();
+
+                if (i != sectors.Length - 1)
+                {
+                    switch (memberInfo.MemberType)
+                    {
+                        case MemberTypes.Constructor:
+                            throw new InvalidOperationException(elementName + " is a Constructor");
+                        case MemberTypes.Event:
+                            throw new InvalidOperationException(elementName + " is a Event");
+                        case MemberTypes.Field:
+                            obj = ((FieldInfo)memberInfo).GetValue(obj);
+                            break;
+                        case MemberTypes.Method:
+                            throw new InvalidOperationException(elementName + " is a Constructor");
+                        case MemberTypes.Property:
+                            obj = ((PropertyInfo)memberInfo).GetValue(obj);
+                            break;
+                        case MemberTypes.TypeInfo:
+                            throw new InvalidOperationException(elementName + " is a TypeInfo");
+                        case MemberTypes.Custom:
+                            throw new InvalidOperationException(elementName + " is Custom???");
+                        case MemberTypes.NestedType:
+                            throw new InvalidOperationException(elementName + " is  NestedType");
+                        case MemberTypes.All:
+                            throw new NotSupportedException("Unsure member type");
+                        default:
+                            throw new NotSupportedException("Unkown member type");
+                    }
+                    if (obj == null)
+                        throw new NullReferenceException();
+                    type = obj.GetType();
+                }
+                else
+                {
+                    switch (memberInfo.MemberType)
+                    {
+                        case MemberTypes.Constructor:
+                            throw new InvalidOperationException(elementName + " is a Constructor");
+                        case MemberTypes.Event:
+                            throw new InvalidOperationException(elementName + " is a Event");
+                        case MemberTypes.Field:
+                            ((FieldInfo)memberInfo).SetValue(obj, value);
+                            break;
+                        case MemberTypes.Method:
+                            throw new InvalidOperationException(elementName + " is a Constructor");
+                        case MemberTypes.Property:
+                            ((PropertyInfo)memberInfo).SetValue(obj, value);
+                            break;
+                        case MemberTypes.TypeInfo:
+                            throw new InvalidOperationException(elementName + " is a TypeInfo");
+                        case MemberTypes.Custom:
+                            throw new InvalidOperationException(elementName + " is Custom???");
+                        case MemberTypes.NestedType:
+                            throw new InvalidOperationException(elementName + " is  NestedType");
+                        case MemberTypes.All:
+                            throw new NotSupportedException("Unsure member type");
+                        default:
+                            throw new NotSupportedException("Unkown member type");
+                    }
+                }
+
+            }
+        }
+
+        public static void SetValueByPath(this object obj, String path, object value)
+        {
+            SetValueByPath(obj.GetType(), obj, path, value);
         }
     }
 }

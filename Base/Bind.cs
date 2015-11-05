@@ -1,10 +1,12 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Windows.Data;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using PTL.ReflectionExtensions;
 
 namespace PTL.Base
 {
@@ -29,21 +31,37 @@ namespace PTL.Base
             link.ValueChanged -= source.BindedValueChanged;
         }
 
-        public static void SetBinding(INotifyPropertyChanged element1, String path1, INotifyPropertyChanged element2, String Path2)
+        public static void SetBinding(
+            INotifyPropertyChanged element1, 
+            String path1, 
+            INotifyPropertyChanged element2, 
+            String path2, 
+            Func<object, object> ConvertValeToType2 = null,
+            Func<object, object> ConvertValeToType1 = null)
         {
-            if (element1 == null || path1 == null || element2 == null || Path2 == null)
+            if (element1 == null || path1 == null || element2 == null || path2 == null)
                 return;
 
-            PropertyChangedEventHandler element1PropertyChanged =
+            element1.PropertyChanged +=
                 (o, e) =>
                 {
                     if (e.PropertyName != path1)
                         return;
-                    Type element1Type = o.GetType();
-                    Type element2Type = element2.GetType();
-                    element1Type.
+                    if (ConvertValeToType2 == null)
+                        element2.SetValueByPath(path2, o.GetValueByPath(path1));
+                    else
+                        element2.SetValueByPath(path2, ConvertValeToType2(o.GetValueByPath(path1)));
                 };
-
+            element2.PropertyChanged +=
+                (obj, e) =>
+                {
+                    if (e.PropertyName != path2)
+                        return;
+                    if (ConvertValeToType1 == null)
+                        element1.SetValueByPath(path1, obj.GetValueByPath(path1));
+                    else
+                        element1.SetValueByPath(path1, ConvertValeToType1(obj.GetValueByPath(path1)));
+                };
         }
     }
 }
