@@ -84,6 +84,7 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ReflectionExtensions\ReflectionExtension.cs" />
     <Compile Include="Base\Source.cs" />
     <Compile Include="Base\Link.cs" />
     <Compile Include="Base\Bind.cs" />
@@ -95,8 +96,12 @@
     <Compile Include="Definitions\LineType.cs" />
     <Compile Include="Exceptions\ArraySizeMismatchException.cs" />
     <Compile Include="Exceptions\TypeMismatchException.cs" />
+    <Compile Include="Geometry\AlignedDimension.cs" />
+    <Compile Include="Geometry\Arc.cs" />
+    <Compile Include="Geometry\Circle.cs" />
     <Compile Include="Geometry\CubicSpace.cs" />
     <Compile Include="Geometry\Cylinder.cs" />
+    <Compile Include="Geometry\Ellipse.cs" />
     <Compile Include="Geometry\Entity.cs" />
     <Compile Include="Geometry\ICanBeWritedToDXFFile.cs" />
     <Compile Include="Geometry\ICanPlotInOpenGL.cs" />
@@ -113,20 +118,25 @@
     <Compile Include="Geometry\IToDXFEntities.cs" />
     <Compile Include="Geometry\IToDXFEntity.cs" />
     <Compile Include="Geometry\ITransformable.cs" />
+    <Compile Include="Geometry\Line.cs" />
     <Compile Include="Geometry\LineArchitectureEntity.cs" />
+    <Compile Include="Geometry\ParaLine.cs" />
     <Compile Include="Geometry\Part.cs" />
+    <Compile Include="Geometry\PolyLine.cs" />
+    <Compile Include="Geometry\RadialDimension.cs" />
     <Compile Include="Geometry\STL.cs" />
     <Compile Include="Geometry\EntityCollection.cs" />
     <Compile Include="Geometry\IDXF.cs" />
     <Compile Include="Geometry\SurfaceEntity.cs" />
     <Compile Include="Geometry\IScriptFile.cs" />
     <Compile Include="Geometry\SurfaceDisplayOptions.cs" />
+    <Compile Include="Geometry\Text.cs" />
     <Compile Include="Geometry\TopoFace.cs" />
     <Compile Include="Geometry\Triangle.cs" />
     <Compile Include="Geometry\Vector.cs" />
     <Compile Include="Geometry\Visibility.cs" />
     <Compile Include="Geometry\PointD.cs" />
-    <Compile Include="Geometry\04_1D.cs" />
+    <Compile Include="Geometry\DiametricDimension.cs" />
     <Compile Include="Geometry\Layer.cs" />
     <Compile Include="Geometry\PTLConvert.cs" />
     <Compile Include="Geometry\CubicClassifier.cs" />
@@ -249,12 +259,6 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <AppDesigner Include="Properties\" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\mathnet-PTL\src\Numerics\Numerics.csproj">
-      <Project>{b7cae5f4-a23f-4438-b5be-41226618b695}</Project>
-      <Name>Numerics</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -114,31 +114,31 @@ namespace PTL.Base.DataType
         }
 
         #region 隱含轉換為 其他型別
-        public static implicit operator decimal(IntNVU v)
+        public static implicit operator decimal (IntNVU v)
         {
             return Convert.ToDecimal(v.V);
         }
-        public static implicit operator double(IntNVU v)
+        public static implicit operator double (IntNVU v)
         {
             return Convert.ToDouble(v.V);
         }
-        public static implicit operator float(IntNVU v)
+        public static implicit operator float (IntNVU v)
         {
             return Convert.ToSingle(v.V);
         }
-        public static implicit operator long(IntNVU v)
+        public static implicit operator long (IntNVU v)
         {
             return Convert.ToInt64(v.V);
         }
-        public static implicit operator int(IntNVU v)
+        public static implicit operator int (IntNVU v)
         {
             return Convert.ToInt32(v.V);
         }
-        public static explicit operator short(IntNVU v)
+        public static explicit operator short (IntNVU v)
         {
             return Convert.ToInt16(v.V);
         }
-        public static implicit operator string(IntNVU v)
+        public static implicit operator string (IntNVU v)
         {
             return v.V.ToString();
         }
@@ -147,7 +147,7 @@ namespace PTL.Base.DataType
         #region 隱含轉換為 IntNVU
         public static explicit operator IntNVU(decimal v)
         {
-            return new IntNVU() { V =  Convert.ToInt32(v) };
+            return new IntNVU() { V = Convert.ToInt32(v) };
         }
         public static explicit operator IntNVU(double v)
         {
@@ -267,37 +267,37 @@ namespace PTL.Base.DataType
             if (this.Unit != null)
                 this.Unit.ToDefaultUnit(ref tv);
             newUnit.FromDefaulUnit(ref tv);
-            this.V =  Convert.ToDouble(tv);
+            this.V = Convert.ToDouble(tv);
             this.Unit = newUnit;
         }
 
         #region 隱含轉換為 其他型別
-        public static implicit operator decimal(DoubleNVU v)
+        public static implicit operator decimal (DoubleNVU v)
         {
             return Convert.ToDecimal(v.V);
         }
-        public static implicit operator double(DoubleNVU v)
+        public static implicit operator double (DoubleNVU v)
         {
             return Convert.ToDouble(v.V);
         }
-        public static implicit operator float(DoubleNVU v)
+        public static implicit operator float (DoubleNVU v)
         {
             return Convert.ToSingle(v.V);
         }
-        public static explicit operator long(DoubleNVU v)
+        public static explicit operator long (DoubleNVU v)
         {
             return Convert.ToInt64(v.V);
         }
-        public static explicit operator int(DoubleNVU v)
+        public static explicit operator int (DoubleNVU v)
         {
             return Convert.ToInt32(v.V);
         }
-        public static explicit operator short(DoubleNVU v)
+        public static explicit operator short (DoubleNVU v)
         {
             return Convert.ToInt16(v.V);
         }
 
-        public static implicit operator string(DoubleNVU v)
+        public static implicit operator string (DoubleNVU v)
         {
             return v.V.ToString();
         }
@@ -326,7 +326,7 @@ namespace PTL.Base.DataType
         }
         public static explicit operator DoubleNVU(string v)
         {
-            return new DoubleNVU() { V =  Convert.ToDouble(v) };
+            return new DoubleNVU() { V = Convert.ToDouble(v) };
         }
         #endregion
 
@@ -415,7 +415,7 @@ namespace PTL.Base.DataType
             {
                 return false;
             }
-            
+
         }
         public void ChangeUnit(IUnit newUnit)
         {
@@ -428,32 +428,32 @@ namespace PTL.Base.DataType
         }
 
         #region 隱含轉換為 其他型別
-        public static explicit operator decimal(StringNVU v)
+        public static explicit operator decimal (StringNVU v)
         {
             return Convert.ToDecimal(v.V);
         }
-        public static explicit operator double(StringNVU v)
+        public static explicit operator double (StringNVU v)
         {
             return Convert.ToDouble(v.V);
         }
-        public static explicit operator float(StringNVU v)
+        public static explicit operator float (StringNVU v)
         {
             return Convert.ToSingle(v.V);
         }
-        public static explicit operator long(StringNVU v)
+        public static explicit operator long (StringNVU v)
         {
             return Convert.ToInt64(v.V);
         }
-        public static explicit operator int(StringNVU v)
+        public static explicit operator int (StringNVU v)
         {
             return Convert.ToInt32(v.V);
         }
-        public static explicit operator short(StringNVU v)
+        public static explicit operator short (StringNVU v)
         {
             return Convert.ToInt16(v.V);
         }
 
-        public static implicit operator string(StringNVU v)
+        public static implicit operator string (StringNVU v)
         {
             return v.V;
         }
@@ -574,7 +574,7 @@ namespace PTL.Base.DataType
             {
                 return false;
             }
-            
+
         }
         public void ChangeUnit(IUnit newUnit)
         {
@@ -612,6 +612,4 @@ namespace PTL.Base.DataType
             return this.V.ToString();
         }
     }
-
-    
 }
