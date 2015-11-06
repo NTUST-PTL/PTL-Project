@@ -45,7 +45,7 @@ namespace PTL.Base
             element1.PropertyChanged +=
                 (o, e) =>
                 {
-                    if (e.PropertyName != path1)
+                    if (e.PropertyName != path1.Split('.').Last())
                         return;
                     if (ConvertValeToType2 == null)
                         element2.SetValueByPath(path2, o.GetValueByPath(path1));
@@ -55,7 +55,7 @@ namespace PTL.Base
             element2.PropertyChanged +=
                 (obj, e) =>
                 {
-                    if (e.PropertyName != path2)
+                    if (e.PropertyName != path2.Split('.').Last())
                         return;
                     if (ConvertValeToType1 == null)
                         element1.SetValueByPath(path1, obj.GetValueByPath(path1));
