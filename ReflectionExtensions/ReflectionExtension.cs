@@ -24,8 +24,12 @@ namespace PTL.ReflectionExtensions
             for (int i = 0; i < sectors.Length; i++)
             {
                 String elementName = sectors[i];
-                MemberInfo memberInfo = type.GetMember(elementName)?.First();
-
+                MemberInfo[] memberInfos = type.GetMember(elementName);
+                MemberInfo memberInfo = memberInfos.Count() > 0 ? memberInfos.First() : null;
+                if (memberInfo == null)
+                {
+                    throw new NullReferenceException();
+                }
                 switch (memberInfo.MemberType)
                 {
                     case MemberTypes.Constructor:
@@ -86,8 +90,12 @@ namespace PTL.ReflectionExtensions
             for (int i = 0; i < sectors.Length; i++)
             {
                 String elementName = sectors[i];
-                MemberInfo memberInfo = type.GetMember(elementName)?.First();
-
+                MemberInfo[] memberInfos = type.GetMember(elementName);
+                MemberInfo memberInfo = memberInfos.Count() > 0 ? memberInfos.First() : null;
+                if (memberInfo == null)
+                {
+                    throw new NullReferenceException();
+                }
                 if (i != sectors.Length - 1)
                 {
                     switch (memberInfo.MemberType)

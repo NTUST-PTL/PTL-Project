@@ -24,6 +24,10 @@ namespace PTL.Windows.Controls
         public BTextBox_Arrow()
         {
             InitializeComponent();
+            this.Increase_Button.Click += (o, e) =>
+                 this._TextBox.GetBindingExpression(TextBox.TextProperty).UpdateSource();
+            this.Decrease_Button.Click += (o, e) =>
+                     this._TextBox.GetBindingExpression(TextBox.TextProperty).UpdateSource();
             this.TextBox.TextChanged += (object sender, TextChangedEventArgs e) => this.V = this.TextBox.Text;
             this.GotFocus += (object sender, System.Windows.RoutedEventArgs e) => this.TextBox.SelectAll();
             this.BindedValueChanged = _BindedValueChanged;

@@ -9,16 +9,17 @@ namespace PTL.Exceptions
 {
     public class ArrayDimensionMismatchException : Exception
     {
-        String Message;
+        string _Message;
+        public override String Message { get { return _Message; } }
 
         public ArrayDimensionMismatchException()
         {
-            Message = "";
+            _Message = "";
         }
 
         public ArrayDimensionMismatchException(string message)
         {
-            Message = message;
+            _Message = message;
         }
     }
 }
