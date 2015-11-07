@@ -55,7 +55,7 @@ namespace PTL.Geometry
 
         public void CubicClassify(EntityCollection part)
         {
-            this.Boundary = part.Boundary;
+            this.Boundary = part.GetBoundary(null);
             this.Dimentions = (Boundary[1] - Boundary[0]);
             double longEdgeLength = (new double[] { Norm(new PointD(this.Dimentions[0], this.Dimentions[1], 0)), this.Dimentions[2] }).Max();
             double unit = longEdgeLength / this.n;

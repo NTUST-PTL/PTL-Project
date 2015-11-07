@@ -206,9 +206,9 @@ namespace PTL.OpenGL.Plot
             {
                 if (item is IHaveBoundary)
                 {
-                    XYZ4[] itemboundary = (item as IHaveBoundary).Boundary;
+                    XYZ4[] itemboundary = (item as IHaveBoundary).GetBoundary(null);
                     if (this.geometryBoundary[0] == null && itemboundary != null)
-                        this.geometryBoundary = (item as IHaveBoundary).Boundary;
+                        this.geometryBoundary = (item as IHaveBoundary).GetBoundary(null);
                     else
                     {
                         if (itemboundary != null)
@@ -474,7 +474,21 @@ namespace PTL.OpenGL.Plot
             //畫DXFD
             if (Things2Show.V.Count != 0)
                 foreach (var item in Things2Show.V)
+                {
                     item.PlotInOpenGL();
+                    if (item is IHaveBoundary)
+                    {
+                        PlotBox(((IHaveBoundary)item).GetBoundary(null));
+                    }
+                    if (item is EntityCollection)
+                    {
+                        EntityCollection ec = (EntityCollection)item;
+                        foreach (var entity in ec.Entities.Values)
+                        {
+                            PlotBox(entity.GetBoundary(ec.CoordinateSystem));
+                        }
+                    }
+                }
 
             ////計算網格
             if (this.PlotGrid == true || this.PlotGraduation == true)

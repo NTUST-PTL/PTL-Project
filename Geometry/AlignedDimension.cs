@@ -85,30 +85,18 @@ namespace PTL.Geometry
         #endregion
 
         #region DXFEntity
-        public override XYZ4[] Boundary
+        public override XYZ4[] GetBoundary(double[,] externalCoordinateMatrix)
         {
-            get
-            {
-                XYZ4[] boundary;
-                if (this.CoordinateSystem != null)
-                {
-                    boundary = new XYZ4[2] { Transport4(this.CoordinateSystem, this.Startpn), Transport4(this.CoordinateSystem, this.Startpn) };
-                    Compare_Boundary(boundary, Transport4(this.CoordinateSystem, Endpn));
-                    Compare_Boundary(boundary, Transport4(this.CoordinateSystem, HieghtReferP));
-                    Compare_Boundary(boundary, Transport4(this.CoordinateSystem, TextReferP));
-                    Compare_Boundary(boundary, Transport4(this.CoordinateSystem, HieghtReferP + (Startpn - Endpn)));
-                }
-                else
-                {
-                    boundary = new XYZ4[2] { (PointD)this.Startpn.Clone(), (PointD)this.Startpn.Clone() };
-                    Compare_Boundary(boundary, Endpn);
-                    Compare_Boundary(boundary, HieghtReferP);
-                    Compare_Boundary(boundary, TextReferP);
-                    Compare_Boundary(boundary, HieghtReferP + (Startpn - Endpn));
-                }
+            double[,] M = MatrixDot(externalCoordinateMatrix, this.CoordinateSystem);
 
-                return boundary;
-            }
+            XYZ4[] boundary;
+            boundary = new XYZ4[2] { Transport4(M, this.Startpn), Transport4(M, this.Startpn) };
+            Compare_Boundary(boundary, Transport4(M, Endpn));
+            Compare_Boundary(boundary, Transport4(M, HieghtReferP));
+            Compare_Boundary(boundary, Transport4(M, TextReferP));
+            Compare_Boundary(boundary, Transport4(M, HieghtReferP + (Startpn - Endpn)));
+
+            return boundary;
         }
         public void WriteToFileInDxfFormat(StreamWriter sw)
         {

@@ -141,9 +141,12 @@ namespace PTL.Geometry
         }
         #endregion
 
-        public override XYZ4[] Boundary
+        public override XYZ4[] GetBoundary(double[,] externalCoordinateMatrix)
         {
-            get { return new XYZ4[] { (PointD)this.Clone(), (PointD)this.Clone() }; }
+            double[,] M = externalCoordinateMatrix;
+            if (this.CoordinateSystem != null)
+                M = MatrixDot(M, this.CoordinateSystem);
+            return new XYZ4[] { Transport<XYZ4>(M, this), Transport<XYZ4>(M, this) };
         }
 
         public override void Transform(double[,] TransformMatrix)

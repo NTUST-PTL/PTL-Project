@@ -37,27 +37,24 @@ namespace PTL.Geometry
         #endregion
 
         #region DXFEntity
-        public override XYZ4[] Boundary
+        public override XYZ4[] GetBoundary(double[,] externalCoordinateMatrix)
         {
-            get
+            XYZ4[] boundary;
+            if (this.CoordinateSystem != null)
             {
-                XYZ4[] boundary;
-                if (this.CoordinateSystem != null)
-                {
-                    boundary = new XYZ4[2] { Transport4(this.CoordinateSystem, Center + new PointD(Radius, 0, 0)), Transport4(this.CoordinateSystem, Center + new PointD(Radius, 0, 0)) };
-                    Compare_Boundary(boundary, Transport4(this.CoordinateSystem, Center + new PointD(-Radius, 0, 0)));
-                    Compare_Boundary(boundary, Transport4(this.CoordinateSystem, Center + new PointD(0, Radius, 0)));
-                    Compare_Boundary(boundary, Transport4(this.CoordinateSystem, Center + new PointD(0, -Radius, 0)));
-                }
-                else
-                {
-                    boundary = new XYZ4[2] { Center + new PointD(Radius, 0, 0), Center + new PointD(Radius, 0, 0) };
-                    Compare_Boundary(boundary, Center + new PointD(-Radius, 0, 0));
-                    Compare_Boundary(boundary, Center + new PointD(0, Radius, 0));
-                    Compare_Boundary(boundary, Center + new PointD(0, -Radius, 0));
-                }
-                return boundary;
+                boundary = new XYZ4[2] { Transport4(this.CoordinateSystem, Center + new PointD(Radius, 0, 0)), Transport4(this.CoordinateSystem, Center + new PointD(Radius, 0, 0)) };
+                Compare_Boundary(boundary, Transport4(this.CoordinateSystem, Center + new PointD(-Radius, 0, 0)));
+                Compare_Boundary(boundary, Transport4(this.CoordinateSystem, Center + new PointD(0, Radius, 0)));
+                Compare_Boundary(boundary, Transport4(this.CoordinateSystem, Center + new PointD(0, -Radius, 0)));
             }
+            else
+            {
+                boundary = new XYZ4[2] { Center + new PointD(Radius, 0, 0), Center + new PointD(Radius, 0, 0) };
+                Compare_Boundary(boundary, Center + new PointD(-Radius, 0, 0));
+                Compare_Boundary(boundary, Center + new PointD(0, Radius, 0));
+                Compare_Boundary(boundary, Center + new PointD(0, -Radius, 0));
+            }
+            return boundary;
         }
         public void WriteToFileInDxfFormat(StreamWriter sw)
         {

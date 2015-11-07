@@ -181,9 +181,9 @@ namespace PTL.Geometry
             return "{" + this.X.ToString(Format) + "," + this.Y.ToString(Format) + "," + this.Z.ToString(Format) + "}";
         }
 
-        public override XYZ4[] Boundary
+        public override XYZ4[] GetBoundary(double[,] externalCoordinateMatrix)
         {
-            get { return null; }
+            return null;
         }
 
         public static void PlotAsPoint(Vector v)

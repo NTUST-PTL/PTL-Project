@@ -110,27 +110,18 @@ namespace PTL.Geometry
         }
         #endregion
 
-        public override XYZ4[] Boundary
+        public override XYZ4[] GetBoundary(double[,] externalCoordinateMatrix)
         {
-            get
-            {
-                XYZ4[] boundary;
-                if (this.CoordinateSystem != null)
-                {
-                    boundary = new XYZ4[2] { Transport4(this.CoordinateSystem, Center + fEndPointOfMajorAxis), Transport4(this.CoordinateSystem, Center + fEndPointOfMajorAxis) };
-                    Compare_Boundary(boundary, Transport4(this.CoordinateSystem, Center - fEndPointOfMajorAxis));
-                    Compare_Boundary(boundary, Transport4(this.CoordinateSystem, Center + MinorDirection * Rb));
-                    Compare_Boundary(boundary, Transport4(this.CoordinateSystem, Center - MinorDirection * Rb));
-                }
-                else
-                {
-                    boundary = new XYZ4[2] { Center + fEndPointOfMajorAxis, Center + fEndPointOfMajorAxis };
-                    Compare_Boundary(boundary, Center - fEndPointOfMajorAxis);
-                    Compare_Boundary(boundary, Center + MinorDirection * Rb);
-                    Compare_Boundary(boundary, Center - MinorDirection * Rb);
-                }
-                return boundary;
-            }
+            double[,] M = externalCoordinateMatrix;
+            if (this.CoordinateSystem != null)
+                M = MatrixDot(M, this.CoordinateSystem);
+
+            XYZ4[] boundary;
+            boundary = new XYZ4[2] { Transport4(M, Center + fEndPointOfMajorAxis), Transport4(M, Center + fEndPointOfMajorAxis) };
+            Compare_Boundary(boundary, Transport4(M, Center - fEndPointOfMajorAxis));
+            Compare_Boundary(boundary, Transport4(M, Center + MinorDirection * Rb));
+            Compare_Boundary(boundary, Transport4(M, Center - MinorDirection * Rb));
+            return boundary;
         }
 
         public void WriteToFileInDxfFormat(StreamWriter sw)

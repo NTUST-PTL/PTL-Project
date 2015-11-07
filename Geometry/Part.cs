@@ -34,7 +34,6 @@ namespace PTL.Geometry
         {
         }
 
-
         public override object Clone()
         {
             Part newPart = new Part();
@@ -86,7 +85,7 @@ namespace PTL.Geometry
 
         public netDxf.DxfDocument ToDXFDocument()
         {
-            XYZ4[] boundary = this.Boundary;
+            XYZ4[] boundary = GetBoundary(null);
             PointD sizeP = boundary[1] - boundary[0];
             double longLength = sizeP.ToArray().Max();
             netDxf.DxfDocument doc = new netDxf.DxfDocument(netDxf.Header.DxfVersion.AutoCad2007);

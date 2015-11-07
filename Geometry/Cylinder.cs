@@ -62,38 +62,39 @@ namespace PTL.Geometry
 
         TopoFace face;
 
-        public override XYZ4[] Boundary
+        public override XYZ4[] GetBoundary(double[,] externalCoordinateMatrix)
         {
-            get
-            {
-                XYZ4[] boundary;
+            double[,] M = externalCoordinateMatrix;
+            if (this.CoordinateSystem != null)
+                M = MatrixDot(M, this.CoordinateSystem);
 
-                PointD p1 = Transport4(this.CoordinateSystem, this.AxisStart);
-                PointD p2 = Transport4(this.CoordinateSystem, this.AxisEnd);
-                XYZ3 axis = Normalize(p2 - p1);
-                Vector Nx = Cross(Cross(new XYZ3(1, 0, 0), axis), axis * radius);
-                Vector Ny = Cross(Cross(new XYZ3(0, 1, 0), axis), axis * radius);
-                Vector Nz = Cross(Cross(new XYZ3(0, 0, 1), axis), axis * radius);
-                List<PointD> pp = new List<PointD>();
-                pp.Add(p1 + Nx);
-                pp.Add(p1 - Nx);
-                pp.Add(p2 + Nx);
-                pp.Add(p2 - Nx);
-                pp.Add(p1 + Ny);
-                pp.Add(p1 - Ny);
-                pp.Add(p2 + Ny);
-                pp.Add(p2 - Ny);
-                pp.Add(p1 + Nz);
-                pp.Add(p1 - Nz);
-                pp.Add(p2 + Nz);
-                pp.Add(p2 - Nz);
+            XYZ4[] boundary;
 
-                boundary = new XYZ4[2] { Transport4(this.CoordinateSystem, pp[0]), Transport4(this.CoordinateSystem, pp[0]) };
-                for (int i = 1; i < pp.Count; i++)
-                    Compare_Boundary(boundary, Transport4(this.CoordinateSystem, pp[i]));
+            PointD p1 = Transport4(M, this.AxisStart);
+            PointD p2 = Transport4(M, this.AxisEnd);
+            XYZ3 axis = Normalize(p2 - p1);
+            Vector Nx = Cross(Cross(new XYZ3(1, 0, 0), axis), axis * radius);
+            Vector Ny = Cross(Cross(new XYZ3(0, 1, 0), axis), axis * radius);
+            Vector Nz = Cross(Cross(new XYZ3(0, 0, 1), axis), axis * radius);
+            List<PointD> pp = new List<PointD>();
+            pp.Add(p1 + Nx);
+            pp.Add(p1 - Nx);
+            pp.Add(p2 + Nx);
+            pp.Add(p2 - Nx);
+            pp.Add(p1 + Ny);
+            pp.Add(p1 - Ny);
+            pp.Add(p2 + Ny);
+            pp.Add(p2 - Ny);
+            pp.Add(p1 + Nz);
+            pp.Add(p1 - Nz);
+            pp.Add(p2 + Nz);
+            pp.Add(p2 - Nz);
 
-                return boundary;
-            }
+            boundary = new XYZ4[2] { Transport4(M, pp[0]), Transport4(M, pp[0]) };
+            for (int i = 1; i < pp.Count; i++)
+                Compare_Boundary(boundary, Transport4(M, pp[i]));
+
+            return boundary;
         }
 
         public void RenderGeometry()

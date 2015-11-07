@@ -63,7 +63,7 @@ namespace PTL.Geometry
 
         public void CubicClassify(EntityCollection part)
         {
-            this.Boundary = part.Boundary;
+            this.Boundary = part.GetBoundary(null);
             this.Dimentions =  (Boundary[1] - Boundary[0]).Values;
             double longEdgeLength = this.Dimentions.Max();
             double unit = longEdgeLength / this.n;
@@ -109,7 +109,7 @@ namespace PTL.Geometry
 
             foreach (Entity entity in part.Entities.Values)
             {
-                XYZ4[] boundary = entity.Boundary;
+                XYZ4[] boundary = entity.GetBoundary(null);
                 int[] startCubeIndex = GetCubicSpaceIndex(boundary[0]);
                 int[] endCubeIndex = GetCubicSpaceIndex(boundary[1]);
 
@@ -182,106 +182,6 @@ namespace PTL.Geometry
             else
                 return null;
         }
-
-        //public HashSet<CubicSpace> GetCubicSpaces(PointD position, Vector direction)
-        //{
-        //    PointD ssP = GetStanderCoordinate(position);
-        //    Vector ssD = Normalize(GetStanderVector(direction));
-        //    HashSet<CubicSpace> IntersectedCubicSpace = new HashSet<CubicSpace>();
-        //    int[] Dquadrant = Sign(direction.ToArray());
-        //    int[] startIndex = GetCubicSpaceIndex(position);
-        //    int[] nextIndex = GetCubicSpaceIndex(position);
-        //    PointD nextsP = ssP.Clone();
-        //    if (!(startIndex[0] < 0 || startIndex[0] >= CubeArrayDimentions[0]
-        //        || startIndex[1] < 0 || startIndex[1] >= CubeArrayDimentions[1]
-        //        || startIndex[2] < 0 || startIndex[2] >= CubeArrayDimentions[2]))
-        //        IntersectedCubicSpace.Add(this.GetCubicSpace(startIndex));
-
-        //    bool end = false;
-        //    while (!end)
-        //    {
-        //        //List<iv> rate6Org = new List<iv>{
-        //        //    new iv(0, nextIndex[0] - nextsP.X),
-        //        //    new iv(1, nextIndex[1] - nextsP.Y),
-        //        //    new iv(2, nextIndex[2] - nextsP.Z),
-        //        //    new iv(3, nextIndex[0] + 1 - nextsP.X),
-        //        //    new iv(4, nextIndex[1] + 1 - nextsP.Y),
-        //        //    new iv(5, nextIndex[2] + 1 - nextsP.Z)
-        //        //};
-        //        List<iv> rate6 = new List<iv>{
-        //            new iv(0, nextIndex[0] - nextsP.X),
-        //            new iv(1, nextIndex[1] - nextsP.Y),
-        //            new iv(2, nextIndex[2] - nextsP.Z),
-        //            new iv(3, nextIndex[0] + 1 - nextsP.X),
-        //            new iv(4, nextIndex[1] + 1 - nextsP.Y),
-        //            new iv(5, nextIndex[2] + 1 - nextsP.Z)
-        //        };
-        //        rate6[0].V = ssD.X != 0 ? rate6[0].V / ssD.X : double.NegativeInfinity;
-        //        rate6[1].V = ssD.Y != 0 ? rate6[1].V / ssD.Y : double.NegativeInfinity;
-        //        rate6[2].V = ssD.Z != 0 ? rate6[2].V / ssD.Z : double.NegativeInfinity;
-        //        rate6[3].V = ssD.X != 0 ? rate6[3].V / ssD.X : double.NegativeInfinity;
-        //        rate6[4].V = ssD.Y != 0 ? rate6[4].V / ssD.Y : double.NegativeInfinity;
-        //        rate6[5].V = ssD.Z != 0 ? rate6[5].V / ssD.Z : double.NegativeInfinity;
-        //        List<iv> rate26 = new List<iv>{
-        //            new iv(0, nextIndex[0] - 1 - nextsP.X),
-        //            new iv(1, nextIndex[1] - 1 - nextsP.Y),
-        //            new iv(2, nextIndex[2] - 1 - nextsP.Z),
-        //            new iv(3, nextIndex[0] + 2 - nextsP.X),
-        //            new iv(4, nextIndex[1] + 2 - nextsP.Y),
-        //            new iv(5, nextIndex[2] + 2 - nextsP.Z)
-        //        };
-        //        rate26[0].V = ssD.X != 0 ? rate26[0].V / ssD.X : double.NegativeInfinity;
-        //        rate26[1].V = ssD.Y != 0 ? rate26[1].V / ssD.Y : double.NegativeInfinity;
-        //        rate26[2].V = ssD.Z != 0 ? rate26[2].V / ssD.Z : double.NegativeInfinity;
-        //        rate26[3].V = ssD.X != 0 ? rate26[3].V / ssD.X : double.NegativeInfinity;
-        //        rate26[4].V = ssD.Y != 0 ? rate26[4].V / ssD.Y : double.NegativeInfinity;
-        //        rate26[5].V = ssD.Z != 0 ? rate26[5].V / ssD.Z : double.NegativeInfinity;
-
-        //        var rate =
-        //            (from v in rate6
-        //             where v.V >= 0
-        //             orderby v.V
-        //             select v).ToList();
-        //        var rate2 =
-        //            (from v in rate26
-        //             where v.V >= 0
-        //             orderby v.V
-        //             select v).ToList();
-
-
-        //        //int[] lastIndex = (int[])ArrayTake(nextIndex, new int[] { 0 }, new int[] { 2 });
-        //        //PointD lastSP = nextsP.Clone();
-
-
-        //        nextIndex[rate[0].i % 3] += Dquadrant[rate[0].i % 3];
-        //        double vRate = rate[1].V < rate2[0].V ? rate[1].V : (rate[0].V + rate2[0].V) / 2.0;
-        //        nextsP = nextsP + ssD * vRate;
-        //        //if (!(nextIndex[0] <= nextsP.X && nextIndex[0] + 1 >= nextsP.X
-        //        //&& nextIndex[1] <= nextsP.Y && nextIndex[1] + 1 >= nextsP.Y
-        //        //&& nextIndex[2] <= nextsP.Z && nextIndex[2] + 1 >= nextsP.Z))
-        //        //{
-
-        //        //}
-
-        //        if (!(nextIndex[0] < 0 || nextIndex[0] >= CubeArrayDimentions[0]
-        //        || nextIndex[1] < 0 || nextIndex[1] >= CubeArrayDimentions[1]
-        //        || nextIndex[2] < 0 || nextIndex[2] >= CubeArrayDimentions[2]))
-        //        {
-        //            CubicSpace cs = this.GetCubicSpace(nextIndex);
-        //            if (cs.HaveEntity)
-        //                IntersectedCubicSpace.Add(cs);
-        //        }
-        //        else if (((nextIndex[0] < 0 && Dquadrant[0] > 0) || (nextIndex[0] > CubeArrayLastIndex[0] && Dquadrant[0] < 0))
-        //        || ((nextIndex[1] < 0 && Dquadrant[1] > 0) || (nextIndex[1] > CubeArrayLastIndex[1] && Dquadrant[1] < 0))
-        //        || ((nextIndex[2] < 0 && Dquadrant[2] > 0) || (nextIndex[2] > CubeArrayLastIndex[2] && Dquadrant[2] < 0)))
-        //        {
-
-        //        }
-        //        else
-        //            end = true;
-        //    }
-        //    return IntersectedCubicSpace;
-        //}
 
         public HashSet<CubicSpace> GetCubicSpaces(PointD position, Vector direction)
         {

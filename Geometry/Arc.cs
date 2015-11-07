@@ -53,50 +53,48 @@ namespace PTL.Geometry
         #endregion
 
         #region DXFEntity
-        public override XYZ4[] Boundary
+        public override XYZ4[] GetBoundary(double[,] externalCoordinateMatrix)
         {
-            get
+            double[,] M = externalCoordinateMatrix;
+            if (this.CoordinateSystem != null)
+                M = MatrixDot(M, this.CoordinateSystem);
+
+            XYZ4[] boundary;
+            PointD startPoint;
+            PointD endPoint;
+            startPoint = Center + new PointD(Radius * Cos(StartAng), Radius * Sin(StartAng), 0);
+            endPoint = Center + new PointD(Radius * Cos(EndAng), Radius * Sin(EndAng), 0);
+            startPoint = Transport4(M, startPoint);
+            endPoint = Transport4(M, endPoint);
+            boundary = new XYZ4[2] { (PointD)startPoint.Clone(), (PointD)startPoint.Clone() };
+            Compare_Boundary(boundary, startPoint);
+            Compare_Boundary(boundary, endPoint);
+            if (Abs(StartAng - EndAng) > PI / 4.0)
             {
-                XYZ4[] boundary;
-                PointD startPoint;
-                PointD endPoint;
-                startPoint = Center + new PointD(Radius * Cos(StartAng), Radius * Sin(StartAng), 0);
-                endPoint = Center + new PointD(Radius * Cos(EndAng), Radius * Sin(EndAng), 0);
-                if (this.CoordinateSystem != null)
+                if (StartAng > EndAng)
                 {
-                    startPoint = Transport4(this.CoordinateSystem, startPoint);
-                    endPoint = Transport4(this.CoordinateSystem, endPoint);
-                }
-                boundary = new XYZ4[2] { (PointD)startPoint.Clone(), (PointD)startPoint.Clone() };
-                Compare_Boundary(boundary, startPoint);
-                Compare_Boundary(boundary, endPoint);
-                if (Abs(StartAng - EndAng) > PI / 4.0)
-                {
-                    if (StartAng > EndAng)
+                    double Angle1;
+                    if (StartAng > 0) { Angle1 = StartAng - (StartAng % (PI / 4.0)); }
+                    else { Angle1 = StartAng - (-PI / 4.0 - StartAng % (PI / 4.0)); }
+                    while (Angle1 < StartAng && Angle1 > EndAng)
                     {
-                        double Angle1;
-                        if (StartAng > 0) { Angle1 = StartAng - (StartAng % (PI / 4.0)); }
-                        else { Angle1 = StartAng - (-PI / 4.0 - StartAng % (PI / 4.0)); }
-                        while (Angle1 < StartAng && Angle1 > EndAng)
-                        {
-                            Compare_Boundary(boundary, Center + new PointD(Radius * Cos(Angle1), Radius * Sin(Angle1), 0));
-                            Angle1 -= PI / 4.0;
-                        }
-                    }
-                    if (StartAng < EndAng)
-                    {
-                        double Angle1;
-                        if (EndAng > 0) { Angle1 = EndAng - (EndAng % (PI / 4.0)); }
-                        else { Angle1 = EndAng - (-PI / 4.0 - EndAng % (PI / 4.0)); }
-                        while (Angle1 < EndAng && Angle1 > StartAng)
-                        {
-                            Compare_Boundary(boundary, Center + new PointD(Radius * Cos(Angle1), Radius * Sin(Angle1), 0));
-                            Angle1 -= PI / 4.0;
-                        }
+                        Compare_Boundary(boundary, Center + new PointD(Radius * Cos(Angle1), Radius * Sin(Angle1), 0));
+                        Angle1 -= PI / 4.0;
                     }
                 }
-                return boundary;
+                if (StartAng < EndAng)
+                {
+                    double Angle1;
+                    if (EndAng > 0) { Angle1 = EndAng - (EndAng % (PI / 4.0)); }
+                    else { Angle1 = EndAng - (-PI / 4.0 - EndAng % (PI / 4.0)); }
+                    while (Angle1 < EndAng && Angle1 > StartAng)
+                    {
+                        Compare_Boundary(boundary, Center + new PointD(Radius * Cos(Angle1), Radius * Sin(Angle1), 0));
+                        Angle1 -= PI / 4.0;
+                    }
+                }
             }
+            return boundary;
         }
         public void WriteToFileInDxfFormat(StreamWriter sw)
         {

@@ -9,6 +9,6 @@ namespace PTL.Geometry
 {
     public interface IHaveBoundary
     {
-        XYZ4[] Boundary { get; }
+        XYZ4[] GetBoundary(double[,] externalCoordinateMatrix);
     }
 }

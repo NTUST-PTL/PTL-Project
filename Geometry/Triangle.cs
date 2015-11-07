@@ -13,25 +13,14 @@ namespace PTL.Geometry
         public XYZ4 P1, P2, P3;
         public XYZ3 N1, N2, N3;
 
-        public override XYZ4[] Boundary
+        public override XYZ4[] GetBoundary(double[,] externalCoordinateMatrix)
         {
-            get
-            {
-                XYZ4[] boundary;
-                if (this.CoordinateSystem != null)
-                {
-                    boundary = new XYZ4[2] { Transport(this.CoordinateSystem, P1), Transport(this.CoordinateSystem, P1) };
-                    Compare_Boundary(boundary, Transport(this.CoordinateSystem, P2));
-                    Compare_Boundary(boundary, Transport(this.CoordinateSystem, P3));
-                }
-                else
-                {
-                    boundary = new XYZ4[2] { (XYZ4)(P1.Clone()), (XYZ4)(P1.Clone()) };
-                    Compare_Boundary(boundary, P2);
-                    Compare_Boundary(boundary, P3);
-                }
-                return boundary;
-            }
+            double[,] M = MatrixDot(externalCoordinateMatrix, this.CoordinateSystem);
+            XYZ4[] boundary;
+            boundary = new XYZ4[2] { Transport(M, P1), Transport(M, P1) };
+            Compare_Boundary(boundary, Transport(M, P2));
+            Compare_Boundary(boundary, Transport(M, P3));
+            return boundary;
         }
 
         public override void PlotInOpenGL()

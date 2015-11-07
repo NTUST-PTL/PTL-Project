@@ -6,6 +6,7 @@ using System.Diagnostics;
 using PTL.Geometry;
 using PTL.Definitions;
 using PTL.Geometry.MathModel;
+using PTL.Exceptions;
 
 namespace PTL.Mathematics
 {
@@ -217,91 +218,123 @@ namespace PTL.Mathematics
 
         protected static double[] MatrixDot(double[] array1, double[] array2)
         {
-            int r1 = array1.Length;  // UBound
-
-            double[] outptr = new double[r1];
-            for (int i = 0; i < r1; i++)
+            if (array1 != null && array2 != null)
             {
-                outptr[i] = array1[i] * array2[i];
+                int r1 = array1.Length;  // UBound
+
+                double[] outptr = new double[r1];
+                for (int i = 0; i < r1; i++)
+                {
+                    outptr[i] = array1[i] * array2[i];
+                }
+                return outptr;
             }
-            return outptr;
+            else if (array1 != null)
+                return array1;
+            else if (array2 != null)
+                return array2;
+            return null;
         }
         protected static double[] MatrixDot(double[] array1, double[,] array2)
         {
-            int r2 = array2.GetLength(0);  // UBound
-            int c2 = array2.GetLength(1);  // UBound
-
-            double[] outptr = new double[r2];
-            for (int i = 0; i < r2; i++)
-                outptr[i] = 0.0;
-            
-            for (int i = 0; i < c2; i++)
+            if (array1 != null && array2 != null)
             {
-                for (int k = 0; k < r2; k++)
+                int r2 = array2.GetLength(0);  // UBound
+                int c2 = array2.GetLength(1);  // UBound
+
+                double[] outptr = new double[r2];
+                for (int i = 0; i < r2; i++)
+                    outptr[i] = 0.0;
+
+                for (int i = 0; i < c2; i++)
                 {
-                    outptr[i] = outptr[i] + array1[k] * array2[k, i];
+                    for (int k = 0; k < r2; k++)
+                    {
+                        outptr[i] = outptr[i] + array1[k] * array2[k, i];
+                    }
                 }
+                return outptr;
             }
-            return outptr;
+            else if (array1 != null)
+                return array1;
+            return null;
         }
         protected static double[] MatrixDot(double[,] array1, double[] array2)
         {
-            int r1, c1, i, k;
-            r1 = array1.GetUpperBound(0);  // UBound
-            c1 = array1.GetUpperBound(1);  // UBound
+            if (array1 != null && array2 != null)
+            {
+                int r1, c1, i, k;
+                r1 = array1.GetUpperBound(0);  // UBound
+                c1 = array1.GetUpperBound(1);  // UBound
 
-            double[] outptr = new double[r1 + 1];
-            //r1 = UBound(ptr1,1);
-            //c1 = UBound(ptr1, 2);
-            //c2 = UBound(ptr2, 2);
-            for (i = 0; r1 >= i; i++)
-            {
-                outptr[i] = 0.0;
-            }
-            for (i = 0; r1 >= i; i++)
-            {
-                for (k = 0; c1 >= k; k++)
+                double[] outptr = new double[r1 + 1];
+                //r1 = UBound(ptr1,1);
+                //c1 = UBound(ptr1, 2);
+                //c2 = UBound(ptr2, 2);
+                for (i = 0; r1 >= i; i++)
                 {
-                    outptr[i] = outptr[i] + array1[i, k] * array2[k];
+                    outptr[i] = 0.0;
                 }
-            }
-            return outptr;
-        }
-        protected static double[,] MatrixDot(double[,] array1, double[,] array2)
-        {
-            int r1, c1, c2, i, j, k;
-            r1 = array1.GetUpperBound(0);  // UBound
-            c1 = array1.GetUpperBound(1);  // UBound
-            c2 = array2.GetUpperBound(1);  // UBound
-
-            double[,] outptr = new double[r1 + 1, c2 + 1];
-            //r1 = UBound(ptr1,1);
-            //c1 = UBound(ptr1, 2);
-            //c2 = UBound(ptr2, 2);
-            for (i = 0; r1 >= i; i++)
-            {
-                for (j = 0; c2 >= j; j++)
-                {
-                    outptr[i, j] = 0.0;
-                }
-            }
-            for (i = 0; r1 >= i; i++)
-            {
-                for (j = 0; c2 >= j; j++)
+                for (i = 0; r1 >= i; i++)
                 {
                     for (k = 0; c1 >= k; k++)
                     {
-                        outptr[i, j] = outptr[i, j] + array1[i, k] * array2[k, j];
+                        outptr[i] = outptr[i] + array1[i, k] * array2[k];
                     }
                 }
+                return outptr;
             }
-            return outptr;
+            else if (array2 != null)
+                return array2;
+            return null;
+        }
+        protected static double[,] MatrixDot(double[,] array1, double[,] array2)
+        {
+            if (array1 != null && array2 != null)
+            {
+                int r1, c1, c2, i, j, k;
+                r1 = array1.GetUpperBound(0);  // UBound
+                c1 = array1.GetUpperBound(1);  // UBound
+                c2 = array2.GetUpperBound(1);  // UBound
+
+                double[,] outptr = new double[r1 + 1, c2 + 1];
+                //r1 = UBound(ptr1,1);
+                //c1 = UBound(ptr1, 2);
+                //c2 = UBound(ptr2, 2);
+                for (i = 0; r1 >= i; i++)
+                {
+                    for (j = 0; c2 >= j; j++)
+                    {
+                        outptr[i, j] = 0.0;
+                    }
+                }
+                for (i = 0; r1 >= i; i++)
+                {
+                    for (j = 0; c2 >= j; j++)
+                    {
+                        for (k = 0; c1 >= k; k++)
+                        {
+                            outptr[i, j] = outptr[i, j] + array1[i, k] * array2[k, j];
+                        }
+                    }
+                }
+                return outptr;
+            }
+            else if (array1 != null)
+                return array1;
+            else if (array2 != null)
+                return array2;
+            return null;
         }
         protected static double[,] MatrixDot(params double[][,] arrarys)
         {
+            foreach (var item in arrarys)
+                if (item == null)
+                    return null;
             for (int i = 0; i < arrarys.Length - 1; i++)
                 if (arrarys[i].GetLength(1) != arrarys[i + 1].GetLength(0))
-                    return null;
+                    throw new ArraySizeMismatchException();
+
             double[,] outputArray = arrarys[0];
             for (int i = 1; i < arrarys.Length; i++)
             {
@@ -317,22 +350,22 @@ namespace PTL.Mathematics
 
             Func<double[,], double[,], double[,]> AddFunc = (double[,] ptr1, double[,] ptr2) =>
             #region
+            {
+                int r1, c1;
+                r1 = ptr1.GetUpperBound(0);  // UBound
+                c1 = ptr1.GetUpperBound(1);  // UBound
+                                             // r1 = UBound(ptr1,1);
+                                             // c1 = UBound(ptr1,2);
+                double[,] outptr = new double[r1 + 1, c1 + 1];
+                for (int i = 0; r1 >= i; i++)
                 {
-                    int r1, c1;
-                    r1 = ptr1.GetUpperBound(0);  // UBound
-                    c1 = ptr1.GetUpperBound(1);  // UBound
-                    // r1 = UBound(ptr1,1);
-                    // c1 = UBound(ptr1,2);
-                    double[,] outptr = new double[r1 + 1, c1 + 1];
-                    for (int i = 0; r1 >= i; i++)
+                    for (int j = 0; c1 >= j; j++)
                     {
-                        for (int j = 0; c1 >= j; j++)
-                        {
-                            outptr[i, j] = ptr1[i, j] + ptr2[i, j];
-                        }
+                        outptr[i, j] = ptr1[i, j] + ptr2[i, j];
                     }
-                    return outptr;
-                };
+                }
+                return outptr;
+            };
             #endregion
             double[,] outputArray = arrarys[0];
             for (int i = 1; i < arrarys.Length; i++)
@@ -416,9 +449,9 @@ namespace PTL.Mathematics
             //擺入元素
             int totalNum = 1;
             foreach (var item in dimensions)
-		        totalNum *= item;
+                totalNum *= item;
             for (int index = 0; index < totalNum; index++)
-			{
+            {
                 int[] indices = new int[dimensions.Length];
                 int residue = index;
                 for (int i = 0; i < dimensions.Length; i++)
@@ -447,7 +480,7 @@ namespace PTL.Mathematics
             //定義Array每個維度的起始索引值(起始值可以不為0)
             int[] lowerBounds = new int[dimensions.Length];
             for (int i = 0; i < lowerBounds.Length; i++)
-			    lowerBounds[i] = 0;
+                lowerBounds[i] = 0;
             //建立新多維Array
             System.Array newArray = System.Array.CreateInstance(elementType, dimensions, lowerBounds);
             //擺入元素
@@ -457,13 +490,13 @@ namespace PTL.Mathematics
                 int[] indices = new int[dimensions.Length];
                 int residue = index;
                 for (int i = 0; i < dimensions.Length; i++)
-			    {
+                {
                     int num = 1;
                     for (int j = i + 1; j < dimensions.Length; j++)
                         num *= dimensions[j];
-			        indices[i] = residue / num;
+                    indices[i] = residue / num;
                     residue -= indices[i] * num;
-			    }
+                }
                 newArray.SetValue(item, indices);
                 index++;
             }
@@ -476,7 +509,7 @@ namespace PTL.Mathematics
             int[] lowerBounds = new int[Matrix.Rank];
             for (int i = 0; i < lowerBounds.Length; i++)
                 lowerBounds[i] = 0;
-            
+
             //建立新多維Array
             int[] dimensions = new int[Matrix.Rank];
             for (int i = 0; i < Matrix.Rank; i++)
@@ -550,7 +583,7 @@ namespace PTL.Mathematics
                 }
             }
         }
-        public static Array ArratJoin(Array arr1, Array arr2, int dim = 0)
+        protected static Array ArratJoin(Array arr1, Array arr2, int dim = 0)
         {
             return PTLM.ArratJoin(arr1, arr2, dim);
         }
@@ -648,7 +681,7 @@ namespace PTL.Mathematics
             }
             return (double[])tr1.Clone();
         }
-        protected static T Transport<T>(double[,] tMatrix, T p) where T : IXYZ 
+        protected static T Transport<T>(double[,] tMatrix, T p) where T : IXYZ
         {
             double[] result;
             if (p.IsHomogeneous == true)
@@ -659,7 +692,7 @@ namespace PTL.Mathematics
             return newP;
         }
 
-        protected static IEnumerable<double[]> RotateX(double theta,params double[][] tr1)
+        protected static IEnumerable<double[]> RotateX(double theta, params double[][] tr1)
         {
             double[,] m = RotateMatrix(Axis.X, theta);
             return Transport3(m, tr1);
@@ -674,7 +707,7 @@ namespace PTL.Mathematics
             double[,] m = RotateMatrix(Axis.Z, theta);
             return Transport3(m, tr1);
         }
-        protected static IEnumerable<double[]> Transport3(double[,] tMatrix,params double[][] tr1)
+        protected static IEnumerable<double[]> Transport3(double[,] tMatrix, params double[][] tr1)
         {
             foreach (var r in tr1)
             {
@@ -726,7 +759,7 @@ namespace PTL.Mathematics
                 if (dReverseMatrix[i, j] == 0)
                 {
                     int m = i + 1;
-                    for (; m <= Level - 1 && dReverseMatrix[m, j] == 0 ; m++) ;/////////////////////////////////////////錯誤修正20150205
+                    for (; m <= Level - 1 && dReverseMatrix[m, j] == 0; m++) ;/////////////////////////////////////////錯誤修正20150205
                     if (m == Level)
                         throw new ArithmeticException();
                     else

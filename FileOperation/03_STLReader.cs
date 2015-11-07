@@ -132,7 +132,6 @@ namespace PTL.FileOperation
                     }
                 }
                 newSTL = aSTL;
-                newSTL.CheckBoundary();
             }
             catch 
             {
@@ -176,7 +175,6 @@ namespace PTL.FileOperation
                         else
                         {
                             reader.Close();
-                            aSTL.CheckBoundary();
                             return aSTL;
                         }
                     }
@@ -189,7 +187,6 @@ namespace PTL.FileOperation
                         else
                         {
                             reader.Close();
-                            aSTL.CheckBoundary();
                             return aSTL;
                         }
                     }
@@ -202,7 +199,6 @@ namespace PTL.FileOperation
                         else
                         {
                             reader.Close();
-                            aSTL.CheckBoundary();
                             return aSTL;
                         }
                     }
@@ -215,7 +211,6 @@ namespace PTL.FileOperation
                         else
                         {
                             reader.Close();
-                            aSTL.CheckBoundary();
                             return aSTL;
                         }
                     }
@@ -224,7 +219,6 @@ namespace PTL.FileOperation
                     if (attributeByteCount.Item1 == false)
                     {
                         reader.Close();
-                        aSTL.CheckBoundary();
                         return aSTL;
                     }
 

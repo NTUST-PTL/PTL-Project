@@ -59,28 +59,20 @@ namespace PTL.Geometry
             Points.Add((XYZ4)tpoint.Clone());
         }
 
-        public override XYZ4[] Boundary
+        public override XYZ4[] GetBoundary(double[,] externalCoordinateMatrix)
         {
-            get
+            double[,] M = externalCoordinateMatrix;
+            if (this.CoordinateSystem != null)
+                M = MatrixDot(M, this.CoordinateSystem);
+
+            XYZ4[] boundary = null;
+            if (Points.Count > 0)
             {
-                XYZ4[] boundary = null;
-                if (Points.Count > 0)
-                {
-                    if (this.CoordinateSystem != null)
-                    {
-                        boundary = new XYZ4[2] { Transport4(this.CoordinateSystem, Points[0]), Transport4(this.CoordinateSystem, Points[0]) };
-                        foreach (PointD p in this.Points)
-                            Compare_Boundary(boundary, Transport4(this.CoordinateSystem, p));
-                    }
-                    else
-                    {
-                        boundary = new XYZ4[2] { this.Points[0].Clone() as XYZ4, this.Points[0].Clone() as XYZ4 };
-                        foreach (PointD p in this.Points)
-                            Compare_Boundary(boundary, p);
-                    }
-                }
-                return boundary;
+                boundary = new XYZ4[2] { Transport4(M, Points[0]), Transport4(M, Points[0]) };
+                foreach (PointD p in this.Points)
+                    Compare_Boundary(boundary, Transport4(M, p));
             }
+            return boundary;
         }
         public void WriteToFileInDxfFormat(StreamWriter sw)
         {

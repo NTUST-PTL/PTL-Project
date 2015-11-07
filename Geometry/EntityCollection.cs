@@ -28,10 +28,6 @@ namespace PTL.Geometry
                 if (aEntity != null)
                 {
                     aEntity.Parent = this;
-                    if (boundary != null)
-                        UpdateBoundary(Entitys);
-                    else
-                        CheckBoundary();
                 }
             }
         }
@@ -44,7 +40,6 @@ namespace PTL.Geometry
                     if (this.Entities.ContainsValue(aEntity))
                     {
                         aEntity.Parent = null;
-                        CheckBoundary();
                     }
             }
         }
@@ -63,7 +58,9 @@ namespace PTL.Geometry
                 foreach (Entity aEntity in this.Entities.Values)
                 {
                     if (aEntity is ICanPlotInOpenGL)
+                    {
                         (aEntity as ICanPlotInOpenGL).PlotInOpenGL();
+                    }
                 }
                 if (this.CoordinateSystem != null)
                 {
@@ -71,67 +68,24 @@ namespace PTL.Geometry
                 }
             }
         }
-
-        public XYZ4[] boundary;
-        public override XYZ4[] Boundary
+        
+        public override XYZ4[] GetBoundary(double[,] externalCoordinateMatrix)
         {
-            get
-            {
-                if (this.CoordinateSystem == null)
-                    return boundary;
-                else
-                {
-                    return Transport(this.CoordinateSystem, boundary).ToArray();
-                }
-            }
-        }
+            double[,] M = MatrixDot(externalCoordinateMatrix, this.CoordinateSystem);
 
-        public void UpdateBoundary(params Entity[] entities)
-        {
-            XYZ4[] newboundary = this.boundary;
-            if (Entities.Count != 0)
-            {
-                XYZ4[] eboundary;
-                foreach (Entity aEntity in entities)
-                {
-                    eboundary = aEntity.Boundary;
-                    Compare_Boundary(newboundary, eboundary[0]);
-                    Compare_Boundary(newboundary, eboundary[1]);
-                }
-            }
-            this.boundary = newboundary;
-        }
-
-        public void CheckBoundary()
-        {
             XYZ4[] boundary = new XYZ4[2] { new XYZ4(), new XYZ4() };
             if (Entities.Count != 0)
             {
                 Entity[] entities = Entities.Values.ToArray();
-                if (this.CoordinateSystem != null)
+                boundary = entities[0].GetBoundary(M);
+                foreach (Entity aEntity in entities)
                 {
-                    boundary = Transport(this.CoordinateSystem, entities[0].Boundary).ToArray();
-                    XYZ4[] eboundary;
-                    foreach (Entity aEntity in entities)
-                    {
-                        eboundary = Transport(this.CoordinateSystem, aEntity.Boundary).ToArray();
-                        Compare_Boundary(boundary, eboundary[0]);
-                        Compare_Boundary(boundary, eboundary[1]);
-                    }
-                }
-                else
-                {
-                    boundary = entities[0].Boundary;
-                    XYZ4[] eboundary;
-                    foreach (Entity aEntity in entities)
-                    {
-                        eboundary = aEntity.Boundary;
-                        Compare_Boundary(boundary, eboundary[0]);
-                        Compare_Boundary(boundary, eboundary[1]);
-                    }
+                    XYZ4[] eboundary = aEntity.GetBoundary(M);
+                    Compare_Boundary(boundary, eboundary[0]);
+                    Compare_Boundary(boundary, eboundary[1]);
                 }
             }
-            this.boundary = boundary;
+            return boundary;
         }
 
         public override void Transform(double[,] TransformMatrix)

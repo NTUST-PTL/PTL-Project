@@ -9,7 +9,7 @@ namespace PTL.ReflectionExtensions
 {
     public static class ReflectionExtension
     {
-        public static object GetValueByPath(this Type type, object obj, String path)
+        public static object GetValueByPath(this Type type, object obj, String path, bool ignoreError = true)
         {
             if (type == null)
                 throw new ArgumentNullException("type");
@@ -28,7 +28,10 @@ namespace PTL.ReflectionExtensions
                 MemberInfo memberInfo = memberInfos.Count() > 0 ? memberInfos.First() : null;
                 if (memberInfo == null)
                 {
-                    throw new NullReferenceException();
+                    if (ignoreError)
+                        return null;
+                    else
+                        throw new NullReferenceException("Object : " + obj + "Element Name : " + elementName);
                 }
                 switch (memberInfo.MemberType)
                 {
@@ -62,7 +65,12 @@ namespace PTL.ReflectionExtensions
                 else
                 {
                     if (obj == null)
-                        throw new NullReferenceException();
+                    {
+                        if (ignoreError)
+                            return null;
+                        else
+                            throw new NullReferenceException("Object : " + obj + "Element Name : " + elementName);
+                    }
                     type = obj.GetType();
                 }
                 
@@ -75,7 +83,7 @@ namespace PTL.ReflectionExtensions
             return GetValueByPath(obj.GetType(), obj, path);
         }
 
-        public static void SetValueByPath(this Type type, object obj, String path, object value)
+        public static void SetValueByPath(this Type type, object obj, String path, object value, bool ignoreError = true)
         {
             if (type == null)
                 throw new ArgumentNullException("type");
@@ -94,7 +102,10 @@ namespace PTL.ReflectionExtensions
                 MemberInfo memberInfo = memberInfos.Count() > 0 ? memberInfos.First() : null;
                 if (memberInfo == null)
                 {
-                    throw new NullReferenceException();
+                    if (ignoreError)
+                        return;
+                    else
+                        throw new NullReferenceException();
                 }
                 if (i != sectors.Length - 1)
                 {
@@ -124,7 +135,12 @@ namespace PTL.ReflectionExtensions
                             throw new NotSupportedException("Unkown member type");
                     }
                     if (obj == null)
-                        throw new NullReferenceException();
+                    {
+                        if (ignoreError)
+                            return;
+                        else
+                            throw new NullReferenceException();
+                    }
                     type = obj.GetType();
                 }
                 else

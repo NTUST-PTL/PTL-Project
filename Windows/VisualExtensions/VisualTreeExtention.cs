@@ -34,9 +34,9 @@ namespace PTL.Windows.VisualExtensions
             List<T> targetFounded = new List<T>();
             if (depObj != null)
             {
-                try
+                IEnumerable childrens = (IEnumerable)depObj.GetValueByPath("Children");
+                if (childrens != null)
                 {
-                    IEnumerable childrens = (IEnumerable)depObj.GetValueByPath("Children");
                     foreach (var child in childrens)
                     {
                         if (child != null && child is T)
@@ -44,48 +44,67 @@ namespace PTL.Windows.VisualExtensions
                         if (ReachTerminate != null)
                         {
                             if (!ReachTerminate(child))
-                                targetFounded.AddRange(FindVisualChildren2<T>(child, ReachTerminate));
-                        }
-                        else
-                            targetFounded.AddRange(FindVisualChildren2<T>(child));
-                    }
-                }
-                catch (Exception)
-                {
-                    try
-                    {
-                        var content = depObj.GetValueByPath("Content");
-                        if (content is T)
-                            targetFounded.Add((T)content);
-                        if (ReachTerminate != null)
-                        {
-                            if (!ReachTerminate(content))
-                                targetFounded.AddRange(FindVisualChildren2<T>(content, ReachTerminate));
-                        }
-                        else
-                            targetFounded.AddRange(FindVisualChildren2<T>(content));
-                    }
-                    catch
-                    {
-                        try
-                        {
-                            IEnumerable childrens = (IEnumerable)depObj.GetValueByPath("Items");
-                            foreach (var child in childrens)
                             {
-                                if (child != null && child is T)
-                                    targetFounded.Add((T)child);
-                                if (ReachTerminate != null)
-                                {
-                                    if (!ReachTerminate(child))
-                                        targetFounded.AddRange(FindVisualChildren2<T>(child, ReachTerminate));
-                                }
-                                else
-                                    targetFounded.AddRange(FindVisualChildren2<T>(child));
+                                var result = FindVisualChildren2<T>(child, ReachTerminate);
+                                if (result.Count != 0)
+                                    targetFounded.AddRange(result);
                             }
                         }
-                        catch
+                        else
                         {
+                            var result = FindVisualChildren2<T>(child);
+                            if (result.Count != 0)
+                                targetFounded.AddRange(result);
+                        }
+                    }
+                    return targetFounded;
+                }
 
+                var content = depObj.GetValueByPath("Content");
+                if (content != null)
+                {
+                    if (content is T)
+                        targetFounded.Add((T)content);
+                    if (ReachTerminate != null)
+                    {
+                        if (!ReachTerminate(content))
+                        {
+                            var result = FindVisualChildren2<T>(content, ReachTerminate);
+                            if (result.Count != 0)
+                                targetFounded.AddRange(result);
+                        }
+                    }
+                    else
+                    {
+                        var result = FindVisualChildren2<T>(content);
+                        if (result.Count != 0)
+                            targetFounded.AddRange(result);
+                    }
+                    return targetFounded;
+                }
+
+
+                IEnumerable Items = (IEnumerable)depObj.GetValueByPath("Items");
+                if (Items != null)
+                {
+                    foreach (var child in Items)
+                    {
+                        if (child != null && child is T)
+                            targetFounded.Add((T)child);
+                        if (ReachTerminate != null)
+                        {
+                            if (!ReachTerminate(child))
+                            {
+                                var result = FindVisualChildren2<T>(child, ReachTerminate);
+                                if (result.Count != 0)
+                                    targetFounded.AddRange(result);
+                            }
+                        }
+                        else
+                        {
+                            var result = FindVisualChildren2<T>(child);
+                            if (result.Count != 0)
+                                targetFounded.AddRange(result);
                         }
                     }
                 }

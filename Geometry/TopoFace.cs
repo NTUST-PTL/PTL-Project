@@ -14,25 +14,15 @@ namespace PTL.Geometry
         public XYZ3[,] Normals;
         public int Dim1Length { get { return Points.GetLength(0); } }
         public int Dim2Length { get { return Points.GetLength(1); } }
-        public override XYZ4[] Boundary
+        public override XYZ4[] GetBoundary(double[,] externalCoordinateMatrix)
         {
-            get
-            {
-                XYZ4[] boundary;
-                if (this.CoordinateSystem != null)
-                {
-                    boundary = new XYZ4[2] { Transport4(this.CoordinateSystem, this.Points[0, 0]), Transport4(this.CoordinateSystem, this.Points[0, 0]) };
-                    foreach (XYZ4 p in this.Points)
-                        Compare_Boundary(boundary, Transport4(this.CoordinateSystem, p));
-                }
-                else
-                {
-                    boundary = new XYZ4[2] { (XYZ4)this.Points[0, 0].Clone(), (XYZ4)this.Points[0, 0].Clone() };
-                    foreach (XYZ4 p in this.Points)
-                        Compare_Boundary(boundary, p);
-                }
-                return boundary;
-            }
+            double[,] M = MatrixDot(externalCoordinateMatrix, this.CoordinateSystem);
+
+            XYZ4[] boundary;
+            boundary = new XYZ4[2] { Transport4(M, this.Points[0, 0]), Transport4(M, this.Points[0, 0]) };
+            foreach (XYZ4 p in this.Points)
+                Compare_Boundary(boundary, Transport4(M, p));
+            return boundary;
         }
 
         public TopoFace()

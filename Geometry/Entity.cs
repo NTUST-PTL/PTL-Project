@@ -103,7 +103,7 @@ namespace PTL.Geometry
                 }
             }
         }
-        public abstract XYZ4[] Boundary { get; }
+        public abstract XYZ4[] GetBoundary(double[,] externalCoordinateMatrix);
 
         public abstract object Clone();
 

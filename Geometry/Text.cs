@@ -63,17 +63,13 @@ namespace PTL.Geometry
         #endregion
 
         #region DXFEntity
-        public override XYZ4[] Boundary
+        public override XYZ4[] GetBoundary(double[,] externalCoordinateMatrix)
         {
-            get
-            {
-                XYZ4[] boundary;
-                if (this.CoordinateSystem != null)
-                    boundary = new XYZ4[2] { Transport4(this.CoordinateSystem, this.RefPoint), Transport4(this.CoordinateSystem, this.RefPoint) };
-                else
-                    boundary = new XYZ4[2] { (PointD)this.RefPoint.Clone(), (PointD)this.RefPoint.Clone() };
-                return boundary;
-            }
+            double[,] M = MatrixDot(externalCoordinateMatrix, this.CoordinateSystem);
+
+            XYZ4[] boundary;
+            boundary = new XYZ4[2] { Transport4(M, this.RefPoint), Transport4(M, this.RefPoint) };
+            return boundary;
         }
         public void WriteToFileInDxfFormat(StreamWriter sw)
         {

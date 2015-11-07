@@ -55,17 +55,16 @@ namespace PTL.Geometry
         }
         #endregion
 
-        public override XYZ4[] Boundary
+        public override XYZ4[] GetBoundary(double[,] externalCoordinateMatrix)
         {
-            get
-            {
-                XYZ4[] boundary;
-                boundary = new XYZ4[2] { (PointD)this.p1.Clone(), (PointD)this.p1.Clone() };
-                Compare_Boundary(boundary, p2);
-                if (this.CoordinateSystem != null)
-                    boundary = Transport(this.CoordinateSystem, boundary).ToArray();
-                return boundary;
-            }
+            double[,] M = externalCoordinateMatrix;
+            if (this.CoordinateSystem != null)
+                M = MatrixDot(M, this.CoordinateSystem);
+
+            XYZ4[] boundary;
+            boundary = new XYZ4[2] { Transport<XYZ4>(M, this.p1), Transport<XYZ4>(M, this.p1) };
+            Compare_Boundary(boundary, Transport<XYZ4>(M, this.p2));
+            return boundary;
         }
         public void WriteToFileInDxfFormat(StreamWriter sw)
         {
