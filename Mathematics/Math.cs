@@ -212,7 +212,11 @@ namespace PTL.Mathematics
         }
         public static XYZ3 GetAnyNormal(XYZ3 direction)
         {
-            return Mathematics.PTLM.GetAnyNormal(direction);
+            XYZ3 n1 = Cross(new XYZ3(0.0, 0.0, 1.0), direction);
+            if (Norm(n1) < 1e-5)
+                n1 = Cross(new XYZ3(0.0, 1.0, 0.0), direction);
+            n1 = Normalize(n1);
+            return n1;
         }
 
         public static double[] MatrixDot(double[] array1, double[] array2)
@@ -584,7 +588,64 @@ namespace PTL.Mathematics
         }
         public static Array ArratJoin(Array arr1, Array arr2, int dim = 0)
         {
-            return PTLM.ArratJoin(arr1, arr2, dim);
+            if (arr1 == null && arr2 != null)
+                return arr2;
+            if (arr1 != null && arr2 == null)
+                return arr1;
+            if (arr1 == null && arr2 == null)
+                return null;
+
+            Type type1 = arr1.GetType().GetElementType();
+            Type type2 = arr2.GetType().GetElementType();
+
+             int[] dims1 = ArrayGetDimension(arr1);
+             int[] dims2 = ArrayGetDimension(arr2);
+
+
+             if (dims1.Length != dims2.Length)
+                 throw new ArrayDimensionMismatchException();
+             for (int i = 0; i<dims1.Length; i++)
+             {
+                 if (i != dim && dims1[i] != dims2[i])
+                     throw new ArraySizeMismatchException();
+             }
+
+             int[] newDims = new int[dims1.Length];
+             for (int i = 0; i<newDims.Length; i++)
+             {
+                 if (i != dim)
+                     newDims[i] = dims1[i];
+                 else
+                     newDims[i] = dims1[i] + dims2[i];
+             }
+
+             Array joined = Array.CreateInstance(type1, newDims);
+             
+             for (int i = 0; i<joined.Length; i++)
+             {
+                 int[] outputIndex = new int[newDims.Length];
+                 int remains = i;
+                 for (int k = 0; k<newDims.Length; k++)
+                 {
+                     int unit = 1;
+                     for (int m = k + 1; m<newDims.Length; m++)
+                         unit *= newDims[m];
+                     outputIndex[k] = remains / unit;
+                     remains -= outputIndex[k] * unit;
+                 }
+
+                 if (outputIndex[dim] < dims1[dim])
+                     joined.SetValue(arr1.GetValue(outputIndex), outputIndex);
+                 else
+                 {
+                     int[] indices2 = new int[outputIndex.Length];
+                     outputIndex.CopyTo(indices2, 0);
+                     indices2[dim] -= dims1[dim];
+                     joined.SetValue(arr2.GetValue(indices2), outputIndex);
+                 }
+             }
+
+             return joined;
         }
 
         public static double[,] RotateMatrix(Axis axis, double theta)

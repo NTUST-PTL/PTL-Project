@@ -476,18 +476,6 @@ namespace PTL.OpenGL.Plot
                 foreach (var item in Things2Show.V)
                 {
                     item.PlotInOpenGL();
-                    if (item is IHaveBoundary)
-                    {
-                        PlotBox(((IHaveBoundary)item).GetBoundary(null));
-                    }
-                    if (item is EntityCollection)
-                    {
-                        EntityCollection ec = (EntityCollection)item;
-                        foreach (var entity in ec.Entities.Values)
-                        {
-                            PlotBox(entity.GetBoundary(ec.CoordinateSystem));
-                        }
-                    }
                 }
 
             ////計算網格
