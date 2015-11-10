@@ -14,7 +14,10 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Media.Media3D;
 using PTL.Windows.VisualExtensions;
+using PTL.Geometry;
+using PTL.Geometry.WPFExtensions;
 using PTL.Geometry.MathModel;
+using PTL.FileOperation;
 using PTL.Mathematics;
 using PTL.Windows.Media.Media3D;
 
@@ -387,26 +390,26 @@ namespace PTL.Windows.Controls
         #region Mouse Event
         public void UI_MouseEnter(object sender, MouseEventArgs e)
         {
-            ModelUIElement3D model = (ModelUIElement3D)sender;
-            Transform3DGroup transformgroup = new Transform3DGroup();
-            if (model.Transform != null)
-                transformgroup.Children.Add(model.Transform);
-            transformgroup.Children.Add(new ScaleTransform3D(
-                new Vector3D(highLightScale, highLightScale, highLightScale),
-                getModelCenter(model.Model)));
-            model.Transform = transformgroup;
+            //ModelUIElement3D model = (ModelUIElement3D)sender;
+            //Transform3DGroup transformgroup = new Transform3DGroup();
+            //if (model.Transform != null)
+            //    transformgroup.Children.Add(model.Transform);
+            //transformgroup.Children.Add(new ScaleTransform3D(
+            //    new Vector3D(highLightScale, highLightScale, highLightScale),
+            //    getModelCenter(model.Model)));
+            //model.Transform = transformgroup;
         }
 
         public void UI_MouseLeave(object sender, MouseEventArgs e)
         {
-            ModelUIElement3D model = (ModelUIElement3D)sender;
-            Transform3DGroup transformgroup = new Transform3DGroup();
-            if (model.Transform != null)
-                transformgroup.Children.Add(model.Transform);
-            transformgroup.Children.Add(new ScaleTransform3D(
-                new Vector3D(reverseHighLightScale, reverseHighLightScale, reverseHighLightScale),
-                getModelCenter(model.Model)));
-            model.Transform = transformgroup;
+            //ModelUIElement3D model = (ModelUIElement3D)sender;
+            //Transform3DGroup transformgroup = new Transform3DGroup();
+            //if (model.Transform != null)
+            //    transformgroup.Children.Add(model.Transform);
+            //transformgroup.Children.Add(new ScaleTransform3D(
+            //    new Vector3D(reverseHighLightScale, reverseHighLightScale, reverseHighLightScale),
+            //    getModelCenter(model.Model)));
+            //model.Transform = transformgroup;
         }
 
         public void UI_MouseUp(object sender, MouseButtonEventArgs e)
@@ -856,6 +859,26 @@ namespace PTL.Windows.Controls
         //}
         #endregion Grid
 
-        
+        #region File Drop
+        private async void DropHandler(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                string[] filePaths = (String[])e.Data.GetData(DataFormats.FileDrop);
+
+                foreach (var file in filePaths)
+                {
+                    if (file.Split('.').Last().ToLower() == "stl")
+                    {
+                        STL stl = await STLReader.ReadSTLFile(file);
+                        stl.Color = System.Drawing.Color.FromArgb(255, 255, 255, 0);
+                        Model3D mGeometry = stl.ToModel3D();
+                        this.AddInteractiveModel(mGeometry);
+                        this.TranslateViewTo(AllModels);
+                    }
+                }
+            }
+        }
+        #endregion File Drop
     }
 }
