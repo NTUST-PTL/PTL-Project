@@ -945,10 +945,16 @@ namespace PTL.Mathematics
         {
             return System.Math.Pow(tx, td);
         }
-        public static double Floor(double x, double a)
+        public static double Floor(double x, double a = 1)
         {
             double xx = x / a;
-            int xx1 = (int)xx;
+            double xx1 = System.Math.Floor(xx);
+            return xx1 * a;
+        }
+        public static double Ceiling(double x, double a = 1)
+        {
+            double xx = x / a;
+            double xx1 = System.Math.Ceiling(xx);
             return xx1 * a;
         }
         public static double Sqrt(double ta)

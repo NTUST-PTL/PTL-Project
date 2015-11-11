@@ -885,11 +885,13 @@ namespace PTL.Mathematics
         {
             return System.Math.Pow(tx, td);
         }
-        protected static double Floor(double x, double a)
+        protected static double Floor(double x, double a = 1)
         {
-            double xx = x / a;
-            int xx1 = (int)xx;
-            return xx1 * a;
+            return PTLM.Floor(x, a);
+        }
+        protected static double Ceiling(double x, double a = 1)
+        {
+            return PTLM.Ceiling(x, a);
         }
         protected static double Sqrt(double ta)
         {

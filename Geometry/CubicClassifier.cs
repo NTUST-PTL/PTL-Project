@@ -200,12 +200,15 @@ namespace PTL.Geometry
 
             #region XYZ射線距離計算
             {
-                double Rate1 = Dot(ssD, new Vector(1, 0, 0));//////////////////
-                double Rate2 = Dot(ssD, new Vector(0, 1, 0));//////////////////
-                double Rate3 = Dot(ssD, new Vector(0, 0, 1));//////////////////
-                double v1 = Dquadrant[0] != 0 ? Rate1 * Abs(currentIndex[0] + Dquadrant[0] - ssP[0]) : double.PositiveInfinity;
-                double v2 = Dquadrant[1] != 0 ? Rate2 * Abs(currentIndex[1] + Dquadrant[1] - ssP[1]) : double.PositiveInfinity;
-                double v3 = Dquadrant[2] != 0 ? Rate3 * Abs(currentIndex[2] + Dquadrant[2] - ssP[2]) : double.PositiveInfinity;
+                double deltaLX = Abs(1 / ssD[0]);//////////////////
+                double deltaLY = Abs(1 / ssD[1]);//////////////////
+                double deltaLZ = Abs(1 / ssD[2]);//////////////////
+                double initailLX = ssD[0] > 0? (Ceiling(ssP[0]) - ssP[0]) / ssD[0] : (Floor(ssP[0]) - ssP[0]) / ssD[0];
+                double initailLY = ssD[1] > 0 ? (Ceiling(ssP[1]) - ssP[1]) / ssD[1] : (Floor(ssP[1]) - ssP[1]) / ssD[1];
+                double initailLZ = ssD[2] > 0 ? (Ceiling(ssP[2]) - ssP[2]) / ssD[2] : (Floor(ssP[2]) - ssP[2]) / ssD[2];
+                double currentLX = initailLX;
+                double currentLY = initailLY;
+                double currentLZ = initailLZ;
                 while( !((currentIndex[0] < 0 && Dquadrant[0] < 0)|| (currentIndex[0] > CubeArrayLastIndex[0] && Dquadrant[0] > 0))
                     && !((currentIndex[1] < 0 && Dquadrant[1] < 0)|| (currentIndex[1] > CubeArrayLastIndex[1] && Dquadrant[1] > 0))
                     && !((currentIndex[2] < 0 && Dquadrant[2] < 0)|| (currentIndex[2] > CubeArrayLastIndex[2] && Dquadrant[2] > 0)))
@@ -214,22 +217,25 @@ namespace PTL.Geometry
                     if (cubic != null)
 	                    Ray.Add(cubic);
 
+                    double nextLX = currentLX + deltaLX;
+                    double nextLY = currentLY + deltaLY;
+                    double nextLZ = currentLZ + deltaLZ;
 
                     int Dir = 0;
-                    double minV = v1;
-                    if ( minV > v2)
-                        Dir = 1; minV = v2;
-                    if (minV > v3)
-                        Dir = 2; minV = v3;
+                    double minL = nextLX;
+                    if (minL > nextLY)
+                    { minL = nextLY; Dir = 1; }
+                    if (minL > nextLZ)
+                    { minL = nextLZ; Dir = 2; }
 
                     currentIndex[Dir] += Dquadrant[Dir];
 
                     if (Dir == 0)
-                        v1 = Dquadrant[0] != 0 ?Rate1 * Abs(currentIndex[0] + Dquadrant[0] - ssP[0]) : double.PositiveInfinity;
+                        currentLX = nextLX;
                     else if (Dir == 1)
-                        v2 = Dquadrant[1] != 0 ?Rate2 * Abs(currentIndex[1] + Dquadrant[1] - ssP[1]) : double.PositiveInfinity;
+                        currentLY = nextLY;
                     else if (Dir == 2)
-                        v3 = Dquadrant[2] != 0 ? Rate3 * Abs(currentIndex[2] + Dquadrant[2] - ssP[2]) : double.PositiveInfinity;
+                        currentLZ = nextLZ;
                 }
             }
             #endregion
