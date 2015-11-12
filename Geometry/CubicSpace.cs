@@ -23,7 +23,7 @@ namespace PTL.Geometry
         }
         public uint EntityNumber = 0;
 
-        private System.Drawing.Color _Color = System.Drawing.Color.FromArgb(25, 150, 200, 150);
+        private System.Drawing.Color _Color = System.Drawing.Color.FromArgb(100, 200, 255, 200);
         public System.Drawing.Color Color
         {
             get { return this._Color; }
