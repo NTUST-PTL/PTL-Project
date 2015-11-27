@@ -1002,6 +1002,12 @@ namespace PTL.Mathematics
                 yield return Sign(item);
             }
         }
+        public static void Exchange(ref double a,ref double b)
+        {
+            double a2 = a;
+            a = b;
+            b = a2;
+        }
         #endregion
     }
 }

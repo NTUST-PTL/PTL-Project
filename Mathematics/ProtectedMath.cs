@@ -629,9 +629,9 @@ namespace PTL.Mathematics
             double angleZ = Atan2(tRotateAxis[1], tRotateAxis[0]);
             double angleY = Atan2(tRotateAxis[2], Sqrt(tRotateAxis[0] * tRotateAxis[0] + tRotateAxis[1] * tRotateAxis[1]));
             double[,] A21 = RotateMatrix(Axis.Z, -angleZ);
-            double[,] A32 = RotateMatrix(Axis.Y, -angleY);
+            double[,] A32 = RotateMatrix(Axis.Y, angleY);
             double[,] ARotate = RotateMatrix(Axis.X, theta);
-            double[,] A23 = RotateMatrix(Axis.Y, angleY);
+            double[,] A23 = RotateMatrix(Axis.Y, -angleY);
             double[,] A12 = RotateMatrix(Axis.Z, angleZ);
 
             return MatrixDot(A12, A23, ARotate, A32, A21);
@@ -955,6 +955,12 @@ namespace PTL.Mathematics
             {
                 yield return ProtectedPTLM.Sign(item);
             }
+        }
+        public static void Exchange(ref double a, ref double b)
+        {
+            double a2 = a;
+            a = b;
+            b = a2;
         }
         #endregion
 
