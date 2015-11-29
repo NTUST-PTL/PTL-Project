@@ -9,8 +9,10 @@ namespace PTL.Geometry
     public enum SurfaceDisplayOptions
     {
         Null,
-        SurfaceOnly,
-        EdgeOnly,
-        SurfaceAndEdge
+        Surface,
+        Mesh,
+        Edge,
+        SurfaceAndEdge,
+        SurfaceAndMesh
     }
 }

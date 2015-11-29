@@ -99,15 +99,18 @@ namespace PTL.Geometry
                     MultMatrixd(this.CoordinateSystem);
                 }
 
-                if (this.SurfaceDisplayOption == SurfaceDisplayOptions.SurfaceOnly || this.SurfaceDisplayOption == SurfaceDisplayOptions.SurfaceAndEdge)
+                if (this.SurfaceDisplayOption == SurfaceDisplayOptions.Surface || this.SurfaceDisplayOption == SurfaceDisplayOptions.SurfaceAndEdge)
                 {
                     this.PlotFace();
                 }
-                if (this.SurfaceDisplayOption == SurfaceDisplayOptions.EdgeOnly || this.SurfaceDisplayOption == SurfaceDisplayOptions.SurfaceAndEdge)
+                if (this.SurfaceDisplayOption == SurfaceDisplayOptions.Mesh || this.SurfaceDisplayOption == SurfaceDisplayOptions.SurfaceAndMesh)
                 {
-                    this.PlotLineStructure();
+                    this.PlotMesh();
                 }
-
+                if (this.SurfaceDisplayOption == SurfaceDisplayOptions.Edge || this.SurfaceDisplayOption == SurfaceDisplayOptions.SurfaceAndEdge)
+                {
+                    this.PlotEdge();
+                }
                 if (this.CoordinateSystem != null)
                 {
                     GL.glPopMatrix();
@@ -115,7 +118,53 @@ namespace PTL.Geometry
             }
         }
 
-        protected void PlotLineStructure()
+        protected void PlotEdge()
+        {
+            GL.glDisable(GL.GL_CULL_FACE);//關閉表面剔除選項
+            GL.glColor4d(this.Color.R / 255.0, this.Color.G / 255.0, this.Color.B / 255.0, this.Color.A / 255.0); //顏色
+
+            int lastRow = Points.GetUpperBound(0);
+            int lastCol = Points.GetUpperBound(1);
+
+            for (int i = 0; i < (Points.GetLength(0)); i++)
+            {
+                //Draw Line
+                GL.glBegin(GL.GL_LINE_STRIP);
+                GL.glVertex3d(Points[i, 0].X,
+                                Points[i, 0].Y,
+                                Points[i, 0].Z);
+                GL.glEnd();
+            }
+            for (int i = 0; i < (Points.GetLength(0)); i++)
+            {
+                //Draw Line
+                GL.glBegin(GL.GL_LINE_STRIP);
+                GL.glVertex3d(Points[i, lastCol].X,
+                                Points[i, lastCol].Y,
+                                Points[i, lastCol].Z);
+                GL.glEnd();
+            }
+            for (int j = 0; j < (Points.GetLength(1)); j++)
+            {
+                //Draw Line
+                GL.glBegin(GL.GL_LINE_STRIP);
+                GL.glVertex3d(Points[0, j].X,
+                                Points[0, j].Y,
+                                Points[0, j].Z);
+                GL.glEnd();
+            }
+            for (int j = 0; j < (Points.GetLength(1)); j++)
+            {
+                //Draw Line
+                GL.glBegin(GL.GL_LINE_STRIP);
+                GL.glVertex3d(Points[lastRow, j].X,
+                                Points[lastRow, j].Y,
+                                Points[lastRow, j].Z);
+                GL.glEnd();
+            }
+        }
+
+        protected void PlotMesh()
         {
             GL.glDisable(GL.GL_CULL_FACE);//關閉表面剔除選項
             GL.glColor4d(this.Color.R / 255.0, this.Color.G / 255.0, this.Color.B / 255.0, this.Color.A / 255.0); //顏色

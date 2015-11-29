@@ -108,14 +108,14 @@ namespace PTL.Geometry
                 }
 
                 //面
-                if (this.SurfaceDisplayOption == SurfaceDisplayOptions.SurfaceOnly || this.SurfaceDisplayOption == SurfaceDisplayOptions.SurfaceAndEdge)
+                if (this.SurfaceDisplayOption == SurfaceDisplayOptions.Surface || this.SurfaceDisplayOption == SurfaceDisplayOptions.SurfaceAndEdge)
                 {
                     if (this.face.Color != this.Color)
                         this.face.Color = this.Color;
                     this.face.PlotInOpenGL();
                 }
                 //邊線
-                if (this.SurfaceDisplayOption == SurfaceDisplayOptions.EdgeOnly || this.SurfaceDisplayOption == SurfaceDisplayOptions.SurfaceAndEdge)
+                if (this.SurfaceDisplayOption == SurfaceDisplayOptions.Mesh || this.SurfaceDisplayOption == SurfaceDisplayOptions.SurfaceAndEdge)
                 {
 
                 }

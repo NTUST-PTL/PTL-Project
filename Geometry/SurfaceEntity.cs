@@ -8,7 +8,7 @@ namespace PTL.Geometry
 {
     public abstract class SurfaceEntity : Entity, IHaveColor, IHaveSurfaceDisplayOptions
     {
-        private SurfaceDisplayOptions surfaceDisplayOption = SurfaceDisplayOptions.SurfaceOnly;
+        private SurfaceDisplayOptions surfaceDisplayOption = SurfaceDisplayOptions.Surface;
         public virtual SurfaceDisplayOptions SurfaceDisplayOption
         {
             get

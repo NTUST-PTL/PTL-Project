@@ -37,7 +37,7 @@ namespace PTL.Geometry
                 GL.glColor4d(this.Color.R / 255.0, this.Color.G / 255.0, this.Color.B / 255.0, this.Color.A / 255.0);
 
                 //面
-                if (this.SurfaceDisplayOption == SurfaceDisplayOptions.SurfaceOnly || this.SurfaceDisplayOption == SurfaceDisplayOptions.SurfaceAndEdge)
+                if (this.SurfaceDisplayOption == SurfaceDisplayOptions.Surface || this.SurfaceDisplayOption == SurfaceDisplayOptions.SurfaceAndEdge)
                 {
                     GL.glBegin(GL.GL_TRIANGLES); //三角面起點
                     if (N1 != null)
@@ -64,7 +64,7 @@ namespace PTL.Geometry
                     GL.glEnd(); //三角面終點
                 }
                 //邊線
-                if (this.SurfaceDisplayOption == SurfaceDisplayOptions.EdgeOnly || this.SurfaceDisplayOption == SurfaceDisplayOptions.SurfaceAndEdge)
+                if (this.SurfaceDisplayOption == SurfaceDisplayOptions.Mesh || this.SurfaceDisplayOption == SurfaceDisplayOptions.SurfaceAndEdge)
                 {
                     GL.glBegin(GL.GL_LINE_LOOP);
                     GL.glVertex3d(P1.X,
