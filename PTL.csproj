@@ -84,6 +84,9 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Extensions\StringArrayExtensions\StringArrayFormattingExtention.cs" />
+    <Compile Include="Extensions\TopoFaceOutputExtensions\TopoFaceStringOuputExtension.cs" />
+    <Compile Include="FileOperation\TXTFile.cs" />
     <Compile Include="OpenGL\Plot\ViewPlotingExtentions\ViewPlotingExtentions.cs" />
     <Compile Include="ReflectionExtensions\ReflectionExtension.cs" />
     <Compile Include="Base\Source.cs" />
