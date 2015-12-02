@@ -17,7 +17,7 @@ namespace PTL.Extensions.StringArrayExtensions
             Right
         }
 
-        public static String[,] AlignString(this String[,] Data, String[] Filler, int[] columnWidth, Font Font, HorizontalAlignmentTypes[] HorizontalAlignments = null)
+        public static string[,] AlignString(this string[,] Data, string[] Filler, int[] columnWidth, Font Font, HorizontalAlignmentTypes[] HorizontalAlignments = null)
         {
             int NRow = Data.GetLength(0);
             int NCol = Data.GetLength(1);
@@ -74,7 +74,30 @@ namespace PTL.Extensions.StringArrayExtensions
             return result;
         }
 
-        public static String[,] AddLineNumber(this String[,] Data, int StartIndex)
+        public static string[,] AppendToEach(this string[,] Data, string added, bool appendToFront = false)
+        {
+            int NRow = Data.GetLength(0);
+            int NCol = Data.GetLength(1);
+            String[,] result = new String[NRow, NCol];
+
+            for (int i = 0; i < NRow; i++)
+            {
+                for (int j = 0; j < NCol; j++)
+                {
+                    if (appendToFront)
+                    {
+                        result[i, j] = added + Data[i, j];
+                    }
+                    else
+                    {
+                        result[i, j] = Data[i, j] + added;
+                    }
+                }
+            }
+            return result;
+        }
+
+        public static string[,] AddLineNumber(this string[,] Data, int StartIndex)
         {
             int NRow = Data.GetLength(0);
             int NCol = Data.GetLength(1);
@@ -90,13 +113,21 @@ namespace PTL.Extensions.StringArrayExtensions
             return result;
         }
 
-        public static String MergeString(this String[,] strArray)
+        public static string MergeString(this string[,] strArray, string spliter = null)
         {
+            int NRow = strArray.GetLength(0);
+            int NCol = strArray.GetLength(1);
             StringBuilder result = new StringBuilder();
-            for (int i = 0; i < strArray.GetLength(0); i++)
+            for (int i = 0; i < NRow; i++)
             {
-                for (int j = 0; j < strArray.GetLength(1); j++)
+                for (int j = 0; j < NCol; j++)
+                {
                     result.Append(strArray[i, j]);
+                    if (!string.IsNullOrEmpty(spliter) && j != NCol - 1)
+                    {
+                        result.Append(spliter);
+                    }
+                }
                 result.Append("\r\n");
             }
             return result.ToString();
