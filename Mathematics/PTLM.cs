@@ -647,6 +647,34 @@ namespace PTL.Mathematics
 
              return joined;
         }
+        public static newElementType[] ChangeArrayType<orgElementType, newElementType>(
+            orgElementType[] orgArray,
+            Func<orgElementType, newElementType> converter)
+        {
+            int num = orgArray.Length;
+            newElementType[] newArray = new newElementType[num];
+            for (int i = 0; i < num; i++)
+            {
+                newArray[i] = converter(orgArray[i]);
+            }
+            return newArray;
+        }
+        public static newElementType[,] ChangeArrayType<orgElementType, newElementType>(
+            orgElementType[,] orgArray,
+            Func<orgElementType, newElementType> converter)
+        {
+            int rNum = orgArray.GetLength(0);
+            int cVum = orgArray.GetLength(1);
+            newElementType[,] newArray = new newElementType[rNum, cVum];
+            for (int i = 0; i < rNum; i++)
+            {
+                for (int j = 0; j < cVum; j++)
+                {
+                    newArray[i, j] = converter(orgArray[i, j]);
+                }
+            }
+            return newArray;
+        }
 
         public static double[,] RotateMatrix(Axis axis, double theta)
         {

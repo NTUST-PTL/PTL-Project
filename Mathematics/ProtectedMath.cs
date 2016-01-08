@@ -587,6 +587,18 @@ namespace PTL.Mathematics
         {
             return PTLM.ArratJoin(arr1, arr2, dim);
         }
+        protected static newElementType[] ChangeArrayType<orgElementType,newElementType>(
+            orgElementType[] orgArray,
+            Func<orgElementType, newElementType> converter)
+        {
+            return PTLM.ChangeArrayType(orgArray, converter);
+        }
+        protected static newElementType[,] ChangeArrayType<orgElementType, newElementType>(
+            orgElementType[,] orgArray,
+            Func<orgElementType, newElementType> converter)
+        {
+            return PTLM.ChangeArrayType(orgArray, converter);
+        }
 
         protected static double[,] RotateMatrix(Axis axis, double theta)
         {
