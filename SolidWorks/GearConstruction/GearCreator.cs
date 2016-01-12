@@ -76,9 +76,9 @@ namespace PTL.SolidWorks.GearConstruction
             //選擇草圖平面
             
             String sketchPlan;
-            if (Abs(normal.X - 1) < 1e-10)
+            if (Abs(Abs(normal.X) - 1) < 1e-10)
                 sketchPlan = "右基準面";
-            else if (Abs(normal.Y - 1) < 1e-10)
+            else if (Abs(Abs(normal.Y) - 1) < 1e-10)
                 sketchPlan = "上基準面";
             else
                 sketchPlan = "前基準面";
@@ -139,7 +139,7 @@ namespace PTL.SolidWorks.GearConstruction
 
                 //環狀排列
                 modDoc.ClearSelection2(true);
-                modDoc.Extension.SelectByID2("使用曲面除料1", "BODYFEATURE", 0, 0, 0, true, 4, null, 0);
+                modDoc.Extension.SelectByID2("使用曲面除料2", "BODYFEATURE", 0, 0, 0, true, 4, null, 0);
                 modDoc.Extension.SelectByID2("基準軸1", "AXIS", 0, 0, 0, true, 1, null, 0);
                 modDoc.FeatureManager.FeatureCircularPattern3(gearData.TeethNumber, 6.2831853071796, false, "NULL", false, true);
             }
