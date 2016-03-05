@@ -55,7 +55,7 @@ namespace PTL.SolidWorks.Edit
                                                     aTopoFace.Points[i, j].Y / 1000.0,
                                                     aTopoFace.Points[i, j].Z / 1000.0);
                     }
-                    aModDoc.InsertCurveFileEnd();
+                    bool successed = aModDoc.InsertCurveFileEnd();
                     alreadyExistedCurveNumber++;
                 }
 

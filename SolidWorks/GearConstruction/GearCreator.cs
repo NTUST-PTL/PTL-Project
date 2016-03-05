@@ -107,7 +107,13 @@ namespace PTL.SolidWorks.GearConstruction
             #region point to curve 繪製齒形曲面
             foreach (var topoface in gearData.ToothFaces)
             {
-                PartEditMethods.AddTopoFaceToSolidWorksPart(modDoc, new TopoFace() { Points = ChangeArrayType<double[], XYZ4>(topoface, (a) => new XYZ4(a)) }, ref TotalCurveNumber, ref TotalFaceNumber);
+                TopoFace tf = new TopoFace() { Points = ChangeArrayType<double[], XYZ4>(topoface, (a) => new XYZ4(a)) };
+                tf.SovleNormalVector();
+                tf.SurfaceDisplayOption = SurfaceDisplayOptions.Mesh;
+                PartEditMethods.AddTopoFaceToSolidWorksPart(modDoc, tf, ref TotalCurveNumber, ref TotalFaceNumber);
+                PTL.DebugTools.Plot plot0 = new DebugTools.Plot();
+                plot0.Window.View.AutoScale = false;
+                plot0.AddSomethings(tf);
             }
 
             modDoc.ClearSelection2(true);
