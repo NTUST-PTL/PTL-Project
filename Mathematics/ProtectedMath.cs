@@ -218,129 +218,23 @@ namespace PTL.Mathematics
 
         protected static double[] MatrixDot(double[] array1, double[] array2)
         {
-            if (array1 != null && array2 != null)
-            {
-                int r1 = array1.Length;  // UBound
-
-                double[] outptr = new double[r1];
-                for (int i = 0; i < r1; i++)
-                {
-                    outptr[i] = array1[i] * array2[i];
-                }
-                return outptr;
-            }
-            else if (array1 != null)
-                return array1;
-            else if (array2 != null)
-                return array2;
-            return null;
+            return PTLM.MatrixDot(array1, array2);
         }
         protected static double[] MatrixDot(double[] array1, double[,] array2)
         {
-            if (array1 != null && array2 != null)
-            {
-                int r2 = array2.GetLength(0);  // UBound
-                int c2 = array2.GetLength(1);  // UBound
-
-                double[] outptr = new double[r2];
-                for (int i = 0; i < r2; i++)
-                    outptr[i] = 0.0;
-
-                for (int i = 0; i < c2; i++)
-                {
-                    for (int k = 0; k < r2; k++)
-                    {
-                        outptr[i] = outptr[i] + array1[k] * array2[k, i];
-                    }
-                }
-                return outptr;
-            }
-            else if (array1 != null)
-                return array1;
-            return null;
+            return PTLM.MatrixDot(array1, array2);
         }
         protected static double[] MatrixDot(double[,] array1, double[] array2)
         {
-            if (array1 != null && array2 != null)
-            {
-                int r1, c1, i, k;
-                r1 = array1.GetUpperBound(0);  // UBound
-                c1 = array1.GetUpperBound(1);  // UBound
-
-                double[] outptr = new double[r1 + 1];
-                //r1 = UBound(ptr1,1);
-                //c1 = UBound(ptr1, 2);
-                //c2 = UBound(ptr2, 2);
-                for (i = 0; r1 >= i; i++)
-                {
-                    outptr[i] = 0.0;
-                }
-                for (i = 0; r1 >= i; i++)
-                {
-                    for (k = 0; c1 >= k; k++)
-                    {
-                        outptr[i] = outptr[i] + array1[i, k] * array2[k];
-                    }
-                }
-                return outptr;
-            }
-            else if (array2 != null)
-                return array2;
-            return null;
+            return PTLM.MatrixDot(array1, array2);
         }
         protected static double[,] MatrixDot(double[,] array1, double[,] array2)
         {
-            if (array1 != null && array2 != null)
-            {
-                int r1, c1, c2, i, j, k;
-                r1 = array1.GetUpperBound(0);  // UBound
-                c1 = array1.GetUpperBound(1);  // UBound
-                c2 = array2.GetUpperBound(1);  // UBound
-
-                double[,] outptr = new double[r1 + 1, c2 + 1];
-                //r1 = UBound(ptr1,1);
-                //c1 = UBound(ptr1, 2);
-                //c2 = UBound(ptr2, 2);
-                for (i = 0; r1 >= i; i++)
-                {
-                    for (j = 0; c2 >= j; j++)
-                    {
-                        outptr[i, j] = 0.0;
-                    }
-                }
-                for (i = 0; r1 >= i; i++)
-                {
-                    for (j = 0; c2 >= j; j++)
-                    {
-                        for (k = 0; c1 >= k; k++)
-                        {
-                            outptr[i, j] = outptr[i, j] + array1[i, k] * array2[k, j];
-                        }
-                    }
-                }
-                return outptr;
-            }
-            else if (array1 != null)
-                return array1;
-            else if (array2 != null)
-                return array2;
-            return null;
+            return PTLM.MatrixDot(array1, array2);
         }
         protected static double[,] MatrixDot(params double[][,] arrarys)
         {
-            foreach (var item in arrarys)
-                if (item == null)
-                    return null;
-            for (int i = 0; i < arrarys.Length - 1; i++)
-                if (arrarys[i].GetLength(1) != arrarys[i + 1].GetLength(0))
-                    throw new ArraySizeMismatchException();
-
-            double[,] outputArray = arrarys[0];
-            for (int i = 1; i < arrarys.Length; i++)
-            {
-                outputArray = MatrixDot(outputArray, arrarys[i]);
-            }
-            return outputArray;
+            return PTLM.MatrixDot(arrarys);
         }
         protected static double[,] MatrixAdd(params double[][,] arrarys)
         {
@@ -600,123 +494,53 @@ namespace PTL.Mathematics
             return PTLM.ChangeArrayType(orgArray, converter);
         }
 
-        protected static double[,] RotateMatrix(Axis axis, double theta)
+        protected static double[,] GetRotateMatrix(Axis axis, double theta)
         {
-            double[,] Mr = IdentityMatrix(4);
-            switch (axis)
-            {
-                case Axis.X:
-                    Mr[1, 1] = Cos(theta);
-                    Mr[2, 2] = Cos(theta);
-                    Mr[1, 2] = -Sin(theta);
-                    Mr[2, 1] = Sin(theta);
-                    break;
-                case Axis.Y:
-                    Mr[0, 0] = Cos(theta);
-                    Mr[2, 2] = Cos(theta);
-                    Mr[0, 2] = Sin(theta);
-                    Mr[2, 0] = -Sin(theta);
-                    break;
-                case Axis.Z:
-                    Mr[0, 0] = Cos(theta);
-                    Mr[1, 1] = Cos(theta);
-                    Mr[0, 1] = -Sin(theta);
-                    Mr[1, 0] = Sin(theta);
-                    break;
-            }
-            return Mr;
+            return PTLM.GetRotateMatrix(axis, theta);
         }
-        protected static double[,] RotateMatrix(double thetax, double thetay, double thetaz)
+        protected static double[,] GetRotateMatrix(double[] tRotateAxis, double theta)
         {
-            double[,] MRx = RotateMatrix(Axis.X, thetax);
-            double[,] MRy = RotateMatrix(Axis.Y, thetay);
-            double[,] MRz = RotateMatrix(Axis.Z, thetaz);
-
-            double[,] Mr = MatrixDot(MRx, MRy, MRz);
-
-            return Mr;
-        }
-        protected static double[,] RotateMatrix(double[] tRotateAxis, double theta)
-        {
-            double angleZ = Atan2(tRotateAxis[1], tRotateAxis[0]);
-            double angleY = Atan2(tRotateAxis[2], Sqrt(tRotateAxis[0] * tRotateAxis[0] + tRotateAxis[1] * tRotateAxis[1]));
-            double[,] A21 = RotateMatrix(Axis.Z, -angleZ);
-            double[,] A32 = RotateMatrix(Axis.Y, angleY);
-            double[,] ARotate = RotateMatrix(Axis.X, theta);
-            double[,] A23 = RotateMatrix(Axis.Y, -angleY);
-            double[,] A12 = RotateMatrix(Axis.Z, angleZ);
-
-            return MatrixDot(A12, A23, ARotate, A32, A21);
+            return PTLM.GetRotateMatrix(tRotateAxis, theta);
         }
 
         protected static double[] RotateX(double theta, double[] tr1)
         {
-            double[,] m = RotateMatrix(Axis.X, theta);
-            return Transport3(m, tr1);
+            return PTLM.RotateX(theta, tr1);
         }
         protected static double[] RotateY(double theta, double[] tr1)
         {
-            double[,] m = RotateMatrix(Axis.Y, theta);
-            return Transport3(m, tr1);
+            return PTLM.RotateY(theta, tr1);
         }
         protected static double[] RotateZ(double theta, double[] tr1)
         {
-            double[,] m = RotateMatrix(Axis.Z, theta);
-            return Transport3(m, tr1);
+            return PTLM.RotateZ(theta, tr1);
         }
         protected static double[] Transport3(double[,] tMatrix, double[] tr1)
         {
-            if (tMatrix != null)
-            {
-                double[] tr2 = new double[3];
-
-                for (int i = 0; i < 3; i++)
-                {
-                    for (int k = 0; k < 3; k++)
-                    {
-                        tr2[i] = tr2[i] + tMatrix[i, k] * tr1[k];
-                    }
-                }
-                return tr2;
-            }
-            return (double[])tr1.Clone();
+            return PTLM.Transport3(tMatrix, tr1);
         }
         protected static double[] Transport4(double[,] tMatrix, double[] tr1)
         {
-            if (tMatrix != null)
-            {
-                double[] tr2 = Transport3(tMatrix, tr1);
-                tr2[0] += tMatrix[0, 3];
-                tr2[1] += tMatrix[1, 3];
-                tr2[2] += tMatrix[2, 3];
-                return tr2;
-            }
-            return (double[])tr1.Clone();
+            return PTLM.Transport4(tMatrix, tr1);
         }
         protected static T Transport<T>(double[,] tMatrix, T p) where T : IXYZ
         {
-            double[] result;
-            if (p.IsHomogeneous == true)
-                result = Transport4(tMatrix, p.Values);
-            else
-                result = Transport3(tMatrix, p.Values);
-            T newP = (T)p.New(result);
-            return newP;
+            return PTLM.Transport(tMatrix, p);
         }
 
         protected static IEnumerable<double[]> RotateX(double theta, params double[][] tr1)
         {
-            double[,] m = RotateMatrix(Axis.X, theta);
+            double[,] m = GetRotateMatrix(Axis.X, theta);
             return Transport3(m, tr1);
         }
         protected static IEnumerable<double[]> RotateY(double theta, params double[][] tr1)
         {
-            double[,] m = RotateMatrix(Axis.Y, theta);
+            double[,] m = GetRotateMatrix(Axis.Y, theta);
             return Transport3(m, tr1);
         }
         protected static IEnumerable<double[]> RotateZ(double theta, params double[][] tr1)
         {
-            double[,] m = RotateMatrix(Axis.Z, theta);
+            double[,] m = GetRotateMatrix(Axis.Z, theta);
             return Transport3(m, tr1);
         }
         protected static IEnumerable<double[]> Transport3(double[,] tMatrix, params double[][] tr1)

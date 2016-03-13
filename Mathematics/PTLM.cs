@@ -223,7 +223,12 @@ namespace PTL.Mathematics
         {
             if (array1 != null && array2 != null)
             {
-                int r1 = array1.Length;  // UBound
+                int r1 = array1.Length;
+                int r2 = array2.Length;
+
+                if (r1 != r2)
+                    throw new ArrayDimensionMismatchException(
+                        String.Format("Array1 Length is : {0} ; Array2 Length is : {1}", r1, r2));
 
                 double[] outptr = new double[r1];
                 for (int i = 0; i < r1; i++)
@@ -242,18 +247,23 @@ namespace PTL.Mathematics
         {
             if (array1 != null && array2 != null)
             {
-                int r2 = array2.GetLength(0);  // UBound
-                int c2 = array2.GetLength(1);  // UBound
+                int c1 = array1.Length;
+                int r2 = array2.GetLength(0);
+                int c2 = array2.GetLength(1);
 
-                double[] outptr = new double[r2];
-                for (int i = 0; i < r2; i++)
+                if (c1 != r2)
+                    throw new ArrayDimensionMismatchException(
+                        String.Format("Array1 Length is : {0} ; Array2 Dimension is : {{1},{2}}", c1, r2, c2));
+
+                double[] outptr = new double[c2];
+                for (int i = 0; i < c2; i++)
                     outptr[i] = 0.0;
 
                 for (int i = 0; i < c2; i++)
                 {
                     for (int k = 0; k < r2; k++)
                     {
-                        outptr[i] = outptr[i] + array1[k] * array2[k, i];
+                        outptr[i] += array1[k] * array2[k, i];
                     }
                 }
                 return outptr;
@@ -266,23 +276,26 @@ namespace PTL.Mathematics
         {
             if (array1 != null && array2 != null)
             {
-                int r1, c1, i, k;
-                r1 = array1.GetUpperBound(0);  // UBound
-                c1 = array1.GetUpperBound(1);  // UBound
+                int r1, c1, r2, i, k;
+                r1 = array1.GetLength(0);
+                c1 = array1.GetLength(1);
+                r2 = array2.GetLength(0);
 
-                double[] outptr = new double[r1 + 1];
-                //r1 = UBound(ptr1,1);
-                //c1 = UBound(ptr1, 2);
-                //c2 = UBound(ptr2, 2);
-                for (i = 0; r1 >= i; i++)
+                if (c1 != r2)
+                    throw new ArrayDimensionMismatchException(
+                        String.Format("Array1 Dimension is : {{0},{1}} ; Array2 Length is : {2}", c1, r2, r2));
+
+                double[] outptr = new double[r1];
+
+                for (i = 0; i < r1; i++)
                 {
                     outptr[i] = 0.0;
                 }
-                for (i = 0; r1 >= i; i++)
+                for (i = 0; i < r1; i++)
                 {
-                    for (k = 0; c1 >= k; k++)
+                    for (k = 0; k < c1; k++)
                     {
-                        outptr[i] = outptr[i] + array1[i, k] * array2[k];
+                        outptr[i] += array1[i, k] * array2[k];
                     }
                 }
                 return outptr;
@@ -295,13 +308,14 @@ namespace PTL.Mathematics
         {
             if (array1 != null && array2 != null)
             {
-                int r1 = array1.GetLength(0);  // UBound
-                int c1 = array1.GetLength(1);  // UBound
-                int r2 = array2.GetLength(0);  // UBound
-                int c2 = array2.GetLength(1);  // UBound
+                int r1 = array1.GetLength(0);
+                int c1 = array1.GetLength(1);
+                int r2 = array2.GetLength(0);
+                int c2 = array2.GetLength(1);
 
                 if (c1 != r2)
-                    throw new ArraySizeMismatchException();
+                    throw new ArraySizeMismatchException(
+                        String.Format("Array1 Dimension is : {{0},{1}} ; Array2 Dimension is : {{2},{3}}", r1, c1, r2, c2));
 
                 double[,] outptr = new double[r1, c2];
                 for (int i = 0; i < r1; i++)
@@ -315,7 +329,7 @@ namespace PTL.Mathematics
                 {
                     for (int j = 0; j < c2; j++)
                     {
-                        for (int k = 0; c1 >= k; k++)
+                        for (int k = 0; k < c1; k++)
                         {
                             outptr[i, j] += array1[i, k] * array2[k, j];
                         }
@@ -331,13 +345,6 @@ namespace PTL.Mathematics
         }
         public static double[,] MatrixDot(params double[][,] arrarys)
         {
-            foreach (var item in arrarys)
-                if (item == null)
-                    return null;
-            for (int i = 0; i < arrarys.Length - 1; i++)
-                if (arrarys[i].GetLength(1) != arrarys[i + 1].GetLength(0))
-                    throw new ArraySizeMismatchException();
-
             double[,] outputArray = arrarys[0];
             for (int i = 1; i < arrarys.Length; i++)
             {
@@ -676,68 +683,58 @@ namespace PTL.Mathematics
             return newArray;
         }
 
-        public static double[,] RotateMatrix(Axis axis, double theta)
+        public static double[,] GetRotateMatrix(Axis axis, double theta)
         {
-            double[,] Mr = IdentityMatrix(4);
+            double[,] Mr = null;
             switch (axis)
             {
                 case Axis.X:
-                    Mr[1, 1] = Cos(theta);
-                    Mr[2, 2] = Cos(theta);
-                    Mr[1, 2] = -Sin(theta);
-                    Mr[2, 1] = Sin(theta);
+                    Mr = new double[,] { { 1,          0,           0, 0 },
+                                         { 0, Cos(theta), -Sin(theta), 0 },
+                                         { 0, Sin(theta),  Cos(theta), 0 },
+                                         { 0,          0,           0, 1 } };
                     break;
                 case Axis.Y:
-                    Mr[0, 0] = Cos(theta);
-                    Mr[2, 2] = Cos(theta);
-                    Mr[0, 2] = Sin(theta);
-                    Mr[2, 0] = -Sin(theta);
+                    Mr = new double[,] { {  Cos(theta), 0, Sin(theta), 0 },
+                                         {           0, 1,          0, 0 },
+                                         { -Sin(theta), 0, Cos(theta), 0 },
+                                         {           0, 0,          0, 1 } };
                     break;
                 case Axis.Z:
-                    Mr[0, 0] = Cos(theta);
-                    Mr[1, 1] = Cos(theta);
-                    Mr[0, 1] = -Sin(theta);
-                    Mr[1, 0] = Sin(theta);
+                    Mr = new double[,] { { Cos(theta), -Sin(theta), 0, 0 },
+                                         { Sin(theta),  Cos(theta), 0, 0 },
+                                         {          0,           0, 1, 0 },
+                                         {          0,           0, 0, 1 } };
                     break;
             }
             return Mr;
         }
-        public static double[,] RotateMatrix(double thetax, double thetay, double thetaz)
-        {
-            double[,] MRx = RotateMatrix(Axis.X, thetax);
-            double[,] MRy = RotateMatrix(Axis.Y, thetay);
-            double[,] MRz = RotateMatrix(Axis.Z, thetaz);
-
-            double[,] Mr = MatrixDot(MRx, MRy, MRz);
-
-            return Mr;
-        }
-        public static double[,] RotateMatrix(double[] tRotateAxis, double theta)
+        public static double[,] GetRotateMatrix(double[] tRotateAxis, double theta)
         {
             double angleZ = Atan2(tRotateAxis[1], tRotateAxis[0]);
-            double angleY = Atan2(tRotateAxis[2], Sqrt(tRotateAxis[0] * tRotateAxis[0] + tRotateAxis[1] * tRotateAxis[1]));
-            double[,] A21 = RotateMatrix(Axis.Z, -angleZ);
-            double[,] A32 = RotateMatrix(Axis.Y, -angleY);
-            double[,] ARotate = RotateMatrix(Axis.X, theta);
-            double[,] A23 = RotateMatrix(Axis.Y, angleY);
-            double[,] A12 = RotateMatrix(Axis.Z, angleZ);
+            double angleY = -Atan2(tRotateAxis[2], Sqrt(tRotateAxis[0] * tRotateAxis[0] + tRotateAxis[1] * tRotateAxis[1]));
+            double[,] A21 = GetRotateMatrix(Axis.Z, -angleZ);
+            double[,] A32 = GetRotateMatrix(Axis.Y, -angleY);
+            double[,] ARotate = GetRotateMatrix(Axis.X, theta);
+            double[,] A23 = GetRotateMatrix(Axis.Y, angleY);
+            double[,] A12 = GetRotateMatrix(Axis.Z, angleZ);
 
             return MatrixDot(A12, A23, ARotate, A32, A21);
         }
 
         public static double[] RotateX(double theta, double[] tr1)
         {
-            double[,] m = RotateMatrix(Axis.X, theta);
+            double[,] m = GetRotateMatrix(Axis.X, theta);
             return Transport3(m, tr1);
         }
         public static double[] RotateY(double theta, double[] tr1)
         {
-            double[,] m = RotateMatrix(Axis.Y, theta);
+            double[,] m = GetRotateMatrix(Axis.Y, theta);
             return Transport3(m, tr1);
         }
         public static double[] RotateZ(double theta, double[] tr1)
         {
-            double[,] m = RotateMatrix(Axis.Z, theta);
+            double[,] m = GetRotateMatrix(Axis.Z, theta);
             return Transport3(m, tr1);
         }
         public static double[] Transport3(double[,] tMatrix, double[] tr1)
@@ -782,17 +779,17 @@ namespace PTL.Mathematics
 
         public static IEnumerable<double[]> RotateX(double theta, params double[][] tr1)
         {
-            double[,] m = RotateMatrix(Axis.X, theta);
+            double[,] m = GetRotateMatrix(Axis.X, theta);
             return Transport3(m, tr1);
         }
         public static IEnumerable<double[]> RotateY(double theta, params double[][] tr1)
         {
-            double[,] m = RotateMatrix(Axis.Y, theta);
+            double[,] m = GetRotateMatrix(Axis.Y, theta);
             return Transport3(m, tr1);
         }
         public static IEnumerable<double[]> RotateZ(double theta, params double[][] tr1)
         {
-            double[,] m = RotateMatrix(Axis.Z, theta);
+            double[,] m = GetRotateMatrix(Axis.Z, theta);
             return Transport3(m, tr1);
         }
         public static IEnumerable<double[]> Transport3(double[,] tMatrix, params double[][] tr1)

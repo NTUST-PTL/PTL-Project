@@ -84,7 +84,7 @@ namespace PTL.Geometry
 
                 for (int i = 0; i < sliceNumber; i++)
                 {
-                    M = RotateMatrix(axisDirection, dTheta * i);
+                    M = GetRotateMatrix(axisDirection, dTheta * i);
                     Vector n = Transport4(M, N1);
                     Vector r = n * this.Radius;
 

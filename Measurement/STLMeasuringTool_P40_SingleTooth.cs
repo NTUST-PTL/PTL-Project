@@ -116,9 +116,9 @@ namespace PTL.Measurement
                 //根據旋轉兩個旋轉角旋轉拓樸面
                 double rotateAngle;
                 rotateAngle = RotateAngles[this.PitchPoint1];
-                TopoFace1.Transform(RotateMatrix(Axis.Z, rotateAngle));
+                TopoFace1.Transform(GetRotateMatrix(Axis.Z, rotateAngle));
                 rotateAngle = RotateAngles[this.PitchPoint2];
-                TopoFace2.Transform(RotateMatrix(Axis.Z, rotateAngle));
+                TopoFace2.Transform(GetRotateMatrix(Axis.Z, rotateAngle));
                 Solve();
             }
         }
