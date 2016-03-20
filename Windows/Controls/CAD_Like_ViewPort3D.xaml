@@ -7,12 +7,11 @@
              xmlns:tool3d="clr-namespace:_3DTools;assembly=3DTools"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
-    <DockPanel Background="#02FFFFFF"
-                   MouseWheel="MouseWheelHandler"
-                   MouseDown="MouseDownHandler"
-                   MouseUp="MouseUpHandler"
-		           MouseMove="MouseMoveHandler"
-                   Drop="DropHandler">
+    <DockPanel MouseWheel="MouseWheelHandler"
+               MouseDown="MouseDownHandler"
+               MouseUp="MouseUpHandler"
+		       MouseMove="MouseMoveHandler"
+               Drop="DropHandler">
         <Viewport3D x:Name="Viewport" x:FieldModifier="public" OpacityMask="#FFD35D5D" SizeChanged="Viewport_SizeChanged">
             <Viewport3D.Camera>
                 <OrthographicCamera x:Name="camera"/>
