@@ -8,6 +8,7 @@ using System.IO;
 using CsGL.OpenGL;
 using PTL.Definitions;
 using PTL.Geometry.MathModel;
+using static PTL.Mathematics.BaseFunctions;
 
 namespace PTL.Geometry
 {
@@ -114,7 +115,7 @@ namespace PTL.Geometry
         {
             double[,] M = externalCoordinateMatrix;
             if (this.CoordinateSystem != null)
-                M = MatrixDot(M, this.CoordinateSystem);
+                M = Dot(M, this.CoordinateSystem);
 
             XYZ4[] boundary;
             boundary = new XYZ4[2] { Transport4(M, Center + fEndPointOfMajorAxis), Transport4(M, Center + fEndPointOfMajorAxis) };

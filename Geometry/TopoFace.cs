@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using CsGL.OpenGL;
 using PTL.Geometry.MathModel;
+using static PTL.Mathematics.BaseFunctions;
 
 namespace PTL.Geometry
 {
@@ -16,7 +17,7 @@ namespace PTL.Geometry
         public int Dim2Length { get { return Points.GetLength(1); } }
         public override XYZ4[] GetBoundary(double[,] externalCoordinateMatrix)
         {
-            double[,] M = MatrixDot(externalCoordinateMatrix, this.CoordinateSystem);
+            double[,] M = Dot(externalCoordinateMatrix, this.CoordinateSystem);
 
             XYZ4[] boundary;
             boundary = new XYZ4[2] { Transport4(M, this.Points[0, 0]), Transport4(M, this.Points[0, 0]) };

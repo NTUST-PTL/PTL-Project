@@ -6,10 +6,11 @@ using PTL.Definitions;
 using PTL.Windows.Controls;
 using PTL.Geometry;
 using PTL.Geometry.MathModel;
+using static PTL.Mathematics.BaseFunctions;
 
 namespace PTL.OpenGL.Plot
 {
-    public class PlotSub : PTL.Mathematics.ProtectedPTLM
+    public class PlotSub
     {
         #region OpenGL 基本程式
         public static void PlotBackground(float colorR, float colorG, float colorB)
@@ -323,84 +324,6 @@ namespace PTL.OpenGL.Plot
             {
                 theta = StartAng + step * i;
                 PointSet[i] = new PointD(radius * Cos(theta), radius * Sin(theta), 0.0);
-            }
-
-            //Plot Arc
-            PlotLine(PointSet);
-        }
-        public static void PlotArcXY(PointD p1, PointD p2, double radius, short ctype)
-        {
-            double ra = Abs(radius);
-            short Flag = (short)(radius / ra);
-
-            //Center Point
-            PointD pc = CalcuCenterXY(p1, p2, radius, ctype);
-
-            //u Range
-            PointD xa = new PointD(1.0, 0.0, 0.0);
-            PointD ya = new PointD(0.0, 1.0, 0.0);
-
-            double Ang1 = Atan2(Dot(p1 - pc, ya), Dot(p1 - pc, xa));
-            double Ang2 = Atan2(Dot(p2 - pc, ya), Dot(p2 - pc, xa));
-
-            double Ang3, Ang4;
-            if (Ang1 < Ang2)
-            {
-                Ang3 = 2 * PI + Ang1;
-                Ang4 = Ang2;
-            }
-            else
-            {
-                Ang3 = Ang1;
-                Ang4 = 2 * PI + Ang2;
-            }
-
-            double DeltaAng1 = Abs(Ang2 - Ang1);
-            double DeltaAng2 = Abs(Ang4 - Ang3);
-
-            double AngS, AngE;
-            if (Flag > 0)
-            {
-                if (DeltaAng1 <= PI)
-                {
-                    AngS = Ang1;
-                    AngE = Ang2;
-                }
-                else
-                {
-                    AngS = Ang3;
-                    AngE = Ang4;
-                }
-            }
-            else
-            {
-                if (DeltaAng1 <= PI)
-                {
-                    AngS = Ang3;
-                    AngE = Ang4;
-                }
-                else
-                {
-                    AngS = Ang1;
-                    AngE = Ang2;
-                }
-            }
-
-            //Point Number
-            double step = DegToRad(1.0);
-            int NumP = (int)Round((AngE - AngS) / step, 1.0);
-            if (NumP < 2)
-                NumP = 2;
-            step = (AngE - AngS) / (NumP - 1);
-
-            double theta = 0;
-
-            //Points
-            PointD[] PointSet = new PointD[NumP];
-            for (int i = 0; i < NumP; i++)
-            {
-                theta = AngS + step * i;
-                PointSet[i] = new PointD(ra * Cos(theta), ra * Sin(theta), 0.0);
             }
 
             //Plot Arc

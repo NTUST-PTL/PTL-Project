@@ -8,6 +8,7 @@ using System.Reflection;
 using PTL.Geometry;
 using PTL.Definitions;
 using PTL.Geometry.MathModel;
+using static PTL.Mathematics.BaseFunctions;
 
 namespace PTL.Measurement
 {

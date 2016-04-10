@@ -8,10 +8,11 @@ using System.Reflection;
 using PTL.Geometry;
 using PTL.Definitions;
 using PTL.Geometry.MathModel;
+using static PTL.Mathematics.BaseFunctions;
 
 namespace PTL.Measurement
 {
-    public class STLMeasuringTool_P40 : PTL.Mathematics.ProtectedPTLM
+    public class STLMeasuringTool_P40
     {
         public virtual List<TopoFace[]> TopoFaces { get; set; }
         public virtual List<XYZ4[]> PitchPoints { get; set; }
@@ -114,7 +115,7 @@ namespace PTL.Measurement
 
                             double[] pitchAngleError_average = new double[] { 0, 0 };
                             double[] pitchDistanceError_average = new double[] { 0, 0 };
-                            double[][,] faceError_average = new double[][,]{ ZeroMatrix(NRow, NCol), ZeroMatrix(NRow, NCol)};
+                            double[][,] faceError_average = new double[][,]{ NewZeroMatrix(NRow, NCol), NewZeroMatrix(NRow, NCol)};
 
                             foreach (var pitchError in PitchAngleErrors)
                             {
@@ -128,16 +129,16 @@ namespace PTL.Measurement
                             }
                             foreach (var faceError in FaceErrors)
                             {
-                                faceError_average[0] = MatrixAdd(faceError_average[0], faceError[0]);
-                                faceError_average[1] = MatrixAdd(faceError_average[1], faceError[1]);
+                                faceError_average[0] = AddEach(faceError_average[0], faceError[0]);
+                                faceError_average[1] = AddEach(faceError_average[1], faceError[1]);
                             }
 
                             pitchAngleError_average[0] /= TopoFaces.Count;
                             pitchAngleError_average[1] /= TopoFaces.Count;
                             pitchDistanceError_average[0] /= TopoFaces.Count;
                             pitchDistanceError_average[1] /= TopoFaces.Count;
-                            faceError_average[0] = MatrixScale(faceError_average[0], 1.0 / TopoFaces.Count);
-                            faceError_average[1] = MatrixScale(faceError_average[1], 1.0 / TopoFaces.Count);
+                            faceError_average[0] = MultEach(faceError_average[0], 1.0 / TopoFaces.Count);
+                            faceError_average[1] = MultEach(faceError_average[1], 1.0 / TopoFaces.Count);
 
                             this.PitchAngleError_Average = pitchAngleError_average;
                             this.PitchDistanceError_Average = pitchDistanceError_average;

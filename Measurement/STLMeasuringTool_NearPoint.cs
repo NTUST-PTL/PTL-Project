@@ -8,6 +8,7 @@ using System.Reflection;
 using PTL.Geometry;
 using PTL.Definitions;
 using PTL.Geometry.MathModel;
+using static PTL.Mathematics.BaseFunctions;
 
 namespace PTL.Measurement
 {
@@ -65,7 +66,7 @@ namespace PTL.Measurement
                         };
 
                         //座標系統反矩陣
-                        double[,] inv = MatrixInverse(csPT);
+                        double[,] inv = Inverse(csPT);
                         //無法求解反矩陣代表P在平面上，其他則代表P不在平面上
                         if (inv == null)//在平面上
                         {

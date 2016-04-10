@@ -4,10 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using PTL.Geometry.MathModel;
+using static PTL.Mathematics.BaseFunctions;
 
 namespace PTL.Geometry.MathModel
 {
-    public class NUB_Surface : PTL.Mathematics.ProtectedPTLM, IParametricSurface
+    public class NUB_Surface : IParametricSurface
     {
         public XYZ4[][] DataPoints;
         public NUB_Curve[] UCurves;

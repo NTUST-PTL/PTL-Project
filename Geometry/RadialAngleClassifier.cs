@@ -4,10 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using PTL.Geometry.MathModel;
+using static PTL.Mathematics.BaseFunctions;
 
 namespace PTL.Geometry
 {
-    class RadialAngleClassifier : PTL.Mathematics.ProtectedPTLM
+    class RadialAngleClassifier
     {
         private int _n = 100;
         private XYZ4[] _Boundary;

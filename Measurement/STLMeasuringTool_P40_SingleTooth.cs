@@ -8,6 +8,7 @@ using System.Reflection;
 using PTL.Geometry;
 using PTL.Definitions;
 using PTL.Geometry.MathModel;
+using static PTL.Mathematics.BaseFunctions;
 
 namespace PTL.Measurement
 {
@@ -116,9 +117,9 @@ namespace PTL.Measurement
                 //根據旋轉兩個旋轉角旋轉拓樸面
                 double rotateAngle;
                 rotateAngle = RotateAngles[this.PitchPoint1];
-                TopoFace1.Transform(GetRotateMatrix(Axis.Z, rotateAngle));
+                TopoFace1.Transform(NewRotateMatrix4(Axis.Z, rotateAngle));
                 rotateAngle = RotateAngles[this.PitchPoint2];
-                TopoFace2.Transform(GetRotateMatrix(Axis.Z, rotateAngle));
+                TopoFace2.Transform(NewRotateMatrix4(Axis.Z, rotateAngle));
                 Solve();
             }
         }
@@ -217,12 +218,12 @@ namespace PTL.Measurement
                     else
                         distanceAll[i] = 0;
 
-                this.Distance1 = (double[,])ArrayReshape(
-                    (double[])ArrayTake(distanceAll, new int[] { 0 }, new int[] { count / 2 - 1 }),
-                    ArrayGetDimension(this.TopoFace1.Points));
-                this.Distance2 = (double[,])ArrayReshape(
-                    (double[])ArrayTake(distanceAll, new int[] { count / 2 }, new int[] { count - 1 }),
-                    ArrayGetDimension(this.TopoFace1.Points));
+                this.Distance1 = (double[,])Reshape(
+                    (double[])Take(distanceAll, new int[] { 0 }, new int[] { count / 2 - 1 }),
+                    GetDimensions(this.TopoFace1.Points));
+                this.Distance2 = (double[,])Reshape(
+                    (double[])Take(distanceAll, new int[] { count / 2 }, new int[] { count - 1 }),
+                    GetDimensions(this.TopoFace1.Points));
 
                 //設定狀態
                 this.IsBusy = false;

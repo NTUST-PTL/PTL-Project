@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using PTL.Geometry.MathModel;
+using static PTL.Mathematics.BaseFunctions;
 
 namespace PTL.Geometry
 {
@@ -145,7 +146,7 @@ namespace PTL.Geometry
         {
             double[,] M = externalCoordinateMatrix;
             if (this.CoordinateSystem != null)
-                M = MatrixDot(M, this.CoordinateSystem);
+                M = Dot(M, this.CoordinateSystem);
             return new XYZ4[] { Transport<XYZ4>(M, this), Transport<XYZ4>(M, this) };
         }
 

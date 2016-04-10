@@ -10,7 +10,7 @@ using PTL.Exceptions;
 
 namespace PTL.Mathematics
 {
-    public class PTLM
+    public class BaseFunctions
     {
         #region 三角函數
         public static double Cos(double trad)
@@ -219,7 +219,7 @@ namespace PTL.Mathematics
             return n1;
         }
 
-        public static double[] MatrixDot(double[] array1, double[] array2)
+        public static double[] MultEach(double[] array1, double[] array2)
         {
             if (array1 != null && array2 != null)
             {
@@ -243,7 +243,64 @@ namespace PTL.Mathematics
                 return array2;
             return null;
         }
-        public static double[] MatrixDot(double[] array1, double[,] array2)
+        public static double[,] MultEach(double[,] tMatrix, double tscale)
+        {
+            PointD p2 = new PointD();
+
+            double[,] MatrixNew = new double[tMatrix.GetLength(0), tMatrix.GetLength(1)];
+
+            for (int i = 0; i < tMatrix.GetLength(0); i++)
+            {
+                for (int j = 0; j < tMatrix.GetLength(1); j++)
+                {
+                    MatrixNew[i, j] = tscale * tMatrix[i, j];
+                }
+            }
+            return MatrixNew;
+        }
+        public static double[,] AddEach(params double[][,] arrarys)
+        {
+            for (int i = 0; i < arrarys.Length - 1; i++)
+                if (arrarys[i].GetLength(0) != arrarys[i + 1].GetLength(0) && arrarys[i].GetLength(1) != arrarys[i + 1].GetLength(1))
+                    return null;
+
+            Func<double[,], double[,], double[,]> AddFunc = (double[,] ptr1, double[,] ptr2) =>
+            #region
+            {
+                int r1, c1;
+                r1 = ptr1.GetUpperBound(0);  // UBound
+                c1 = ptr1.GetUpperBound(1);  // UBound
+                                             // r1 = UBound(ptr1,1);
+                                             // c1 = UBound(ptr1,2);
+                double[,] outptr = new double[r1 + 1, c1 + 1];
+                for (int i = 0; r1 >= i; i++)
+                {
+                    for (int j = 0; c1 >= j; j++)
+                    {
+                        outptr[i, j] = ptr1[i, j] + ptr2[i, j];
+                    }
+                }
+                return outptr;
+            };
+            #endregion
+            double[,] outputArray = arrarys[0];
+            for (int i = 1; i < arrarys.Length; i++)
+            {
+                outputArray = AddFunc(outputArray, arrarys[i]);
+            }
+            return outputArray;
+        }
+        public static double Dot(double[] ptr1, double[] ptr2)
+        {
+            double value = 0.0;
+
+            for (int i = 0; i <= ptr1.GetUpperBound(0); i++)
+            {
+                value = value + ptr1[i] * ptr2[i];
+            }
+            return value;
+        }
+        public static double[] Dot(double[] array1, double[,] array2)
         {
             if (array1 != null && array2 != null)
             {
@@ -272,7 +329,7 @@ namespace PTL.Mathematics
                 return array1;
             return null;
         }
-        public static double[] MatrixDot(double[,] array1, double[] array2)
+        public static double[] Dot(double[,] array1, double[] array2)
         {
             if (array1 != null && array2 != null)
             {
@@ -304,7 +361,7 @@ namespace PTL.Mathematics
                 return array2;
             return null;
         }
-        public static double[,] MatrixDot(double[,] array1, double[,] array2)
+        public static double[,] Dot(double[,] array1, double[,] array2)
         {
             if (array1 != null && array2 != null)
             {
@@ -343,44 +400,12 @@ namespace PTL.Mathematics
                 return array2;
             return null;
         }
-        public static double[,] MatrixDot(params double[][,] arrarys)
+        public static double[,] Dot(params double[][,] arrarys)
         {
             double[,] outputArray = arrarys[0];
             for (int i = 1; i < arrarys.Length; i++)
             {
-                outputArray = MatrixDot(outputArray, arrarys[i]);
-            }
-            return outputArray;
-        }
-        public static double[,] MatrixAdd(params double[][,] arrarys)
-        {
-            for (int i = 0; i < arrarys.Length - 1; i++)
-                if (arrarys[i].GetLength(0) != arrarys[i + 1].GetLength(0) && arrarys[i].GetLength(1) != arrarys[i + 1].GetLength(1))
-                    return null;
-
-            Func<double[,], double[,], double[,]> AddFunc = (double[,] ptr1, double[,] ptr2) =>
-            #region
-            {
-                int r1, c1;
-                r1 = ptr1.GetUpperBound(0);  // UBound
-                c1 = ptr1.GetUpperBound(1);  // UBound
-                                             // r1 = UBound(ptr1,1);
-                                             // c1 = UBound(ptr1,2);
-                double[,] outptr = new double[r1 + 1, c1 + 1];
-                for (int i = 0; r1 >= i; i++)
-                {
-                    for (int j = 0; c1 >= j; j++)
-                    {
-                        outptr[i, j] = ptr1[i, j] + ptr2[i, j];
-                    }
-                }
-                return outptr;
-            };
-            #endregion
-            double[,] outputArray = arrarys[0];
-            for (int i = 1; i < arrarys.Length; i++)
-            {
-                outputArray = AddFunc(outputArray, arrarys[i]);
+                outputArray = Dot(outputArray, arrarys[i]);
             }
             return outputArray;
         }
@@ -392,33 +417,9 @@ namespace PTL.Mathematics
             outptr[2] = ptr1[0] * ptr2[1] - ptr1[1] * ptr2[0];
             return outptr;
         }
-        public static double Dot(double[] ptr1, double[] ptr2)
-        {
-            double value = 0.0;
+        
 
-            for (int i = 0; i <= ptr1.GetUpperBound(0); i++)
-            {
-                value = value + ptr1[i] * ptr2[i];
-            }
-            return value;
-        }
-        public static double[,] MatrixScale(double[,] tMatrix, double tscale)
-        {
-            PointD p2 = new PointD();
-
-            double[,] MatrixNew = new double[tMatrix.GetLength(0), tMatrix.GetLength(1)];
-
-            for (int i = 0; i < tMatrix.GetLength(0); i++)
-            {
-                for (int j = 0; j < tMatrix.GetLength(1); j++)
-                {
-                    MatrixNew[i, j] = tscale * tMatrix[i, j];
-                }
-            }
-            return MatrixNew;
-        }
-
-        public static double[,] IdentityMatrix(int tn)
+        public static double[,] NewIdentityMatrix(int tn)
         {
             double[,] tMatrix = new double[tn, tn];
 
@@ -436,7 +437,7 @@ namespace PTL.Mathematics
             }
             return tMatrix;
         }
-        public static double[,] ZeroMatrix(int dimension1, int dimention2)
+        public static double[,] NewZeroMatrix(int dimension1, int dimention2)
         {
             double[,] matrix = new double[dimension1, dimention2];
             for (int i = 0; i < dimension1; i++)
@@ -448,7 +449,7 @@ namespace PTL.Mathematics
             }
             return matrix;
         }
-        public static System.Array InitializedMatrix<T>(T value, params int[] dimensions)
+        public static System.Array NewFilledMatrix<T>(T value, params int[] dimensions)
         {
             //定義Array每個維度的起始索引值(起始值可以不為0)
             int[] lowerBounds = new int[dimensions.Length];
@@ -477,14 +478,14 @@ namespace PTL.Mathematics
             }
             return newArray;
         }
-        public static int[] ArrayGetDimension(System.Array Array)
+        public static int[] GetDimensions(System.Array Array)
         {
             int[] dimensions = new int[Array.Rank];
             for (int i = 0; i < Array.Rank; i++)
                 dimensions[i] = Array.GetLength(i);
             return dimensions;
         }
-        public static System.Array ArrayReshape(System.Array Matrix, params int[] dimensions)
+        public static System.Array Reshape(System.Array Matrix, params int[] dimensions)
         {
             System.Type elementType = Matrix.GetType().GetElementType();
             //定義Array每個維度的起始索引值(起始值可以不為0)
@@ -512,7 +513,7 @@ namespace PTL.Mathematics
             }
             return newArray;
         }
-        public static System.Array ArrayTake(System.Array Matrix, int[] startIndex, int[] endIndex)
+        public static System.Array Take(System.Array Matrix, int[] startIndex, int[] endIndex)
         {
             System.Type elementType = Matrix.GetType().GetElementType();
             //定義Array每個維度的起始索引值(起始值可以不為0)
@@ -552,7 +553,7 @@ namespace PTL.Mathematics
             }
             return newArray;
         }
-        public static void ArrayPut(System.Array Matrix, System.Array TargetMatrix, int[] startIndex)
+        public static void Replace(System.Array Matrix, System.Array TargetMatrix, int[] startIndex)
         {
             if (Matrix != null && TargetMatrix != null)
             {
@@ -593,7 +594,7 @@ namespace PTL.Mathematics
                 }
             }
         }
-        public static Array ArratJoin(Array arr1, Array arr2, int dim = 0)
+        public static Array Join(Array arr1, Array arr2, int dim = 0)
         {
             if (arr1 == null && arr2 != null)
                 return arr2;
@@ -605,8 +606,8 @@ namespace PTL.Mathematics
             Type type1 = arr1.GetType().GetElementType();
             Type type2 = arr2.GetType().GetElementType();
 
-             int[] dims1 = ArrayGetDimension(arr1);
-             int[] dims2 = ArrayGetDimension(arr2);
+             int[] dims1 = GetDimensions(arr1);
+             int[] dims2 = GetDimensions(arr2);
 
 
              if (dims1.Length != dims2.Length)
@@ -683,7 +684,7 @@ namespace PTL.Mathematics
             return newArray;
         }
 
-        public static double[,] GetRotateMatrix(Axis axis, double theta)
+        public static double[,] NewRotateMatrix4(Axis axis, double theta)
         {
             double[,] Mr = null;
             switch (axis)
@@ -709,32 +710,32 @@ namespace PTL.Mathematics
             }
             return Mr;
         }
-        public static double[,] GetRotateMatrix(double[] tRotateAxis, double theta)
+        public static double[,] NewRotateMatrix4(double[] tRotateAxis, double theta)
         {
             double angleZ = Atan2(tRotateAxis[1], tRotateAxis[0]);
             double angleY = -Atan2(tRotateAxis[2], Sqrt(tRotateAxis[0] * tRotateAxis[0] + tRotateAxis[1] * tRotateAxis[1]));
-            double[,] A21 = GetRotateMatrix(Axis.Z, -angleZ);
-            double[,] A32 = GetRotateMatrix(Axis.Y, -angleY);
-            double[,] ARotate = GetRotateMatrix(Axis.X, theta);
-            double[,] A23 = GetRotateMatrix(Axis.Y, angleY);
-            double[,] A12 = GetRotateMatrix(Axis.Z, angleZ);
+            double[,] A21 = NewRotateMatrix4(Axis.Z, -angleZ);
+            double[,] A32 = NewRotateMatrix4(Axis.Y, -angleY);
+            double[,] ARotate = NewRotateMatrix4(Axis.X, theta);
+            double[,] A23 = NewRotateMatrix4(Axis.Y, angleY);
+            double[,] A12 = NewRotateMatrix4(Axis.Z, angleZ);
 
-            return MatrixDot(A12, A23, ARotate, A32, A21);
+            return Dot(A12, A23, ARotate, A32, A21);
         }
 
         public static double[] RotateX(double theta, double[] tr1)
         {
-            double[,] m = GetRotateMatrix(Axis.X, theta);
+            double[,] m = NewRotateMatrix4(Axis.X, theta);
             return Transport3(m, tr1);
         }
         public static double[] RotateY(double theta, double[] tr1)
         {
-            double[,] m = GetRotateMatrix(Axis.Y, theta);
+            double[,] m = NewRotateMatrix4(Axis.Y, theta);
             return Transport3(m, tr1);
         }
         public static double[] RotateZ(double theta, double[] tr1)
         {
-            double[,] m = GetRotateMatrix(Axis.Z, theta);
+            double[,] m = NewRotateMatrix4(Axis.Z, theta);
             return Transport3(m, tr1);
         }
         public static double[] Transport3(double[,] tMatrix, double[] tr1)
@@ -779,17 +780,17 @@ namespace PTL.Mathematics
 
         public static IEnumerable<double[]> RotateX(double theta, params double[][] tr1)
         {
-            double[,] m = GetRotateMatrix(Axis.X, theta);
+            double[,] m = NewRotateMatrix4(Axis.X, theta);
             return Transport3(m, tr1);
         }
         public static IEnumerable<double[]> RotateY(double theta, params double[][] tr1)
         {
-            double[,] m = GetRotateMatrix(Axis.Y, theta);
+            double[,] m = NewRotateMatrix4(Axis.Y, theta);
             return Transport3(m, tr1);
         }
         public static IEnumerable<double[]> RotateZ(double theta, params double[][] tr1)
         {
-            double[,] m = GetRotateMatrix(Axis.Z, theta);
+            double[,] m = NewRotateMatrix4(Axis.Z, theta);
             return Transport3(m, tr1);
         }
         public static IEnumerable<double[]> Transport3(double[,] tMatrix, params double[][] tr1)
@@ -814,10 +815,10 @@ namespace PTL.Mathematics
             }
         }
 
-        public static double[,] MatrixInverse(double[,] dMatrix)
+        public static double[,] Inverse(double[,] dMatrix)
         {
             int Level = dMatrix.GetLength(0);
-            double dMatrixValue = MatrixDeterminant(dMatrix);
+            double dMatrixValue = Determinant(dMatrix);
             // 判斷行列式是否為0 ( < allowError )
             double allowError = 0.000000000001;
             if (dMatrixValue > -allowError && dMatrixValue < allowError)
@@ -889,7 +890,7 @@ namespace PTL.Mathematics
                     dReturn[i, j] = dReverseMatrix[i, j + Level];
             return dReturn;
         }
-        public static double MatrixDeterminant(double[,] MatrixList)
+        public static double Determinant(double[,] MatrixList)
         {
             int Level = MatrixList.GetLength(0);
             double[,] dMatrix = new double[Level, Level];
@@ -940,7 +941,7 @@ namespace PTL.Mathematics
             }
             return k * sn;
         }
-        public static T[,] MatrixTranspose<T>(T[,] Matrix)
+        public static T[,] Transpose<T>(T[,] Matrix)
         {
             int r1, c1;
             r1 = Matrix.GetUpperBound(0) + 1;  //UBound

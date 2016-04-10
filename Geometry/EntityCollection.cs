@@ -9,6 +9,7 @@ using PTL.Definitions;
 using PTL.Geometry.MathModel;
 using PTL.OpenGL.Plot;
 using CsGL.OpenGL;
+using static PTL.Mathematics.BaseFunctions;
 
 namespace PTL.Geometry
 {
@@ -71,7 +72,7 @@ namespace PTL.Geometry
         
         public override XYZ4[] GetBoundary(double[,] externalCoordinateMatrix)
         {
-            double[,] M = MatrixDot(externalCoordinateMatrix, this.CoordinateSystem);
+            double[,] M = Dot(externalCoordinateMatrix, this.CoordinateSystem);
 
             XYZ4[] boundary = new XYZ4[2] { new XYZ4(), new XYZ4() };
             if (Entities.Count != 0)

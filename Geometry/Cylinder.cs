@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using CsGL.OpenGL;
 using PTL.Geometry.MathModel;
+using static PTL.Mathematics.BaseFunctions;
 
 namespace PTL.Geometry
 {
@@ -64,7 +65,7 @@ namespace PTL.Geometry
 
         public override XYZ4[] GetBoundary(double[,] externalCoordinateMatrix)
         {
-            return this.face.GetBoundary(MatrixDot(externalCoordinateMatrix, CoordinateSystem));
+            return this.face.GetBoundary(Dot(externalCoordinateMatrix, CoordinateSystem));
         }
 
         public void RenderGeometry()
@@ -80,11 +81,11 @@ namespace PTL.Geometry
                 N1 = Normalize(N1);
 
                 double dTheta = PI * 2.0 / (sliceNumber - 1);
-                double[,] M = IdentityMatrix(4);
+                double[,] M = NewIdentityMatrix(4);
 
                 for (int i = 0; i < sliceNumber; i++)
                 {
-                    M = GetRotateMatrix(axisDirection, dTheta * i);
+                    M = NewRotateMatrix4(axisDirection, dTheta * i);
                     Vector n = Transport4(M, N1);
                     Vector r = n * this.Radius;
 

@@ -259,9 +259,9 @@ namespace PTL.Windows.Controls
                       { M.M12, M.M22, M.M32, M.OffsetY },
                       { M.M13, M.M23, M.M33, M.OffsetZ },
                       { M.M14, M.M24, M.M34, M.M44 }};
-                    double[,] mi = PTLM.MatrixInverse(m);
-                    XYZ3 look = PTLM.Transport(mi, new XYZ3(0, 0, -1));
-                    XYZ3 up = PTLM.Transport(mi, new XYZ3(0, 1, 0));
+                    double[,] mi = Mathematics.BaseFunctions.Inverse(m);
+                    XYZ3 look = Mathematics.BaseFunctions.Transport(mi, new XYZ3(0, 0, -1));
+                    XYZ3 up = Mathematics.BaseFunctions.Transport(mi, new XYZ3(0, 1, 0));
 
                     item.Item3.ReshreshModelMesh(look, up, camera.Width, Convert.ToInt32(Viewport.ActualWidth));
                 }

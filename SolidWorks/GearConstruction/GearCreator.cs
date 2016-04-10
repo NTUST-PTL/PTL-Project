@@ -10,10 +10,11 @@ using PTL.SolidWorks;
 using PTL.SolidWorks.Edit;
 using SolidWorks.Interop.sldworks;
 using SolidWorks.Interop.swconst;
+using static PTL.Mathematics.BaseFunctions;
 
 namespace PTL.SolidWorks.GearConstruction
 {
-    public class GearCreator : PTL.Mathematics.ProtectedPTLM
+    public class GearCreator
     {
         public static void PublishToSolidWorks(GearData gearData)
         {

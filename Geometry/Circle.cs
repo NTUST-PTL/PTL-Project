@@ -8,6 +8,7 @@ using System.IO;
 using CsGL.OpenGL;
 using PTL.Definitions;
 using PTL.Geometry.MathModel;
+using static PTL.Mathematics.BaseFunctions;
 
 namespace PTL.Geometry
 {

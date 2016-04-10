@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 using CsGL.OpenGL;
 using PTL.OpenGL.Plot;
 using PTL.Geometry.MathModel;
+using static PTL.Mathematics.BaseFunctions;
 
 namespace PTL.Geometry
 {
-    public class CubicClassifier : PTL.Mathematics.ProtectedPTLM, ICanPlotInOpenGL
+    public class CubicClassifier : ICanPlotInOpenGL
     {
         private int _n = 100;
         private XYZ4[] _Boundary;

@@ -16,10 +16,10 @@ namespace PTL.Geometry.WPFExtensions
     {
         public static XYZ3 GetAnyNormal(XYZ3 direction)
         {
-            XYZ3 n1 = PTLM.Cross(new XYZ3(0.0, 0.0, 1.0), direction);
-            if (PTLM.Norm(n1) < 1e-5)
-                n1 = PTLM.Cross(new XYZ3(0.0, 1.0, 0.0), direction);
-            n1 = PTLM.Normalize(n1);
+            XYZ3 n1 = Mathematics.BaseFunctions.Cross(new XYZ3(0.0, 0.0, 1.0), direction);
+            if (Mathematics.BaseFunctions.Norm(n1) < 1e-5)
+                n1 = Mathematics.BaseFunctions.Cross(new XYZ3(0.0, 1.0, 0.0), direction);
+            n1 = Mathematics.BaseFunctions.Normalize(n1);
             return n1;
         }
 
@@ -32,23 +32,23 @@ namespace PTL.Geometry.WPFExtensions
             XYZ3 segment2StartDirection,
             bool counterClock)
         {
-            XYZ3 v = PTLM.Normalize(direction);
-            XYZ3 n1 = PTLM.Normalize(segment2StartDirection);
-            XYZ3 n2 = counterClock ? PTLM.Cross(n1, direction) : PTLM.Cross(direction, n1);
-            n2 = PTLM.Normalize(n2);
+            XYZ3 v = Mathematics.BaseFunctions.Normalize(direction);
+            XYZ3 n1 = Mathematics.BaseFunctions.Normalize(segment2StartDirection);
+            XYZ3 n2 = counterClock ? Mathematics.BaseFunctions.Cross(n1, direction) : Mathematics.BaseFunctions.Cross(direction, n1);
+            n2 = Mathematics.BaseFunctions.Normalize(n2);
 
             TopoFace toprface = new TopoFace();
             toprface.Points = new XYZ4[segment1, segment2];
             toprface.Normals = new XYZ3[segment1, segment2];
             for (int i = 0; i < segment1; i++)
             {
-                double theta1 = i * 0.5 * PTLM.PI / (segment1 - 1);
-                double vr = radius * PTLM.Cos(theta1);
-                double h = radius * PTLM.Sin(theta1);
+                double theta1 = i * 0.5 * Mathematics.BaseFunctions.PI / (segment1 - 1);
+                double vr = radius * Mathematics.BaseFunctions.Cos(theta1);
+                double h = radius * Mathematics.BaseFunctions.Sin(theta1);
                 for (int j = 0; j < segment2; j++)
                 {
-                    double theta2 = j * 2.0 * PTLM.PI / (segment2 - 1);
-                    XYZ3 rr = vr * n1 * PTLM.Cos(theta2) + vr * n2 * PTLM.Sin(theta2) + h * v;
+                    double theta2 = j * 2.0 * Mathematics.BaseFunctions.PI / (segment2 - 1);
+                    XYZ3 rr = vr * n1 * Mathematics.BaseFunctions.Cos(theta2) + vr * n2 * Mathematics.BaseFunctions.Sin(theta2) + h * v;
                     XYZ4 p = center + rr;
                     toprface.Points[i, j] = p;
                     toprface.Normals[i, j] = rr;
@@ -68,17 +68,17 @@ namespace PTL.Geometry.WPFExtensions
             int totalWidthPixel
             )
         {
-            XYZ3 pn = PTLM.Cross(look, lineDirect);
+            XYZ3 pn = Mathematics.BaseFunctions.Cross(look, lineDirect);
 
             //If lineDirect parallel to camera.LookDirection
-            if (PTLM.Norm(pn) < 1e-5)
+            if (Mathematics.BaseFunctions.Norm(pn) < 1e-5)
                 return null;
 
             double trueWidth = linewidth * (cemeraRange / totalWidthPixel);
 
-            XYZ4 V = trueWidth / 2.0 * (XYZ4)PTLM.Normalize(pn);
+            XYZ4 V = trueWidth / 2.0 * (XYZ4)Mathematics.BaseFunctions.Normalize(pn);
             XYZ4 p1, p2;
-            if (PTLM.Dot(pn, up) > 0)
+            if (Mathematics.BaseFunctions.Dot(pn, up) > 0)
             {
                 p1 = position + V;
                 p2 = position - V;
@@ -159,7 +159,7 @@ namespace PTL.Geometry.WPFExtensions
                 //Start
                 #region Start
                 {
-                    points.Add(GetLineRenderPoint(pline.Points[0], PTLM.Normalize(pline.Points[1] - pline.Points[0]), pline.LineWidth, look, up, range, pixelNum));
+                    points.Add(GetLineRenderPoint(pline.Points[0], Mathematics.BaseFunctions.Normalize(pline.Points[1] - pline.Points[0]), pline.LineWidth, look, up, range, pixelNum));
                 }
                 #endregion Start
                 //Mid
@@ -167,15 +167,15 @@ namespace PTL.Geometry.WPFExtensions
                 {
                     for (int i = 1; i < pointNum - 1; i++)
                     {
-                        points.Add(GetLineRenderPoint(pline.Points[i], PTLM.Normalize(pline.Points[i] - pline.Points[i - 1]), pline.LineWidth, look, up, range, pixelNum));
-                        points.Add(GetLineRenderPoint(pline.Points[i], PTLM.Normalize(pline.Points[i + 1] - pline.Points[i]), pline.LineWidth, look, up, range, pixelNum));
+                        points.Add(GetLineRenderPoint(pline.Points[i], Mathematics.BaseFunctions.Normalize(pline.Points[i] - pline.Points[i - 1]), pline.LineWidth, look, up, range, pixelNum));
+                        points.Add(GetLineRenderPoint(pline.Points[i], Mathematics.BaseFunctions.Normalize(pline.Points[i + 1] - pline.Points[i]), pline.LineWidth, look, up, range, pixelNum));
                     }
                 }
                 #endregion Mid
                 //End
                 #region End
                 {
-                    points.Add(GetLineRenderPoint(pline.Points[pointNum - 1], PTLM.Normalize(pline.Points[pointNum - 1] - pline.Points[pointNum - 2]), pline.LineWidth, look, up, range, pixelNum));
+                    points.Add(GetLineRenderPoint(pline.Points[pointNum - 1], Mathematics.BaseFunctions.Normalize(pline.Points[pointNum - 1] - pline.Points[pointNum - 2]), pline.LineWidth, look, up, range, pixelNum));
                 }
                 #endregion End
 
@@ -381,7 +381,7 @@ namespace PTL.Geometry.WPFExtensions
             XYZ3 v1112 = face.Points[0, 1] - face.Points[0, 0];
             XYZ3 v1221 = face.Points[0, 1] - face.Points[0, 1];
             XYZ3 n1 = face.Normals[0, 0];
-            if (PTLM.Dot(PTLM.Cross(v1112, v1221), n1) > 0)
+            if (Mathematics.BaseFunctions.Dot(Mathematics.BaseFunctions.Cross(v1112, v1221), n1) > 0)
                 direct = true;
 
             //加入點資料

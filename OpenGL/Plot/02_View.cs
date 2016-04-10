@@ -15,6 +15,7 @@ using PTL.OpenGL;
 using PTL.OpenGL.Plot;
 using PTL.Windows.Controls;
 using PTL.Base;
+using static PTL.Mathematics.BaseFunctions;
 
 namespace PTL.OpenGL.Plot
 {

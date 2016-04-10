@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static PTL.Mathematics.BaseFunctions;
 
 namespace PTL.Geometry.MathModel
 {
-    public class NUB_Curve : PTL.Mathematics.ProtectedPTLM
+    public class NUB_Curve
     {
         public XYZ4[] DataPoints;
         public XYZ4[] ControlPoints;
@@ -60,7 +61,7 @@ namespace PTL.Geometry.MathModel
             DataPoints = dataPoints;
             int n = DataPoints.Length;
             this.LastSegmentIndex = n - 2;
-            double[,] M = ZeroMatrix(n + 2, n + 2);
+            double[,] M = NewZeroMatrix(n + 2, n + 2);
             
             double[,] invM;
 
@@ -120,7 +121,7 @@ namespace PTL.Geometry.MathModel
             #endregion
 
             #region 求解控制點
-            invM = MatrixInverse(M);
+            invM = Inverse(M);
             if (n == 2)
             {
                 ControlPoints = new XYZ4[] { DataPoints[0], DataPoints[0], DataPoints[1], DataPoints[1] };
@@ -145,7 +146,7 @@ namespace PTL.Geometry.MathModel
             if (segmentsIndex >= 0 && segmentsIndex < DataPoints.Length - 1)
             {
                 int i_d = segmentsIndex + 2;
-                double[,] Nci = IdentityMatrix(4);
+                double[,] Nci = NewIdentityMatrix(4);
                 Nci[0, 0] = Pow(Delta_i[i_d], 2)
                             / (Delta_i[i_d - 1] + Delta_i[i_d])
                             / (Delta_i[i_d - 2] + Delta_i[i_d - 1] + Delta_i[i_d]);
@@ -211,7 +212,7 @@ namespace PTL.Geometry.MathModel
             //tou
             double[] tou = new Double[] { 1, u, u * u, u * u * u };
             //bending
-            double[] blending = MatrixDot(tou, Nci);
+            double[] blending = Dot(tou, Nci);
             //ControlPoint
             XYZ4 p = new XYZ4();
             for (int i = 0; i < blending.Length; i++)
@@ -226,7 +227,7 @@ namespace PTL.Geometry.MathModel
             //tou
             double[] tou = new Double[] { 0, 1, 2.0 * u, 3.0 * u * u };
             //bending
-            double[] blending = MatrixDot(tou, Nci);
+            double[] blending = Dot(tou, Nci);
             //ControlPoint
             XYZ3 p = new XYZ3();
             for (int i = 0; i < blending.Length; i++)
@@ -241,7 +242,7 @@ namespace PTL.Geometry.MathModel
             //tou
             double[] tou = new Double[] { 0, 0, 2.0, 6.0 * u };
             //bending
-            double[] blending = MatrixDot(tou, Nci);
+            double[] blending = Dot(tou, Nci);
             //ControlPoint
             XYZ3 p = new XYZ3();
             for (int i = 0; i < blending.Length; i++)

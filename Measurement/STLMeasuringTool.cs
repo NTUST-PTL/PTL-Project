@@ -8,10 +8,11 @@ using System.Reflection;
 using PTL.Geometry;
 using PTL.Definitions;
 using PTL.Geometry.MathModel;
+using static PTL.Mathematics.BaseFunctions;
 
 namespace PTL.Measurement
 {
-    public abstract class STLMeasuringTool : PTL.Mathematics.ProtectedPTLM
+    public abstract class STLMeasuringTool
     {
         /// <summary>
         /// 要量測的STL

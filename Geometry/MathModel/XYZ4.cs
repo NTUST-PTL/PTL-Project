@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static PTL.Mathematics.BaseFunctions;
 
 namespace PTL.Geometry.MathModel
 {
-    public class XYZ4 : PTL.Mathematics.ProtectedPTLM, IXYZ
+    public class XYZ4 : IXYZ
     {
         protected double[] values;
         public double[] Values

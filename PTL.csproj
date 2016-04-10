@@ -152,8 +152,7 @@
     <Compile Include="Geometry\RadialAngleClassifier.cs" />
     <Compile Include="Geometry\WPFExtensions\WPFExtensions.cs" />
     <Compile Include="Exceptions\ArrayDimensionMismatchException.cs" />
-    <Compile Include="Mathematics\ProtectedMath.cs" />
-    <Compile Include="Mathematics\PTLM.cs" />
+    <Compile Include="Mathematics\BasicFunctions.cs" />
     <Compile Include="Measurement\STLMeasuringTool_P40.cs" />
     <Compile Include="Measurement\STLMeasuringTool_P40_SingleTooth.cs" />
     <Compile Include="Measurement\STLMeasuringTool_ZAngle.cs" />

@@ -200,7 +200,7 @@ namespace PTL
 
             return len;
         }
-        protected static double[,] MatrixDot(double[,] ptr1, double[,] ptr2)
+        protected static double[,] Dot(double[,] ptr1, double[,] ptr2)
         {
             int r1, c1, c2, i, j, k;
             r1 = ptr1.GetUpperBound(0);  // UBound
@@ -230,9 +230,9 @@ namespace PTL
             }
             return outptr;
         }
-        protected static double[,] MatrixDot(double[,] ptr1, double[,] ptr2, double[,] ptr3)
+        protected static double[,] Dot(double[,] ptr1, double[,] ptr2, double[,] ptr3)
         {
-            double[,] outptr = MatrixDot(ptr1, MatrixDot(ptr3, ptr2));
+            double[,] outptr = Dot(ptr1, Dot(ptr3, ptr2));
 
             return outptr;
         }
@@ -360,7 +360,7 @@ namespace PTL
             }
             return tr2;
         }
-        protected static double[,] MatrixScale(double[,] tMatrix, double tscale)
+        protected static double[,] MultEach(double[,] tMatrix, double tscale)
         {
             PointD p2 = new PointD();
 
@@ -375,7 +375,7 @@ namespace PTL
             }
             return MatrixNew;
         }
-        protected static double[,] IdentityMatrix(int tn)
+        protected static double[,] NewIdentityMatrix(int tn)
         {
             double[,] tMatrix = new double[tn, tn];
 
@@ -407,7 +407,7 @@ namespace PTL
         }
         protected static double[,] RotateMatrix(Axis axis, double theta)
         {
-            double[,] Mr = IdentityMatrix(4);
+            double[,] Mr = NewIdentityMatrix(4);
             switch (axis)
             {
                 case Axis.X:
@@ -437,7 +437,7 @@ namespace PTL
             double[,] MRy = RotateMatrix(Axis.Y, thetay);
             double[,] MRz = RotateMatrix(Axis.Z, thetaz);
 
-            double[,] Mr = MatrixDot(MRx, MRy, MRz);
+            double[,] Mr = Dot(MRx, MRy, MRz);
 
             return Mr;
         }
@@ -447,7 +447,7 @@ namespace PTL
             double[,] II = new double[3, 3];
             double[,] Cs = new double[3, 3];
 
-            II = IdentityMatrix(3);
+            II = NewIdentityMatrix(3);
 
             Cs[0, 0] = 0.0;
             Cs[0, 1] = -tRotateAxis.Z;
@@ -460,7 +460,7 @@ namespace PTL
             Cs[2, 2] = 0.0;
 
             //Rotate Matrix
-            Lr = MatrixAdd(II, MatrixScale(MatrixDot(Cs, Cs), 1.0 - Cos(theta)), MatrixScale(Cs, Sin(theta)));
+            Lr = MatrixAdd(II, MultEach(Dot(Cs, Cs), 1.0 - Cos(theta)), MultEach(Cs, Sin(theta)));
 
             return Lr;
         }
@@ -477,7 +477,7 @@ namespace PTL
         {
             double[,] tMatrix = new double[4, 4];
 
-            tMatrix = IdentityMatrix(4);
+            tMatrix = NewIdentityMatrix(4);
             tMatrix[0, 3] = p1.X;
             tMatrix[1, 3] = p1.Y;
             tMatrix[2, 3] = p1.Z;

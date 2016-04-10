@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using System.Diagnostics;
 using System.Drawing;
 using PTL.Geometry;
+using static PTL.Mathematics.BaseFunctions;
 
 namespace PTL.FileOperation
 {
@@ -19,7 +20,7 @@ namespace PTL.FileOperation
         void ExportScript(Part DXF2Export, string filename, bool openFolder);
     }
 
-    public class DXFExporter : PTL.Mathematics.ProtectedPTLM
+    public class DXFExporter
     {
         /// <summary>
         /// System.Drawing.Color對應DXF索引顏色的Dictionary
