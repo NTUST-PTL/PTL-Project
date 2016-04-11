@@ -162,7 +162,6 @@
     <Compile Include="Measurement\STLMeasuringTool.cs" />
     <Compile Include="OpenGL\Plot\02_View.cs" />
     <Compile Include="OpenGL\Plot\03_PlotSub.cs" />
-    <Compile Include="Math.cs" />
     <Compile Include="SolidWorks\Edit\SLDCRVReader.cs" />
     <Compile Include="SolidWorks\GearConstruction\APIFileReader.cs" />
     <Compile Include="SolidWorks\GearConstruction\GearCreator.cs" />
