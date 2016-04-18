@@ -44,5 +44,6 @@ namespace PTL.SolidWorks.GearConstruction
             get { return toothFaces; }
             set { toothFaces = value; }
         }
+        public bool InvertCuttingSide { get; set; } = false;
     }
 }

@@ -112,59 +112,78 @@ namespace PTL.SolidWorks.GearConstruction
                 tf.SovleNormalVector();
                 tf.SurfaceDisplayOption = SurfaceDisplayOptions.Mesh;
                 PartEditMethods.AddTopoFaceToSolidWorksPart(modDoc, tf, ref TotalCurveNumber, ref TotalFaceNumber);
-                PTL.DebugTools.Plot plot0 = new DebugTools.Plot();
-                plot0.Window.View.AutoScale = false;
-                plot0.AddSomethings(tf);
+                //PTL.DebugTools.Plot plot0 = new DebugTools.Plot();
+                //plot0.Window.View.AutoScale = false;
+                //plot0.AddSomethings(tf);
             }
 
-            modDoc.ClearSelection2(true);
-            for (int i = 1; i <= TotalFaceNumber; i++)
+            if (gearData.ToothFaces.Count > 1)
             {
-                bool ok = modDoc.Extension.SelectByID2("曲面-疊層拉伸" + i, "SURFACEBODY", 0, 0, 0, true, 1, null, 0);
-                ok = true;
+                modDoc.ClearSelection2(true);
+                for (int i = 1; i <= TotalFaceNumber; i++)
+                {
+                    bool ok = modDoc.Extension.SelectByID2("曲面-疊層拉伸" + i, "SURFACEBODY", 0, 0, 0, true, 1, null, 0);
+                    ok = true;
+                }
+                modDoc.FeatureManager.InsertSewRefSurface(true, false, false, 0.0001, 0.0001);
             }
-            modDoc.FeatureManager.InsertSewRefSurface(true, false, false, 0.0001, 0.0001);
             #endregion point to curve 繪製齒形曲面
 
             #region 除料、環狀排列
             //除料
-            modDoc.ClearSelection2(true);
-            modDoc.Extension.SelectByID2("曲面-縫織1", "SURFACEBODY", 0, 0, 0, true, 0, null, 0);
-            modDoc.InsertCutSurface(false, 0);
-
-            //環狀排列
-            modDoc.ClearSelection2(true);
-            modDoc.Extension.SelectByID2("使用曲面除料1", "BODYFEATURE", 0, 0, 0, true, 4, null, 0);
-            modDoc.Extension.SelectByID2("基準軸1", "AXIS", 0, 0, 0, true, 1, null, 0);
-            if (modDoc.FeatureManager.FeatureCircularPattern3(gearData.TeethNumber, 6.2831853071796, false, "NULL", false, true) == null)
+            if (gearData.ToothFaces.Count > 1)
             {
-                modDoc.EditUndo2(1);
-                //除料
                 modDoc.ClearSelection2(true);
                 modDoc.Extension.SelectByID2("曲面-縫織1", "SURFACEBODY", 0, 0, 0, true, 0, null, 0);
-                modDoc.InsertCutSurface(true, 0);
+                modDoc.InsertCutSurface(gearData.InvertCuttingSide, 0);
 
                 //環狀排列
                 modDoc.ClearSelection2(true);
-                modDoc.Extension.SelectByID2("使用曲面除料2", "BODYFEATURE", 0, 0, 0, true, 4, null, 0);
+                modDoc.Extension.SelectByID2("使用曲面除料1", "BODYFEATURE", 0, 0, 0, true, 4, null, 0);
                 modDoc.Extension.SelectByID2("基準軸1", "AXIS", 0, 0, 0, true, 1, null, 0);
-                modDoc.FeatureManager.FeatureCircularPattern3(gearData.TeethNumber, 6.2831853071796, false, "NULL", false, true);
+                if (modDoc.FeatureManager.FeatureCircularPattern3(gearData.TeethNumber, 6.2831853071796, false, "NULL", false, true) == null)
+                {
+                    modDoc.EditUndo2(1);
+                    //除料
+                    modDoc.ClearSelection2(true);
+                    modDoc.Extension.SelectByID2("曲面-縫織1", "SURFACEBODY", 0, 0, 0, true, 0, null, 0);
+                    modDoc.InsertCutSurface(true, 0);
+
+                    //環狀排列
+                    modDoc.ClearSelection2(true);
+                    modDoc.Extension.SelectByID2("使用曲面除料2", "BODYFEATURE", 0, 0, 0, true, 4, null, 0);
+                    modDoc.Extension.SelectByID2("基準軸1", "AXIS", 0, 0, 0, true, 1, null, 0);
+                    modDoc.FeatureManager.FeatureCircularPattern3(gearData.TeethNumber, 6.2831853071796, false, "NULL", false, true);
+                }
+            }
+            else
+            {
+                modDoc.ClearSelection2(true);
+                modDoc.Extension.SelectByID2("曲面-疊層拉伸1", "SURFACEBODY", 0, 0, 0, true, 0, null, 0);
+                modDoc.InsertCutSurface(gearData.InvertCuttingSide, 0);
             }
             #endregion 除料、環狀排列
 
             #region 隱藏曲線、曲面
-            modDoc.Extension.SelectByID2("曲面-縫織1", "SURFACEBODY", 0, 0, 0, false, 0, null, 0);
-            modDoc.FeatureManager.HideBodies();
+            if (gearData.ToothFaces.Count > 1)
+            {
+                modDoc.ClearSelection2(true);
+                modDoc.Extension.SelectByID2("曲面-縫織1", "SURFACEBODY", 0, 0, 0, false, 0, null, 0);
+                modDoc.FeatureManager.HideBodies();
+            }
+            modDoc.ClearSelection2(true);
             for (int i = 1; i <= TotalCurveNumber; i++)
             {
                 modDoc.Extension.SelectByID2("曲線" + i, "REFERENCECURVES", 0, 0, 0, false, 0, null, 0);
                 modDoc.BlankRefGeom();
             }
+            modDoc.ClearSelection2(true);
             for (int i = 0; i < TotalFaceNumber; i++)
             {
                 modDoc.Extension.SelectByID2("曲面-疊層拉伸" + i, "REFERENCECURVES", 0, 0, 0, false, 0, null, 0);
                 modDoc.BlankRefGeom();
             }
+            modDoc.ClearSelection2(true);
             modDoc.Extension.SelectByID2("基準軸1", "AXIS", 0, 0, 0, false, 0, null, 0);
             modDoc.BlankRefGeom();
             #endregion
