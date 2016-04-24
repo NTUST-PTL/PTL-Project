@@ -219,7 +219,7 @@ namespace PTL.Mathematics
             return n1;
         }
 
-        public static double[] MultEach(double[] array1, double[] array2)
+        public static double[] Mult(double[] array1, double[] array2)
         {
             if (array1 != null && array2 != null)
             {
@@ -243,10 +243,8 @@ namespace PTL.Mathematics
                 return array2;
             return null;
         }
-        public static double[,] MultEach(double[,] tMatrix, double tscale)
+        public static double[,] Mult(double[,] tMatrix, double tscale)
         {
-            PointD p2 = new PointD();
-
             double[,] MatrixNew = new double[tMatrix.GetLength(0), tMatrix.GetLength(1)];
 
             for (int i = 0; i < tMatrix.GetLength(0); i++)
@@ -258,35 +256,26 @@ namespace PTL.Mathematics
             }
             return MatrixNew;
         }
-        public static double[,] AddEach(params double[][,] arrarys)
+        public static double[,] Add(params double[][,] arrarys)
         {
             for (int i = 0; i < arrarys.Length - 1; i++)
                 if (arrarys[i].GetLength(0) != arrarys[i + 1].GetLength(0) && arrarys[i].GetLength(1) != arrarys[i + 1].GetLength(1))
                     return null;
 
-            Func<double[,], double[,], double[,]> AddFunc = (double[,] ptr1, double[,] ptr2) =>
-            #region
+            int r1, c1;
+            r1 = arrarys[0].GetLength(0);  // UBound
+            c1 = arrarys[0].GetLength(1);  // UBound
+
+            double[,] outputArray = NewZeroMatrix(r1, c1);
+            for (int k = 0; k < arrarys.Length; k++)
             {
-                int r1, c1;
-                r1 = ptr1.GetUpperBound(0);  // UBound
-                c1 = ptr1.GetUpperBound(1);  // UBound
-                                             // r1 = UBound(ptr1,1);
-                                             // c1 = UBound(ptr1,2);
-                double[,] outptr = new double[r1 + 1, c1 + 1];
-                for (int i = 0; r1 >= i; i++)
+                for (int i = 0; r1 > i; i++)
                 {
-                    for (int j = 0; c1 >= j; j++)
+                    for (int j = 0; c1 > j; j++)
                     {
-                        outptr[i, j] = ptr1[i, j] + ptr2[i, j];
+                        outputArray[i, j] += arrarys[k][i, j];
                     }
                 }
-                return outptr;
-            };
-            #endregion
-            double[,] outputArray = arrarys[0];
-            for (int i = 1; i < arrarys.Length; i++)
-            {
-                outputArray = AddFunc(outputArray, arrarys[i]);
             }
             return outputArray;
         }
@@ -473,8 +462,7 @@ namespace PTL.Mathematics
                     indices[i] = residue / num;
                     residue -= indices[i] * num;
                 }
-                newArray.SetValue(Activator.CreateInstance(value.GetType()), indices);
-                index++;
+                newArray.SetValue(value, indices);
             }
             return newArray;
         }
