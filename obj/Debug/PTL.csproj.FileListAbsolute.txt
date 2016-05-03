@@ -273,7 +273,6 @@ E:\Data\GitHub\PTL-Project\bin\Debug\Tao.OpenGl.dll
 E:\Data\GitHub\PTL-Project\bin\Debug\Tao.Platform.Windows.dll
 E:\Data\GitHub\PTL-Project\bin\Debug\Newtonsoft.Json.pdb
 E:\Data\GitHub\PTL-Project\bin\Debug\Newtonsoft.Json.xml
-E:\Data\GitHub\PTL-Project\obj\Debug\PTL.csprojResolveAssemblyReference.cache
 E:\Data\GitHub\PTL-Project\obj\Debug\Windows\Controls\BComboBox.baml
 E:\Data\GitHub\PTL-Project\obj\Debug\Windows\Controls\BTextBox.baml
 E:\Data\GitHub\PTL-Project\obj\Debug\Windows\Controls\LTextBox_double_Arrow.baml

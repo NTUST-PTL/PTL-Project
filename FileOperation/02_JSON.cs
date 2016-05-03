@@ -57,6 +57,19 @@ namespace PTL.FileOperation
             sr.Close();
             return obj;
         }
+
+        /// <summary>
+        /// 從Json格式文字檔讀取資訊並回傳Object物件。
+        /// </summary>
+        /// <param name="fileName">讀取文件之檔案路徑</param>
+        /// <returns>回傳object物件</returns>
+        public static object ReadJsonFile(String fileName)
+        {
+            StreamReader sr = new StreamReader(fileName);
+            object obj = JsonConvert.DeserializeObject(sr.ReadToEnd());
+            sr.Close();
+            return obj;
+        }
     }
 
 }
