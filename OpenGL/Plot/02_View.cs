@@ -367,12 +367,14 @@ namespace PTL.OpenGL.Plot
 
 
         //顏色屬性
-        public bool LightOn { get; set; }
         public Color BackGroundColor { get; set; }
         public Color GridColor1 { get; set; }
         public Color GridColor2 { get; set; }
         public Color GraduationColor { get; set; }
 
+        //渲染開關
+        public bool LightOn { get; set; }
+        public bool SmoothingOn { get; set; }
 
 
 
@@ -385,7 +387,6 @@ namespace PTL.OpenGL.Plot
             this.OpenGLWindow = openGLWindow;
             this.Things2Show.V = new HashSet<ICanPlotInOpenGL>();
 
-
             this.geometryBoundary = new XYZ4[2];
             this.viewBoundary = new XYZ4[2];
             this.BackGroundColor = Color.FromArgb(50, 50, 50);
@@ -393,6 +394,7 @@ namespace PTL.OpenGL.Plot
             this.BoundaryGap = 0.2;
 
             this.LightOn = true;
+            this.SmoothingOn = true;
             this.PlotGrid = true;
             this.GridColor1 = Color.FromArgb(160, 160, 160);
             this.GridColor2 = Color.FromArgb(70, 70, 70);
@@ -463,11 +465,14 @@ namespace PTL.OpenGL.Plot
             Translated(centerPoint * -1);//平移原點DXF中心
             //開啟平滑模式
             //GL.glEnable(GL.GL_NORMALIZE);
-            GL.glEnable(GL.GL_POINT_SMOOTH);
-            GL.glEnable(GL.GL_BLEND);
-            GL.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA);
-            GL.glEnable(GL.GL_SMOOTH);
-            GL.glEnable(GL.GL_LINE_SMOOTH);
+            if (SmoothingOn)
+            {
+                GL.glEnable(GL.GL_POINT_SMOOTH);
+                GL.glEnable(GL.GL_BLEND);
+                GL.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA);
+                GL.glEnable(GL.GL_SMOOTH);
+                GL.glEnable(GL.GL_LINE_SMOOTH);
+            }
             //GL.glFlush();
 
 
