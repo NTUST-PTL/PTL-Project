@@ -9,7 +9,7 @@ using PTL.Geometry.MathModel;
 using PTL.Geometry;
 using PTL.SolidWorks.GearConstruction;
 
-namespace WindowsFormsApplication1
+namespace SW_API2012
 {
     public class APIFileReader
     {
