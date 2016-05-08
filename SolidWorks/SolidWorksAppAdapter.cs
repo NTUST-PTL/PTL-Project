@@ -109,6 +109,10 @@ namespace PTL.SolidWorks
         {
             return SWApp.NewDocument(TemplateName, PaperSize, Width, Height);
         }
+        public virtual dynamic OpenDoc6(String docPath, int type, int option, string config, ref int error, ref int wornings)
+        {
+            return SWApp.OpenDoc6(docPath, type, option, config, ref error, ref wornings);
+        }
         public virtual void SetUserPreferenceToggle(int UserPreferenceValue, bool OnFlag)
         {
             SWApp.SetUserPreferenceToggle(UserPreferenceValue, OnFlag);
