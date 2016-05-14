@@ -243,6 +243,16 @@ namespace PTL.Mathematics
                 return array2;
             return null;
         }
+        public static double[] Mult(double[] vector, double tscale)
+        {
+            double[] newVector = new double[vector.Length];
+
+            for (int i = 0; i < vector.Length; i++)
+            {
+                newVector[i] = tscale * vector[i];
+            }
+            return newVector;
+        }
         public static double[,] Mult(double[,] tMatrix, double tscale)
         {
             double[,] MatrixNew = new double[tMatrix.GetLength(0), tMatrix.GetLength(1)];
@@ -255,6 +265,27 @@ namespace PTL.Mathematics
                 }
             }
             return MatrixNew;
+        }
+        public static double[] Add(params double[][] arrarys)
+        {
+            for (int i = 0; i < arrarys.Length - 1; i++)
+                if (arrarys[i].Length != arrarys[i + 1].Length)
+                    return null;
+
+            int n = arrarys[0].Length;
+
+            double[] outputArray = new double[n];
+            for (int i = 0; i < n; i++)
+                outputArray[i] = 0;
+
+            for (int k = 0; k < arrarys.Length; k++)
+            {
+                for (int i = 0; i < n; i++)
+                {
+                    outputArray[i] += arrarys[k][i];
+                }
+            }
+            return outputArray;
         }
         public static double[,] Add(params double[][,] arrarys)
         {
@@ -278,6 +309,38 @@ namespace PTL.Mathematics
                 }
             }
             return outputArray;
+        }
+        public static double[] Substract(double[]  arr1, double[] arr2)
+        {
+            if (arr1.Length != arr2.Length)
+                throw new ArrayDimensionMismatchException();
+
+            double[] re = new double[arr1.Length];
+            for (int i = 0; i < arr1.Length; i++)
+            {
+                re[i] = arr1[i] - arr2[i];
+            }
+
+            return re;
+        }
+        public static double[,] Substract(double[,] arr1, double[,] arr2)
+        {
+            if (arr1.Length != arr2.Length || arr1.GetLength(0) != arr2.GetLength(0))
+                throw new ArrayDimensionMismatchException();
+
+            int nRow = arr1.GetLength(0);
+            int nCol = arr1.GetLength(1);
+
+            double[,] re = new double[nRow, nCol];
+            for (int i = 0; i < nRow; i++)
+            {
+                for (int j = 0; j < nCol; j++)
+                {
+                    re[i, j] = arr1[i, j] - arr2[i, j];
+                }
+            }
+
+            return re;
         }
         public static double Dot(double[] ptr1, double[] ptr2)
         {
