@@ -85,12 +85,16 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Data\Binding.cs" />
+    <Compile Include="Data\Conveters\DegToRadConverter.cs" />
+    <Compile Include="Data\Conveters\RatioConverter.cs" />
+    <Compile Include="Data\ExObservableCollection.cs" />
     <Compile Include="Extensions\StringArrayExtensions\StringArrayFormattingExtention.cs" />
     <Compile Include="Extensions\TopoFaceOutputExtensions\TopoFaceStringOuputExtension.cs" />
     <Compile Include="FileOperation\TXTFile.cs" />
     <Compile Include="Mathematics\MatrixFunctions.cs" />
     <Compile Include="OpenGL\Plot\ViewPlotingExtentions\ViewPlotingExtentions.cs" />
-    <Compile Include="ReflectionExtensions\ReflectionExtension.cs" />
+    <Compile Include="Extensions\ReflectionExtensions\ReflectionExtension.cs" />
     <Compile Include="Base\Source.cs" />
     <Compile Include="Base\Link.cs" />
     <Compile Include="Base\Bind.cs" />

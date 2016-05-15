@@ -42,7 +42,7 @@ namespace PTL.Geometry
                 newPart.Name = this.Name;
             Entity[] entities = this.Entities.Values.ToArray();
             for (int i = 0; i < entities.Length; i++)
-                newPart.AddEntity(entities[i].Clone() as Layer);
+                newPart.AddEntity((Entity)entities[i].Clone());
             return newPart;
         }
 

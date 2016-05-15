@@ -169,6 +169,9 @@ namespace PTL.Geometry
             aPoint.X = this.X;
             aPoint.Y = this.Y;
             aPoint.Z = this.Z;
+            aPoint.Color = this.Color;
+            aPoint.openGLDisplaySize = this.openGLDisplaySize;
+            aPoint.OpenGLDisplayFunction = this.OpenGLDisplayFunction;
             return aPoint;
         }
 

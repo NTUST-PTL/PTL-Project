@@ -47,7 +47,7 @@ namespace PTL.Geometry
             aDXFLayer.Color = this._color;
             Entity[] entities = this.Entities.Values.ToArray();
             for (int i = 0; i < entities.Length; i++)
-                aDXFLayer.AddEntity(entities[i].Clone() as Entity);
+                aDXFLayer.AddEntity((Entity)entities[i].Clone());
             return aDXFLayer;
         }
 

@@ -5,7 +5,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PTL.ReflectionExtensions
+namespace PTL.Extensions.ReflectionExtensions
 {
     public static class ReflectionExtension
     {

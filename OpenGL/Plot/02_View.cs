@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.ComponentModel;
 using CsGL.OpenGL;
 using Tao.Platform.Windows;
 using PTL;
@@ -15,6 +16,7 @@ using PTL.OpenGL;
 using PTL.OpenGL.Plot;
 using PTL.Windows.Controls;
 using PTL.Base;
+using PTL.Data;
 using static PTL.Mathematics.BaseFunctions;
 
 namespace PTL.OpenGL.Plot
@@ -30,11 +32,25 @@ namespace PTL.OpenGL.Plot
     /// 將指定的ICanPlotInOpenGL類別(屬性名稱Things2Show)轉換至OpenGL繪圖方法
     /// 可自動計算內容範圍，並在視野範圍內顯示格線及刻度
     /// </summary>
-    public class OpenGLView :OpenGL.Plot.PlotSub, IView
+    public class OpenGLView :OpenGL.Plot.PlotSub, IView, INotifyPropertyChanged
     {
-        #region 欄位
+        #region 欄位、屬性
         protected OpenGLWindow openGLWindow;
-        public Source<HashSet<ICanPlotInOpenGL>> Things2Show = new Source<HashSet<ICanPlotInOpenGL>>();
+        protected ExObservableCollection<ICanPlotInOpenGL> _Things2Show = new ExObservableCollection<ICanPlotInOpenGL>();
+        public ExObservableCollection<ICanPlotInOpenGL> Things2Show
+        {
+            get { return _Things2Show; }
+            set {
+                if (_Things2Show != value)
+                {
+                    _Things2Show = value;
+                    _Boundary_Changed_NeedCheck = true;
+                    Update();
+                    _Things2Show.CollectionChanged += (o, e) => Update();
+                    NotifyChanged(nameof(Things2Show));
+                }
+            }
+        }
         protected Layer gridLayer;
         protected Layer graduationLayer;
         protected Double fRange;
@@ -58,8 +74,16 @@ namespace PTL.OpenGL.Plot
         protected bool _Boundary_Changed_NeedCheck;
         #endregion 欄位
 
-
-
+        #region 事件
+        public event PropertyChangedEventHandler PropertyChanged;
+        public void NotifyChanged(String name)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(name));
+            }
+        }
+        #endregion 事件
 
 
         /// <summary>
@@ -94,12 +118,11 @@ namespace PTL.OpenGL.Plot
             {
                 if (item != null)
                 {
-                    Things2Show.V.Add(item);
                     if (item is IHaveBoundary)
                         _Boundary_Changed_NeedCheck = true;
                 }
             }
-            Update();
+            Things2Show.AddRange(someThings2Show);
         }
         /// <summary>
         /// 移除顯示的物件
@@ -113,12 +136,11 @@ namespace PTL.OpenGL.Plot
             {
                 if (item != null)
                 {
-                    Things2Show.V.Remove(item);
                     if (item is IHaveBoundary)
                         _Boundary_Changed_NeedCheck = true;
                 }
             }
-            Update();
+            Things2Show.RemoveRange(someThingsDontWant2Show);
         }
         /// <summary>
         /// 清除舊有物件並增加新的顯示物件
@@ -128,24 +150,23 @@ namespace PTL.OpenGL.Plot
         /// <param name="someThing2Show">欲顯示的物件</param>
         public void ReplaceThing2Show(params ICanPlotInOpenGL[] someThings2Show)
         {
-            this.Things2Show.V.Clear();
             foreach (var item in someThings2Show)
             {
                 if (item != null)
                 {
-                    Things2Show.V.Add(item);
                     if (item is IHaveBoundary)
                         _Boundary_Changed_NeedCheck = true;
                 }
             }
-            Update();
+            Things2Show.Clear();
+            Things2Show.AddRange(someThings2Show);
         }
         /// <summary>
         /// 清除顯示的物件
         /// </summary>
         public void ClearThings2Show()
         {
-            Things2Show.V = new HashSet<ICanPlotInOpenGL>();
+            Things2Show.Clear();
             CheckBoundary();
             if (AutoRefresh)
             {
@@ -203,7 +224,7 @@ namespace PTL.OpenGL.Plot
         private void CheckBoundary()
         {
             this.geometryBoundary = new XYZ4[2];
-            foreach (var item in Things2Show.V)
+            foreach (var item in Things2Show)
             {
                 if (item is IHaveBoundary)
                 {
@@ -265,7 +286,6 @@ namespace PTL.OpenGL.Plot
             if (this._Boundary_Changed_NeedCheck)
                 CheckBoundary();
             OpenGLWindow.Refresh();
-            Things2Show.NoticeChange("V");
         }
 
 
@@ -385,7 +405,7 @@ namespace PTL.OpenGL.Plot
         public OpenGLView(OpenGLWindow openGLWindow)
         {
             this.OpenGLWindow = openGLWindow;
-            this.Things2Show.V = new HashSet<ICanPlotInOpenGL>();
+            this.Things2Show = new ExObservableCollection<ICanPlotInOpenGL>();
 
             this.geometryBoundary = new XYZ4[2];
             this.viewBoundary = new XYZ4[2];
@@ -478,8 +498,8 @@ namespace PTL.OpenGL.Plot
 
             //GL.glDisable(GL.GL_LINE_SMOOTH);
             //畫DXFD
-            if (Things2Show.V.Count != 0)
-                foreach (var item in Things2Show.V)
+            if (Things2Show.Count != 0)
+                foreach (var item in Things2Show)
                 {
                     item.PlotInOpenGL();
                 }

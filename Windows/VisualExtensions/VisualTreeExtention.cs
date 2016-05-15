@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
-using PTL.ReflectionExtensions;
+using PTL.Extensions.ReflectionExtensions;
 
 namespace PTL.Windows.VisualExtensions
 {
