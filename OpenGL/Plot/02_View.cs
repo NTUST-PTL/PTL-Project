@@ -46,7 +46,11 @@ namespace PTL.OpenGL.Plot
                     _Things2Show = value;
                     _Boundary_Changed_NeedCheck = true;
                     Update();
-                    _Things2Show.CollectionChanged += (o, e) => Update();
+                    _Things2Show.CollectionChanged += (o, e) =>
+                        {
+                            _Boundary_Changed_NeedCheck = true;
+                            Update();
+                        };
                     NotifyChanged(nameof(Things2Show));
                 }
             }
@@ -78,10 +82,7 @@ namespace PTL.OpenGL.Plot
         public event PropertyChangedEventHandler PropertyChanged;
         public void NotifyChanged(String name)
         {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(name));
-            }
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
         #endregion 事件
 

@@ -45,7 +45,7 @@ namespace PTL.Measurement
                 if (this.percentage != value)
                 {
                     this.percentage = value;
-                    if (PercentageChanged != null) PercentageChanged(this, this.percentage);
+                    PercentageChanged?.Invoke(this, this.percentage);
                 }
             }
         }
@@ -144,8 +144,7 @@ namespace PTL.Measurement
                             this.PitchDistanceError_Average = pitchDistanceError_average;
                             this.FaceError_Average = faceError_average;
 
-                            if (this.OnFinish != null)
-                                this.OnFinish(this, null);
+                            this.OnFinish?.Invoke(this, null);
                         }
                     }
                 )

@@ -109,7 +109,7 @@ namespace PTL.SolidWorks.GearConstruction
             foreach (var topoface in gearData.ToothFaces)
             {
                 TopoFace tf = new TopoFace() { Points = ChangeArrayType<double[], XYZ4>(topoface, (a) => new XYZ4(a)) };
-                tf.SovleNormalVector();
+                tf.SolveNormalVector();
                 tf.SurfaceDisplayOption = SurfaceDisplayOptions.Mesh;
                 PartEditMethods.AddTopoFaceToSolidWorksPart(modDoc, tf, ref TotalCurveNumber, ref TotalFaceNumber);
                 //PTL.DebugTools.Plot plot0 = new DebugTools.Plot();

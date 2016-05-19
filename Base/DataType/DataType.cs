@@ -36,7 +36,7 @@ namespace PTL.Base.DataType
                 if (this.name != value)
                 {
                     this.name = value;
-                    if (NameChanged != null) NameChanged(this, this.name);
+                    NameChanged?.Invoke(this, this.name);
                 }
             }
         }
@@ -56,7 +56,7 @@ namespace PTL.Base.DataType
                     if (this.value != value)
                     {
                         this.value = value;
-                        if (ValueChanged != null) ValueChanged(this, this.value);
+                        ValueChanged?.Invoke(this, this.value);
                     }
                 }
                 catch (Exception e)
@@ -76,7 +76,7 @@ namespace PTL.Base.DataType
                 if (this.unit != value)
                 {
                     this.unit = value;
-                    if (UnitChanged != null) UnitChanged(this, this.unit);
+                    UnitChanged?.Invoke(this, this.unit);
                 }
             }
         }
@@ -201,7 +201,7 @@ namespace PTL.Base.DataType
                 if (this.name != value)
                 {
                     this.name = value;
-                    if (NameChanged != null) NameChanged(this, this.name);
+                    NameChanged?.Invoke(this, this.name);
                 }
             }
         }
@@ -219,7 +219,7 @@ namespace PTL.Base.DataType
                 if (this.value != value)
                 {
                     this.value = value;
-                    if (ValueChanged != null) ValueChanged(this, this.value);
+                    ValueChanged?.Invoke(this, this.value);
                 }
             }
         }
@@ -234,7 +234,7 @@ namespace PTL.Base.DataType
                 if (this.unit != value)
                 {
                     this.unit = value;
-                    if (UnitChanged != null) UnitChanged(this, this.unit);
+                    UnitChanged?.Invoke(this, this.unit);
                 }
             }
         }
@@ -356,7 +356,7 @@ namespace PTL.Base.DataType
                 if (this.name != value)
                 {
                     this.name = value;
-                    if (NameChanged != null) NameChanged(this, this.name);
+                    NameChanged?.Invoke(this, this.name);
                 }
             }
         }
@@ -374,7 +374,7 @@ namespace PTL.Base.DataType
                 if (this.value != value)
                 {
                     this.value = value;
-                    if (ValueChanged != null) ValueChanged(this, this.value);
+                    ValueChanged?.Invoke(this, this.value);
                 }
             }
         }
@@ -389,7 +389,7 @@ namespace PTL.Base.DataType
                 if (this.unit != value)
                 {
                     this.unit = value;
-                    if (UnitChanged != null) UnitChanged(this, this.unit);
+                    UnitChanged?.Invoke(this, this.unit);
                 }
             }
         }
@@ -515,7 +515,7 @@ namespace PTL.Base.DataType
                 if (this.name != value)
                 {
                     this.name = value;
-                    if (NameChanged != null) NameChanged(this, this.name);
+                    NameChanged?.Invoke(this, this.name);
                 }
             }
         }
@@ -533,7 +533,7 @@ namespace PTL.Base.DataType
                 if (this.value != value)
                 {
                     this.value = value;
-                    if (ValueChanged != null) ValueChanged(this, this.value);
+                    ValueChanged?.Invoke(this, this.value);
                 }
             }
         }
@@ -548,7 +548,7 @@ namespace PTL.Base.DataType
                 if (this.unit != value)
                 {
                     this.unit = value;
-                    if (UnitChanged != null) UnitChanged(this, this.unit);
+                    UnitChanged?.Invoke(this, this.unit);
                 }
             }
         }

@@ -18,9 +18,9 @@ namespace PTL.Data
             {
                 Items.Add(item);
             }
-            CollectionChanged(
-                this, 
-                new System.Collections.Specialized.NotifyCollectionChangedEventArgs(System.Collections.Specialized.NotifyCollectionChangedAction.Add, datas));
+            CollectionChanged?.Invoke(
+this,
+new System.Collections.Specialized.NotifyCollectionChangedEventArgs(System.Collections.Specialized.NotifyCollectionChangedAction.Add, datas));
         }
 
         public void RemoveRange(params T[] datas)
@@ -29,9 +29,21 @@ namespace PTL.Data
             {
                 Items.Remove(item);
             }
-            CollectionChanged(
-                this,
-                new System.Collections.Specialized.NotifyCollectionChangedEventArgs(System.Collections.Specialized.NotifyCollectionChangedAction.Remove, datas));
+            CollectionChanged?.Invoke(
+this,
+new System.Collections.Specialized.NotifyCollectionChangedEventArgs(System.Collections.Specialized.NotifyCollectionChangedAction.Remove, datas));
+        }
+
+        public void ReplaceAll(params T[] datas)
+        {
+            Items.Clear();
+            foreach (var item in datas)
+            {
+                Items.Add(item);
+            }
+            CollectionChanged?.Invoke(
+this,
+new System.Collections.Specialized.NotifyCollectionChangedEventArgs(System.Collections.Specialized.NotifyCollectionChangedAction.Add, datas));
         }
     }
 }

@@ -53,7 +53,7 @@ namespace PTL.Measurement
                 if (this.percentage != value)
                 {
                     this.percentage = value;
-                    if (PercentageChanged != null) PercentageChanged(this, this.percentage);
+                    PercentageChanged?.Invoke(this, this.percentage);
                 }
             }
         }

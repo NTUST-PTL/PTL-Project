@@ -36,8 +36,7 @@ namespace PTL.DebugTools
             #region
             Window = new Windows.DebugWindow_Plot();
             Window.View.AutoScale = true;
-            if (WindowSetter != null)
-                WindowSetter(Window);
+            WindowSetter?.Invoke(Window);
             Window.Show();
             InitializeTimer();
             #endregion
@@ -63,8 +62,7 @@ namespace PTL.DebugTools
 
             PolyLine newRecord = new PolyLine() { Name = Name, Color = color, LineWidth = 2.0f };
 
-            if (Setter != null)
-                Setter(newRecord);
+            Setter?.Invoke(newRecord);
 
             System.Windows.Controls.TextBox tb = this.Window.CreateNewLogTextBox(Name, color);
 

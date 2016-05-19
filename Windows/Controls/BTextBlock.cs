@@ -23,8 +23,7 @@ namespace PTL.Windows.Controls
                 {
                     this.value = value.ToString();
                     this.Text = this.value;
-                    if (ValueChanged != null)
-                        ValueChanged(this, this.value);
+                    ValueChanged?.Invoke(this, this.value);
                 }
             }
         }

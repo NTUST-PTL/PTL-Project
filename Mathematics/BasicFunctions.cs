@@ -734,6 +734,40 @@ namespace PTL.Mathematics
             }
             return newArray;
         }
+        public static List<object> Table(Func<int[], object> func, int[] perantIndex, params int[][] ranges)
+        {
+            List<object> results = new List<object>();
+            if (ranges.Length > 1)
+            {
+                for (int i = ranges[0][0]; i <= ranges[0][1]; i++)
+                {
+                    int newIndexLength = perantIndex != null ? perantIndex.Length + 1 : 1;
+                    int[] newPerantIndex = new int[newIndexLength];
+                    perantIndex?.CopyTo(newPerantIndex, 0);
+                    newPerantIndex[newIndexLength - 1] = i;
+
+                    int[][] remainingIndexs = (from range in ranges
+                                               where range != ranges[0]
+                                               select range).ToArray();
+                    results.Add(Table(func, newPerantIndex, remainingIndexs));
+                }
+            }
+            else
+            {
+                
+
+                for (int i = ranges[0][0]; i <= ranges[0][1]; i++)
+                {
+                    int IndexLength = perantIndex != null ? perantIndex.Length + 1 : 1;
+                    int[] Indexs = new int[IndexLength];
+                    perantIndex?.CopyTo(Indexs, 0);
+                    Indexs[IndexLength - 1] = i;
+
+                    results.Add(func(Indexs));
+                }
+            }
+            return results;
+        }
 
         public static double[,] NewRotateMatrix4(Axis axis, double theta)
         {

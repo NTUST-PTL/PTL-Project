@@ -16,13 +16,13 @@ namespace PTL.Data.Conveters
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             double doubleValue = System.Convert.ToDouble(value);
-            return doubleValue / 180 * Math.PI;
+            return doubleValue / Math.PI * 180;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             double doubleValue = System.Convert.ToDouble(value);
-            return doubleValue / Math.PI * 180;
+            return doubleValue / 180 * Math.PI;
         }
 
         public override object ProvideValue(IServiceProvider serviceProvider)

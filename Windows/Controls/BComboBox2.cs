@@ -16,8 +16,7 @@ namespace PTL.Windows.Controls
         {
             this.SelectionChanged += (object sender, SelectionChangedEventArgs e) =>
             {
-                if (this.ValueChanged != null)
-                    this.ValueChanged(this, (this.SelectedItem as ComboBoxItem).Content.ToString());
+                this.ValueChanged?.Invoke(this, (this.SelectedItem as ComboBoxItem).Content.ToString());
             };
             this.BindedValueChanged = _BindedValueChanged;
         }
@@ -49,7 +48,7 @@ namespace PTL.Windows.Controls
                     {
                         this.SelectedItem = aComboBoxItem;
                         selectSuccesful = true;
-                        if (this.ValueChanged != null) { this.ValueChanged(this, aComboBoxItem.Content.ToString()); }
+                        this.ValueChanged?.Invoke(this, aComboBoxItem.Content.ToString());
                     }
                 }
                 return selectSuccesful;

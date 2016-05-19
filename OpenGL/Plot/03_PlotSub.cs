@@ -94,8 +94,8 @@ namespace PTL.OpenGL.Plot
 
             // All materials hereafter have full specular reflectivity
             // with a high shine
-            GL.glMaterialfv(GL.GL_FRONT, GL.GL_SPECULAR, specref);
-            GL.glMateriali(GL.GL_FRONT, GL.GL_SHININESS, 128);
+            //GL.glMaterialfv(GL.GL_FRONT, GL.GL_SPECULAR, specref);
+            //GL.glMateriali(GL.GL_FRONT, GL.GL_SHININESS, 128);
             // GL.glShadeModel(GL.GL_SMOOTH);// Enable smooth shading
             GL.glFlush();
         }

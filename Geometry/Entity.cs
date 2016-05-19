@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 using System.Drawing;
 using PTL.OpenGL.Plot;
 using PTL.Geometry.MathModel;
+using System.ComponentModel;
 
 namespace PTL.Geometry
 {
-    public abstract class Entity : PlotSub, IHaveBoundary, IHaveName, ICloneable, IHaveCoordinateSystem, ICanPlotInOpenGL, IHaveColor, IHaveParent, ITransformable
+    public abstract class Entity : PlotSub, IHaveBoundary, IHaveName, ICloneable, IHaveCoordinateSystem, ICanPlotInOpenGL, IHaveColor, IHaveParent, ITransformable, INotifyPropertyChanged
     {
         public virtual String Name { get; set; }
         private EntityCollection fParent;
@@ -91,6 +92,13 @@ namespace PTL.Geometry
             }
         }
         double[,] coordinateSystem;
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        public void NotifyChanged(string name)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+        }
+
         public virtual double[,] CoordinateSystem
         {
             get { return this.coordinateSystem; }

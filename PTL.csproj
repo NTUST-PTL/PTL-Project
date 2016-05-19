@@ -92,6 +92,7 @@
     <Compile Include="Extensions\StringArrayExtensions\StringArrayFormattingExtention.cs" />
     <Compile Include="Extensions\TopoFaceOutputExtensions\TopoFaceStringOuputExtension.cs" />
     <Compile Include="FileOperation\TXTFile.cs" />
+    <Compile Include="Geometry\PolyFan.cs" />
     <Compile Include="Mathematics\MatrixFunctions.cs" />
     <Compile Include="OpenGL\Plot\ViewPlotingExtentions\ViewPlotingExtentions.cs" />
     <Compile Include="Extensions\ReflectionExtensions\ReflectionExtension.cs" />
@@ -147,7 +148,7 @@
     <Compile Include="Geometry\PointD.cs" />
     <Compile Include="Geometry\DiametricDimension.cs" />
     <Compile Include="Geometry\Layer.cs" />
-    <Compile Include="Geometry\PTLConvert.cs" />
+    <Compile Include="Geometry\Converter.cs" />
     <Compile Include="Geometry\CubicClassifier.cs" />
     <Compile Include="Geometry\MathModel\IXYZ.cs" />
     <Compile Include="Geometry\MathModel\IParametricSurface.cs" />

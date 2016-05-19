@@ -30,7 +30,7 @@ namespace PTL.Windows.Controls
 
         void aMenuItemItem_Checked(object sender, System.Windows.RoutedEventArgs e)
         {
-            if (this.ValueChanged != null) this.ValueChanged(this, (sender as MenuItem).Header.ToString());
+            this.ValueChanged?.Invoke(this, (sender as MenuItem).Header.ToString());
         }
 
         #region IBindable 成員

@@ -229,10 +229,7 @@ namespace PTL.Measurement
                 this.IsBusy = false;
                 this.FinishTime = DateTime.Now;
 
-                if (OnFinish != null)
-                {
-                    OnFinish(this, new EventArgs());
-                }
+                OnFinish?.Invoke(this, new EventArgs());
             }
         }
     }

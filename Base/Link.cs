@@ -33,8 +33,7 @@ namespace PTL.Base
 
         public void NoticeChange()
         {
-            if (this.PropertyChanged != null)
-                this.PropertyChanged(this, new PropertyChangedEventArgs("V"));
+            this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("V"));
         }
 
         public void LinkTo(Source<T> source)

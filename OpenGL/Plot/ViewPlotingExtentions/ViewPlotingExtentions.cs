@@ -11,18 +11,18 @@ namespace PTL.OpenGL.Plot.ViewPlotingExtentions
 {
     public static class ViewPlotingExtentions
     {
-        public static void ParameterPlot(this OpenGLView view, Func<double, XYZ4> Function, double start, double end, uint slices, Action<PolyLine> PolyLineSetter = null)
+        public static void ParameterPlot(this OpenGLView view, Func<double, XYZ4> Function, double start, double end, int slices, Action<PolyLine> PolyLineSetter = null)
         {
-            PolyLine polyline = PTL.Geometry.PTLConvert.ToPolyLine(
+            PolyLine polyline = PTL.Geometry.Converter.ToPolyLine(
                 (u) => Function(u), start, end, slices, PolyLineSetter
                 );
 
             view.AddSomeThing2Show(polyline);
         }
 
-        public static void ParameterPlot(this OpenGLView view, Func<double, double, XYZ4> Function, double xstart, double xend, uint xslices, double ystart, double yend, uint yslices, Action<TopoFace> TopoFaceSetter = null)
+        public static void ParameterPlot(this OpenGLView view, Func<double, double, XYZ4> Function, double xstart, double xend, int xslices, double ystart, double yend, int yslices, Action<TopoFace> TopoFaceSetter = null)
         {
-            TopoFace topoFace = PTL.Geometry.PTLConvert.ToTopoFace(
+            TopoFace topoFace = PTL.Geometry.Converter.ToTopoFace(
                 (u, v) => Function(u, v),
                 xstart, xend, xslices,
                 ystart, yend, yslices,
@@ -31,7 +31,7 @@ namespace PTL.OpenGL.Plot.ViewPlotingExtentions
             view.AddSomeThing2Show(topoFace);
         }
 
-        public static void ParameterPlotBoundary(this OpenGLView view, Func<double, double, XYZ4> Function, double xstart, double xend, uint xslices, double ystart, double yend, uint yslices, Action<PolyLine> PolyLineSetter = null)
+        public static void ParameterPlotBoundary(this OpenGLView view, Func<double, double, XYZ4> Function, double xstart, double xend, int xslices, double ystart, double yend, int yslices, Action<PolyLine> PolyLineSetter = null)
         {
             ParameterPlot(view, (u) => Function(u, ystart), xstart, xend, xslices, PolyLineSetter);
             ParameterPlot(view, (u) => Function(u, yend), xstart, xend, xslices, PolyLineSetter);

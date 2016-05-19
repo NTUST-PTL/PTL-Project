@@ -30,7 +30,7 @@ namespace PTL.Geometry
         {
         }
 
-        public void SovleNormalVector()
+        public void SolveNormalVector()
         {
             if (Points != null && Points.Length >= 4)
             {

@@ -50,8 +50,7 @@ namespace PTL.Base
         {
             foreach (var observer in Observers)
                 observer.NoticeChange();
-            if (this.PropertyChanged != null)
-                this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+            this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
         public void LinkWith(params Link<T>[] links)

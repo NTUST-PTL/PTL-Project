@@ -143,7 +143,7 @@ namespace PTL.Measurement
                 this.IsBusy = false;
                 this.Percentage = 100;
                 this.FinishTime = DateTime.Now;
-                if (OnFinish != null) OnFinish(this, new EventArgs());
+                OnFinish?.Invoke(this, new EventArgs());
             }
             return;
         }

@@ -38,6 +38,11 @@ namespace PTL.Data
         public object Paremeters;
         public CultureInfo Culture;
 
+        protected Binding()
+        {
+
+        }
+
         public static Binding Bind(INotifyPropertyChanged target, string targetPropertyName, INotifyPropertyChanged source, string sourcePropertyName, IValueConverter converter = null, object parameters = null, CultureInfo culture = null)
         {
             Binding newBinding = new Binding();
@@ -102,7 +107,7 @@ namespace PTL.Data
             sourceProperty.SetValue(Source, targetValue);
         }
 
-        public void Remove()
+        public void RemoveBinding()
         {
             Target.PropertyChanged -= TargetPropertyChangedEventHandler;
             Source.PropertyChanged -= SourcePropertyChangedEventHandler;

@@ -20,8 +20,7 @@ namespace PTL.DebugTools
         {
             Window = new Windows.DebugWindow_Plot();
             LogTextBox = Window.CreateNewLogTextBox("Log", System.Drawing.Color.White);
-            if (WindowSetter != null)
-                WindowSetter(Window);
+            WindowSetter?.Invoke(Window);
             Window.Show();
         }
 
@@ -55,18 +54,18 @@ namespace PTL.DebugTools
             Window.View.AddSomeThing2Show(polyline);
         }
 
-        public void ParameterPlot(Func<double, XYZ4> Function, double start, double end, uint slices, Action<PolyLine> PolyLineSetter = null)
+        public void ParameterPlot(Func<double, XYZ4> Function, double start, double end, int slices, Action<PolyLine> PolyLineSetter = null)
         {
-            PolyLine polyline = PTL.Geometry.PTLConvert.ToPolyLine(
+            PolyLine polyline = PTL.Geometry.Converter.ToPolyLine(
                 (u) => Function(u), start, end, slices, PolyLineSetter
                 );
 
             Window.View.AddSomeThing2Show(polyline);
         }
 
-        public void ParameterPlot(Func<double, double, XYZ4> Function, double xstart, double xend, uint xslices, double ystart, double yend, uint yslices, Action<TopoFace> TopoFaceSetter = null)
+        public void ParameterPlot(Func<double, double, XYZ4> Function, double xstart, double xend, int xslices, double ystart, double yend, int yslices, Action<TopoFace> TopoFaceSetter = null)
         {
-            TopoFace topoFace = PTL.Geometry.PTLConvert.ToTopoFace(
+            TopoFace topoFace = PTL.Geometry.Converter.ToTopoFace(
                 (u, v) => Function(u, v),
                 xstart, xend, xslices,
                 ystart, yend, yslices,
@@ -138,14 +137,14 @@ namespace PTL.DebugTools
                     Plot2D(Function, start, end, slices,PolyLineSetter);
                 }));
         }
-        public async Task InvokeParameterPlot(Func<double, XYZ4> Function, double start, double end, uint slices, Action<PolyLine> PolyLineSetter = null)
+        public async Task InvokeParameterPlot(Func<double, XYZ4> Function, double start, double end, int slices, Action<PolyLine> PolyLineSetter = null)
         {
             await Application.Current.Dispatcher.BeginInvoke(
                 new Action(() => {
                     ParameterPlot(Function, start, end, slices, PolyLineSetter);
                 }));
         }
-        public async Task InvokeParameterPlot(Func<double, double, XYZ4> Function, double xstart, double xend, uint xslices, double ystart, double yend, uint yslices, Action<TopoFace> TopoFaceSetter = null)
+        public async Task InvokeParameterPlot(Func<double, double, XYZ4> Function, double xstart, double xend, int xslices, double ystart, double yend, int yslices, Action<TopoFace> TopoFaceSetter = null)
         {
             await Application.Current.Dispatcher.BeginInvoke(
                 new Action(() => {
