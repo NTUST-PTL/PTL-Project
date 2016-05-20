@@ -20,6 +20,11 @@ namespace PTL.Geometry.MathModel
             Calculate_NURBS_Curve(dataPoints, closed);
         }
 
+        public NUB_Curve(XYZ4[] dataPoints, XYZ3 startTangent, XYZ3 endTangent)
+        {
+            Calculate_NURBS_Curve(dataPoints, startTangent, endTangent);
+        }
+
         public void Calculate_NURBS_Curve(XYZ4[] dataPoints, bool closed = false)
         {
             #region 計算R矩陣

@@ -52,6 +52,13 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>dll\Json60r7\Bin\Net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="PdfSharp-WPF">
+      <HintPath>dll\PdfSharpXpsBin\PdfSharp-WPF.dll</HintPath>
+    </Reference>
+    <Reference Include="PdfSharp.Xps">
+      <HintPath>dll\PdfSharpXpsBin\PdfSharp.Xps.dll</HintPath>
+    </Reference>
+    <Reference Include="ReachFramework" />
     <Reference Include="SolidWorks.Interop.sldworks">
       <HintPath>dll\SolidWorks\SolidWorks.Interop.sldworks.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
@@ -64,6 +71,8 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Management" />
+    <Reference Include="System.Printing" />
+    <Reference Include="System.Windows" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
@@ -86,12 +95,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Data\Binding.cs" />
+    <Compile Include="Data\Conveters\RadToDegreeStringConverter.cs" />
+    <Compile Include="Data\Conveters\RadToHelixDegreeStringConverter.cs" />
     <Compile Include="Data\Conveters\DegToRadConverter.cs" />
     <Compile Include="Data\Conveters\RatioConverter.cs" />
     <Compile Include="Data\ExObservableCollection.cs" />
     <Compile Include="Extensions\StringArrayExtensions\StringArrayFormattingExtention.cs" />
     <Compile Include="Extensions\TopoFaceOutputExtensions\TopoFaceStringOuputExtension.cs" />
     <Compile Include="FileOperation\TXTFile.cs" />
+    <Compile Include="Geometry\MathModel\CurveFunctionUniformer.cs" />
+    <Compile Include="Geometry\MathModel\SurfaceFunctionUniformer.cs" />
     <Compile Include="Geometry\PolyFan.cs" />
     <Compile Include="Mathematics\MatrixFunctions.cs" />
     <Compile Include="OpenGL\Plot\ViewPlotingExtentions\ViewPlotingExtentions.cs" />
@@ -218,6 +231,7 @@
       <DependentUpon>DebugWindow_Plot.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\Media\Media3D\LineGeometry3D.cs" />
+    <Compile Include="Windows\VisualExtensions\PrintExtensions.cs" />
     <Compile Include="Windows\VisualExtensions\VisualTreeExtention.cs" />
     <Compile Include="Windows\VisualExtensions\HitTest3DExtension.cs" />
     <Page Include="Windows\Controls\BComboBox.xaml">
@@ -272,6 +286,12 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <AppDesigner Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\mathnet-PTL\src\Numerics\Numerics.csproj">
+      <Project>{b7cae5f4-a23f-4438-b5be-41226618b695}</Project>
+      <Name>Numerics</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

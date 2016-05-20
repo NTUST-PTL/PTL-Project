@@ -17,73 +17,59 @@ namespace PTL.Geometry.MathModel
         public int LastSegmentIndexV;
         public bool ReverseNormalVectorDirection = false;
 
-        public NUB_Surface(XYZ4[][] dataPoints)
+        public NUB_Surface(XYZ4[][] dataPoints, XYZ3[][] VTangents = null)
         {
-            Calulate(dataPoints);
+            Calulate(dataPoints, VTangents);
         }
 
-        public void Calulate(XYZ4[][] dataPoints)
+        public NUB_Surface(NUB_Curve[] UCurves)
+        {
+            Calulate(UCurves);
+        }
+
+        public void Calulate(XYZ4[][] dataPoints, XYZ3[][] VTangents = null)
         {
             this.DataPoints = dataPoints;
             this.LastSegmentIndexU = dataPoints[0].Length - 2;
             this.LastSegmentIndexV = dataPoints.Length - 2;
 
-            //計算uCurve
-            UCurves = new NUB_Curve[dataPoints.Length];
-            for (int i = 0; i < dataPoints.Length; i++)
-               UCurves[i] = new NUB_Curve(dataPoints[i]);
-
             //計算vCurve
-            VCurves = new NUB_Curve[UCurves[0].ControlPoints.Length];
-            for (int i = 0; i < UCurves[0].ControlPoints.Length; i++)
+            VCurves = new NUB_Curve[dataPoints.Length];
+            for (int i = 0; i < dataPoints.Length; i++)
+                VCurves[i] = new NUB_Curve(dataPoints[i], VTangents[i][0], VTangents[i][1]);
+
+            //計算uCurve
+            UCurves = new NUB_Curve[VCurves[0].ControlPoints.Length];
+            for (int i = 0; i < VCurves[0].ControlPoints.Length; i++)
             {
-                XYZ4[] vDatapoints = (from curve in UCurves
+                XYZ4[] vDatapoints = (from curve in VCurves
                                     select curve.ControlPoints[i]).ToArray();
-                VCurves[i] = new NUB_Curve(vDatapoints);
+                UCurves[i] = new NUB_Curve(vDatapoints);
+            }
+        }
+
+        public void Calulate(NUB_Curve[] vCurves)
+        {
+            this.DataPoints = (from curve in vCurves select curve.DataPoints).ToArray();
+            this.LastSegmentIndexU = vCurves[0].LastSegmentIndex;
+            this.LastSegmentIndexV = vCurves.Length - 2;
+
+            VCurves = vCurves;
+            //計算vCurve
+            UCurves = new NUB_Curve[vCurves[0].ControlPoints.Length];
+            for (int i = 0; i < vCurves[0].ControlPoints.Length; i++)
+            {
+                XYZ4[] vDatapoints = (from curve in vCurves
+                                      select curve.ControlPoints[i]).ToArray();
+                UCurves[i] = new NUB_Curve(vDatapoints);
             }
         }
 
         public Tuple<int, double, int, double> Param_Mapping(double u, double v)
         {
-            #region u, v mapping
             Tuple<int,double> uMapping = UCurves[0].Param_Mapping(u);
             Tuple<int, double> vMapping = VCurves[0].Param_Mapping(v);
-
-            //double globalU = u * (DataPoints[0].Length - 1);
-            //double localU = globalU % 1;
-            //int sIndexU = (int)(globalU > 0 ? System.Math.Floor(globalU) : System.Math.Ceiling(globalU));
-            //if (sIndexU > LastSegmentIndexU)
-            //{
-            //    int deltaIndex = sIndexU - LastSegmentIndexU;
-            //    localU += deltaIndex;
-            //    sIndexU = LastSegmentIndexU;
-            //}
-            //else if (sIndexU < 0)
-            //{
-            //    localU += sIndexU;
-            //    sIndexU = 0;
-            //}
-
-
-            //double globalV = v * (DataPoints.Length - 1);
-            //double localV = globalV % 1;
-            //int sIndexV = (int)(globalV > 0 ? System.Math.Floor(globalV) : System.Math.Ceiling(globalV));
-            //if (sIndexV > LastSegmentIndexV)
-            //{
-            //    int deltaIndex = sIndexV - LastSegmentIndexV;
-            //    localV += deltaIndex;
-            //    sIndexV = LastSegmentIndexV;
-            //}
-            //else if (sIndexV < 0)
-            //{
-            //    localV += sIndexV;
-            //    sIndexV = 0;
-            //}
-
-
-            #endregion u, v mapping
-
-            //return new Tuple<int,double,int,double>(sIndexU, localU, sIndexV, localV);
+            
             return new Tuple<int, double, int, double>(uMapping.Item1, uMapping.Item2, vMapping.Item1, vMapping.Item2);
         }
 
@@ -95,15 +81,15 @@ namespace PTL.Geometry.MathModel
             int sIndexV = mappedPara.Item3;
             double localV = mappedPara.Item4;
 
-            XYZ4[] uControlPoints = new XYZ4[4];
+            XYZ4[] vControlPoints = new XYZ4[4];
             for (int i = 0; i < 4; i++)
             {
-                uControlPoints[i] = VCurves[sIndexU + i].P(v);
+                vControlPoints[i] = UCurves[sIndexV + i].P(u);
             }
 
-            double[,] Nc = UCurves[sIndexV].Ni[sIndexU];
+            double[,] Nc = VCurves[sIndexU].Ni[sIndexV];
 
-            XYZ4 p = NUB_Curve.Blending(localU, Nc, uControlPoints);
+            XYZ4 p = NUB_Curve.Blending(localV, Nc, vControlPoints);
 
             return p;
         }
@@ -116,15 +102,15 @@ namespace PTL.Geometry.MathModel
             int sIndexV = mappedPara.Item3;
             double localV = mappedPara.Item4;
 
-            XYZ4[] uControlPoint = new XYZ4[4];
+            XYZ4[] vControlPoints = new XYZ4[4];
             for (int i = 0; i < 4; i++)
             {
-                uControlPoint[i] = VCurves[sIndexU + i].P(v);
+                vControlPoints[i] = UCurves[sIndexV + i].P(u);
             }
 
-            double[,] Nc = UCurves[sIndexV].Ni[sIndexU];
+            double[,] Nc = VCurves[sIndexU].Ni[sIndexV];
 
-            XYZ3 p = NUB_Curve.dU_Blending(localU, Nc, uControlPoint);
+            XYZ3 p = NUB_Curve.dU_Blending(localU, Nc, vControlPoints);
 
             return p;
         }
@@ -137,15 +123,15 @@ namespace PTL.Geometry.MathModel
             int sIndexV = mappedPara.Item3;
             double localV = mappedPara.Item4;
 
-            XYZ4[] uControlPoint = new XYZ4[4];
+            XYZ4[] vControlPoints = new XYZ4[4];
             for (int i = 0; i < 4; i++)
             {
-                uControlPoint[i] = VCurves[sIndexU + i].P(v);
+                vControlPoints[i] = UCurves[sIndexV + i].P(u);
             }
 
-            double[,] Nc = UCurves[sIndexV].Ni[sIndexU];
+            double[,] Nc = VCurves[sIndexU].Ni[sIndexV];
 
-            XYZ3 p = NUB_Curve.dU2_Blending(localU, Nc, uControlPoint);
+            XYZ3 p = NUB_Curve.dU2_Blending(localU, Nc, vControlPoints);
 
             return p;
         }
@@ -158,15 +144,15 @@ namespace PTL.Geometry.MathModel
             int sIndexV = mappedPara.Item3;
             double localV = mappedPara.Item4;
 
-            XYZ4[] uControlPoint = new XYZ4[4];
+            XYZ4[] vControlPoint = new XYZ4[4];
             for (int i = 0; i < 4; i++)
             {
-                uControlPoint[i] = VCurves[sIndexU + i].dU(v);
+                vControlPoint[i] = UCurves[sIndexV + i].dU(u);
             }
 
-            double[,] Nc = UCurves[sIndexV].Ni[sIndexU];
+            double[,] Nc = VCurves[sIndexU].Ni[sIndexV];
 
-            XYZ3 p = NUB_Curve.Blending(localU, Nc, uControlPoint);
+            XYZ3 p = NUB_Curve.Blending(localV, Nc, vControlPoint);
 
             return p;
         }
@@ -179,15 +165,15 @@ namespace PTL.Geometry.MathModel
             int sIndexV = mappedPara.Item3;
             double localV = mappedPara.Item4;
 
-            XYZ4[] uControlPoint = new XYZ4[4];
+            XYZ4[] vControlPoint = new XYZ4[4];
             for (int i = 0; i < 4; i++)
             {
-                uControlPoint[i] = VCurves[sIndexU + i].dU2(v);
+                vControlPoint[i] = UCurves[sIndexV + i].dU2(u);
             }
 
-            double[,] Nc = UCurves[sIndexV].Ni[sIndexU];
+            double[,] Nc = VCurves[sIndexU].Ni[sIndexV];
 
-            XYZ3 p = NUB_Curve.Blending(localU, Nc, uControlPoint);
+            XYZ3 p = NUB_Curve.Blending(localV, Nc, vControlPoint);
 
             return p;
         }
@@ -200,15 +186,15 @@ namespace PTL.Geometry.MathModel
             int sIndexV = mappedPara.Item3;
             double localV = mappedPara.Item4;
 
-            XYZ4[] uControlPoint = new XYZ4[4];
+            XYZ4[] vControlPoint = new XYZ4[4];
             for (int i = 0; i < 4; i++)
             {
-                uControlPoint[i] = VCurves[sIndexU + i].dU(v);
+                vControlPoint[i] = UCurves[sIndexV + i].dU(u);
             }
 
-            double[,] Nc = UCurves[sIndexV].Ni[sIndexU];
+            double[,] Nc = VCurves[sIndexU].Ni[sIndexV];
 
-            XYZ3 p = NUB_Curve.dU_Blending(localU, Nc, uControlPoint);
+            XYZ3 p = NUB_Curve.dU_Blending(localV, Nc, vControlPoint);
 
             return p;
         }

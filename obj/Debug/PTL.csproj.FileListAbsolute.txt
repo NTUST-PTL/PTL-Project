@@ -263,7 +263,6 @@ E:\Data\GitHub\PTL-Project\obj\Debug\PTL.Properties.Resources.resources
 E:\Data\GitHub\PTL-Project\obj\Debug\PTL.csproj.GenerateResource.Cache
 E:\Data\GitHub\PTL-Project\obj\Debug\PTL.dll
 E:\Data\GitHub\PTL-Project\obj\Debug\PTL.pdb
-E:\Data\GitHub\PTL-Project\obj\Debug\PTL.csprojResolveAssemblyReference.cache
 C:\Data\GitHub\PTL-Project\bin\Debug\PTL.dll
 C:\Data\GitHub\PTL-Project\bin\Debug\PTL.pdb
 C:\Data\GitHub\PTL-Project\bin\Debug\3DTools.dll
@@ -295,3 +294,8 @@ C:\Data\GitHub\PTL-Project\obj\Debug\PTL.csproj.GenerateResource.Cache
 C:\Data\GitHub\PTL-Project\obj\Debug\PTL.dll
 C:\Data\GitHub\PTL-Project\obj\Debug\PTL.pdb
 C:\Data\GitHub\PTL-Project\obj\Debug\PTL.csprojResolveAssemblyReference.cache
+E:\Data\GitHub\PTL-Project\obj\Debug\PTL.csprojResolveAssemblyReference.cache
+E:\Data\GitHub\PTL-Project\bin\Debug\PdfSharp-WPF.dll
+E:\Data\GitHub\PTL-Project\bin\Debug\PdfSharp.Xps.dll
+E:\Data\GitHub\PTL-Project\bin\Debug\PdfSharp-WPF.xml
+E:\Data\GitHub\PTL-Project\bin\Debug\PdfSharp.Xps.xml
