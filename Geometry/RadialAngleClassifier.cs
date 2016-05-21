@@ -128,9 +128,9 @@ namespace PTL.Geometry
             return index;
         }
 
-        public Vector GetStanderVector(Vector v)
+        public VectorD GetStanderVector(VectorD v)
         {
-            return new Vector(
+            return new VectorD(
                 v.X / CubeDimentions[0],
                 v.Y / CubeDimentions[1],
                 v.Z / CubeDimentions[2]);
@@ -147,10 +147,10 @@ namespace PTL.Geometry
             return CubeSpaces[index[0], index[1], index[2]];
         }
 
-        public HashSet<CubicSpace> GetCubicSpaces(PointD position, Vector direction)
+        public HashSet<CubicSpace> GetCubicSpaces(PointD position, VectorD direction)
         {
             PointD ssP = GetStanderCoordinate(position);
-            Vector ssD = Normalize(GetStanderVector(direction));
+            VectorD ssD = Normalize(GetStanderVector(direction));
             HashSet<CubicSpace> IntersectedCubicSpace = new HashSet<CubicSpace>();
             int[] Dquadrant = EachSign(direction.ToArray()).ToArray();
             int[] startIndex = GetCubicSpaceIndex(position);
@@ -221,7 +221,7 @@ namespace PTL.Geometry
             return IntersectedCubicSpace;
         }
 
-        public HashSet<CubicSpace> GetCubicSpaces2(PointD position, Vector direction)
+        public HashSet<CubicSpace> GetCubicSpaces2(PointD position, VectorD direction)
         {
             HashSet<CubicSpace> CubicSpaceInD1 = GetCubicSpaces(position, direction);
             HashSet<CubicSpace> CubicSpaceInD2 = GetCubicSpaces(position, -1 * direction);
@@ -232,7 +232,7 @@ namespace PTL.Geometry
             return CubicSpaceInD1;
         }
 
-        public HashSet<Entity> GetEntities2(PointD position, Vector direction)
+        public HashSet<Entity> GetEntities2(PointD position, VectorD direction)
         {
             HashSet<CubicSpace> IntersectedCubicSpace = GetCubicSpaces2(position, direction);
             HashSet<Entity> Entities = new HashSet<Entity>();

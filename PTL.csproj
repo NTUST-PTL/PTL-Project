@@ -104,9 +104,12 @@
     <Compile Include="Extensions\TopoFaceOutputExtensions\TopoFaceStringOuputExtension.cs" />
     <Compile Include="FileOperation\TXTFile.cs" />
     <Compile Include="Geometry\MathModel\CurveFunctionUniformer.cs" />
+    <Compile Include="Geometry\MathModel\NUB_Surface_base.cs" />
     <Compile Include="Geometry\MathModel\SurfaceFunctionUniformer.cs" />
     <Compile Include="Geometry\PolyFan.cs" />
+    <Compile Include="Geometry\VectorD.cs" />
     <Compile Include="Mathematics\MatrixFunctions.cs" />
+    <Compile Include="Mathematics\Vector.cs" />
     <Compile Include="OpenGL\Plot\ViewPlotingExtentions\ViewPlotingExtentions.cs" />
     <Compile Include="Extensions\ReflectionExtensions\ReflectionExtension.cs" />
     <Compile Include="Base\Source.cs" />
@@ -156,7 +159,6 @@
     <Compile Include="Geometry\Text.cs" />
     <Compile Include="Geometry\TopoFace.cs" />
     <Compile Include="Geometry\Triangle.cs" />
-    <Compile Include="Geometry\Vector.cs" />
     <Compile Include="Geometry\Visibility.cs" />
     <Compile Include="Geometry\PointD.cs" />
     <Compile Include="Geometry\DiametricDimension.cs" />

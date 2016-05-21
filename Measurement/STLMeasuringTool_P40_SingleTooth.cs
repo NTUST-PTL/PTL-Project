@@ -38,7 +38,7 @@ namespace PTL.Measurement
             ToBothSide
         }
 
-        public override List<Vector> MeasurePointNormals
+        public override List<VectorD> MeasurePointNormals
         {
             get
             {
@@ -128,7 +128,7 @@ namespace PTL.Measurement
         {
             //提取所有拓樸點
             XYZ4[] allTopoPoints = new XYZ4[this.TopoFace1.Points.Length + this.TopoFace2.Points.Length];
-            Vector[] allTopoPointNormals = new Vector[this.TopoFace1.Normals.Length + this.TopoFace2.Normals.Length];
+            VectorD[] allTopoPointNormals = new VectorD[this.TopoFace1.Normals.Length + this.TopoFace2.Normals.Length];
             int index;
             index = 0;
             foreach (var item in this.TopoFace1.Points)
@@ -165,7 +165,7 @@ namespace PTL.Measurement
                 XYZ4[] PartoalPoints = new XYZ4[sliceIndex[i + 1] - sliceIndex[i]];
                 for (int j = 0; j < sliceIndex[i + 1] - sliceIndex[i]; j++)
                     PartoalPoints[j] = allTopoPoints[j + sliceIndex[i]];
-                Vector[] PartoalNormals = new Vector[sliceIndex[i + 1] - sliceIndex[i]];
+                VectorD[] PartoalNormals = new VectorD[sliceIndex[i + 1] - sliceIndex[i]];
                 for (int j = 0; j < sliceIndex[i + 1] - sliceIndex[i]; j++)
                     PartoalNormals[j] = allTopoPointNormals[j + sliceIndex[i]];
                 //建立物件
@@ -196,7 +196,7 @@ namespace PTL.Measurement
             {
                 //抓取結果
                 this.MeasurePoints = new List<XYZ4>();
-                this.MeasurePointNormals = new List<Vector>();
+                this.MeasurePointNormals = new List<VectorD>();
                 this.TouchPoints = new List<XYZ4>();
                 this.TouchedTriangles = new List<Triangle>();
                 foreach (var item in STLMeasurent_Objects)

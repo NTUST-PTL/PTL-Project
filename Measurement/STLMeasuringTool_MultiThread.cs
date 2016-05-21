@@ -16,7 +16,7 @@ namespace PTL.Measurement
         /// <summary>
         /// 量測點的法向量
         /// </summary>
-        public virtual List<Vector> MeasurePointNormals { get; set; }
+        public virtual List<VectorD> MeasurePointNormals { get; set; }
         /// <summary>
         /// 執行緒數目
         /// </summary>
@@ -39,7 +39,7 @@ namespace PTL.Measurement
         public List<STLMeasuringTool> STLMeasurent_Objects;
 
         protected STLMeasuringTool_MultiThread() { }
-        public STLMeasuringTool_MultiThread(STL STL2Measure, List<XYZ4> P, List<Vector> N, int ThreadNumber, EventHandler OnFinish, STLMeasuringTool objSTLMeasurement)
+        public STLMeasuringTool_MultiThread(STL STL2Measure, List<XYZ4> P, List<VectorD> N, int ThreadNumber, EventHandler OnFinish, STLMeasuringTool objSTLMeasurement)
         {
             this.STL2Measure = STL2Measure;
             this.MeasurePoints = P;
@@ -89,7 +89,7 @@ namespace PTL.Measurement
                     aSTLMeasurementObject.OnFinish += this.OnThreadFinished;
                     if (aSTLMeasurementObject is ISTLMeasurement_NeedNormals && this.MeasurePointNormals != null)
                     {
-                        Vector[] PartoalNormals = new Vector[sliceIndex[i + 1] - sliceIndex[i]];
+                        VectorD[] PartoalNormals = new VectorD[sliceIndex[i + 1] - sliceIndex[i]];
                         for (int j = 0; j < sliceIndex[i + 1] - sliceIndex[i]; j++)
                             PartoalNormals[j] = this.MeasurePointNormals[j + sliceIndex[i]];
                         (aSTLMeasurementObject as ISTLMeasurement_NeedNormals).MeasurePointNormals = PartoalNormals.ToList();

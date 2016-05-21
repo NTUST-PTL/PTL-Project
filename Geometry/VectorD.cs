@@ -9,7 +9,7 @@ using static PTL.Mathematics.BaseFunctions;
 
 namespace PTL.Geometry
 {
-    public class Vector : Entity, IHaveXYZ
+    public class VectorD : Entity, IHaveXYZ
     {
         public double[] Value = new double[3] { 0, 0, 0 };
         public double X
@@ -57,7 +57,7 @@ namespace PTL.Geometry
             }
         }
 
-        public static Vector ZeroVector { get { return new Vector(0, 0, 0); } }
+        public static VectorD ZeroVector { get { return new VectorD(0, 0, 0); } }
 
         protected double openGLDisplaySize = 10;
         public double OpenGLDisplaySize
@@ -65,28 +65,28 @@ namespace PTL.Geometry
             get { return openGLDisplaySize; }
             set { this.openGLDisplaySize = value; }
         }
-        public Action<Vector> OpenGLDisplayFunction = PlotAsPoint;
+        public Action<VectorD> OpenGLDisplayFunction = PlotAsPoint;
 
         #region Constructor and Destructor
-        public Vector(double x, double y, double z)
+        public VectorD(double x, double y, double z)
         {
             this.X = x;
             this.Y = y;
             this.Z = z;
         }
 
-        public Vector(double[] direction)
+        public VectorD(double[] direction)
         {
             this.X = direction[0];
             this.Y = direction[1];
             this.Z = direction[2];
         }
 
-        public Vector()
+        public VectorD()
         {
         }
 
-        public Vector(Vector p)
+        public VectorD(VectorD p)
         {
             this.X = p.X;
             this.Y = p.Y;
@@ -95,9 +95,9 @@ namespace PTL.Geometry
         #endregion
 
         #region Operation
-        public static Vector operator -(Vector p1, Vector p2)
+        public static VectorD operator -(VectorD p1, VectorD p2)
         {
-            Vector p3 = new Vector();
+            VectorD p3 = new VectorD();
 
             p3.X = p1.X - p2.X;
             p3.Y = p1.Y - p2.Y;
@@ -105,9 +105,9 @@ namespace PTL.Geometry
 
             return p3;
         }
-        public static Vector operator +(Vector p1, Vector p2)
+        public static VectorD operator +(VectorD p1, VectorD p2)
         {
-            Vector p3 = new Vector();
+            VectorD p3 = new VectorD();
 
             p3.X = p1.X + p2.X;
             p3.Y = p1.Y + p2.Y;
@@ -115,9 +115,9 @@ namespace PTL.Geometry
 
             return p3;
         }
-        public static Vector operator *(double scale, Vector p1)
+        public static VectorD operator *(double scale, VectorD p1)
         {
-            Vector po = new Vector();
+            VectorD po = new VectorD();
 
             po.X = scale * p1.X;
             po.Y = scale * p1.Y;
@@ -125,9 +125,9 @@ namespace PTL.Geometry
 
             return po;
         }
-        public static Vector operator *(Vector p1, double scale)
+        public static VectorD operator *(VectorD p1, double scale)
         {
-            Vector po = new Vector();
+            VectorD po = new VectorD();
 
             po.X = scale * p1.X;
             po.Y = scale * p1.Y;
@@ -135,9 +135,9 @@ namespace PTL.Geometry
 
             return po;
         }
-        public static Vector operator /(Vector p1, double denominator)
+        public static VectorD operator /(VectorD p1, double denominator)
         {
-            Vector po = new Vector();
+            VectorD po = new VectorD();
 
             po.X = p1.X / denominator;
             po.Y = p1.Y / denominator;
@@ -145,19 +145,19 @@ namespace PTL.Geometry
 
             return po;
         }
-        public static implicit operator XYZ3(Vector v)
+        public static implicit operator XYZ3(VectorD v)
         {
             return new XYZ3(v.Value);
         }
-        public static implicit operator Vector(XYZ3 v)
+        public static implicit operator VectorD(XYZ3 v)
         {
-            return new Vector(v.Values);
+            return new VectorD(v.Values);
         }
-        public static implicit operator Vector(double[] p)
+        public static implicit operator VectorD(double[] p)
         {
-            return new Vector(p);
+            return new VectorD(p);
         }
-        public static implicit operator double[] (Vector p)
+        public static implicit operator double[] (VectorD p)
         {
             return p.Value;
         }
@@ -169,9 +169,6 @@ namespace PTL.Geometry
             aPoint.X = this.X;
             aPoint.Y = this.Y;
             aPoint.Z = this.Z;
-            aPoint.Color = this.Color;
-            aPoint.openGLDisplaySize = this.openGLDisplaySize;
-            aPoint.OpenGLDisplayFunction = this.OpenGLDisplayFunction;
             return aPoint;
         }
 
@@ -190,7 +187,7 @@ namespace PTL.Geometry
             return null;
         }
 
-        public static void PlotAsPoint(Vector v)
+        public static void PlotAsPoint(VectorD v)
         {
             glColor4d(v.Color);
             GL.glPointSize(Convert.ToSingle(v.openGLDisplaySize));
@@ -199,7 +196,7 @@ namespace PTL.Geometry
             GL.glEnd();
         }
 
-        public static void PlotAsShpere(Vector v)
+        public static void PlotAsShpere(VectorD v)
         {
             glColor4d(v.Color);
             GL.glPushMatrix();
@@ -208,7 +205,7 @@ namespace PTL.Geometry
             GL.glPopMatrix();
         }
 
-        public static void PlotAsCube(Vector v)
+        public static void PlotAsCube(VectorD v)
         {
             glColor4d(v.Color);
             GL.glPushMatrix();
@@ -227,7 +224,7 @@ namespace PTL.Geometry
 
         public override void Transform(double[,] TransformMatrix)
         {
-            Vector newPoint = Transport3(TransformMatrix, this);
+            VectorD newPoint = Transport3(TransformMatrix, this);
             this.X = newPoint.X;
             this.Y = newPoint.Y;
             this.Z = newPoint.Z;

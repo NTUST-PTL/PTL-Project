@@ -37,28 +37,81 @@ namespace PTL.Geometry.MathModel
             }
             else if (closed)
             {
-                XYZ4 a0 = dataPoints[1] - dataPoints[0];
-                XYZ4 b0 = dataPoints[n - 2] - dataPoints[0];
-                XYZ4 c0 = Cross(a0, b0);
-                XYZ4 r0 = (Norm(a0) * Norm(a0) * (XYZ4)Cross(b0, c0) + Norm(b0) * Norm(b0) * (XYZ4)Cross(c0, a0)) / (2 * GetLength(c0) * GetLength(c0));
-                T1 = GetLength(a0) * (XYZ4)Cross(r0, c0) / GetLength(Cross(r0, c0));
-                T2 = T1;
+                //XYZ4 a0 = dataPoints[1] - dataPoints[0];
+                //XYZ4 b0 = dataPoints[n - 2] - dataPoints[0];
+                //XYZ4 c0 = Cross(a0, b0);
+                //XYZ4 r0 = (Norm(a0) * Norm(a0) * (XYZ4)Cross(b0, c0) + Norm(b0) * Norm(b0) * (XYZ4)Cross(c0, a0)) / (2 * GetLength(c0) * GetLength(c0));
+                //T1 = GetLength(a0) * (XYZ4)Cross(r0, c0) / GetLength(Cross(r0, c0));
+                //T2 = -1 * T1;
+                T1 = GetCircularTangent(dataPoints[n - 2], dataPoints[0], dataPoints[1], GetCircularTangentAt.Middle);
+                T2 = -1 * T1;
             }
             else
             {
-                XYZ4 a0 = dataPoints[1] - dataPoints[0];
-                XYZ4 b0 = dataPoints[2] - dataPoints[0];
-                XYZ4 c0 = Cross(a0, b0);
-                XYZ4 r0 = (Norm(a0) * Norm(a0) * (XYZ4)Cross(b0, c0) + Norm(b0) * Norm(b0) * (XYZ4)Cross(c0, a0)) / (2 * GetLength(c0) * GetLength(c0));
-                T1 = GetLength(a0) * (XYZ4)Cross(r0, c0) / GetLength(Cross(r0, c0));
-                XYZ4 an = dataPoints[n - 2] - dataPoints[n - 1];
-                XYZ4 bn = dataPoints[n - 3] - dataPoints[n - 1];
-                XYZ4 cn = Cross(an, bn);
-                XYZ4 rn = (GetLength(an) * GetLength(an) * (XYZ4)Cross(bn, cn) + GetLength(bn) * GetLength(bn) * (XYZ4)Cross(cn, an)) / (2 * GetLength(cn) * GetLength(cn));
-                T2 = -1.0 * GetLength(an) * (XYZ4)Cross(rn, cn) / GetLength(Cross(rn, cn));
+                //XYZ4 a0 = dataPoints[1] - dataPoints[0];
+                //XYZ4 b0 = dataPoints[2] - dataPoints[0];
+                //XYZ4 c0 = Cross(a0, b0);
+                //XYZ4 r0 = (Norm(a0) * Norm(a0) * (XYZ4)Cross(b0, c0) + Norm(b0) * Norm(b0) * (XYZ4)Cross(c0, a0)) / (2 * GetLength(c0) * GetLength(c0));
+                //T1 = GetLength(a0) * (XYZ4)Cross(r0, c0) / GetLength(Cross(r0, c0));
+                //XYZ4 an = dataPoints[n - 2] - dataPoints[n - 1];
+                //XYZ4 bn = dataPoints[n - 3] - dataPoints[n - 1];
+                //XYZ4 cn = Cross(an, bn);
+                //XYZ4 rn = (GetLength(an) * GetLength(an) * (XYZ4)Cross(bn, cn) + GetLength(bn) * GetLength(bn) * (XYZ4)Cross(cn, an)) / (2 * GetLength(cn) * GetLength(cn));
+                //T2 = -1.0 * GetLength(an) * (XYZ4)Cross(rn, cn) / GetLength(Cross(rn, cn));
+                T1 = GetCircularTangent(dataPoints[0], dataPoints[1], dataPoints[2], GetCircularTangentAt.Start);
+                T2 = GetCircularTangent(dataPoints[n - 3], dataPoints[n - 2], dataPoints[n - 1], GetCircularTangentAt.End);
             }
             #endregion
             Calculate_NURBS_Curve(dataPoints, T1, T2);
+        }
+
+        public enum GetCircularTangentAt
+        {
+            Start,
+            Middle,
+            End
+        };
+        public static XYZ3 GetCircularTangent(XYZ4 p1, XYZ4 p2, XYZ4 p3, GetCircularTangentAt at)
+        {
+            switch (at)
+            {
+                case GetCircularTangentAt.Start:
+                    {
+                        XYZ4 a0 = p2 - p1;
+                        XYZ4 b0 = p3 - p1;
+                        XYZ4 c0 = Cross(a0, b0);
+                        XYZ4 r0 = (Norm(a0) * Norm(a0) * (XYZ4)Cross(b0, c0) + Norm(b0) * Norm(b0) * (XYZ4)Cross(c0, a0)) / (2 * GetLength(c0) * GetLength(c0));
+                        XYZ3 T1 = GetLength(a0) * (XYZ4)Cross(r0, c0) / GetLength(Cross(r0, c0));
+                        return T1;
+                    }
+                case GetCircularTangentAt.Middle:
+                    {
+                        XYZ4 a0 = p3 - p2;
+                        XYZ4 b0 = p1 - p2;
+                        XYZ4 c0 = Cross(a0, b0);
+                        XYZ4 r0 = (Norm(a0) * Norm(a0) * (XYZ4)Cross(b0, c0) + Norm(b0) * Norm(b0) * (XYZ4)Cross(c0, a0)) / (2 * GetLength(c0) * GetLength(c0));
+                        XYZ3 T1 = GetLength(a0) * (XYZ4)Cross(r0, c0) / GetLength(Cross(r0, c0));
+                        return T1;
+                    }
+                case GetCircularTangentAt.End:
+                    {
+                        XYZ4 an = p2 - p3;
+                        XYZ4 bn = p1 - p3;
+                        XYZ4 cn = Cross(an, bn);
+                        XYZ4 rn = (GetLength(an) * GetLength(an) * (XYZ4)Cross(bn, cn) + GetLength(bn) * GetLength(bn) * (XYZ4)Cross(cn, an)) / (2 * GetLength(cn) * GetLength(cn));
+                        XYZ3 T3 = -1.0 * GetLength(an) * (XYZ4)Cross(rn, cn) / GetLength(Cross(rn, cn));
+                        return T3;
+                    }
+                default:
+                    {
+                        XYZ4 a0 = p2 - p1;
+                        XYZ4 b0 = p3 - p1;
+                        XYZ4 c0 = Cross(a0, b0);
+                        XYZ4 r0 = (Norm(a0) * Norm(a0) * (XYZ4)Cross(b0, c0) + Norm(b0) * Norm(b0) * (XYZ4)Cross(c0, a0)) / (2 * GetLength(c0) * GetLength(c0));
+                        XYZ3 T1 = GetLength(a0) * (XYZ4)Cross(r0, c0) / GetLength(Cross(r0, c0));
+                        return T1;
+                    }
+            }
         }
 
         public void Calculate_NURBS_Curve(XYZ4[] dataPoints, XYZ3 startTangent, XYZ3 endTangent)
@@ -108,8 +161,8 @@ namespace PTL.Geometry.MathModel
 
             #region 計算R矩陣
             XYZ4[,] R = new XYZ4[n + 2, 1];
-            R[0, 0] = startTangent;
-            R[n + 1, 0] = endTangent;
+            R[0, 0] = startTangent != null ? startTangent : GetCircularTangent(dataPoints[0], dataPoints[1], dataPoints[2], GetCircularTangentAt.Start);
+            R[n + 1, 0] = endTangent != null ? endTangent : GetCircularTangent(dataPoints[n-3], dataPoints[n-2], dataPoints[n-1], GetCircularTangentAt.End);
             for (int i = 0; i < n; i++)
             {
                 int i_M = i + 1;

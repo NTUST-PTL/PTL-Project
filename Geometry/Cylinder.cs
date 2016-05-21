@@ -74,10 +74,10 @@ namespace PTL.Geometry
             {
                 this.face = new TopoFace() { Points = new XYZ4[2, sliceNumber], Normals = new XYZ3[2, sliceNumber] };
 
-                Vector axisDirection = AxisEnd - AxisStart;
-                Vector N1 = Cross(new Vector(0, 0, 1), axisDirection);
+                VectorD axisDirection = AxisEnd - AxisStart;
+                VectorD N1 = Cross(new VectorD(0, 0, 1), axisDirection);
                 if (Norm(N1) == 0)
-                    N1 = Cross(new Vector(0, 1, 0), axisDirection);
+                    N1 = Cross(new VectorD(0, 1, 0), axisDirection);
                 N1 = Normalize(N1);
 
                 double dTheta = PI * 2.0 / (sliceNumber - 1);
@@ -86,8 +86,8 @@ namespace PTL.Geometry
                 for (int i = 0; i < sliceNumber; i++)
                 {
                     M = NewRotateMatrix4(axisDirection, dTheta * i);
-                    Vector n = Transport4(M, N1);
-                    Vector r = n * this.Radius;
+                    VectorD n = Transport4(M, N1);
+                    VectorD r = n * this.Radius;
 
                     this.face.Normals[0, i] = n;
                     this.face.Normals[1, i] = n;

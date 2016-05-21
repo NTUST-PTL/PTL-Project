@@ -16,6 +16,6 @@ namespace PTL.Measurement
         /// <summary>
         /// 量測點的法向量
         /// </summary>
-        List<Vector> MeasurePointNormals { get; set; }
+        List<VectorD> MeasurePointNormals { get; set; }
     }
 }

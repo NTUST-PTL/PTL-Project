@@ -8,7 +8,7 @@ using static PTL.Mathematics.BaseFunctions;
 
 namespace PTL.Geometry
 {
-    public class PointD : Vector
+    public class PointD : VectorD
     {
         public PointD(double x, double y, double z)
             : base(x, y, z)
@@ -28,13 +28,13 @@ namespace PTL.Geometry
         {
         }
 
-        public PointD(Vector p)
+        public PointD(VectorD p)
             :base(p)
         {
         }
 
         #region Operation
-        public static PointD operator -(Vector p1, PointD p2)
+        public static PointD operator -(VectorD p1, PointD p2)
         {
             PointD p3 = new PointD();
 
@@ -44,7 +44,7 @@ namespace PTL.Geometry
 
             return p3;
         }
-        public static PointD operator -(PointD p1, Vector p2)
+        public static PointD operator -(PointD p1, VectorD p2)
         {
             PointD p3 = new PointD();
 
@@ -64,7 +64,7 @@ namespace PTL.Geometry
 
             return p3;
         }
-        public static PointD operator +(PointD p1, Vector p2)
+        public static PointD operator +(PointD p1, VectorD p2)
         {
             PointD p3 = new PointD();
 
@@ -74,7 +74,7 @@ namespace PTL.Geometry
 
             return p3;
         }
-        public static PointD operator +(Vector p1, PointD p2)
+        public static PointD operator +(VectorD p1, PointD p2)
         {
             PointD p3 = new PointD();
 
@@ -158,9 +158,9 @@ namespace PTL.Geometry
             this.Z = newPoint.Z;
         }
 
-        public virtual Vector ToVector()
+        public virtual VectorD ToVector()
         {
-            return new Vector(this.Value);
+            return new VectorD(this.Value);
         }
     }
 }

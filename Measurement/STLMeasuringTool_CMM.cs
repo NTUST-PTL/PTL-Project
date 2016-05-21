@@ -20,7 +20,7 @@ namespace PTL.Measurement
         /// <summary>
         /// 量測點的法向量
         /// </summary>
-        public List<Vector> MeasurePointNormals { get; set; }
+        public List<VectorD> MeasurePointNormals { get; set; }
 
         /// <summary>
         /// 執行緒結束時觸發此事件
@@ -47,7 +47,7 @@ namespace PTL.Measurement
                 {
                     //Console.WriteLine(pointsIndex);
                     XYZ4 P = MeasurePoints[pointsIndex];
-                    Vector N = MeasurePointNormals[pointsIndex];
+                    VectorD N = MeasurePointNormals[pointsIndex];
                     bool alreadyFound = false;
 
                     ///進度報告
@@ -98,7 +98,7 @@ namespace PTL.Measurement
                         else
                         {
                             //向量 N 在 csPT 上的X,Y, Z分量
-                            Vector component = Transport3(inv, N);
+                            VectorD component = Transport3(inv, N);
                             if ((component.X >= -0 && component.Y >= -0 && component.Z >= -0) ||
                                 (component.X <= 0 && component.Y <= 0 && component.Z <= 0))
                             {

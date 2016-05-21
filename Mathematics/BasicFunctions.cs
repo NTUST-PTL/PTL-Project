@@ -1037,6 +1037,49 @@ namespace PTL.Mathematics
                     Trans[jj, ii] = Matrix[ii, jj];
             return Trans;
         }
+        public static T[][] Transpose<T>(T[][] Matrix)
+        {
+            int r1, c1;
+            r1 = Matrix.Length;  //UBound
+            c1 = Matrix[0].Length;  // UBound
+            T[][] Trans = new T[c1][];
+            for (int i = 0; i < c1; i++)
+                Trans[i] = new T[r1];
+
+            for (int ii = 0; ii < r1; ii++)
+                for (int jj = 0; jj < c1; jj++)
+                    Trans[jj][ii] = Matrix[ii][jj];
+                
+            return Trans;
+        }
+
+        public static T[][] ToIrregularArray<T>(T[,] Matrix)
+        {
+            int r1, c1;
+            r1 = Matrix.GetLength(0);
+            c1 = Matrix.GetLength(1);
+            T[][] irM = new T[r1][];
+            for (int ii = 0; ii < r1; ii++)
+            {
+                irM[ii] = new T[c1];
+                for (int jj = 0; jj < c1; jj++)
+                    irM[ii][jj] = Matrix[ii, jj];
+            }
+            return irM;
+        }
+        public static T[,] ToRegularArray<T>(T[][] Matrix)
+        {
+            int r1, c1;
+            r1 = Matrix.Length;
+            c1 = Matrix[0].Length;
+            T[,] rM = new T[r1, c1];
+            for (int ii = 0; ii < r1; ii++)
+            {
+                for (int jj = 0; jj < c1; jj++)
+                    rM[ii,jj] = Matrix[ii][jj];
+            }
+            return rM;
+        }
         #endregion
 
         #region 其他

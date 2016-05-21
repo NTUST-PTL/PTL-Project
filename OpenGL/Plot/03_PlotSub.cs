@@ -208,7 +208,7 @@ namespace PTL.OpenGL.Plot
             }
             GL.glPopMatrix();
         }
-        public static void WriteString(string str, Vector p1, float colorR, float colorG, float colorB)
+        public static void WriteString(string str, VectorD p1, float colorR, float colorG, float colorB)
         {
             GL.glPushMatrix();
             GL.glColor3f(colorR, colorG, colorB);
@@ -220,7 +220,7 @@ namespace PTL.OpenGL.Plot
             }
             GL.glPopMatrix();
         }
-        public static void WriteString(string str, Vector p1, Color color)
+        public static void WriteString(string str, VectorD p1, Color color)
         {
             GL.glPushMatrix();
             glColor3d(color);

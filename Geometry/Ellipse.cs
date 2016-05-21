@@ -16,8 +16,8 @@ namespace PTL.Geometry
     {
         //欄位，作為橢圓的實際定義
         private PointD fCenter;
-        private Vector fEndPointOfMajorAxis;//Relative To Center
-        private Vector fNormal;
+        private VectorD fEndPointOfMajorAxis;//Relative To Center
+        private VectorD fNormal;
         private double fRatio;
         private double fStartAngle = 0, fEndAngle = 2 * PI;
 
@@ -27,12 +27,12 @@ namespace PTL.Geometry
             get { return fCenter; }
             set { this.fCenter = value; }
         }
-        public Vector EndPointOfMajorAxis
+        public VectorD EndPointOfMajorAxis
         {
             get { return this.fEndPointOfMajorAxis; }
             set { this.fEndPointOfMajorAxis = value; }
         }
-        public Vector Normal
+        public VectorD Normal
         {
             get { return this.fNormal; }
             private set { this.fNormal = value; }
@@ -48,16 +48,16 @@ namespace PTL.Geometry
         { get { return this.fEndAngle; } private set { this.fEndAngle = value; } }
 
         //屬性，作為橢圓外在的特徵
-        public Vector MajorDirection
+        public VectorD MajorDirection
         {
             get { return Normalize(fEndPointOfMajorAxis); }
             set
             {
                 double Ra = Norm(fEndPointOfMajorAxis);
-                this.fEndPointOfMajorAxis = Ra * (Vector)Normalize(value);
+                this.fEndPointOfMajorAxis = Ra * (VectorD)Normalize(value);
             }
         }
-        public Vector MinorDirection
+        public VectorD MinorDirection
         {
             get { return Normalize(Cross(fNormal, fEndPointOfMajorAxis)); }
             set
@@ -66,30 +66,30 @@ namespace PTL.Geometry
             }
         }
         public double Ra
-        { get { return Norm(fEndPointOfMajorAxis); } set { this.fEndPointOfMajorAxis = value * (Vector)Normalize(fEndPointOfMajorAxis); } }
+        { get { return Norm(fEndPointOfMajorAxis); } set { this.fEndPointOfMajorAxis = value * (VectorD)Normalize(fEndPointOfMajorAxis); } }
         public double Rb
         { get { return fRatio * Norm(fEndPointOfMajorAxis); } set { this.fRatio = value / Norm(fEndPointOfMajorAxis); } }
 
 
         #region Constructor
-        public Ellipse(PointD center, Vector majorDirection, Vector minorDirection, Double ra, double rb)
+        public Ellipse(PointD center, VectorD majorDirection, VectorD minorDirection, Double ra, double rb)
         {
             this.fCenter = center;
-            this.fEndPointOfMajorAxis = (new Vector(Normalize(majorDirection))) * Ra;
+            this.fEndPointOfMajorAxis = (new VectorD(Normalize(majorDirection))) * Ra;
             this.fNormal = Cross(majorDirection, minorDirection);
             this.fRatio = rb / ra;
         }
-        public Ellipse(PointD center, Vector majorDirection, Vector minorDirection, Double ra, double rb, Color color, LineType lineType, float width)
+        public Ellipse(PointD center, VectorD majorDirection, VectorD minorDirection, Double ra, double rb, Color color, LineType lineType, float width)
         {
             this.fCenter = center;
-            this.fEndPointOfMajorAxis = (Vector)Normalize(majorDirection) * ra;
+            this.fEndPointOfMajorAxis = (VectorD)Normalize(majorDirection) * ra;
             this.fNormal = Cross(majorDirection, minorDirection);
             this.fRatio = rb / ra;
             this.Color = color;
             this.LineType = lineType;
             this.LineWidth = width;
         }
-        public Ellipse(PointD center, Vector endPointOfMajorAxis, Vector normal, double ratio, double startAngle, double endAngle)
+        public Ellipse(PointD center, VectorD endPointOfMajorAxis, VectorD normal, double ratio, double startAngle, double endAngle)
         {
             this.fCenter = center;
             this.fEndPointOfMajorAxis = endPointOfMajorAxis;
@@ -98,7 +98,7 @@ namespace PTL.Geometry
             this.fStartAngle = startAngle;
             this.fEndAngle = endAngle;
         }
-        public Ellipse(PointD center, Vector endPointOfMajorAxis, Vector normal, double ratio)
+        public Ellipse(PointD center, VectorD endPointOfMajorAxis, VectorD normal, double ratio)
         {
             this.fCenter = center;
             this.fEndPointOfMajorAxis = endPointOfMajorAxis;
@@ -164,8 +164,8 @@ namespace PTL.Geometry
                 double step = 2 * PI / (nump - 1);
 
                 PointD center = this.Center;
-                Vector e1 = (Vector)this.MajorDirection.Clone();
-                Vector e2 = (Vector)this.MinorDirection.Clone();
+                VectorD e1 = (VectorD)this.MajorDirection.Clone();
+                VectorD e2 = (VectorD)this.MinorDirection.Clone();
                 double ra = this.Ra;
                 double rb = this.Rb;
 

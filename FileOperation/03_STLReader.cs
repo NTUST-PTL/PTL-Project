@@ -222,7 +222,7 @@ namespace PTL.FileOperation
                         return aSTL;
                     }
 
-                    aTriangle.N1 = new Vector(Normal);
+                    aTriangle.N1 = new VectorD(Normal);
                     aTriangle.P1 = new PointD(vertex1);
                     aTriangle.P2 = new PointD(vertex2);
                     aTriangle.P3 = new PointD(vertex3);
