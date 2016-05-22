@@ -80,6 +80,8 @@ namespace PTL.Geometry.MathModel
                         XYZ4 a0 = p2 - p1;
                         XYZ4 b0 = p3 - p1;
                         XYZ4 c0 = Cross(a0, b0);
+                        if (Norm(c0) < 1e-12)
+                            return a0;
                         XYZ4 r0 = (Norm(a0) * Norm(a0) * (XYZ4)Cross(b0, c0) + Norm(b0) * Norm(b0) * (XYZ4)Cross(c0, a0)) / (2 * GetLength(c0) * GetLength(c0));
                         XYZ3 T1 = GetLength(a0) * (XYZ4)Cross(r0, c0) / GetLength(Cross(r0, c0));
                         return T1;
@@ -89,6 +91,8 @@ namespace PTL.Geometry.MathModel
                         XYZ4 a0 = p3 - p2;
                         XYZ4 b0 = p1 - p2;
                         XYZ4 c0 = Cross(a0, b0);
+                        if (Norm(c0) < 1e-12)
+                            return a0;
                         XYZ4 r0 = (Norm(a0) * Norm(a0) * (XYZ4)Cross(b0, c0) + Norm(b0) * Norm(b0) * (XYZ4)Cross(c0, a0)) / (2 * GetLength(c0) * GetLength(c0));
                         XYZ3 T1 = GetLength(a0) * (XYZ4)Cross(r0, c0) / GetLength(Cross(r0, c0));
                         return T1;
@@ -98,6 +102,8 @@ namespace PTL.Geometry.MathModel
                         XYZ4 an = p2 - p3;
                         XYZ4 bn = p1 - p3;
                         XYZ4 cn = Cross(an, bn);
+                        if (Norm(cn) < 1e-12)
+                            return -1.0 * an;
                         XYZ4 rn = (GetLength(an) * GetLength(an) * (XYZ4)Cross(bn, cn) + GetLength(bn) * GetLength(bn) * (XYZ4)Cross(cn, an)) / (2 * GetLength(cn) * GetLength(cn));
                         XYZ3 T3 = -1.0 * GetLength(an) * (XYZ4)Cross(rn, cn) / GetLength(Cross(rn, cn));
                         return T3;
@@ -107,6 +113,8 @@ namespace PTL.Geometry.MathModel
                         XYZ4 a0 = p2 - p1;
                         XYZ4 b0 = p3 - p1;
                         XYZ4 c0 = Cross(a0, b0);
+                        if (Norm(c0) < 1e-12)
+                            return a0;
                         XYZ4 r0 = (Norm(a0) * Norm(a0) * (XYZ4)Cross(b0, c0) + Norm(b0) * Norm(b0) * (XYZ4)Cross(c0, a0)) / (2 * GetLength(c0) * GetLength(c0));
                         XYZ3 T1 = GetLength(a0) * (XYZ4)Cross(r0, c0) / GetLength(Cross(r0, c0));
                         return T1;
@@ -180,6 +188,18 @@ namespace PTL.Geometry.MathModel
 
             #region 求解控制點
             invM = Inverse(M);
+            //for (int i = 0; i < invM.GetLength(0); i++)
+            //{
+            //    for (int j = 0; j < invM.GetLength(1); j++)
+            //    {
+            //        if (double.IsNaN(invM[i, j])
+            //            || double.IsInfinity(invM[i, j]))
+            //        {
+
+            //        }
+            //    }
+            //}
+            
             if (n == 2)
             {
                 ControlPoints = new XYZ4[] { DataPoints[0], DataPoints[0], DataPoints[1], DataPoints[1] };
@@ -193,6 +213,16 @@ namespace PTL.Geometry.MathModel
                     for (int j = 0; j < ControlPoints.GetLength(0); j++)
                     {
                         ControlPoints[i] += invM[i, j] * R[j, 0];
+                    }
+                    if (double.IsNaN(ControlPoints[i].X)
+                        || double.IsInfinity(ControlPoints[i].X)
+                        || double.IsNaN(ControlPoints[i].Y)
+                        || double.IsInfinity(ControlPoints[i].Y)
+                        || double.IsNaN(ControlPoints[i].Z)
+                        || double.IsInfinity(ControlPoints[i].Z)
+                        )
+                    {
+
                     }
                 }
             }

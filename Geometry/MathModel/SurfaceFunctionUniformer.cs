@@ -56,7 +56,6 @@ namespace PTL.Geometry.MathModel
                     }
                     catch (Exception)
                     {
-
                         throw;
                     }
                     ans = MathNet.Numerics.RootFinding.Broyden.FindRoot(func, initialGuess, 1e-8, 100);
