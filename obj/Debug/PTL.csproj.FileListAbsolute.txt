@@ -305,3 +305,5 @@ C:\Data\GitHub\PTL-Project\bin\Debug\PdfSharp.Xps.dll
 C:\Data\GitHub\PTL-Project\bin\Debug\MathNet.Numerics.pdb
 C:\Data\GitHub\PTL-Project\bin\Debug\PdfSharp-WPF.xml
 C:\Data\GitHub\PTL-Project\bin\Debug\PdfSharp.Xps.xml
+E:\Data\GitHub\PTL-Project\bin\Debug\MathNet.Numerics.dll
+E:\Data\GitHub\PTL-Project\bin\Debug\MathNet.Numerics.pdb

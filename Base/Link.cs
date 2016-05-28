@@ -14,57 +14,37 @@ namespace PTL.Base
         {
 
         }
-        public Link(Source<T> source)
+        public Link(Func<T> getSourceValue, Action<T> setSourceValue)
         {
-            source.LinkWith(this);
+            GetSourceValue = getSourceValue;
+            SetSourceValue = setSourceValue;
         }
 
-        public Source<T> Source;
         public Func<T> GetSourceValue;
         public Action<T> SetSourceValue;
 
         public event PropertyChangedEventHandler PropertyChanged;
+        public void NotifyPropertyChanged(string name)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+        }
 
-        public T V
+        public T Value
         {
             get { return GetSourceValue(); }
-            set { SetSourceValue(value); }
-        }
-
-        public void NoticeChange()
-        {
-            this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("V"));
-        }
-
-        public void LinkTo(Source<T> source)
-        {
-            LinkTo(true, source);
-        }
-
-        public void LinkTo(bool bilateral, Source<T> source)
-        {
-            if (source != null)
-            {
-                this.GetSourceValue = source.GetValue;
-                this.SetSourceValue = source.SetValue;
-                this.Source = source;
-                if (bilateral)
-                    source.LinkWith(false, this);
+            set {
+                if (!Value.Equals(value))
+                {
+                    SetSourceValue(value);
+                    NotifyPropertyChanged(nameof(Value));
+                }
+                
             }
-        }
-
-        public void Delink()
-        {
-            this.GetSourceValue = null;
-            this.SetSourceValue = null;
-            this.Source = null;
-            if (this.Source != null)
-                this.Source.DelinkWith(this);
         }
 
         public static implicit operator T(Link<T> link)
         {
-            return link.V;
+            return link.Value;
         }
     }
 }

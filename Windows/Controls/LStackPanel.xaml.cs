@@ -38,8 +38,8 @@ namespace PTL.Windows.Controls
             if (CheckAccess())
             {
                 this._StackPanel.Children.Clear();
-                List<ICanPlotInOpenGL> ValueList = Value.V.ToList();
-                for (int i = 0; i < Value.V.Count; i++)
+                List<ICanPlotInOpenGL> ValueList = Value.Value.ToList();
+                for (int i = 0; i < Value.Value.Count; i++)
                 {
                     if (ValueList[i] is IHaveVisibility)
                     {
@@ -61,7 +61,7 @@ namespace PTL.Windows.Controls
             {
                 int i = 0;
                 List<IHaveVisibility> ValueList =
-                    (from item in Value.V.ToList()
+                    (from item in Value.Value.ToList()
                      where item is IHaveVisibility
                      select item as IHaveVisibility).ToList();
                 foreach (CheckBox item in this._StackPanel.Children)
