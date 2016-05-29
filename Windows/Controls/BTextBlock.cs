@@ -11,7 +11,7 @@ namespace PTL.Windows.Controls
     public class BTextBlock : TextBlock, IBindable
     {
         public string value = "";
-        public object V
+        public object Value
         {
             get
             {
@@ -36,7 +36,7 @@ namespace PTL.Windows.Controls
         {
             try
             {
-                this.V = value.ToString();
+                this.Value = value.ToString();
                 return true;
             }
             catch
@@ -50,7 +50,7 @@ namespace PTL.Windows.Controls
         {
             this.ValueChanged += (object sender, object e) =>
             {
-                this.V = this.Text;
+                this.Value = this.Text;
                 return true;
             };
             this.BindedValueChanged = _BindedValueChanged;

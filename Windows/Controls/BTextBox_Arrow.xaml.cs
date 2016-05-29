@@ -19,63 +19,14 @@ namespace PTL.Windows.Controls
     /// <summary>
     /// BindableTextBox_Arrow.xaml 的互動邏輯
     /// </summary>
-    public partial class BTextBox_Arrow : UserControl, IBindable
+    public partial class BTextBox_Arrow : UserControl
     {
         public BTextBox_Arrow()
         {
             InitializeComponent();
-            this.Increase_Button.Click += (o, e) =>
-                 this._TextBox.GetBindingExpression(TextBox.TextProperty)?.UpdateSource();
-            this.Decrease_Button.Click += (o, e) =>
-                     this._TextBox.GetBindingExpression(TextBox.TextProperty)?.UpdateSource();
-            this.TextBox.TextChanged += (object sender, TextChangedEventArgs e) => this.V = this.TextBox.Text;
-            this.GotFocus += (object sender, System.Windows.RoutedEventArgs e) => this.TextBox.SelectAll();
-            this.BindedValueChanged = _BindedValueChanged;
-            this.V = 0.1; this.V = 0.0;
         }
 
-        public double value;
-        public object V
-        {
-            get
-            {
-                return this.value;
-            }
-            set
-            {
-                try
-                {
-                    if (this.value != Convert.ToDouble(value))
-                    {
-                        this.value = Convert.ToDouble(value);
-                        this.TextBox.Text = this.value.ToString();
-                        if (ValueChanged != null)
-                        {
-                            bool somthingWrong = false;
-                            foreach (Func<Object, Object, bool> item in ValueChanged.GetInvocationList())
-                                if (!item(this, this.value))
-                                    somthingWrong = true;
-                            if (somthingWrong)
-                            {
-                                if (this.Background != this.WarningColor)
-                                    this.ORGBackGroung = this.Background;
-                                this.Background = this.WarningColor;
-                            }
-                            else
-                            {
-                                if (this.Background == this.WarningColor)
-                                    this.Background = this.ORGBackGroung;
-                            }
-                        }
-                    }
-                }
-                catch
-                {
-
-                }
-            }
-        }
-        public double _Gradiation = 0.1;
+        private double _Gradiation = 0.1;
         public double Gradiation
         {
             get
@@ -88,48 +39,91 @@ namespace PTL.Windows.Controls
                     this._Gradiation = value;
             }
         }
-        public TextBox TextBox
+
+        public static FrameworkPropertyMetadata TextPropertymetadata =
+            new FrameworkPropertyMetadata(""
+                , FrameworkPropertyMetadataOptions.BindsTwoWayByDefault
+                | FrameworkPropertyMetadataOptions.Journal
+                , new PropertyChangedCallback(Text_PropertyChanged)
+                , new CoerceValueCallback(Text_CoerceValue)
+                , false
+                , UpdateSourceTrigger.PropertyChanged);
+        public static FrameworkPropertyMetadata CommandPropertymetadata =
+            new FrameworkPropertyMetadata(null
+                , FrameworkPropertyMetadataOptions.BindsTwoWayByDefault
+                | FrameworkPropertyMetadataOptions.Journal
+                , new PropertyChangedCallback(Command_PropertyChanged)
+                , new CoerceValueCallback(Command_CoerceValue)
+                , false
+                , UpdateSourceTrigger.PropertyChanged);
+        public static DependencyProperty TextProperty = DependencyProperty.Register(
+            nameof(Text)
+            , typeof(string)
+            , typeof(BTextBox_Arrow)
+            , TextPropertymetadata
+            , new ValidateValueCallback(Text_Validate));
+        public static DependencyProperty CommandProperty = DependencyProperty.Register(
+            nameof(Command)
+            , typeof(ICommand)
+            , typeof(BTextBox_Arrow)
+            , CommandPropertymetadata
+            , new ValidateValueCallback(Command_Validate));
+
+        private static void Text_PropertyChanged(
+            DependencyObject dobj,
+            DependencyPropertyChangedEventArgs e)
         {
-            get { return this._TextBox; }
-            set {
-                if (this._TextBox != value)
-                {
-                    this._TextBox = value;
-                    this._TextBox.TextChanged += (object sender, TextChangedEventArgs e) => this.V = this.TextBox.Text;
-                }
-            }
         }
 
-        public event Func<Object, Object, bool> ValueChanged;
-        public Func<object, object, bool> BindedValueChanged { get; set; }
-
-        public System.Windows.Media.Brush WarningColor = System.Windows.Media.Brushes.Yellow;
-        protected System.Windows.Media.Brush ORGBackGroung;
-
-        private bool _BindedValueChanged(object sender, object value)
+        private static object Text_CoerceValue(DependencyObject dobj, object Value)
         {
-            try
-            {
-                if (CheckAccess())
-                    this.V = value.ToString();
-                else
-                    Dispatcher.Invoke(() => { _BindedValueChanged(sender, value); });
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
+            return Value;
+        }
+
+        private static bool Text_Validate(object Value)
+        {
+            return true;
+        }
+
+        private static void Command_PropertyChanged(
+            DependencyObject dobj,
+            DependencyPropertyChangedEventArgs e)
+        {
+        }
+
+        private static object Command_CoerceValue(DependencyObject dobj, object Value)
+        {
+            return Value;
+        }
+
+        private static bool Command_Validate(object Value)
+        {
+            return true;
+        }
+
+        public string Text
+        {
+            get { return this.GetValue(TextProperty) as string; }
+            set { this.SetValue(TextProperty, value); } 
+        }
+        public ICommand Command
+        {
+            get { return this.GetValue(CommandProperty) as ICommand; }
+            set { this.SetValue(CommandProperty, value); }
         }
 
         private void Button_minus_Click(object sender, RoutedEventArgs e)
         {
-            this.V = this.value - Gradiation;
+            this._TextBox.Text = (Convert.ToDouble(this._TextBox.Text == null ? "0" : this._TextBox.Text) - Gradiation).ToString();
+            this._TextBox.GetBindingExpression(TextBox.TextProperty)?.UpdateSource();
+            Command?.Execute(null);
         }
 
         private void Button_add_Click(object sender, RoutedEventArgs e)
         {
-            this.V = this.value + Gradiation;
+            this._TextBox.Text = (Convert.ToDouble(this._TextBox.Text == null? "0" : this._TextBox.Text) + Gradiation).ToString();
+            this._TextBox.GetBindingExpression(TextBox.TextProperty)?.UpdateSource();
+            Command?.Execute(null);
         }
     }
 }

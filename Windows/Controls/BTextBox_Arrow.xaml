@@ -4,16 +4,20 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              mc:Ignorable="d" 
-             d:DesignHeight="40" d:DesignWidth="100">
+             d:DesignHeight="40" d:DesignWidth="100" x:Name="control">
     <StackPanel>
-        <TextBox x:Name="_TextBox" x:FieldModifier="public" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"></TextBox>
-            <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="1*"/>
-                <ColumnDefinition Width="1*"/>
-            </Grid.ColumnDefinitions>
-            <RepeatButton x:Name="Increase_Button" x:FieldModifier="public" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Stretch" Content="&lt;" Click="Button_minus_Click"></RepeatButton>
-            <RepeatButton x:Name="Decrease_Button" x:FieldModifier="public" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Stretch" Content="&gt;" Click="Button_add_Click"></RepeatButton>
+        <TextBox x:Name="_TextBox" HorizontalContentAlignment="Center" Text="{Binding ElementName=control, Path=Text}">
+            <TextBox.InputBindings>
+                <KeyBinding Command="{Binding ElementName=control, Path=Command}" Key="Return"/>
+            </TextBox.InputBindings>
+        </TextBox>
+        <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="1*"/>
+        </Grid.ColumnDefinitions>
+        <RepeatButton x:Name="Increase_Button" x:FieldModifier="public" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Stretch" Content="&lt;" Click="Button_minus_Click"></RepeatButton>
+        <RepeatButton x:Name="Decrease_Button" x:FieldModifier="public" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Stretch" Content="&gt;" Click="Button_add_Click"></RepeatButton>
         </Grid>
     </StackPanel>
 </UserControl>

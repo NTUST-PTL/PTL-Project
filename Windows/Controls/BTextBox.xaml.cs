@@ -31,12 +31,12 @@ namespace PTL.Windows.Controls
 
         private void InitializeTextBoxEvent()
         {
-            this.TextBox.TextChanged += (object sender, TextChangedEventArgs e) => this.V = this.TextBox.Text;
+            this.TextBox.TextChanged += (object sender, TextChangedEventArgs e) => this.Value = this.TextBox.Text;
             //if (this.TextChanged != null)
             //    this._TextBox.TextChanged += this.TextChanged;
         }
         public string value = "";
-        public object V
+        public object Value
         {
             get
             {
@@ -83,7 +83,7 @@ namespace PTL.Windows.Controls
         {
             try
             {
-                this.V = value.ToString();
+                this.Value = value.ToString();
                 return true;
             }
             catch

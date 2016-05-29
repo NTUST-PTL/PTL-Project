@@ -536,9 +536,9 @@ namespace PTL.Mathematics
                 dimensions[i] = Array.GetLength(i);
             return dimensions;
         }
-        public static System.Array Reshape(System.Array Matrix, params int[] dimensions)
+        public static System.Array Reshape(System.Array Array, params int[] dimensions)
         {
-            System.Type elementType = Matrix.GetType().GetElementType();
+            System.Type elementType = Array.GetType().GetElementType();
             //定義Array每個維度的起始索引值(起始值可以不為0)
             int[] lowerBounds = new int[dimensions.Length];
             for (int i = 0; i < lowerBounds.Length; i++)
@@ -547,7 +547,7 @@ namespace PTL.Mathematics
             System.Array newArray = System.Array.CreateInstance(elementType, dimensions, lowerBounds);
             //擺入元素
             int index = 0;
-            foreach (var item in Matrix)
+            foreach (var item in Array)
             {
                 int[] indices = new int[dimensions.Length];
                 int residue = index;
@@ -564,17 +564,17 @@ namespace PTL.Mathematics
             }
             return newArray;
         }
-        public static System.Array Take(System.Array Matrix, int[] startIndex, int[] endIndex)
+        public static System.Array Take(System.Array Array, int[] startIndex, int[] endIndex)
         {
-            System.Type elementType = Matrix.GetType().GetElementType();
+            System.Type elementType = Array.GetType().GetElementType();
             //定義Array每個維度的起始索引值(起始值可以不為0)
-            int[] lowerBounds = new int[Matrix.Rank];
+            int[] lowerBounds = new int[Array.Rank];
             for (int i = 0; i < lowerBounds.Length; i++)
                 lowerBounds[i] = 0;
 
             //建立新多維Array
-            int[] dimensions = new int[Matrix.Rank];
-            for (int i = 0; i < Matrix.Rank; i++)
+            int[] dimensions = new int[Array.Rank];
+            for (int i = 0; i < Array.Rank; i++)
                 dimensions[i] = endIndex[i] - startIndex[i] + 1;
             System.Array newArray = System.Array.CreateInstance(elementType, dimensions, lowerBounds);
 
@@ -599,7 +599,42 @@ namespace PTL.Mathematics
                 int[] orgIndices = new int[dimensions.Length];
                 for (int i = 0; i < dimensions.Length; i++)
                     orgIndices[i] = startIndex[i] + indices[i];
-                newArray.SetValue(Matrix.GetValue(orgIndices), indices);
+                newArray.SetValue(Array.GetValue(orgIndices), indices);
+                index++;
+            }
+            return newArray;
+        }
+        public static System.Array ConvertArrayType<TypeIn, TypeOut>(System.Array array, Func<TypeIn, TypeOut> converter)
+        {
+            //定義Array每個維度的起始索引值(起始值可以不為0)
+            int[] lowerBounds = new int[array.Rank];
+            for (int i = 0; i < lowerBounds.Length; i++)
+                lowerBounds[i] = 0;
+
+            //建立新多維Array
+            int[] dimensions = GetDimensions(array);
+            System.Array newArray = System.Array.CreateInstance(typeof(TypeOut), dimensions, lowerBounds);
+
+            //Take
+            int totalNum = 1;
+            for (int i = 0; i < dimensions.Length; i++)
+                totalNum *= dimensions[i];
+            int index = 0;
+            for (int n = 0; n < totalNum; n++)
+            {
+                int[] indices = new int[dimensions.Length];
+                int residue = index;
+                for (int i = 0; i < dimensions.Length; i++)
+                {
+                    int num = 1;
+                    for (int j = i + 1; j < dimensions.Length; j++)
+                        num *= dimensions[j];
+                    indices[i] = residue / num;
+                    residue -= indices[i] * num;
+                }
+
+                int[] orgIndices = new int[dimensions.Length];
+                newArray.SetValue(converter((TypeIn)array.GetValue(orgIndices)), indices);
                 index++;
             }
             return newArray;
