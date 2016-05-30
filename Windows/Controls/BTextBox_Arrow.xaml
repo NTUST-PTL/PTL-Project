@@ -6,7 +6,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="40" d:DesignWidth="100" x:Name="control">
     <StackPanel>
-        <TextBox x:Name="_TextBox" HorizontalContentAlignment="Center" Text="{Binding ElementName=control, Path=Text}" KeyDown="_TextBox_KeyDown"/>
+        <TextBox x:Name="_TextBox" HorizontalContentAlignment="Center" Text="{Binding ElementName=control, Path=Text, ValidatesOnExceptions=True}" KeyDown="_TextBox_KeyDown"/>
         <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*"/>

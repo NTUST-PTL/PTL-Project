@@ -118,7 +118,7 @@ namespace PTL.Windows.Controls
                 return;
 
             this._TextBox.Text = (
-                Convert.ToDouble(System.Text.RegularExpressions.Regex.Replace(this._TextBox.Text, "[^0-9.]", ""))
+                Convert.ToDouble(System.Text.RegularExpressions.Regex.Replace(this._TextBox.Text, "[^-0-9.]", ""))
                 - Gradiation).ToString();
             this._TextBox.GetBindingExpression(TextBox.TextProperty)?.UpdateSource();
             Command?.Execute(null);
@@ -130,7 +130,7 @@ namespace PTL.Windows.Controls
                 return;
 
             this._TextBox.Text = (
-                Convert.ToDouble(System.Text.RegularExpressions.Regex.Replace(this._TextBox.Text, "[^0-9.]", ""))
+                Convert.ToDouble(System.Text.RegularExpressions.Regex.Replace(this._TextBox.Text, "[^-0-9.]", ""))
                 + Gradiation).ToString();
             this._TextBox.GetBindingExpression(TextBox.TextProperty)?.UpdateSource();
             Command?.Execute(null);

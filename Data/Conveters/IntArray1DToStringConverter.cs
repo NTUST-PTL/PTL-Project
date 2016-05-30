@@ -24,7 +24,7 @@ namespace PTL.Data.Conveters
             {
                 stringValue += arrayValue[i].ToString();
                 if (i != arrayValue.Length - 1)
-                    stringValue += ",";
+                    stringValue += ", ";
             }
             return stringValue;
         }
@@ -32,7 +32,7 @@ namespace PTL.Data.Conveters
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             if (String.IsNullOrEmpty(value as string))
-                return null;
+            return null;
 
             string stringValue = (string)value;
             string[] stringArray = stringValue.Trim(' ').Split(',');
