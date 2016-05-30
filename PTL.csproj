@@ -99,7 +99,7 @@
     <Compile Include="Data\Conveters\IntArray1DToStringConverter.cs" />
     <Compile Include="Data\Conveters\RadToDegreeStringConverter.cs" />
     <Compile Include="Data\Conveters\RadToHelixDegreeStringConverter.cs" />
-    <Compile Include="Data\Conveters\DegToRadConverter.cs" />
+    <Compile Include="Data\Conveters\RadToDegConverter.cs" />
     <Compile Include="Data\Conveters\RatioConverter.cs" />
     <Compile Include="Data\ExObservableCollection.cs" />
     <Compile Include="Extensions\StringArrayExtensions\StringArrayFormattingExtention.cs" />
@@ -233,7 +233,7 @@
     <Compile Include="Windows\DebugWindow_Plot.xaml.cs">
       <DependentUpon>DebugWindow_Plot.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\Dependency\DepedentComand.cs" />
+    <Compile Include="Windows\Dependency\DepedencyComand.cs" />
     <Compile Include="Windows\Media\Media3D\LineGeometry3D.cs" />
     <Compile Include="Windows\VisualExtensions\PrintExtensions.cs" />
     <Compile Include="Windows\VisualExtensions\VisualTreeExtention.cs" />

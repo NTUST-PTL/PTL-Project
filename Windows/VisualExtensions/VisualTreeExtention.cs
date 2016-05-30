@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Media;
 using PTL.Extensions.ReflectionExtensions;
 
@@ -16,14 +17,32 @@ namespace PTL.Windows.VisualExtensions
         {
             if (depObj != null)
             {
-                for (int i = 0; i < VisualTreeHelper.GetChildrenCount(depObj); i++)
+                if (VisualTreeHelper.GetChildrenCount(depObj) > 0)
                 {
-                    DependencyObject child = VisualTreeHelper.GetChild(depObj, i);
-                    if (child != null && child is T)
-                        yield return (T)child;
-                    foreach (var childOfChild in FindVisualChildren<T>(child))
+                    for (int i = 0; i < VisualTreeHelper.GetChildrenCount(depObj); i++)
                     {
-                        yield return childOfChild;
+                        DependencyObject child = VisualTreeHelper.GetChild(depObj, i);
+                        if (child != null && child is T)
+                            yield return (T)child;
+                        foreach (var childOfChild in FindVisualChildren<T>(child))
+                        {
+                            yield return childOfChild;
+                        }
+                    }
+                }
+                else
+                {
+                    var content = (depObj as ContentControl)?.Content;
+                    if (content != null && content is T)
+                    {
+                        yield return (T)content;
+                    }
+                    if (content != null && content is DependencyObject)
+                    {
+                        foreach (var childOfContent in FindVisualChildren<T>((DependencyObject)content))
+                        {
+                            yield return childOfContent;
+                        }
                     }
                 }
             }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Specialized;
 using System.Drawing;
 using System.Collections.Generic;
 using System.Linq;
@@ -43,14 +44,11 @@ namespace PTL.OpenGL.Plot
             set {
                 if (_Things2Show != value)
                 {
+                    _Things2Show.CollectionChanged -= Things2ShowCollectionChanged;
                     _Things2Show = value;
                     _Boundary_Changed_NeedCheck = true;
                     Update();
-                    _Things2Show.CollectionChanged += (o, e) =>
-                        {
-                            _Boundary_Changed_NeedCheck = true;
-                            Update();
-                        };
+                    _Things2Show.CollectionChanged += Things2ShowCollectionChanged;
                     NotifyChanged(nameof(Things2Show));
                 }
             }
@@ -220,6 +218,12 @@ namespace PTL.OpenGL.Plot
         public async Task InvokeClearThings2Show()
         {
             await Application.Current.Dispatcher.BeginInvoke(new Action(ClearThings2Show));
+        }
+
+        public void Things2ShowCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            _Boundary_Changed_NeedCheck = true;
+            Update();
         }
 
         private void CheckBoundary()

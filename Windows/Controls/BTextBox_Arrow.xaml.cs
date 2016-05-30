@@ -114,16 +114,33 @@ namespace PTL.Windows.Controls
 
         private void Button_minus_Click(object sender, RoutedEventArgs e)
         {
-            this._TextBox.Text = (Convert.ToDouble(this._TextBox.Text == null ? "0" : this._TextBox.Text) - Gradiation).ToString();
+            if (String.IsNullOrEmpty(System.Text.RegularExpressions.Regex.Replace(this._TextBox.Text, "[^0-9.]", "")))
+                return;
+
+            this._TextBox.Text = (
+                Convert.ToDouble(System.Text.RegularExpressions.Regex.Replace(this._TextBox.Text, "[^0-9.]", ""))
+                - Gradiation).ToString();
             this._TextBox.GetBindingExpression(TextBox.TextProperty)?.UpdateSource();
             Command?.Execute(null);
         }
 
         private void Button_add_Click(object sender, RoutedEventArgs e)
         {
-            this._TextBox.Text = (Convert.ToDouble(this._TextBox.Text == null? "0" : this._TextBox.Text) + Gradiation).ToString();
+            if (String.IsNullOrEmpty(System.Text.RegularExpressions.Regex.Replace(this._TextBox.Text, "[^0-9.]", "")))
+                return;
+
+            this._TextBox.Text = (
+                Convert.ToDouble(System.Text.RegularExpressions.Regex.Replace(this._TextBox.Text, "[^0-9.]", ""))
+                + Gradiation).ToString();
             this._TextBox.GetBindingExpression(TextBox.TextProperty)?.UpdateSource();
             Command?.Execute(null);
+        }
+
+        private void _TextBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            ((TextBox)sender).GetBindingExpression(TextBox.TextProperty)?.UpdateSource();
+            this.GetBindingExpression(CommandProperty)?.UpdateSource();
+            this.Command?.Execute(null);
         }
     }
 }

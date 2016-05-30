@@ -9,9 +9,9 @@ using System.Windows.Markup;
 
 namespace PTL.Data.Conveters
 {
-    public class DegToRadConverter : MarkupExtension, IValueConverter
+    public class RadToDegConverter : MarkupExtension, IValueConverter
     {
-        public static DegToRadConverter _ratioConverter;
+        public static RadToDegConverter _Converter;
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
@@ -27,7 +27,7 @@ namespace PTL.Data.Conveters
 
         public override object ProvideValue(IServiceProvider serviceProvider)
         {
-            return _ratioConverter ?? (_ratioConverter = new DegToRadConverter());
+            return _Converter ?? (_Converter = new RadToDegConverter());
         }
     }
 }

@@ -4,17 +4,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Data;
 using System.Windows.Input;
-
 namespace PTL.Windows.Dependency
 {
-    public class DepedentComand : DependencyObject
+    public class DepedencyComand : FrameworkElement
     {
         public static DependencyProperty CommandProperty =
             DependencyProperty.RegisterAttached(
                 "Command"
                 , typeof(ICommand)
-                , typeof(DepedentComand)
+                , typeof(DepedencyComand)
                 );
         
         public static void SetCommand(DependencyObject obj, ICommand value)

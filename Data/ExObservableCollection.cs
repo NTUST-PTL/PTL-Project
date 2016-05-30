@@ -12,26 +12,28 @@ namespace PTL.Data
     {
         public override event NotifyCollectionChangedEventHandler CollectionChanged;
 
-        public void AddRange( params T[] datas)
+        public void AddRange(params T[] datas)
         {
             foreach (var item in datas)
             {
-                Items.Add(item);
+                if(item != null)
+                    Items.Add(item);
             }
             CollectionChanged?.Invoke(
-this,
-new System.Collections.Specialized.NotifyCollectionChangedEventArgs(System.Collections.Specialized.NotifyCollectionChangedAction.Add, datas));
+                this,
+                new System.Collections.Specialized.NotifyCollectionChangedEventArgs(System.Collections.Specialized.NotifyCollectionChangedAction.Add, datas));
         }
 
         public void RemoveRange(params T[] datas)
         {
             foreach (var item in datas)
             {
-                Items.Remove(item);
+                if (item != null)
+                    Items.Remove(item);
             }
             CollectionChanged?.Invoke(
-this,
-new System.Collections.Specialized.NotifyCollectionChangedEventArgs(System.Collections.Specialized.NotifyCollectionChangedAction.Remove, datas));
+                this,
+                new System.Collections.Specialized.NotifyCollectionChangedEventArgs(System.Collections.Specialized.NotifyCollectionChangedAction.Remove, datas));
         }
 
         public void ReplaceAll(params T[] datas)
@@ -39,11 +41,12 @@ new System.Collections.Specialized.NotifyCollectionChangedEventArgs(System.Colle
             Items.Clear();
             foreach (var item in datas)
             {
-                Items.Add(item);
+                if (item != null)
+                    Items.Add(item);
             }
             CollectionChanged?.Invoke(
-this,
-new System.Collections.Specialized.NotifyCollectionChangedEventArgs(System.Collections.Specialized.NotifyCollectionChangedAction.Add, datas));
+                this,
+                new System.Collections.Specialized.NotifyCollectionChangedEventArgs(System.Collections.Specialized.NotifyCollectionChangedAction.Add, datas));
         }
     }
 }
