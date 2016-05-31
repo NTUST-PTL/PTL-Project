@@ -25,6 +25,7 @@ namespace PTL.Geometry
                 Compare_Boundary(boundary, Transport4(M, p));
             return boundary;
         }
+        public bool NormalVisible = false;
 
         public TopoFace()
         {
@@ -99,7 +100,8 @@ namespace PTL.Geometry
                     GL.glMatrixMode(GL.GL_MODELVIEW);
                     MultMatrixd(this.CoordinateSystem);
                 }
-
+                if (NormalVisible)
+                    PlotNormal();
                 if (this.SurfaceDisplayOption == SurfaceDisplayOptions.Surface || this.SurfaceDisplayOption == SurfaceDisplayOptions.SurfaceAndEdge)
                 {
                     this.PlotFace();

@@ -24,6 +24,9 @@ namespace PTL.Geometry
 
         public virtual void AddEntity(params Entity[] Entitys)
         {
+            if (Entitys == null)
+                return;
+
             foreach (var aEntity in Entitys)
             {
                 if (aEntity != null)
@@ -35,6 +38,9 @@ namespace PTL.Geometry
 
         public virtual void RemoveEntity(params Entity[] Entitys)
         {
+            if (Entitys == null)
+                return;
+
             foreach (var aEntity in Entitys)
             {
                 if (aEntity != null)

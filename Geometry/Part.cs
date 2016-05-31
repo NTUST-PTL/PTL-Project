@@ -34,6 +34,12 @@ namespace PTL.Geometry
         {
         }
 
+        public Part(params Entity[] entities)
+            : base()
+        {
+            AddEntity(entities);
+        }
+
         public override object Clone()
         {
             Part newPart = new Part();

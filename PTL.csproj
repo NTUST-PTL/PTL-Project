@@ -112,6 +112,7 @@
     <Compile Include="Geometry\PolyFan.cs" />
     <Compile Include="Geometry\VectorD.cs" />
     <Compile Include="Mathematics\MatrixFunctions.cs" />
+    <Compile Include="Mathematics\TreeSearch.cs" />
     <Compile Include="Mathematics\Vector.cs" />
     <Compile Include="OpenGL\Plot\ViewPlotingExtentions\ViewPlotingExtentions.cs" />
     <Compile Include="Extensions\ReflectionExtensions\ReflectionExtension.cs" />

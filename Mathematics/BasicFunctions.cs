@@ -632,9 +632,8 @@ namespace PTL.Mathematics
                     indices[i] = residue / num;
                     residue -= indices[i] * num;
                 }
-
-                int[] orgIndices = new int[dimensions.Length];
-                newArray.SetValue(converter((TypeIn)array.GetValue(orgIndices)), indices);
+                
+                newArray.SetValue(converter((TypeIn)array.GetValue(indices)), indices);
                 index++;
             }
             return newArray;
