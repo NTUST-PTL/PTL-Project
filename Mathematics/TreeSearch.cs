@@ -13,11 +13,16 @@ namespace PTL.Mathematics
     public class TreeSearch
     {
         static Plot plot;
+        static int[] indexbuffer;
+        static double[] parambuffer;
+        static double[] samplesbuffer;
+        static double[] distancebuffer;
+        static double[] ansBuffer;
 
         public static double[] NearestSearch(Func<double[], double[]> func, double[] target, double[] startBoundary, double[] endBoundary, int S1 = 4, int S2 = 1, int Iteration = 25)
         {
-            plot = new Plot();
-            plot.Window.View.AutoScale = false;
+            //plot = new Plot();
+            //plot.Window.View.AutoScale = false;
 
             int rank = startBoundary.Length;
             int L1 = S1 + 1;
@@ -28,11 +33,16 @@ namespace PTL.Mathematics
                 sampleNum *= L1;
             }
 
-            int[] indexbuffer = new int[rank];
-            double[] parambuffer = new double[rank];
-            double[] samplesbuffer = new double[sampleNum * dataLength];
-            double[] distancebuffer = new double[sampleNum];
-            double[] ansBuffer = new double[rank];
+            if (indexbuffer == null || indexbuffer.Length != rank)
+                indexbuffer = new int[rank];
+            if (parambuffer == null || parambuffer.Length != rank)
+                parambuffer = new double[rank];
+            if (samplesbuffer == null || samplesbuffer.Length != sampleNum * dataLength)
+                samplesbuffer = new double[sampleNum * dataLength];
+            if (distancebuffer == null || distancebuffer.Length != sampleNum)
+                distancebuffer = new double[sampleNum];
+            if (ansBuffer == null || ansBuffer.Length != rank)
+                ansBuffer = new double[rank];
 
             NearestSearch(
                   rank
