@@ -4,7 +4,7 @@
 library
 C#
 .cs
-C:\Data\GitHub\PTL-Project\obj\Debug\
+E:\Data\GitHub\PTL-Project\obj\Debug\
 PTL
 none
 false
@@ -13,7 +13,7 @@ DEBUG;TRACE
 7-1990942993
 
 135-558856719
-301719170932
+30-2127575928
 Windows\Controls\BComboBox.xaml;Windows\Controls\BTextBox.xaml;Windows\Controls\CAD_Like_ViewPort3D.xaml;Windows\Controls\LTextBox_double_Arrow.xaml;Windows\Controls\BTextBox_Arrow.xaml;Windows\Controls\LStackPanel.xaml;Windows\DebugWindow_Plot.xaml;
 
 True

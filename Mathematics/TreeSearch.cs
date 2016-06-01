@@ -19,7 +19,14 @@ namespace PTL.Mathematics
         static double[] distancebuffer;
         static double[] ansBuffer;
 
-        public static double[] NearestSearch(Func<double[], double[]> func, double[] target, double[] startBoundary, double[] endBoundary, int S1 = 4, int S2 = 1, int Iteration = 25)
+        public static double[] NearestSearch(
+            Func<double[], double[]> func
+            , double[] target
+            , double[] startBoundary
+            , double[] endBoundary
+            , int S1=16
+            , int S2=4
+            , int Iteration=16)
         {
             //plot = new Plot();
             //plot.Window.View.AutoScale = false;
@@ -83,7 +90,7 @@ namespace PTL.Mathematics
             , double[] target
             , double[] startBoundary
             , double[] endBoundary
-            , int S1
+            , int S
             , int S2
             , int L1
             , int currentIteration
@@ -109,7 +116,7 @@ namespace PTL.Mathematics
                 #region 計算paras
                 for (int j = 0; j < rank; j++)
                 {
-                    paras[j] = startBoundary[j] + index[j] * (endBoundary[j] - startBoundary[j]) / S1;
+                    paras[j] = startBoundary[j] + index[j] * (endBoundary[j] - startBoundary[j]) / S;
                 }
                 //Console.Write("paras : ");
                 //Console.WriteLine(ArrayToString(paras));
@@ -180,12 +187,12 @@ namespace PTL.Mathematics
             for (int j = 0; j < rank; j++)
             {
                 if (index[j] >= S2)
-                    newStart[j] = startBoundary[j] + (index[j] - S2) * (endBoundary[j] - startBoundary[j]) / S1;
+                    newStart[j] = startBoundary[j] + (index[j] - S2) * (endBoundary[j] - startBoundary[j]) / S;
                 else
                     newStart[j] = startBoundary[j];
 
                 if ((L1 - S2) > index[j])
-                    newEnd[j] = startBoundary[j] + (index[j] + S2) * (endBoundary[j] - startBoundary[j]) / S1;
+                    newEnd[j] = startBoundary[j] + (index[j] + S2) * (endBoundary[j] - startBoundary[j]) / S;
                 else
                     newEnd[j] = endBoundary[j];
             }
@@ -234,7 +241,7 @@ namespace PTL.Mathematics
                     , target
                     , newStart
                     , newEnd
-                    , S1
+                    , S
                     , S2
                     , L1
                     , currentIteration
