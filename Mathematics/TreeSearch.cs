@@ -26,10 +26,15 @@ namespace PTL.Mathematics
             , double[] endBoundary
             , int S1=16
             , int S2=4
-            , int Iteration=16)
+            , int Iteration=16
+            , double accuracy = 1e-8
+            , bool showProcess = false)
         {
-            //plot = new Plot();
-            //plot.Window.View.AutoScale = false;
+            if (showProcess)
+            {
+                plot = new Plot();
+                plot.Window.View.AutoScale = false;
+            }
 
             int rank = startBoundary.Length;
             int L1 = S1 + 1;
@@ -70,7 +75,10 @@ namespace PTL.Mathematics
                 , S2
                 , L1
                 , 0
-                , Iteration);
+                , Iteration
+                , accuracy
+
+                , showProcess);
 
             return ansBuffer;
         }
@@ -94,7 +102,10 @@ namespace PTL.Mathematics
             , int S2
             , int L1
             , int currentIteration
-            , int maxIteration)
+            , int maxIteration
+            , double accuracy
+
+            , bool showProcess)
         {
             #region 計算取樣點
             for (int i = 0; i < samplesNum; i++)
@@ -202,29 +213,32 @@ namespace PTL.Mathematics
             //Console.Write("newEnd : ");
             //Console.WriteLine(ArrayToString(newEnd));
 
-            //plot.ParameterPlot((u, v) => new XYZ4(func(new double[] { u, v }))
-            //, startBoundary[0], endBoundary[0], 20
-            //, startBoundary[1], endBoundary[1], 20
-            //, (tf) => tf.Color = System.Drawing.Color.FromArgb(80, 200, 200, 200));
-            //List<PointD> points = new List<PointD>();
-            //for (int i = 0; i < samplesNum; i++)
-            //{
-            //    double[] data = new double[3];
-            //    int p = i * dataLength;
-            //    for (int j = 0; j < 3; j++)
-            //    {
-            //        data[j] = samplesData[p + j];
-            //    }
-            //    points.Add(new PointD(data) { OpenGLDisplaySize = 0.01});
-            //}
-            //plot.AddSomethings(points.ToArray());
-            //plot.AddSomethings(new PointD(target));
+            if (showProcess)
+            {
+                plot.ParameterPlot((u, v) => new XYZ4(func(new double[] { u, v }))
+                    , startBoundary[0], endBoundary[0], 20
+                    , startBoundary[1], endBoundary[1], 20
+                    , (tf) => tf.Color = System.Drawing.Color.FromArgb(80, 200, 200, 200));
+                List<PointD> points = new List<PointD>();
+                for (int i = 0; i < samplesNum; i++)
+                {
+                    double[] data = new double[3];
+                    int p = i * dataLength;
+                    for (int j = 0; j < 3; j++)
+                    {
+                        data[j] = samplesData[p + j];
+                    }
+                    points.Add(new PointD(data) { OpenGLDisplaySize = 5, Color = System.Drawing.Color.Red });
+                }
+                plot.AddSomethings(points.ToArray());
+            }
+            
 
             //return;
 
             #region 疊代
             currentIteration++;
-            if (currentIteration < maxIteration)
+            if (minDis > accuracy && currentIteration < maxIteration)
             {
                 NearestSearch(
                       rank
@@ -245,13 +259,24 @@ namespace PTL.Mathematics
                     , S2
                     , L1
                     , currentIteration
-                    , maxIteration);
+                    , maxIteration
+                    , accuracy
+
+                    , showProcess);
             }
             else
             {
                 for (int i = 0; i < rank; i++)
                 {
                     ansBuffer[i] = (newStart[i] + newEnd[i]) / 2;
+                }
+
+                if (showProcess)
+                {
+                    PointD p1 = new PointD(target) { Color = System.Drawing.Color.LawnGreen };
+                    PointD p2 = new PointD(func(ansBuffer)) { Color = System.Drawing.Color.Yellow };
+                    Line line = new Line(p1, p2) { Color = System.Drawing.Color.Cyan };
+                    plot.AddSomethings(p1, p2, line);
                 }
             }
             #endregion

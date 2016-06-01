@@ -10,18 +10,20 @@ using System.Windows.Controls;
 
 namespace PTL.Data.Conveters
 {
-    public class IntArray1DToStringValidationRule : ValidationRule
+    public class ConverterValidationRule : ValidationRule
     {
+        public IValueConverter Converter { get; set; }
+
         public override ValidationResult Validate(object value, CultureInfo cultureInfo)
         {
             try
             {
-                IntArray1DToStringConverter._Converter.ConvertBack(value, typeof(int[]), null, null);
+                Converter.ConvertBack(value, typeof(int[]), null, null);
                 return new ValidationResult(true, null);
             }
             catch
             {
-                return new ValidationResult(false, "無法轉換成陣列");
+                return new ValidationResult(false, "Converter轉換失敗!請檢察輸入");
             }
         }
     }

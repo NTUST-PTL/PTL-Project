@@ -138,9 +138,12 @@ namespace PTL.Windows.Controls
 
         private void _TextBox_KeyDown(object sender, KeyEventArgs e)
         {
-            ((TextBox)sender).GetBindingExpression(TextBox.TextProperty)?.UpdateSource();
-            this.GetBindingExpression(CommandProperty)?.UpdateSource();
-            this.Command?.Execute(null);
+            if (e.Key == Key.Enter)
+            {
+                ((TextBox)sender).GetBindingExpression(TextBox.TextProperty)?.UpdateSource();
+                this.GetBindingExpression(CommandProperty)?.UpdateSource();
+                this.Command?.Execute(null);
+            }
         }
     }
 }

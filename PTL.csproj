@@ -95,8 +95,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Data\Binding.cs" />
+    <Compile Include="Data\Conveters\BooleanToVisibilityConverter.cs" />
+    <Compile Include="Data\Conveters\BooleanConverter.cs" />
     <Compile Include="Data\Conveters\EnumBooleanConverter.cs" />
-    <Compile Include="Data\Conveters\IntArray1DToStringValidationRule.cs" />
+    <Compile Include="Data\Conveters\ConverterValidationRule.cs" />
     <Compile Include="Data\Conveters\IntArray1DToStringConverter.cs" />
     <Compile Include="Data\Conveters\RadToDegreeStringConverter.cs" />
     <Compile Include="Data\Conveters\RadToHelixDegreeStringConverter.cs" />
