@@ -16,6 +16,8 @@ namespace PTL.Geometry.MathModel
             , Func<XYZ4, double[]> targetFunc
             , double[,][] targetTopo
             , double[] initialGuess
+            , double[] startBoundary = null
+            , double[] endBoundary = null
             , params Func<double, double, object>[] getExtraSurfaceData
             )
         {
@@ -54,11 +56,13 @@ namespace PTL.Geometry.MathModel
                     {
                         ans = MathNet.Numerics.RootFinding.Broyden.FindRoot(func, initialGuess, 1e-8, 100);
                     }
-                    catch (Exception)
+                    catch
                     {
-                        throw;
+                        if (startBoundary != null && endBoundary != null)
+                            ans = TreeSearch.NearestSearch(func, new double[] { 0, 0 }, startBoundary, endBoundary, S1: 4, S2: 1, Iteration: 25);
+                        else
+                            ans = TreeSearch.NearestSearch(func, new double[] { 0, 0 }, new double[] { 0, -0.15 }, new double[] { 1.15, 1.15 }, S1: 4, S2: 1, Iteration:25);
                     }
-                    ans = MathNet.Numerics.RootFinding.Broyden.FindRoot(func, initialGuess, 1e-8, 100);
 
                     uniformedPoints[i,j] = surfaceFunc(ans[0], ans[1]);
 
@@ -243,7 +247,7 @@ namespace PTL.Geometry.MathModel
                , targetFunc
                , targetTopo
                , initialGuess
-               , (u, v) => surfaceTangentFunc(u, v)
+               , getExtraSurfaceData: (u, v) => surfaceTangentFunc(u, v)
                );
 
             XYZ4[][] dataPoints = ToIrregularArray(results.Item1);
