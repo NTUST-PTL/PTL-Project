@@ -871,7 +871,7 @@ namespace PTL.Windows.Controls
                     if (file.Split('.').Last().ToLower() == "stl")
                     {
                         STL stl = await STLReader.ReadSTLFile(file);
-                        stl.Color = System.Drawing.Color.FromArgb(255, 255, 255, 0);
+                        stl.Color = System.Drawing.Color.FromArgb(255, 200, 200, 200);
                         Model3D mGeometry = stl.ToModel3D();
                         this.AddInteractiveModel(mGeometry);
                         this.TranslateViewTo(AllModels);

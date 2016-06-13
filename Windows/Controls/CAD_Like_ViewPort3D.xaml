@@ -11,7 +11,8 @@
                MouseDown="MouseDownHandler"
                MouseUp="MouseUpHandler"
 		       MouseMove="MouseMoveHandler"
-               Drop="DropHandler">
+               Drop="DropHandler"
+               Background="#02000000">
         <Viewport3D x:Name="Viewport" x:FieldModifier="public" OpacityMask="#FFD35D5D" SizeChanged="Viewport_SizeChanged">
             <Viewport3D.Camera>
                 <OrthographicCamera x:Name="camera"/>
@@ -33,14 +34,16 @@
             <ModelVisual3D x:Name="MovingLightVisual3D" x:FieldModifier="public" >
                 <ModelVisual3D.Content>
                     <Model3DGroup x:Name="MovingLightModelGroup" x:FieldModifier="public" >
-                        
+                        <!--<DirectionalLight Color="#F0F0F0" Direction="-1,1,1"/>-->
                     </Model3DGroup>
                 </ModelVisual3D.Content>
             </ModelVisual3D>
             <ModelVisual3D x:Name="FixedLightVisual3D" x:FieldModifier="public" >
                 <ModelVisual3D.Content>
                     <Model3DGroup x:Name="FixedLightModelGroup" x:FieldModifier="public">
-                        <SpotLight Color="#F0F0F0" Position="30,0,500"/>
+                        <DirectionalLight Color="#FF8A8A8A" Direction="10,10,-10"/>
+                        <DirectionalLight Color="#FF7A7A7A" Direction="-10,10,-10"/>
+                        <AmbientLight Color="#FF545454"/>
                     </Model3DGroup>
                 </ModelVisual3D.Content>
             </ModelVisual3D>
