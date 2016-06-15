@@ -33,13 +33,19 @@ namespace PTL.Base
         {
             get { return GetSourceValue(); }
             set {
-                if (!Value.Equals(value))
+                if (Value != null && !Value.Equals(value))
                 {
                     SetSourceValue(value);
                     NotifyPropertyChanged(nameof(Value));
                 }
                 
             }
+        }
+
+        public void LinkTo(Source<T> source)
+        {
+            GetSourceValue = source.GetValue;
+            SetSourceValue = source.SetValue;
         }
 
         public static implicit operator T(Link<T> link)
