@@ -108,6 +108,8 @@
     <Compile Include="Data\ExObservableCollection.cs" />
     <Compile Include="Extensions\StringArrayExtensions\StringArrayFormattingExtention.cs" />
     <Compile Include="Extensions\TopoFaceOutputExtensions\TopoFaceStringOuputExtension.cs" />
+    <Compile Include="FileOperation\WorkingDirectory.cs" />
+    <Compile Include="FileOperation\IHaveWorkingDirectory.cs" />
     <Compile Include="FileOperation\TXTFile.cs" />
     <Compile Include="Geometry\MathModel\CurveFunctionUniformer.cs" />
     <Compile Include="Geometry\MathModel\NUB_Surface_base.cs" />
@@ -295,12 +297,17 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <AppDesigner Include="Properties\" />
+    <None Include="Snippets\notifypc.snippet" />
+    <None Include="Snippets\propps.snippet" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\mathnet-PTL\src\Numerics\Numerics.csproj">
       <Project>{b7cae5f4-a23f-4438-b5be-41226618b695}</Project>
       <Name>Numerics</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Snippets\propnotify.snippet" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

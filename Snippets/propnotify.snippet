@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <Title>propnotify</Title>
+      <Shortcut>propnotify</Shortcut>
+      <Description>屬性和支援欄位與變更通知的程式碼片段</Description>
+      <Author>F1shift</Author>
+      <SnippetTypes>
+        <SnippetType>Expansion</SnippetType>
+      </SnippetTypes>
+    </Header>
+    <Snippet>
+      <Declarations>
+        <Literal>
+          <ID>type</ID>
+          <ToolTip>屬性類型</ToolTip>
+          <Default>int</Default>
+        </Literal>
+        <Literal>
+          <ID>property</ID>
+          <ToolTip>屬性名稱</ToolTip>
+          <Default>MyProperty</Default>
+        </Literal>
+        <Literal>
+          <ID>notify</ID>
+          <ToolTip>變更通知函示</ToolTip>
+          <Default>NotifyPropertyChanged</Default>
+        </Literal>
+      </Declarations>
+      <Code Language="csharp">
+        <![CDATA[private $type$ _$property$;
+	public $type$ $property$
+	{
+		get { return _$property$;}
+		set { 
+        if(value!=_$property$)
+        {
+            _$property$ = value;
+            $notify$(nameof($property$));
+        }
+    }
+	}
+	$end$]]>
+      </Code>
+    </Snippet>
+  </CodeSnippet>
+</CodeSnippets>
