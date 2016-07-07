@@ -45,32 +45,42 @@ namespace PTL.Data
 
         public static Binding Bind(INotifyPropertyChanged target, string targetPropertyName, INotifyPropertyChanged source, string sourcePropertyName, IValueConverter converter = null, object parameters = null, CultureInfo culture = null)
         {
-            Binding newBinding = new Binding();
-            newBinding.Target = target;
-            newBinding.Source = source;
-            newBinding.TargetPropertyName = targetPropertyName;
-            newBinding.SourcePropertyName = sourcePropertyName;
-            newBinding.Converter = converter;
-            newBinding.Paremeters = parameters;
-            newBinding.Culture = culture;
-
-            newBinding.TargetPropertyChangedEventHandler = (o, e) =>
+            if (target != null
+                && source != null
+                && target.GetType().GetProperty(targetPropertyName) != null
+                && source.GetType().GetProperty(sourcePropertyName) != null)
             {
-                if (o == newBinding.Target && e.PropertyName == newBinding.TargetPropertyName)
-                    newBinding.UpdateSource();
-            };
-            newBinding.SourcePropertyChangedEventHandler = (o, e) =>
+                Binding newBinding = new Binding();
+                newBinding.Target = target;
+                newBinding.Source = source;
+                newBinding.TargetPropertyName = targetPropertyName;
+                newBinding.SourcePropertyName = sourcePropertyName;
+                newBinding.Converter = converter;
+                newBinding.Paremeters = parameters;
+                newBinding.Culture = culture;
+
+                newBinding.TargetPropertyChangedEventHandler = (o, e) =>
+                {
+                    if (o == newBinding.Target && e.PropertyName == newBinding.TargetPropertyName)
+                        newBinding.UpdateSource();
+                };
+                newBinding.SourcePropertyChangedEventHandler = (o, e) =>
+                {
+                    if (o == newBinding.Source && e.PropertyName == newBinding.SourcePropertyName)
+                        newBinding.UpdateTarget();
+                };
+
+                newBinding.Target.PropertyChanged += newBinding.TargetPropertyChangedEventHandler;
+                newBinding.Source.PropertyChanged += newBinding.SourcePropertyChangedEventHandler;
+
+                newBinding.UpdateTarget();
+
+                return newBinding;
+            }
+            else
             {
-                if (o == newBinding.Source && e.PropertyName == newBinding.SourcePropertyName)
-                    newBinding.UpdateTarget();
-            };
-
-            newBinding.Target.PropertyChanged += newBinding.TargetPropertyChangedEventHandler;
-            newBinding.Source.PropertyChanged += newBinding.SourcePropertyChangedEventHandler;
-
-            newBinding.UpdateTarget();
-
-            return newBinding;
+                return null;
+            }
         }
 
         public void UpdateTarget()

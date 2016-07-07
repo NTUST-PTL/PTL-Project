@@ -32,7 +32,7 @@ namespace PTL.FileOperation
         public string FullDirectory
         {
             get { return _FullDirectory; }
-            set
+            private set
             {
                 if (value != _FullDirectory)
                 {
@@ -51,11 +51,10 @@ namespace PTL.FileOperation
 
         private String SeekUp(string existedDirectory)
         {
-            string newDir = FolderName + "\\" + existedDirectory;
             if (Parent != null)
-                return Parent.SeekUp(newDir);
+                return Parent.SeekUp(Parent.FolderName + "\\" + existedDirectory);
             else
-                return newDir;
+                return existedDirectory;
         }
 
         private void UpdateFullDirectory()
@@ -117,18 +116,7 @@ namespace PTL.FileOperation
 
         public void CreateDirectory()
         {
-            string[] folders = FullDirectory.Split('\\');
-            string currentPath = folders[0];
-            for (int i = 0; i < folders.Length; i++)
-            {
-                if (!System.IO.Directory.Exists(currentPath))
-                    System.IO.Directory.CreateDirectory(currentPath);
-            }
-
-            foreach (var item in SubDirectories)
-            {
-                item.CreateDirectory();
-            }
+            System.IO.Directory.CreateDirectory(FullDirectory);
         }
 
         public override string ToString()
