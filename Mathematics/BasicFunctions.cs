@@ -210,6 +210,17 @@ namespace PTL.Mathematics
 
             return len;
         }
+        public static double GetFirstNNorm(double[] input, double n)
+        {
+            double sum = 0;
+            for (int i = 0; i < n; i++)
+            {
+                sum = sum + input[i] * input[i];
+            }
+            double len = Sqrt(sum);
+
+            return len;
+        }
         public static XYZ3 GetAnyNormal(XYZ3 direction)
         {
             XYZ3 n1 = Cross(new XYZ3(0.0, 0.0, 1.0), direction);

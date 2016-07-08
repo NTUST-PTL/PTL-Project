@@ -31,6 +31,12 @@ namespace PTL.Geometry
         {
         }
 
+        public TopoFace(int nRow, int nCol)
+        {
+            this.Points = new XYZ4[nRow, nCol];
+            this.Normals = new XYZ3[nRow, nCol];
+        }
+
         public void SolveNormalVector()
         {
             if (Points != null && Points.Length >= 4)

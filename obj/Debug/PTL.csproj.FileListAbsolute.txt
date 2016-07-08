@@ -307,3 +307,14 @@ C:\Data\GitHub\PTL-Project\bin\Debug\PdfSharp-WPF.xml
 C:\Data\GitHub\PTL-Project\bin\Debug\PdfSharp.Xps.xml
 E:\Data\GitHub\PTL-Project\bin\Debug\MathNet.Numerics.dll
 E:\Data\GitHub\PTL-Project\bin\Debug\MathNet.Numerics.pdb
+C:\Data\GitHub\PTL-Project\bin\Debug\System.Windows.Interactivity.dll
+C:\Data\GitHub\PTL-Project\bin\Debug\System.Windows.Interactivity.xml
+C:\Data\GitHub\PTL-Project\bin\Debug\de\System.Windows.Interactivity.resources.dll
+C:\Data\GitHub\PTL-Project\bin\Debug\en\System.Windows.Interactivity.resources.dll
+C:\Data\GitHub\PTL-Project\bin\Debug\es\System.Windows.Interactivity.resources.dll
+C:\Data\GitHub\PTL-Project\bin\Debug\fr\System.Windows.Interactivity.resources.dll
+C:\Data\GitHub\PTL-Project\bin\Debug\it\System.Windows.Interactivity.resources.dll
+C:\Data\GitHub\PTL-Project\bin\Debug\ja\System.Windows.Interactivity.resources.dll
+C:\Data\GitHub\PTL-Project\bin\Debug\ko\System.Windows.Interactivity.resources.dll
+C:\Data\GitHub\PTL-Project\bin\Debug\zh-Hans\System.Windows.Interactivity.resources.dll
+C:\Data\GitHub\PTL-Project\bin\Debug\zh-Hant\System.Windows.Interactivity.resources.dll
