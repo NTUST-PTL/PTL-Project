@@ -231,6 +231,7 @@ namespace PTL.Mathematics
                     points.Add(new PointD(data) { OpenGLDisplaySize = 5, Color = System.Drawing.Color.Red });
                 }
                 plot.AddSomethings(points.ToArray());
+                plot.Log(minDis.ToString());
             }
             
 

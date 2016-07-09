@@ -107,6 +107,7 @@
     <Compile Include="Data\Conveters\RadToDegConverter.cs" />
     <Compile Include="Data\Conveters\RatioConverter.cs" />
     <Compile Include="Data\ExObservableCollection.cs" />
+    <Compile Include="Data\ITag.cs" />
     <Compile Include="Extensions\StringArrayExtensions\StringArrayFormattingExtention.cs" />
     <Compile Include="Extensions\TopoFaceOutputExtensions\TopoFaceStringOuputExtension.cs" />
     <Compile Include="FileOperation\WorkingDirectory.cs" />
