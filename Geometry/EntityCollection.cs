@@ -51,6 +51,24 @@ namespace PTL.Geometry
             }
         }
 
+        public virtual IEnumerable<Entity> EntitiesDeepSearch(Predicate<Entity> predicate)
+        {
+            foreach (var item in Entities.Values)
+            {
+                if (predicate(item))
+                {
+                    yield return item;
+                }
+                else if(item is EntityCollection)
+                {
+                    foreach (var item2 in ((EntityCollection)item).EntitiesDeepSearch(predicate))
+                    {
+                        yield return item2;
+                    }
+                }
+            }
+        }
+
         public override void PlotInOpenGL()
         {
             if (this.Visible == true)
@@ -79,11 +97,16 @@ namespace PTL.Geometry
         public override XYZ4[] GetBoundary(double[,] externalCoordinateMatrix)
         {
             double[,] M = Dot(externalCoordinateMatrix, this.CoordinateSystem);
+            return GetTotalBoundary(this.Entities.Values.ToArray(), M);
+        }
+
+        public static XYZ4[] GetTotalBoundary(Entity[] entities, double[,] externalCoordinateMatrix)
+        {
+            double[,] M = externalCoordinateMatrix;
 
             XYZ4[] boundary = new XYZ4[2] { new XYZ4(), new XYZ4() };
-            if (Entities.Count != 0)
+            if (entities.Length != 0)
             {
-                Entity[] entities = Entities.Values.ToArray();
                 boundary = entities[0].GetBoundary(M);
                 foreach (Entity aEntity in entities)
                 {

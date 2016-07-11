@@ -106,6 +106,7 @@
     <Compile Include="Data\Conveters\RadToHelixDegreeStringConverter.cs" />
     <Compile Include="Data\Conveters\RadToDegConverter.cs" />
     <Compile Include="Data\Conveters\RatioConverter.cs" />
+    <Compile Include="Data\DataCopy.cs" />
     <Compile Include="Data\ExObservableCollection.cs" />
     <Compile Include="Data\ITag.cs" />
     <Compile Include="Extensions\StringArrayExtensions\StringArrayFormattingExtention.cs" />
@@ -113,6 +114,8 @@
     <Compile Include="FileOperation\WorkingDirectory.cs" />
     <Compile Include="FileOperation\IHaveWorkingDirectory.cs" />
     <Compile Include="FileOperation\TXTFile.cs" />
+    <Compile Include="Geometry\CompoundSurface.cs" />
+    <Compile Include="Geometry\ISurfaceEntity.cs" />
     <Compile Include="Geometry\MathModel\CurveFunctionUniformer.cs" />
     <Compile Include="Geometry\MathModel\NUB_Surface_base.cs" />
     <Compile Include="Geometry\MathModel\SurfaceDefinitions.cs" />

@@ -58,31 +58,30 @@ namespace PTL.Geometry
 
         public override void PlotInOpenGL()
         {
-            PlotFace();
-        }
-
-        protected void PlotFace()
-        {
-            GL.glDisable(GL.GL_CULL_FACE);//關閉表面剔除選項
-
-            GL.glColor4d(this.Color.R / 255.0, this.Color.G / 255.0, this.Color.B / 255.0, this.Color.A / 255.0); //顏色
-            GL.glBegin(GL.GL_TRIANGLE_FAN); //三角面起點
-            GL.glVertex3d(Points[0].X,
-                          Points[0].Y,
-                          Points[0].Z);
-            GL.glVertex3d(Points[1].X,
-                          Points[1].Y,
-                          Points[1].Z);
-            for (int i = 2; i < Points.Count; i++)
+            switch (SurfaceDisplayOption)
             {
-                GL.glNormal3d(Normals[i-2].X,
-                              Normals[i-2].Y,
-                              Normals[i-2].Z);//頂點法向量
-                GL.glVertex3d(Points[i].X,
-                              Points[i].Y,
-                              Points[i].Z);
+                case SurfaceDisplayOptions.Null:
+                    break;
+                case SurfaceDisplayOptions.Surface:
+                    PlotFace();
+                    break;
+                case SurfaceDisplayOptions.Mesh:
+                    PlotMesh();
+                    break;
+                case SurfaceDisplayOptions.Edge:
+                    PlotEdge();
+                    break;
+                case SurfaceDisplayOptions.SurfaceAndEdge:
+                    PlotFace();
+                    PlotEdge();
+                    break;
+                case SurfaceDisplayOptions.SurfaceAndMesh:
+                    PlotFace();
+                    PlotMesh();
+                    break;
+                default:
+                    break;
             }
-            GL.glEnd();
         }
 
         public void SolveNormalVectors(bool reverseDirection = false)
@@ -139,6 +138,45 @@ namespace PTL.Geometry
             }
 
             return newFan;
+        }
+
+        public override void PlotEdge()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void PlotMesh()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void PlotNormal()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void PlotFace()
+        {
+            GL.glDisable(GL.GL_CULL_FACE);//關閉表面剔除選項
+
+            GL.glColor4d(this.Color.R / 255.0, this.Color.G / 255.0, this.Color.B / 255.0, this.Color.A / 255.0); //顏色
+            GL.glBegin(GL.GL_TRIANGLE_FAN); //三角面起點
+            GL.glVertex3d(Points[0].X,
+                          Points[0].Y,
+                          Points[0].Z);
+            GL.glVertex3d(Points[1].X,
+                          Points[1].Y,
+                          Points[1].Z);
+            for (int i = 2; i < Points.Count; i++)
+            {
+                GL.glNormal3d(Normals[i - 2].X,
+                              Normals[i - 2].Y,
+                              Normals[i - 2].Z);//頂點法向量
+                GL.glVertex3d(Points[i].X,
+                              Points[i].Y,
+                              Points[i].Z);
+            }
+            GL.glEnd();
         }
     }
 }

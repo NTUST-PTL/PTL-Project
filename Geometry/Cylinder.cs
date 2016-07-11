@@ -72,7 +72,7 @@ namespace PTL.Geometry
         {
             if (this.axisStart != null && axisEnd != null && this.radius != 0 && this.sliceNumber != 0)
             {
-                this.face = new TopoFace() { Points = new XYZ4[2, sliceNumber], Normals = new XYZ3[2, sliceNumber] };
+                this.face = new TopoFace(2, sliceNumber);
 
                 VectorD axisDirection = AxisEnd - AxisStart;
                 VectorD N1 = Cross(new VectorD(0, 0, 1), axisDirection);
@@ -99,32 +99,30 @@ namespace PTL.Geometry
 
         public override void PlotInOpenGL()
         {
-            if (this.Visible == true && this.face != null)
+            this.face.Color = this.Color;
+            switch (SurfaceDisplayOption)
             {
-                if (this.CoordinateSystem != null)
-                {
-                    GL.glPushMatrix();
-                    GL.glMatrixMode(GL.GL_MODELVIEW);
-                    MultMatrixd(this.CoordinateSystem);
-                }
-
-                //面
-                if (this.SurfaceDisplayOption == SurfaceDisplayOptions.Surface || this.SurfaceDisplayOption == SurfaceDisplayOptions.SurfaceAndEdge)
-                {
-                    if (this.face.Color != this.Color)
-                        this.face.Color = this.Color;
-                    this.face.PlotInOpenGL();
-                }
-                //邊線
-                if (this.SurfaceDisplayOption == SurfaceDisplayOptions.Mesh || this.SurfaceDisplayOption == SurfaceDisplayOptions.SurfaceAndEdge)
-                {
-
-                }
-
-                if (this.CoordinateSystem != null)
-                {
-                    GL.glPopMatrix();
-                }
+                case SurfaceDisplayOptions.Null:
+                    break;
+                case SurfaceDisplayOptions.Surface:
+                    PlotFace();
+                    break;
+                case SurfaceDisplayOptions.Mesh:
+                    PlotMesh();
+                    break;
+                case SurfaceDisplayOptions.Edge:
+                    PlotEdge();
+                    break;
+                case SurfaceDisplayOptions.SurfaceAndEdge:
+                    PlotFace();
+                    PlotEdge();
+                    break;
+                case SurfaceDisplayOptions.SurfaceAndMesh:
+                    PlotFace();
+                    PlotMesh();
+                    break;
+                default:
+                    break;
             }
         }
 
@@ -144,6 +142,50 @@ namespace PTL.Geometry
         {
             this.AxisStart.Transform(TransformMatrix);
             this.AxisEnd.Transform(TransformMatrix);
+        }
+
+        public override void PlotEdge()
+        {
+            GL.glDisable(GL.GL_CULL_FACE);//關閉表面剔除選項
+            GL.glColor4d(this.Color.R / 255.0, this.Color.G / 255.0, this.Color.B / 255.0, this.Color.A / 255.0); //顏色
+
+            int lastRow = face.Points.GetUpperBound(0);
+            int lastCol = face.Points.GetUpperBound(1);
+
+            //Draw Line
+            GL.glBegin(GL.GL_LINE_STRIP);
+            for (int j = 0; j < (face.Points.GetLength(1)); j++)
+            {
+                GL.glVertex3d(face.Points[0, j].X,
+                                face.Points[0, j].Y,
+                                face.Points[0, j].Z);
+            }
+            GL.glEnd();
+
+            //Draw Line
+            GL.glBegin(GL.GL_LINE_STRIP);
+            for (int j = 0; j < (face.Points.GetLength(1)); j++)
+            {
+                GL.glVertex3d(face.Points[lastRow, j].X,
+                                face.Points[lastRow, j].Y,
+                                face.Points[lastRow, j].Z);
+            }
+            GL.glEnd();
+        }
+
+        public override void PlotMesh()
+        {
+            face?.PlotMesh();
+        }
+
+        public override void PlotNormal()
+        {
+            face?.PlotNormal();
+        }
+
+        public override void PlotFace()
+        {
+            face?.PlotFace();
         }
     }
 }

@@ -26,6 +26,83 @@ namespace PTL.Geometry
 
         public override void PlotInOpenGL()
         {
+            switch (SurfaceDisplayOption)
+            {
+                case SurfaceDisplayOptions.Null:
+                    break;
+                case SurfaceDisplayOptions.Surface:
+                    PlotFace();
+                    break;
+                case SurfaceDisplayOptions.Mesh:
+                    PlotMesh();
+                    break;
+                case SurfaceDisplayOptions.Edge:
+                    PlotEdge();
+                    break;
+                case SurfaceDisplayOptions.SurfaceAndEdge:
+                    PlotFace();
+                    PlotEdge();
+                    break;
+                case SurfaceDisplayOptions.SurfaceAndMesh:
+                    PlotFace();
+                    PlotMesh();
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        public override object Clone()
+        {
+            Triangle newTriangle = new Triangle()
+            {
+                Color = this._color,
+                CoordinateSystem = this.CoordinateSystem,
+                Visible = this.Visible
+            };
+            if (this.P1 != null)
+                newTriangle.P1 = this.P1.Clone() as XYZ4;
+            if (this.P2 != null)
+                newTriangle.P2 = this.P2.Clone() as XYZ4;
+            if (this.P3 != null)
+                newTriangle.P3 = this.P3.Clone() as XYZ4;
+            if (this.N1 != null)
+                newTriangle.N1 = this.N1.Clone() as XYZ3;
+            if (this.N2 != null)
+                newTriangle.N2 = this.N2.Clone() as XYZ3;
+            if (this.N3 != null)
+                newTriangle.N3 = this.N3.Clone() as XYZ3;
+
+            return newTriangle;
+        }
+
+        public override void Transform(double[,] TransformMatrix)
+        {
+            if (this.P1 != null) this.P1 = Transport(TransformMatrix, this.P1);
+            if (this.P2 != null) this.P2 = Transport(TransformMatrix, this.P2);
+            if (this.P3 != null) this.P3 = Transport(TransformMatrix, this.P3);
+            if (this.N1 != null) this.N1 = Transport(TransformMatrix, this.N1);
+            if (this.N2 != null) this.N2 = Transport(TransformMatrix, this.N2);
+            if (this.N3 != null) this.N3 = Transport(TransformMatrix, this.N3);
+        }
+
+        public override void PlotEdge()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void PlotMesh()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void PlotNormal()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void PlotFace()
+        {
             if (this.Visible == true)
             {
                 if (this.CoordinateSystem != null)
@@ -85,40 +162,6 @@ namespace PTL.Geometry
                     GL.glPopMatrix();
                 }
             }
-        }
-
-        public override object Clone()
-        {
-            Triangle newTriangle = new Triangle()
-            {
-                Color = this._color,
-                CoordinateSystem = this.CoordinateSystem,
-                Visible = this.Visible
-            };
-            if (this.P1 != null)
-                newTriangle.P1 = this.P1.Clone() as XYZ4;
-            if (this.P2 != null)
-                newTriangle.P2 = this.P2.Clone() as XYZ4;
-            if (this.P3 != null)
-                newTriangle.P3 = this.P3.Clone() as XYZ4;
-            if (this.N1 != null)
-                newTriangle.N1 = this.N1.Clone() as XYZ3;
-            if (this.N2 != null)
-                newTriangle.N2 = this.N2.Clone() as XYZ3;
-            if (this.N3 != null)
-                newTriangle.N3 = this.N3.Clone() as XYZ3;
-
-            return newTriangle;
-        }
-
-        public override void Transform(double[,] TransformMatrix)
-        {
-            if (this.P1 != null) this.P1 = Transport(TransformMatrix, this.P1);
-            if (this.P2 != null) this.P2 = Transport(TransformMatrix, this.P2);
-            if (this.P3 != null) this.P3 = Transport(TransformMatrix, this.P3);
-            if (this.N1 != null) this.N1 = Transport(TransformMatrix, this.N1);
-            if (this.N2 != null) this.N2 = Transport(TransformMatrix, this.N2);
-            if (this.N3 != null) this.N3 = Transport(TransformMatrix, this.N3);
         }
     }
 }

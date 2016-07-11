@@ -127,7 +127,7 @@ namespace PTL.Geometry
             }
         }
 
-        protected void PlotEdge()
+        public override void PlotEdge()
         {
             GL.glDisable(GL.GL_CULL_FACE);//關閉表面剔除選項
             GL.glColor4d(this.Color.R / 255.0, this.Color.G / 255.0, this.Color.B / 255.0, this.Color.A / 255.0); //顏色
@@ -135,48 +135,54 @@ namespace PTL.Geometry
             int lastRow = Points.GetUpperBound(0);
             int lastCol = Points.GetUpperBound(1);
 
+            glLineWidth(this.EdgeLineWidth);
+
+            //Draw Line
+            GL.glBegin(GL.GL_LINE_STRIP);
             for (int i = 0; i < (Points.GetLength(0)); i++)
             {
-                //Draw Line
-                GL.glBegin(GL.GL_LINE_STRIP);
                 GL.glVertex3d(Points[i, 0].X,
                                 Points[i, 0].Y,
                                 Points[i, 0].Z);
-                GL.glEnd();
             }
+            GL.glEnd();
+
+            //Draw Line
+            GL.glBegin(GL.GL_LINE_STRIP);
             for (int i = 0; i < (Points.GetLength(0)); i++)
             {
-                //Draw Line
-                GL.glBegin(GL.GL_LINE_STRIP);
                 GL.glVertex3d(Points[i, lastCol].X,
                                 Points[i, lastCol].Y,
                                 Points[i, lastCol].Z);
-                GL.glEnd();
             }
+            GL.glEnd();
+
+            //Draw Line
+            GL.glBegin(GL.GL_LINE_STRIP);
             for (int j = 0; j < (Points.GetLength(1)); j++)
             {
-                //Draw Line
-                GL.glBegin(GL.GL_LINE_STRIP);
                 GL.glVertex3d(Points[0, j].X,
                                 Points[0, j].Y,
                                 Points[0, j].Z);
-                GL.glEnd();
             }
+            GL.glEnd();
+
+            //Draw Line
+            GL.glBegin(GL.GL_LINE_STRIP);
             for (int j = 0; j < (Points.GetLength(1)); j++)
             {
-                //Draw Line
-                GL.glBegin(GL.GL_LINE_STRIP);
                 GL.glVertex3d(Points[lastRow, j].X,
                                 Points[lastRow, j].Y,
                                 Points[lastRow, j].Z);
-                GL.glEnd();
             }
+            GL.glEnd();
         }
 
-        protected void PlotMesh()
+        public override void PlotMesh()
         {
             GL.glDisable(GL.GL_CULL_FACE);//關閉表面剔除選項
             GL.glColor4d(this.Color.R / 255.0, this.Color.G / 255.0, this.Color.B / 255.0, this.Color.A / 255.0); //顏色
+            glLineWidth(this.MeshLineWidth);
             for (int i = 0; i < (Points.GetLength(0)); i++)
             {
                 //Draw Line
@@ -203,7 +209,7 @@ namespace PTL.Geometry
             }
         }
 
-        protected void PlotNormal()
+        public override void PlotNormal()
         {
             //畫法向量
             glColor4d(System.Drawing.Color.LawnGreen);
@@ -221,7 +227,7 @@ namespace PTL.Geometry
             }
         }
 
-        protected void PlotFace()
+        public override void PlotFace()
         {
             GL.glDisable(GL.GL_CULL_FACE);//關閉表面剔除選項
 
