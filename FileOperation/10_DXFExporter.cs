@@ -8,7 +8,7 @@ using System.Windows.Forms;
 using System.Diagnostics;
 using System.Drawing;
 using PTL.Geometry;
-using static PTL.Mathematics.BaseFunctions;
+using static PTL.Mathematics.BasicFunctions;
 
 namespace PTL.FileOperation
 {

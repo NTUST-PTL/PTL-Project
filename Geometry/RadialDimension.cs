@@ -7,7 +7,7 @@ using System.Drawing;
 using System.IO;
 using CsGL.OpenGL;
 using PTL.Geometry.MathModel;
-using static PTL.Mathematics.BaseFunctions;
+using static PTL.Mathematics.BasicFunctions;
 
 namespace PTL.Geometry
 {

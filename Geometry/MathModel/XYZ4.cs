@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static PTL.Mathematics.BaseFunctions;
+using static PTL.Mathematics.BasicFunctions;
 
 namespace PTL.Geometry.MathModel
 {

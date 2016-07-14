@@ -10,7 +10,7 @@ using PTL.Exceptions;
 
 namespace PTL.Mathematics
 {
-    public class BaseFunctions
+    public class BasicFunctions
     {
         #region 三角函數
         public static double Cos(double trad)

@@ -64,7 +64,7 @@ namespace PTL.Extensions.TopoFaceOutputExtensions
                     StringArrayFormattingExtention.HorizontalAlignmentTypes.Right
                 });
 
-            string[,] total = (String[,])PTL.Mathematics.BaseFunctions.Join(header, datas);
+            string[,] total = (String[,])PTL.Mathematics.BasicFunctions.Join(header, datas);
             String output = total.MergeString();
             return output;
         }
@@ -93,7 +93,7 @@ namespace PTL.Extensions.TopoFaceOutputExtensions
                 }
             }
 
-            string[,] total = (String[,])PTL.Mathematics.BaseFunctions.Join(header, datas);
+            string[,] total = (String[,])PTL.Mathematics.BasicFunctions.Join(header, datas);
             String output = total.MergeString("\t");
             return output;
         }

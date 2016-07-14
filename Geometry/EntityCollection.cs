@@ -9,7 +9,7 @@ using PTL.Definitions;
 using PTL.Geometry.MathModel;
 using PTL.OpenGL.Plot;
 using CsGL.OpenGL;
-using static PTL.Mathematics.BaseFunctions;
+using static PTL.Mathematics.BasicFunctions;
 
 namespace PTL.Geometry
 {

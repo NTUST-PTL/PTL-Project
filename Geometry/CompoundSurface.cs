@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using PTL.Data;
 using PTL.Geometry.MathModel;
-using static PTL.Mathematics.BaseFunctions;
+using static PTL.Mathematics.BasicFunctions;
 
 namespace PTL.Geometry
 {
