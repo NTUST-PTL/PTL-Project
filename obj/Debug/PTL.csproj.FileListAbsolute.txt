@@ -329,3 +329,6 @@ E:\Data\GitHub\PTL-Project\bin\Debug\ja\System.Windows.Interactivity.resources.d
 E:\Data\GitHub\PTL-Project\bin\Debug\ko\System.Windows.Interactivity.resources.dll
 E:\Data\GitHub\PTL-Project\bin\Debug\zh-Hans\System.Windows.Interactivity.resources.dll
 E:\Data\GitHub\PTL-Project\bin\Debug\zh-Hant\System.Windows.Interactivity.resources.dll
+C:\Data\GitHub\PTL-Project\obj\Debug\Windows\Controls\TopoErrorDiagramControl.g.cs
+C:\Data\GitHub\PTL-Project\obj\Debug\Windows\Controls\TopoErrorDiagramControl.baml
+C:\Data\GitHub\PTL-Project\obj\Debug\GeneratedInternalTypeHelper.g.cs

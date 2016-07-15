@@ -242,6 +242,9 @@
     <Compile Include="Windows\Controls\OpenGLViewer.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="Windows\Controls\TopoErrorDiagramControl.xaml.cs">
+      <DependentUpon>TopoErrorDiagramControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\Data\Array1DConverter.cs" />
     <Compile Include="Windows\DebugWindow_Plot.xaml.cs">
       <DependentUpon>DebugWindow_Plot.xaml</DependentUpon>
@@ -274,6 +277,10 @@
     <Page Include="Windows\Controls\LStackPanel.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Windows\Controls\TopoErrorDiagramControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\DebugWindow_Plot.xaml">
       <SubType>Designer</SubType>
