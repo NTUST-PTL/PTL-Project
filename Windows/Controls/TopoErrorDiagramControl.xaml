@@ -13,7 +13,7 @@
     </UserControl.Resources>
     <Viewbox>
         <Grid Width="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=ImageWidth_CM, Converter={StaticResource ratio}, ConverterParameter=28.3464566929}"
-              x:Name="outGrid">
+              x:Name="outGrid" ClipToBounds="True">
             <StackPanel x:Name="mStack">
             </StackPanel>
         </Grid>

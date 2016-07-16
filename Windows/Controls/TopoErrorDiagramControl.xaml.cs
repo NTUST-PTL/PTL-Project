@@ -58,19 +58,17 @@ namespace PTL.Windows.Controls
             GridLines,
             Texts
         }
-        private DiagramTypes _DiagramType;
         public DiagramTypes DiagramType
         {
-            get { return _DiagramType; }
-            set
-            {
-                if (value != _DiagramType)
-                {
-                    _DiagramType = value;
-                    NotifyPropertyChanged(nameof(DiagramType));
-                }
-            }
+            get { return (DiagramTypes)GetValue(DiagramTypeProperty); }
+            set { SetValue(DiagramTypeProperty, value); }
         }
+
+        // Using a DependencyProperty as the backing store for DiagramType.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty DiagramTypeProperty =
+            DependencyProperty.Register("DiagramType", typeof(DiagramTypes), typeof(TopoErrorDiagramControl), new PropertyMetadata(DiagramTypes.GridLines, Update));
+
+
 
         private double _FontSize1  =7;
         public double FontSize1
@@ -852,7 +850,7 @@ namespace PTL.Windows.Controls
                             Num.Text = ((char)(k + 65)).ToString();
                             Num.FontSize = this.FontSize1;
 
-                            XYZ4 p = (GridPoints[i][nRow - 1, k] + GridPoints[i][nRow - 1, k + 1]) / 2;
+                            XYZ4 p = (GridPoints[i][nRow, k] + GridPoints[i][nRow, k + 1]) / 2;
 
                             double left = p.X + this.FontSize1 * 0.5;
                             double top = 0;
