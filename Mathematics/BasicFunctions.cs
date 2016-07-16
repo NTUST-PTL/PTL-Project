@@ -1104,8 +1104,8 @@ namespace PTL.Mathematics
         public static T[,] Transpose<T>(T[,] Matrix)
         {
             int r1, c1;
-            r1 = Matrix.GetUpperBound(0) + 1;  //UBound
-            c1 = Matrix.GetUpperBound(1) + 1;  // UBound
+            r1 = Matrix.GetLength(0);  //UBound
+            c1 = Matrix.GetLength(1);  // UBound
             T[,] Trans = new T[c1, r1];
             for (int ii = 0; ii < r1; ii++)
                 for (int jj = 0; jj < c1; jj++)

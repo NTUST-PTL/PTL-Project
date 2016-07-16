@@ -41,10 +41,12 @@ namespace PTL.Windows.Controls
         }
         private double[][,] TopoErrors;
         private double[] CenterDiviations;
+        public bool IsAutoScale { get; set; } = true;
         public bool IsRootTipSwaped { get; set; } = false;
         public bool IsTranposed { get; set; } = false;
         public bool IsRowReversed { get; set; } = false;
         public bool IsColReversed { get; set; } = false;
+        public bool IsErrorDirectionReversed { get; set; } = false;
 
         // Using a DependencyProperty as the backing store for ErrorData.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty ErrorDataProperty =
@@ -166,8 +168,8 @@ namespace PTL.Windows.Controls
 
         private Brush baseGridBrush = new SolidColorBrush(Color.FromArgb(255, 150, 150, 150));
         private Brush measuredGridBrush = Brushes.Blue;
-        private Brush nagtiveErrorBrush = Brushes.Red;
-        private Brush positiveErrorBrush = new SolidColorBrush(Color.FromArgb(255, 0, 200, 0));
+        private Brush nagtiveErrorBrush = new SolidColorBrush(Color.FromArgb(255, 0, 200, 0));
+        private Brush positiveErrorBrush = Brushes.Red;
 
         public TopoErrorDiagramControl()
         {
@@ -200,7 +202,8 @@ namespace PTL.Windows.Controls
         {
             if (this.ErrorData != null
                 && this.ErrorData.TopoErrors != null
-                && this.ErrorData.CenterDiviations != null)
+                && this.ErrorData.CenterDiviations != null
+                && this.ActualWidth != 0)
             {
                 Func<double, double> s = (percent) => this.outGrid.ActualWidth * (percent / 100.0);
                 Func<double[], double[]> ss = (input) => {
@@ -210,9 +213,7 @@ namespace PTL.Windows.Controls
                     return re;
                 };
 
-                TopoErrors = this.ErrorData.TopoErrors;
-                CenterDiviations = this.ErrorData.CenterDiviations;
-                CheckDataSequence();
+                SetData();
 
                 int nRow = TopoErrors[0].GetLength(0);
                 int nCol = TopoErrors[0].GetLength(1);
@@ -306,11 +307,38 @@ namespace PTL.Windows.Controls
 
 
                 #region Measured Points
+                if (IsAutoScale)
+                {
+                    double maxValue = 0;
+                    for (int i = 0; i < 2; i++)
+                    {
+                        for (int j = 0; j < nRow; j++)
+                        {
+                            for (int k = 0; k < nCol; k++)
+                            {
+                                maxValue = maxValue < Abs(TopoErrors[i][j,k]) ? Abs(TopoErrors[i][j, k]) : maxValue;
+                            }
+                        }
+                    }
+                    this.Ratio = s(100) * 0.025 / s(this.unitCons) / (maxValue * 1000);
+                }
                 double unit = s(this.unitCons) * this.Ratio;
-                XYZ3[] vec = new XYZ3[] {
-                    new XYZ3(Cos(DegToRad(-135)), Sin(DegToRad(-135)), 0)
-                    , new XYZ3(Cos(DegToRad(135)), Sin(DegToRad(135)), 0)
-                };
+                XYZ3[] vec;
+                if (IsErrorDirectionReversed)
+                {
+                    vec = new XYZ3[] {
+                        new XYZ3(Cos(DegToRad(-135)), Sin(DegToRad(-135)), 0)
+                        , new XYZ3(Cos(DegToRad(135)), Sin(DegToRad(135)), 0)
+                    };
+                }
+                else
+                {
+                    vec = new XYZ3[] {
+                        new XYZ3(-Cos(DegToRad(-135)), -Sin(DegToRad(-135)), 0)
+                        , new XYZ3(-Cos(DegToRad(135)), -Sin(DegToRad(135)), 0)
+                    };
+                }
+                
                 XYZ4[][,] MeasuredPoints = new XYZ4[2][,] { new XYZ4[nRow, nCol], new XYZ4[nRow, nCol] };
                 for (int i = 0; i < 2; i++)
                 {
@@ -392,6 +420,7 @@ namespace PTL.Windows.Controls
                         for (int k = 0; k < nCol; k++)
                         {
                             Line line = new Line();
+                            line.ToolTip = TopoErrors[i][j, k].ToString("G6");
                             line.StrokeThickness = this._GridLineWidth2;
                             if (TopoErrors[i][j, k] < 0)
                                 line.Stroke = this.nagtiveErrorBrush;
@@ -625,7 +654,8 @@ namespace PTL.Windows.Controls
         {
             if (this.ErrorData != null
                 && this.ErrorData.TopoErrors != null
-                && this.ErrorData.CenterDiviations != null)
+                && this.ErrorData.CenterDiviations != null
+                && this.ActualWidth != 0)
             {
                 Func<double, double> s = (percent) => this.outGrid.ActualWidth * (percent / 100.0);
                 Func<double[], double[]> ss = (input) => {
@@ -635,9 +665,7 @@ namespace PTL.Windows.Controls
                     return re;
                 };
 
-                TopoErrors = this.ErrorData.TopoErrors;
-                CenterDiviations = this.ErrorData.CenterDiviations;
-                CheckDataSequence();
+                SetData();
 
                 int nRow = TopoErrors[0].GetLength(0);
                 int nCol = TopoErrors[0].GetLength(1);
@@ -915,8 +943,10 @@ namespace PTL.Windows.Controls
             }
         }
 
-        public void CheckDataSequence()
+        public void SetData()
         {
+            TopoErrors = new double[][,] { this.ErrorData.TopoErrors[0], this.ErrorData.TopoErrors[1] };
+            CenterDiviations = this.ErrorData.CenterDiviations;
             if (IsTranposed)
             {
                 for (int i = 0; i < 2; i++)
@@ -937,6 +967,19 @@ namespace PTL.Windows.Controls
                 {
                     TopoErrors[i] = (double[,])Reverse(TopoErrors[i], 1);
                 }
+            }
+        }
+
+        private void US_Loaded(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                Update();
+            }
+            catch (Exception)
+            {
+
+                throw;
             }
         }
     }

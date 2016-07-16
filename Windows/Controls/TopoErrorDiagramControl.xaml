@@ -7,15 +7,14 @@
              xmlns:conveter="clr-namespace:PTL.Data.Conveters"
              mc:Ignorable="d" 
              x:Name="US"
-             d:DesignHeight="210" d:DesignWidth="284" d:Background="BlanchedAlmond" FontFamily="Times New Roman">
+             d:DesignHeight="210" d:DesignWidth="284" FontFamily="Times New Roman" Foreground="Black" Background="White" Loaded="US_Loaded">
     <UserControl.Resources>
         <conveter:RatioConverter x:Key="ratio"/>
     </UserControl.Resources>
     <Viewbox>
         <Grid Width="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=ImageWidth_CM, Converter={StaticResource ratio}, ConverterParameter=28.3464566929}"
               x:Name="outGrid">
-            <StackPanel x:Name="mStack" Background="AliceBlue">
-                <TextBlock Background="Red">Test</TextBlock>
+            <StackPanel x:Name="mStack">
             </StackPanel>
         </Grid>
     </Viewbox>
