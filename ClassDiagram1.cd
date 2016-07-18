@@ -1,0 +1,756 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="PTL.Data.DataCopy" Collapsed="true">
+    <Position X="25" Y="14.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAEAAQAAAAAEAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Data\DataCopy.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PTL.FileOperation.XML" Collapsed="true">
+    <Position X="25" Y="13.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAQAAAAAAAAAAAAAABAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>FileOperation\01_XML.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PTL.FileOperation.Json" Collapsed="true">
+    <Position X="25" Y="12.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACA=</HashCode>
+      <FileName>FileOperation\02_JSON.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PTL.FileOperation.STLReader" Collapsed="true">
+    <Position X="25" Y="14" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAgAAAAAAQAAAAAgAAAAAAAAAAA=</HashCode>
+      <FileName>FileOperation\03_STLReader.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PTL.FileOperation.WorkingDirectory" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="25" Y="16.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAEACBAAAAIAEAAAAQEAAgABAAQAYAAAAAAAAAQA=</HashCode>
+      <FileName>FileOperation\WorkingDirectory.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="PTL.BinaryExtentionMethods.BinaryReaderExtentions" Collapsed="true">
+    <Position X="25" Y="15.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AABAAAAAAAAAAAAABAAAAAAAAAAAAAAAIAAAAAAAAAA=</HashCode>
+      <FileName>FileOperation\BinaryReaderExtentionMethods\BinaryReader_TryReadExtention.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PTL.Geometry.AlignedDimension" Collapsed="true">
+    <Position X="22.5" Y="5" Width="1.5" />
+    <InheritanceLine Type="PTL.Geometry.Entity" ManuallyRouted="true" FixedToPoint="true">
+      <Path>
+        <Point X="20.25" Y="2.427" />
+        <Point X="20.25" Y="2.874" />
+        <Point X="21.942" Y="2.874" />
+        <Point X="21.942" Y="5.312" />
+        <Point X="22.5" Y="5.312" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>ACAAAAAAAAQAAAAAAAAAAAQEIBAIAACBAAIgiBIAABA=</HashCode>
+      <FileName>Geometry\AlignedDimension.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="PTL.Geometry.Arc" Collapsed="true">
+    <Position X="16.5" Y="5" Width="1.5" />
+    <InheritanceLine Type="PTL.Geometry.LineArchitectureEntity" FixedToPoint="true">
+      <Path>
+        <Point X="16.25" Y="3.927" />
+        <Point X="16.25" Y="5.312" />
+        <Point X="16.5" Y="5.312" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>ACAIAAAAEAAAQAAAAAAAAAQEIAAAAIABAAAABAIIABg=</HashCode>
+      <FileName>Geometry\Arc.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="PTL.Geometry.Circle" Collapsed="true">
+    <Position X="16.5" Y="6.5" Width="1.5" />
+    <InheritanceLine Type="PTL.Geometry.LineArchitectureEntity" FixedToPoint="true">
+      <Path>
+        <Point X="16.25" Y="3.927" />
+        <Point X="16.25" Y="6.812" />
+        <Point X="16.5" Y="6.812" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>ACAIAAAAAAAAAAAAAAAAAAQEIAAAAAABAAAAAAIIABA=</HashCode>
+      <FileName>Geometry\Circle.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="PTL.Geometry.CompoundSurface" Collapsed="true">
+    <Position X="25.75" Y="6.25" Width="1.5" />
+    <InheritanceLine Type="PTL.Geometry.EntityCollection" FixedToPoint="true">
+      <Path>
+        <Point X="25.25" Y="3.927" />
+        <Point X="25.25" Y="6.625" />
+        <Point X="25.75" Y="6.625" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>ACAEAAAECAAAEAAAAAAAAAAABAQAAgEAAAAAAACAQBA=</HashCode>
+      <FileName>Geometry\CompoundSurface.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="PTL.Geometry.CubicClassifier" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="13.75" Y="13.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ACggIAEEAAAAAQAABIABQBKAgUAAiAAAEAAAAACYRAA=</HashCode>
+      <FileName>Geometry\CubicClassifier.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="PTL.Geometry.CubicSpace" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="13.75" Y="12.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ACIAAAAAAAABAAAAAAAABAAAAAAIAEAIACEAgAAIBQA=</HashCode>
+      <FileName>Geometry\CubicSpace.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="PTL.Geometry.Cylinder" Collapsed="true">
+    <Position X="20" Y="5" Width="1.5" />
+    <InheritanceLine Type="PTL.Geometry.SurfaceEntity" FixedToPoint="true">
+      <Path>
+        <Point X="19.5" Y="3.927" />
+        <Point X="19.5" Y="5.375" />
+        <Point X="20" Y="5.375" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>ACAIAAAAiAAAEAAAAAAAAAQMBBQACAAQAAAAQACAAFA=</HashCode>
+      <FileName>Geometry\Cylinder.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PTL.Geometry.DiametricDimension" Collapsed="true">
+    <Position X="22.5" Y="6.75" Width="1.5" />
+    <InheritanceLine Type="PTL.Geometry.Entity" ManuallyRouted="true" FixedToPoint="true">
+      <Path>
+        <Point X="20.25" Y="2.427" />
+        <Point X="20.25" Y="2.883" />
+        <Point X="21.953" Y="2.883" />
+        <Point X="21.953" Y="7.125" />
+        <Point X="22.5" Y="7.125" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>ACAAAAAAAAQAAAAAAAAAAAQEIBAIAACBAAJgiAIAABA=</HashCode>
+      <FileName>Geometry\DiametricDimension.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="PTL.Geometry.Ellipse" Collapsed="true">
+    <Position X="16.5" Y="9.25" Width="1.5" />
+    <InheritanceLine Type="PTL.Geometry.LineArchitectureEntity" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="16.25" Y="3.927" />
+        <Point X="16.25" Y="9.562" />
+        <Point X="16.5" Y="9.562" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>ACAACAAAAQQASAAIAAAABIYEIAAIACgAAAAIAIIIABE=</HashCode>
+      <FileName>Geometry\Ellipse.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="PTL.Geometry.Entity" Collapsed="true">
+    <Position X="19.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ACIAAIAAAAAIAAAAAAAARAQEgAAAACAIAACAiAAAABA=</HashCode>
+      <FileName>Geometry\Entity.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="PTL.Geometry.EntityCollection" Collapsed="true">
+    <Position X="24.5" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ACgAAAAAAAAAAAABAAABAAQEAAAAIAAAAIEAAAAAAAA=</HashCode>
+      <FileName>Geometry\EntityCollection.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="PTL.Geometry.Layer" Collapsed="true">
+    <Position X="25.75" Y="7.5" Width="1.5" />
+    <InheritanceLine Type="PTL.Geometry.EntityCollection" FixedToPoint="true">
+      <Path>
+        <Point X="25.25" Y="3.927" />
+        <Point X="25.25" Y="7.813" />
+        <Point X="25.75" Y="7.813" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAIAABA=</HashCode>
+      <FileName>Geometry\Layer.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="PTL.Geometry.Line" Collapsed="true">
+    <Position X="16.5" Y="8" Width="1.5" />
+    <InheritanceLine Type="PTL.Geometry.LineArchitectureEntity" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="16.25" Y="3.927" />
+        <Point X="16.25" Y="8.312" />
+        <Point X="16.5" Y="8.312" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>ACAAAAAAAAAAAAAAAAAAAAQEIAEAAAABgAAAAAIAABA=</HashCode>
+      <FileName>Geometry\Line.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="PTL.Geometry.LineArchitectureEntity" Collapsed="true">
+    <Position X="15.5" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAYAAEAAAAAAAAAAEAAAAAgAAAAAAAAAQAAAAAAAAA=</HashCode>
+      <FileName>Geometry\LineArchitectureEntity.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="PTL.Geometry.Part" Collapsed="true">
+    <Position X="25.75" Y="8.75" Width="1.5" />
+    <InheritanceLine Type="PTL.Geometry.EntityCollection" FixedToPoint="true">
+      <Path>
+        <Point X="25.25" Y="3.927" />
+        <Point X="25.25" Y="9.062" />
+        <Point X="25.75" Y="9.062" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AACAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAACAAAAIBA=</HashCode>
+      <FileName>Geometry\Part.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="PTL.Geometry.PointD" Collapsed="true">
+    <Position X="13.5" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAYAUAAAQEAABEAAAAAAAAAAAABAA=</HashCode>
+      <FileName>Geometry\PointD.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PTL.Geometry.PolyFan" Collapsed="true">
+    <Position X="20" Y="8" Width="1.5" />
+    <InheritanceLine Type="PTL.Geometry.SurfaceEntity" FixedToPoint="true">
+      <Path>
+        <Point X="19.5" Y="3.927" />
+        <Point X="19.5" Y="8.312" />
+        <Point X="20" Y="8.312" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>ACAIAAAAGAAAkAAAAAAAAAQEBAAAAAAAkAAAAACAABA=</HashCode>
+      <FileName>Geometry\PolyFan.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PTL.Geometry.PolyLine" Collapsed="true">
+    <Position X="16.5" Y="10.75" Width="1.5" />
+    <InheritanceLine Type="PTL.Geometry.LineArchitectureEntity" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="16.25" Y="3.927" />
+        <Point X="16.25" Y="11" />
+        <Point X="16.5" Y="11" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>ACAAAAAAAAAQgAAAAAAAAAQEIAAAAAABAAAAAAIAABA=</HashCode>
+      <FileName>Geometry\PolyLine.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="PTL.Geometry.RadialDimension" Collapsed="true">
+    <Position X="22.5" Y="8.5" Width="1.5" />
+    <InheritanceLine Type="PTL.Geometry.Entity" ManuallyRouted="true" FixedToPoint="true">
+      <Path>
+        <Point X="20.25" Y="2.427" />
+        <Point X="20.25" Y="2.874" />
+        <Point X="21.954" Y="2.874" />
+        <Point X="21.954" Y="8.812" />
+        <Point X="22.5" Y="8.812" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>ACAAAAAAAAQAAAAAAAAAAAQEIBAIAACBAAJgiAIAABA=</HashCode>
+      <FileName>Geometry\RadialDimension.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="PTL.Geometry.STL" Collapsed="true">
+    <Position X="25.75" Y="5" Width="1.5" />
+    <InheritanceLine Type="PTL.Geometry.EntityCollection" FixedToPoint="true">
+      <Path>
+        <Point X="25.25" Y="3.927" />
+        <Point X="25.25" Y="5.375" />
+        <Point X="25.75" Y="5.375" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAIAAAAAAABA=</HashCode>
+      <FileName>Geometry\STL.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PTL.Geometry.SurfaceEntity" Collapsed="true">
+    <Position X="18.75" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAECAAAEAAAAAAAAAAADAQAAAEAAAAAAAGAQAA=</HashCode>
+      <FileName>Geometry\SurfaceEntity.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="PTL.Geometry.Text" Collapsed="true">
+    <Position X="22.5" Y="3.25" Width="1.5" />
+    <InheritanceLine Type="PTL.Geometry.Entity" ManuallyRouted="true" FixedToPoint="true">
+      <Path>
+        <Point X="20.25" Y="2.427" />
+        <Point X="20.25" Y="2.874" />
+        <Point X="21.964" Y="2.874" />
+        <Point X="21.964" Y="3.625" />
+        <Point X="22.5" Y="3.625" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>ACAAAAAAAAAAAgAAAIAAAAQEIAACAAEAAAAgAAIAExM=</HashCode>
+      <FileName>Geometry\Text.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="PTL.Geometry.TopoFace" Collapsed="true">
+    <Position X="20" Y="7" Width="1.5" />
+    <InheritanceLine Type="PTL.Geometry.SurfaceEntity" FixedToPoint="true">
+      <Path>
+        <Point X="19.5" Y="3.927" />
+        <Point X="19.5" Y="7.25" />
+        <Point X="20" Y="7.25" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>ACgAAgAAGIAAkAAAAAAAAAQEBAEAAAABEAAAABCAABA=</HashCode>
+      <FileName>Geometry\TopoFace.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="PTL.Geometry.Triangle" Collapsed="true">
+    <Position X="20" Y="6" Width="1.5" />
+    <InheritanceLine Type="PTL.Geometry.SurfaceEntity" FixedToPoint="true">
+      <Path>
+        <Point X="19.5" Y="3.927" />
+        <Point X="19.5" Y="6.312" />
+        <Point X="20" Y="6.312" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>ACAAAggACAAAEAAAAAAAAQQEBACAAAIAAAAAAACAABA=</HashCode>
+      <FileName>Geometry\Triangle.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PTL.Geometry.VectorD" Collapsed="true">
+    <Position X="13.5" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ACAAAQAAAgCAACAFaAWIAAQFAAgEAACAAAAgAABAZBE=</HashCode>
+      <FileName>Geometry\VectorD.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="PTL.Geometry.MathModel.CurveFunctionUniformer" Collapsed="true">
+    <Position X="20.5" Y="12.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Geometry\MathModel\CurveFunctionUniformer.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PTL.Geometry.MathModel.NUB_Curve" Collapsed="true">
+    <Position X="22.75" Y="14.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ABABAAAgAAAgAAAAhAACAAAAAAAAAAAAAAAAAgRgAJA=</HashCode>
+      <FileName>Geometry\MathModel\NUB_Curve.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PTL.Geometry.MathModel.NUB_Surface" Collapsed="true">
+    <Position X="22.75" Y="16.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAAAAgAACAEAAAAABAAAAEAAAABBAAAA=</HashCode>
+      <FileName>Geometry\MathModel\NUB_Surface.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PTL.Geometry.MathModel.NUB_Surface_base" Collapsed="true">
+    <Position X="22.75" Y="15.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEAAAAAgAKAAAAABgAACAAAAgAABAABAEAAAABBAABA=</HashCode>
+      <FileName>Geometry\MathModel\NUB_Surface_base.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="PTL.Geometry.MathModel.SurfaceDefinitions" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="22.75" Y="14" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAgAAAAAAACEAAAAAABAAAAIAAAABBAAAA=</HashCode>
+      <FileName>Geometry\MathModel\SurfaceDefinitions.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="PTL.Geometry.MathModel.SurfaceFunctionUniformer" Collapsed="true">
+    <Position X="20.5" Y="13.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAIAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Geometry\MathModel\SurfaceFunctionUniformer.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PTL.Geometry.MathModel.XYZ3" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="22.75" Y="12.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAACAGaAUAAAQAAAgEACAAAAAgAAAAZBE=</HashCode>
+      <FileName>Geometry\MathModel\XYZ3.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="PTL.Geometry.MathModel.XYZ4" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="22.75" Y="13.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAACAGaAUAAAQAAAgEACAAAAAgAAAAZBE=</HashCode>
+      <FileName>Geometry\MathModel\XYZ4.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="PTL.Mathematics.TreeSearch" Collapsed="true">
+    <Position X="20.5" Y="14" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CAEEIIAAAAAAAAAAAAAAAAAAABAAACQAAAAAAAAAAAA=</HashCode>
+      <FileName>Mathematics\TreeSearch.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PTL.Measurement.STLMeasuringTool" Collapsed="true">
+    <Position X="13.75" Y="14.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>FAAAAAAChAAAAAAAAAACACBIIAgAAAAIEgAAAAAAAAA=</HashCode>
+      <FileName>Measurement\STLMeasuringTool.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PTL.Measurement.STLMeasuringTool_MultiThread" Collapsed="true">
+    <Position X="13.75" Y="15.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BQAAAEABAQAQAAAAAAACEAAIAAAAEAAAAAAAAAEAAAA=</HashCode>
+      <FileName>Measurement\STLMeasuringTool_MultiThread.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="PTL.Measurement.STLMeasuringTool_P40" Collapsed="true">
+    <Position X="13.75" Y="17.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>lAAAAAAAgAAAAgCAAAACEAAAACgAgAgIEAAIAAIASAI=</HashCode>
+      <FileName>Measurement\STLMeasuringTool_P40.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PTL.Measurement.STLMeasuringTool_P40_SingleTooth" Collapsed="true">
+    <Position X="13.75" Y="16.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>FQEABAAAAAAQAAAAAAACAAAIABAAAABBAAAAAgAAQCA=</HashCode>
+      <FileName>Measurement\STLMeasuringTool_P40_SingleTooth.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="PTL.OpenGL.Plot.OpenGLView" Collapsed="true">
+    <Position X="16.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gARCwCABIoAJCAgGICgADOgtggAkQGxAg0CkAAEMAEw=</HashCode>
+      <FileName>OpenGL\Plot\02_View.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="PTL.OpenGL.Plot.PlotSub" Collapsed="true">
+    <Position X="18.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIABAAAAAACAAEAAAgICCgAEIACAAAAQiBAIAEJIAiI=</HashCode>
+      <FileName>OpenGL\Plot\03_PlotSub.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PTL.SolidWorks.Edit.PartEditMethods" Collapsed="true">
+    <Position X="18.25" Y="15.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAEIAAAAA=</HashCode>
+      <FileName>SolidWorks\Edit\StaticPartEditMethods.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PTL.SolidWorks.GearConstruction.GearCreator" Collapsed="true">
+    <Position X="18.25" Y="14" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAg=</HashCode>
+      <FileName>SolidWorks\GearConstruction\GearCreator.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PTL.SolidWorks.GearConstruction.GearData" Collapsed="true">
+    <Position X="18.25" Y="14.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAQAAAAEAAAAAAAAQgAARAIAAEQAAAAA=</HashCode>
+      <FileName>SolidWorks\GearConstruction\GearData.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PTL.SolidWorks.SLDCRVReader" Collapsed="true">
+    <Position X="18.25" Y="13.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAIAAAAAAAABAAAAAAAgAAAAA=</HashCode>
+      <FileName>SolidWorks\SLDCRVReader.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PTL.SolidWorks.SolidWorksAppAdapter" Collapsed="true">
+    <Position X="18.25" Y="12.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAgQAABAgAAAAgAAAAAAA0AAgAAAAAACAAEAA=</HashCode>
+      <FileName>SolidWorks\SolidWorksAppAdapter.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PTL.Windows.Controls.OpenGLWindow" Collapsed="true">
+    <Position X="16" Y="12.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AABgEAAAkABADKAAACAgAAAAEAJAQBAAAUgAAAEIARA=</HashCode>
+      <FileName>Windows\Controls\01_OpenGLWindow.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="PTL.Windows.Controls.OpenGLViewer" Collapsed="true">
+    <Position X="16" Y="13.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Windows\Controls\OpenGLViewer.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PTL.Windows.Controls.TopoErrorDiagramControl" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="16" Y="15.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BIwAEAALAABAiMAEAKABGgACgAcACCBQCAgCAACAgIA=</HashCode>
+      <FileName>Windows\Controls\TopoErrorDiagramControl.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="PTL.Windows.Dependency.DepedencyComand" Collapsed="true">
+    <Position X="16" Y="14.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAIAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAABAAAA=</HashCode>
+      <FileName>Windows\Dependency\DepedencyComand.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Interface Name="PTL.Base.Unit.IUnit" Collapsed="true">
+    <Position X="17" Y="20.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAEAAAAA=</HashCode>
+      <FileName>Base\Units\Unit.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="PTL.Data.ITag" Collapsed="true">
+    <Position X="25.75" Y="19.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Data\ITag.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="PTL.FileOperation.IDXFExporter" Collapsed="true">
+    <Position X="18.75" Y="18.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAgAAAAAAAAA=</HashCode>
+      <FileName>FileOperation\10_DXFExporter.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="PTL.FileOperation.IHaveWorkingDirectory" Collapsed="true">
+    <Position X="23.75" Y="20.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>FileOperation\IHaveWorkingDirectory.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="PTL.Geometry.ICanBeWritedToDXFFile" Collapsed="true">
+    <Position X="13.5" Y="18.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAA=</HashCode>
+      <FileName>Geometry\ICanBeWritedToDXFFile.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="PTL.Geometry.ICanPlotInOpenGL" Collapsed="true">
+    <Position X="15.25" Y="18.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Geometry\ICanPlotInOpenGL.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="PTL.Geometry.IDXF" Collapsed="true">
+    <Position X="17" Y="18.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Geometry\IDXF.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="PTL.Geometry.IHaveBoundary" Collapsed="true">
+    <Position X="20.5" Y="18.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Geometry\IHaveBoundary.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="PTL.Geometry.IHaveCoordinateSystem" Collapsed="true">
+    <Position X="22.25" Y="18.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Geometry\IHaveCoordinateSystem.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="PTL.Geometry.IHaveName" Collapsed="true">
+    <Position X="24" Y="18.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Geometry\IHaveName.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="PTL.Geometry.IHaveParent" Collapsed="true">
+    <Position X="25.75" Y="18.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Geometry\IHaveParent.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="PTL.Geometry.IHaveSurfaceDisplayOptions" Collapsed="true">
+    <Position X="22.25" Y="20.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA=</HashCode>
+      <FileName>Geometry\IHaveSurfaceDisplayOptions.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="PTL.Geometry.IHaveXYZ" Collapsed="true">
+    <Position X="13.5" Y="19.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAYAE=</HashCode>
+      <FileName>Geometry\IHaveXYZ.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="PTL.Geometry.ILineArchitecture" Collapsed="true">
+    <Position X="15.25" Y="19.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAIAAAAAAAAAAAAAEAAAAAgAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Geometry\ILineArchitecture.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="PTL.Geometry.IScriptFile" Collapsed="true">
+    <Position X="20.5" Y="19.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Geometry\IScriptFile.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="PTL.Geometry.ISurfaceEntity" Collapsed="true">
+    <Position X="24" Y="19.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAACAAAEAAAAAAAAAAABAQAAAEAAAAAAACAQAA=</HashCode>
+      <FileName>Geometry\ISurfaceEntity.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="PTL.Geometry.IToDXFDocument" Collapsed="true">
+    <Position X="25.75" Y="20.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAA=</HashCode>
+      <FileName>Geometry\IToDXFDocument.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="PTL.Geometry.IToDXFEntities" Collapsed="true">
+    <Position X="13.5" Y="21" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Geometry\IToDXFEntities.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="PTL.Geometry.IToDXFEntity" Collapsed="true">
+    <Position X="13.5" Y="20.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAA=</HashCode>
+      <FileName>Geometry\IToDXFEntity.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="PTL.Geometry.ITransformable" Collapsed="true">
+    <Position X="15.25" Y="20.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Geometry\ITransformable.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="PTL.Geometry.MathModel.IParametricSurface" Collapsed="true">
+    <Position X="18.75" Y="19.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAgAACAAAAAAABAAAAEAAAABBAAAA=</HashCode>
+      <FileName>Geometry\MathModel\IParametricSurface.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="PTL.Geometry.MathModel.IXYZ" Collapsed="true">
+    <Position X="20.5" Y="20.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAACACCAAAAAAAAAAAAAAAAAAgAAAAYAE=</HashCode>
+      <FileName>Geometry\MathModel\IXYZ.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="PTL.Measurement.ISTLMeasurement_NeedNormals" Collapsed="true">
+    <Position X="22.25" Y="19.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Measurement\ISTLMeasurement_NeedNormals.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="PTL.OpenGL.Plot.IView" Collapsed="true">
+    <Position X="18.75" Y="20.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAA=</HashCode>
+      <FileName>OpenGL\Plot\02_View.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="PTL.Windows.Controls.IOpenGLWindowMouseControl" Collapsed="true">
+    <Position X="17" Y="19.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAACAAAAAAAAAAAAAJAAAAAAEAAAAAAARA=</HashCode>
+      <FileName>Windows\Controls\01_OpenGLWindow.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Enum Name="PTL.Definitions.Axis" Collapsed="true">
+    <Position X="15.25" Y="21" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAYAE=</HashCode>
+      <FileName>Definitions\Axis.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="PTL.Definitions.Dimension" Collapsed="true">
+    <Position X="17" Y="21" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAACAAAAAA=</HashCode>
+      <FileName>Definitions\Dimension.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="PTL.Definitions.LineType" Collapsed="true">
+    <Position X="18.75" Y="21" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAACAAAAAAAAAAAAAAABAAAAAAIAAIAAAAAAAA=</HashCode>
+      <FileName>Definitions\LineType.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="PTL.Geometry.SurfaceDisplayOptions" Collapsed="true">
+    <Position X="20.5" Y="21" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAABAAEIAAABAAAAQIAAAAAAAA=</HashCode>
+      <FileName>Geometry\SurfaceDisplayOptions.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="PTL.Geometry.Visibility" Collapsed="true">
+    <Position X="22.25" Y="21" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAACAIAAIAAAAAAAA=</HashCode>
+      <FileName>Geometry\Visibility.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Microsoft JhengHei UI" Size="9" />
+</ClassDiagram>
