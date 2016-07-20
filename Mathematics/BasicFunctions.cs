@@ -7,64 +7,23 @@ using PTL.Geometry;
 using PTL.Definitions;
 using PTL.Geometry.MathModel;
 using PTL.Exceptions;
+using static System.Math;
 
 namespace PTL.Mathematics
 {
     public class BasicFunctions
     {
         #region 三角函數
-        public static double Cos(double trad)
-        {
-            double tvalue;
-            tvalue = System.Math.Cos(trad);
-            return tvalue;
-        }
-        public static double Sin(double trad)
-        {
-            double tvalue;
-            tvalue = System.Math.Sin(trad);
-            return tvalue;
-        }
-        public static double Tan(double trad)
-        {
-            double tvalue;
-            tvalue = System.Math.Tan(trad);
-            return tvalue;
-        }
         public static double Sec(double trad)
         {
             double tvalue;
             tvalue = 1 / System.Math.Cos(trad);
             return tvalue;
         }
-        public static double Acos(double tv)
-        {
-            double tvalue;
-            tvalue = System.Math.Acos(tv);
-            return tvalue;
-        }
-        public static double Atan2(double y, double x)
-        {
-            double tvalue;
-            tvalue = System.Math.Atan2(y, x);
-            return tvalue;
-        }
-        public static double Atan(double tv)
-        {
-            double tvalue;
-            tvalue = System.Math.Atan(tv);
-            return tvalue;
-        }
-        public static double Asin(double tv)
-        {
-            double tvalue;
-            tvalue = System.Math.Asin(tv);
-            return tvalue;
-        }
         public static double Asec(double tv)
         {
             double tvalue;
-            tvalue = System.Math.Acos(1.0 / tv);
+            tvalue = System.Math.Acos(1 / tv);
             return tvalue;
         }
         public static double Csc(double trad)
@@ -1158,6 +1117,36 @@ namespace PTL.Mathematics
         #endregion
 
         #region 其他
+        public static double Min(params double[] paras)
+        {
+            if (paras == null || paras.Length == 0)
+                throw new ArgumentNullException();
+
+            double min = double.PositiveInfinity;
+            foreach (var item in paras)
+            {
+                if (item < min)
+                {
+                    min = item;
+                }
+            }
+            return min;
+        }
+        public static double Max(params double[] paras)
+        {
+            if (paras == null || paras.Length == 0)
+                throw new ArgumentNullException();
+
+            double max = double.NegativeInfinity;
+            foreach (var item in paras)
+            {
+                if (max < item)
+                {
+                    max = item;
+                }
+            }
+            return max;
+        }
         public static double Sphive(double tphi, double tgammab)
         {
             double tsphive;
@@ -1170,10 +1159,6 @@ namespace PTL.Mathematics
             return (System.Math.Tan(alpha) - alpha);
 
         }
-        public static double Pow(double tx, double td)
-        {
-            return System.Math.Pow(tx, td);
-        }
         public static double Floor(double x, double a = 1)
         {
             double xx = x / a;
@@ -1185,18 +1170,6 @@ namespace PTL.Mathematics
             double xx = x / a;
             double xx1 = System.Math.Ceiling(xx);
             return xx1 * a;
-        }
-        public static double Sqrt(double ta)
-        {
-            return System.Math.Sqrt(ta);
-        }
-        public static double PI
-        {
-            get { return System.Math.PI; }
-        }
-        public static double Abs(double ta)
-        {
-            return System.Math.Abs(ta);
         }
         public static double Round(double ta, double tb)
         {
@@ -1219,10 +1192,6 @@ namespace PTL.Mathematics
             else if (point2Check.Y < Boundary[0].Y) { Boundary[0].Y = point2Check.Y; }
             if (point2Check.Z > Boundary[1].Z) { Boundary[1].Z = point2Check.Z; }
             else if (point2Check.Z < Boundary[0].Z) { Boundary[0].Z = point2Check.Z; }
-        }
-        public static int Sign(double values)
-        {
-            return System.Math.Sign(values);
         }
         public static IEnumerable<int> EachSign(IEnumerable<double> values)
         {

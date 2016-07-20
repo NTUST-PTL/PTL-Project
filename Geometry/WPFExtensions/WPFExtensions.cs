@@ -8,6 +8,7 @@ using System.Windows.Media.Media3D;
 using PTL.Mathematics;
 using PTL.Geometry;
 using PTL.Geometry.MathModel;
+using static System.Math;
 using PTL.Windows.Media.Media3D;
 
 namespace PTL.Geometry.WPFExtensions
@@ -42,13 +43,13 @@ namespace PTL.Geometry.WPFExtensions
             toprface.Normals = new XYZ3[segment1, segment2];
             for (int i = 0; i < segment1; i++)
             {
-                double theta1 = i * 0.5 * Mathematics.BasicFunctions.PI / (segment1 - 1);
-                double vr = radius * Mathematics.BasicFunctions.Cos(theta1);
-                double h = radius * Mathematics.BasicFunctions.Sin(theta1);
+                double theta1 = i * 0.5 * PI / (segment1 - 1);
+                double vr = radius * Cos(theta1);
+                double h = radius * Sin(theta1);
                 for (int j = 0; j < segment2; j++)
                 {
-                    double theta2 = j * 2.0 * Mathematics.BasicFunctions.PI / (segment2 - 1);
-                    XYZ3 rr = vr * n1 * Mathematics.BasicFunctions.Cos(theta2) + vr * n2 * Mathematics.BasicFunctions.Sin(theta2) + h * v;
+                    double theta2 = j * 2.0 * PI / (segment2 - 1);
+                    XYZ3 rr = vr * n1 * Cos(theta2) + vr * n2 * Sin(theta2) + h * v;
                     XYZ4 p = center + rr;
                     toprface.Points[i, j] = p;
                     toprface.Normals[i, j] = rr;

@@ -10,7 +10,11 @@ using PTL.Geometry.MathModel;
 
 namespace PTL.Mathematics
 {
-    public class MatrixFunctions
+    /// <summary>
+    /// 提供使用指標存取記憶體之矩陣運算函式
+    /// 具備較佳運算效能
+    /// </summary>
+    public class UnsafeMatrixFunctions
     {
         public static double[] Normalize(double[] r)
         {

@@ -122,7 +122,7 @@
     <Compile Include="Geometry\MathModel\SurfaceFunctionUniformer.cs" />
     <Compile Include="Geometry\PolyFan.cs" />
     <Compile Include="Geometry\VectorD.cs" />
-    <Compile Include="Mathematics\MatrixFunctions.cs" />
+    <Compile Include="Mathematics\UnsafeMatrixFunctions.cs" />
     <Compile Include="Mathematics\TreeSearch.cs" />
     <Compile Include="Mathematics\Vector.cs" />
     <Compile Include="OpenGL\Plot\ViewPlotingExtentions\ViewPlotingExtentions.cs" />
@@ -312,7 +312,6 @@
     </None>
     <AppDesigner Include="Properties\" />
     <None Include="Snippets\notifypc.snippet" />
-    <None Include="Snippets\propps.snippet" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\mathnet-PTL\src\Numerics\Numerics.csproj">

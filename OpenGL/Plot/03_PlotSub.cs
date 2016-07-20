@@ -6,6 +6,7 @@ using PTL.Definitions;
 using PTL.Windows.Controls;
 using PTL.Geometry;
 using PTL.Geometry.MathModel;
+using static System.Math;
 using static PTL.Mathematics.BasicFunctions;
 
 namespace PTL.OpenGL.Plot

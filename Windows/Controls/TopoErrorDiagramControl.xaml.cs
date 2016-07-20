@@ -14,6 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.ComponentModel;
 using PTL.Geometry.MathModel;
+using static System.Math;
 using static PTL.Mathematics.BasicFunctions;
 
 namespace PTL.Windows.Controls

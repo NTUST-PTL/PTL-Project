@@ -10,6 +10,7 @@ using PTL.SolidWorks;
 using PTL.SolidWorks.Edit;
 using SolidWorks.Interop.sldworks;
 using SolidWorks.Interop.swconst;
+using static System.Math;
 using static PTL.Mathematics.BasicFunctions;
 
 namespace PTL.SolidWorks.GearConstruction
