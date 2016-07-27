@@ -150,7 +150,7 @@ namespace PTL.FileOperation
 
         public static STL ReadSTL_Binary(String fileName, Predicate<Triangle> TriangleFilter = null)
         {
-            BinaryReader reader = new BinaryReader(File.Open(fileName, FileMode.Open), Encoding.ASCII);
+            BinaryReader reader = new BinaryReader(File.OpenRead(fileName), Encoding.ASCII);
             STL aSTL = new STL() { Color = System.Drawing.Color.Gray };
             
             try

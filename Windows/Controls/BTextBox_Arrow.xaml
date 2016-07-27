@@ -3,17 +3,22 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:PTL.Windows.Controls"
              mc:Ignorable="d" 
              d:DesignHeight="40" d:DesignWidth="100" x:Name="control">
-    <StackPanel>
-        <TextBox x:Name="_TextBox" x:FieldModifier="public" HorizontalContentAlignment="Center" Text="{Binding ElementName=control, Path=Text, ValidatesOnExceptions=True}" KeyDown="_TextBox_KeyDown"/>
-        <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="1*"/>
-            <ColumnDefinition Width="1*"/>
-        </Grid.ColumnDefinitions>
-        <RepeatButton x:Name="Increase_Button" x:FieldModifier="public" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Stretch" Content="&lt;" Click="Button_minus_Click"></RepeatButton>
-        <RepeatButton x:Name="Decrease_Button" x:FieldModifier="public" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Stretch" Content="&gt;" Click="Button_add_Click"></RepeatButton>
-        </Grid>
-    </StackPanel>
+    <UserControl.Template>
+        <ControlTemplate >
+            <StackPanel>
+                <TextBox HorizontalContentAlignment="Center" Text="{Binding Text, RelativeSource={RelativeSource TemplatedParent}}" KeyDown="_TextBox_KeyDown"/>
+                <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="1*"/>
+                    </Grid.ColumnDefinitions>
+                    <RepeatButton Grid.Row="1" Grid.Column="0" HorizontalAlignment="Stretch" Content="&lt;" Click="Button_minus_Click"></RepeatButton>
+                    <RepeatButton Grid.Row="1" Grid.Column="1" HorizontalAlignment="Stretch" Content="&gt;" Click="Button_add_Click"></RepeatButton>
+                </Grid>
+            </StackPanel>
+        </ControlTemplate>
+    </UserControl.Template>
 </UserControl>

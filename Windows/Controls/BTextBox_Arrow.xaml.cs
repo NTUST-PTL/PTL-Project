@@ -114,25 +114,25 @@ namespace PTL.Windows.Controls
 
         private void Button_minus_Click(object sender, RoutedEventArgs e)
         {
-            if (String.IsNullOrEmpty(System.Text.RegularExpressions.Regex.Replace(this._TextBox.Text, "[^0-9.]", "")))
+            if (String.IsNullOrEmpty(System.Text.RegularExpressions.Regex.Replace(this.Text, "[^0-9.]", "")))
                 return;
 
-            this._TextBox.Text = (
-                Convert.ToDouble(System.Text.RegularExpressions.Regex.Replace(this._TextBox.Text, "[^-0-9.]", ""))
+            this.Text = (
+                Convert.ToDouble(System.Text.RegularExpressions.Regex.Replace(this.Text, "[^-0-9.]", ""))
                 - Gradiation).ToString();
-            this._TextBox.GetBindingExpression(TextBox.TextProperty)?.UpdateSource();
+            this.GetBindingExpression(TextBox.TextProperty)?.UpdateSource();
             Command?.Execute(null);
         }
 
         private void Button_add_Click(object sender, RoutedEventArgs e)
         {
-            if (String.IsNullOrEmpty(System.Text.RegularExpressions.Regex.Replace(this._TextBox.Text, "[^0-9.]", "")))
+            if (String.IsNullOrEmpty(System.Text.RegularExpressions.Regex.Replace(this.Text, "[^0-9.]", "")))
                 return;
 
-            this._TextBox.Text = (
-                Convert.ToDouble(System.Text.RegularExpressions.Regex.Replace(this._TextBox.Text, "[^-0-9.]", ""))
+            this.Text = (
+                Convert.ToDouble(System.Text.RegularExpressions.Regex.Replace(this.Text, "[^-0-9.]", ""))
                 + Gradiation).ToString();
-            this._TextBox.GetBindingExpression(TextBox.TextProperty)?.UpdateSource();
+            this.GetBindingExpression(TextBox.TextProperty)?.UpdateSource();
             Command?.Execute(null);
         }
 
