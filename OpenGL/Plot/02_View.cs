@@ -45,11 +45,13 @@ namespace PTL.OpenGL.Plot
             set {
                 if (_Things2Show != value)
                 {
-                    _Things2Show.CollectionChanged -= Things2ShowCollectionChanged;
+                    if (_Things2Show != null)
+                        _Things2Show.CollectionChanged -= Things2ShowCollectionChanged;
                     _Things2Show = value;
                     _Boundary_Changed_NeedCheck = true;
                     Update();
-                    _Things2Show.CollectionChanged += Things2ShowCollectionChanged;
+                    if (_Things2Show != null)
+                        _Things2Show.CollectionChanged += Things2ShowCollectionChanged;
                     NotifyChanged(nameof(Things2Show));
                 }
             }
@@ -229,6 +231,8 @@ namespace PTL.OpenGL.Plot
 
         private void CheckBoundary()
         {
+            if (Things2Show == null)
+                return;
             this.geometryBoundary = new XYZ4[2];
             foreach (var item in Things2Show)
             {
@@ -504,7 +508,7 @@ namespace PTL.OpenGL.Plot
 
             //GL.glDisable(GL.GL_LINE_SMOOTH);
             //畫DXFD
-            if (Things2Show.Count != 0)
+            if (Things2Show != null)
                 foreach (var item in Things2Show)
                 {
                     item.PlotInOpenGL();

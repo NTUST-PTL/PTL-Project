@@ -97,11 +97,13 @@
   <ItemGroup>
     <Compile Include="Base\Source %282%29.cs" />
     <Compile Include="Data\Binding.cs" />
+    <Compile Include="Data\Conveters\StringDoubleConverter.cs" />
     <Compile Include="Data\Conveters\BooleanToVisibilityConverter.cs" />
     <Compile Include="Data\Conveters\BooleanConverter.cs" />
     <Compile Include="Data\Conveters\EnumBooleanConverter.cs" />
     <Compile Include="Data\Conveters\ConverterValidationRule.cs" />
     <Compile Include="Data\Conveters\IntArray1DToStringConverter.cs" />
+    <Compile Include="Data\Conveters\MultiNumberConverter.cs" />
     <Compile Include="Data\Conveters\RadToDegreeStringConverter.cs" />
     <Compile Include="Data\Conveters\RadToHelixDegreeStringConverter.cs" />
     <Compile Include="Data\Conveters\RadToDegConverter.cs" />
