@@ -47,6 +47,8 @@ namespace PTL.Data
         {
             if (target != null
                 && source != null
+                && !String.IsNullOrWhiteSpace(targetPropertyName)
+                && !String.IsNullOrWhiteSpace(sourcePropertyName)
                 && target.GetType().GetProperty(targetPropertyName) != null
                 && source.GetType().GetProperty(sourcePropertyName) != null)
             {

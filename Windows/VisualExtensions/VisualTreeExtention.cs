@@ -13,6 +13,12 @@ namespace PTL.Windows.VisualExtensions
 {
     public static class VisualTreeExtention
     {
+        /// <summary>
+        /// Find Visual Children by VisualTreeHelper.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="depObj"></param>
+        /// <returns></returns>
         public static IEnumerable<T> FindVisualChildren<T>(this DependencyObject depObj) where T : DependencyObject
         {
             if (depObj != null)
@@ -48,6 +54,14 @@ namespace PTL.Windows.VisualExtensions
             }
         }
 
+        /// <summary>
+        /// Find Visual Children by reflection.
+        /// Searching path includes Children, ,Child, Content, and Items
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="depObj"></param>
+        /// <param name="ReachTerminate"></param>
+        /// <returns></returns>
         public static List<T> FindVisualChildren2<T>(this object depObj, Predicate<object> ReachTerminate = null) where T : DependencyObject
         {
             List<T> targetFounded = new List<T>();
@@ -102,6 +116,30 @@ namespace PTL.Windows.VisualExtensions
                     return targetFounded;
                 }
 
+                {
+                    var child = depObj.GetValueByPath("Child");
+                    if (child != null)
+                    {
+                        if (child is T)
+                            targetFounded.Add((T)child);
+                        if (ReachTerminate != null)
+                        {
+                            if (!ReachTerminate(child))
+                            {
+                                var result = FindVisualChildren2<T>(child, ReachTerminate);
+                                if (result.Count != 0)
+                                    targetFounded.AddRange(result);
+                            }
+                        }
+                        else
+                        {
+                            var result = FindVisualChildren2<T>(child);
+                            if (result.Count != 0)
+                                targetFounded.AddRange(result);
+                        }
+                        return targetFounded;
+                    }
+                }
 
                 IEnumerable Items = (IEnumerable)depObj.GetValueByPath("Items");
                 if (Items != null)

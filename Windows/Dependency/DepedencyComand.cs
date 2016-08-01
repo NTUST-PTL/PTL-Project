@@ -26,5 +26,23 @@ namespace PTL.Windows.Dependency
         {
             return obj.GetValue(CommandProperty) as ICommand;
         }
+
+
+        public static DependencyProperty CommandParameterProperty =
+            DependencyProperty.RegisterAttached(
+                "CommandParameter"
+                , typeof(object)
+                , typeof(DepedencyComand)
+                );
+
+        public static void SetCommandParameter(DependencyObject obj, object value)
+        {
+            obj.SetValue(CommandParameterProperty, value);
+        }
+
+        public static object GetCommandParameter(DependencyObject obj)
+        {
+            return obj.GetValue(CommandParameterProperty);
+        }
     }
 }
