@@ -241,6 +241,9 @@
     <Compile Include="Windows\Controls\LStackPanel.xaml.cs">
       <DependentUpon>LStackPanel.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Windows\Controls\OpenGLHost.xaml.cs">
+      <DependentUpon>OpenGLHost.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\Controls\OpenGLViewer.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -279,6 +282,10 @@
     <Page Include="Windows\Controls\LStackPanel.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Windows\Controls\OpenGLHost.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\Controls\TopoErrorDiagramControl.xaml">
       <SubType>Designer</SubType>

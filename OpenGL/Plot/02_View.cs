@@ -20,6 +20,7 @@ using PTL.Base;
 using PTL.Data;
 using static System.Math;
 using static PTL.Mathematics.BasicFunctions;
+using static PTL.OpenGL.Plot.PlotSub;
 
 namespace PTL.OpenGL.Plot
 {
@@ -34,7 +35,7 @@ namespace PTL.OpenGL.Plot
     /// 將指定的ICanPlotInOpenGL類別(屬性名稱Things2Show)轉換至OpenGL繪圖方法
     /// 可自動計算內容範圍，並在視野範圍內顯示格線及刻度
     /// </summary>
-    public class OpenGLView :OpenGL.Plot.PlotSub, IView, INotifyPropertyChanged
+    public class OpenGLView : IView, INotifyPropertyChanged
     {
         #region 欄位、屬性
         protected OpenGLWindow openGLWindow;

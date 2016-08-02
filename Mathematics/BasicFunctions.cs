@@ -362,7 +362,7 @@ namespace PTL.Mathematics
 
                 if (c1 != r2)
                     throw new ArrayDimensionMismatchException(
-                        String.Format("Array1 Dimension is : {{0},{1}} ; Array2 Length is : {2}", c1, r2, r2));
+                        String.Format("Array1 Dimension is : {{{0},{1}}} ; Array2 Length is : {2}", c1, c1, r2));
 
                 double[] outptr = new double[r1];
 
