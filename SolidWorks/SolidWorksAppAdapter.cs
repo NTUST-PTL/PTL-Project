@@ -50,7 +50,6 @@ namespace PTL.SolidWorks
             }
 
             throw new TypeAccessException("找不到已安裝的SolidWorks!");
-            return null;
         }
         protected virtual IEnumerable<KeyValuePair<String, String>> FindSolidWorksPath()
         {

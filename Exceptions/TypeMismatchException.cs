@@ -9,7 +9,7 @@ namespace PTL.Exceptions
 {
     public class TypeMismatchException : Exception
     {
-        String Message;
+        public new String Message { get; set; }
 
         public TypeMismatchException()
         {

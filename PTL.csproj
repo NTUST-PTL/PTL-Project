@@ -122,6 +122,7 @@
     <Compile Include="Geometry\MathModel\NUB_Surface_base.cs" />
     <Compile Include="Geometry\MathModel\SurfaceDefinitions.cs" />
     <Compile Include="Geometry\MathModel\SurfaceFunctionUniformer.cs" />
+    <Compile Include="Geometry\Operations.cs" />
     <Compile Include="Geometry\PolyFan.cs" />
     <Compile Include="Geometry\VectorD.cs" />
     <Compile Include="Mathematics\UnsafeMatrixFunctions.cs" />

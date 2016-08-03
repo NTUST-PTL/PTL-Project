@@ -9,7 +9,7 @@ namespace PTL.Exceptions
 {
     public class ArraySizeMismatchException : Exception
     {
-        String Message;
+        public new String Message { get; set; }
 
         public ArraySizeMismatchException()
         {
