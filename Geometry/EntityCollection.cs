@@ -111,6 +111,8 @@ namespace PTL.Geometry
                 foreach (Entity aEntity in entities)
                 {
                     XYZ4[] eboundary = aEntity.GetBoundary(M);
+                    if (eboundary == null)
+                        continue;
                     Compare_Boundary(boundary, eboundary[0]);
                     Compare_Boundary(boundary, eboundary[1]);
                 }

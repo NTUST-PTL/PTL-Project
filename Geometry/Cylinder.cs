@@ -66,7 +66,7 @@ namespace PTL.Geometry
 
         public override XYZ4[] GetBoundary(double[,] externalCoordinateMatrix)
         {
-            return this.face.GetBoundary(Dot(externalCoordinateMatrix, CoordinateSystem));
+            return this.face?.GetBoundary(Dot(externalCoordinateMatrix, CoordinateSystem));
         }
 
         public void RenderGeometry()
@@ -100,6 +100,8 @@ namespace PTL.Geometry
 
         public override void PlotInOpenGL()
         {
+            if (this.face == null)
+                return;
             this.face.Color = this.Color;
             switch (SurfaceDisplayOption)
             {

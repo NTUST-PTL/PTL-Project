@@ -1186,6 +1186,8 @@ namespace PTL.Mathematics
         }
         public static void Compare_Boundary(XYZ4[] Boundary, XYZ4 point2Check)
         {
+            if (point2Check == null || point2Check.Values == null)
+                return;
             if (point2Check.X > Boundary[1].X) { Boundary[1].X = point2Check.X; }
             else if (point2Check.X < Boundary[0].X) { Boundary[0].X = point2Check.X; }
             if (point2Check.Y > Boundary[1].Y) { Boundary[1].Y = point2Check.Y; }
