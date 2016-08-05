@@ -6,12 +6,20 @@ using System.Threading.Tasks;
 using PTL.Geometry.MathModel;
 using static System.Math;
 using static PTL.Mathematics.BasicFunctions;
+using static PTL.Geometry.Operations.PrivateMethods;
 
 namespace PTL.Geometry
 {
     public class Operations
     {
-        public static TopoFace SealToRadius(XYZ4[] points, double r, int interpolate = 0, Action<TopoFace> TopoFaceSetter = null)
+        public static TopoFace SealToRadius(
+            XYZ4[] points, 
+            double r, 
+            PTL.Definitions.Axis axis = Definitions.Axis.Z,
+            int interpolate = 0,
+            bool specify_Z_Value = false,
+            double axisPosition = 0,
+            Action<TopoFace> TopoFaceSetter = null)
         {
             int n = points.Length + (points.Length - 1) * interpolate;
             TopoFace sealSurface = new TopoFace(n, 2);
@@ -46,11 +54,12 @@ namespace PTL.Geometry
 
             for (int i = 0; i < n; i++)
             {
-                double ri = GetFirstNNorm(interpolatedPoints[i], 2);
-                double ratio = r / ri;
                 XYZ4 p = interpolatedPoints[i];
                 sealSurface.Points[i, 0] = p;
-                sealSurface.Points[i, 1] = new XYZ4(p.X * ratio, p.Y * ratio, p.Z);
+                if (specify_Z_Value)
+                    sealSurface.Points[i, 1] = SetPosition(p, r, axisPosition, axis);
+                else
+                    sealSurface.Points[i, 1] = SetPosition(p, r, GetAxisPosition(p, axis), axis);
             }
 
             sealSurface.SolveNormalVector();
@@ -58,9 +67,16 @@ namespace PTL.Geometry
             return sealSurface;
         }
 
-        public static TopoFace SealToRadius(TopoFace face, double r, TopoFaceEdges edge, int interpolate = 0, Action<TopoFace> TopoFaceSetter = null)
+        public static TopoFace SealToRadius(
+            TopoFace face, double r,
+            TopoFaceEdges edge,
+            PTL.Definitions.Axis axis = Definitions.Axis.Z,
+            int interpolate = 0,
+            bool specify_Z_Value = false,
+            double axisPosition = 0,
+            Action<TopoFace> TopoFaceSetter = null)
         {
-            return SealToRadius(GetEdgePoints(face.Points, edge), r, interpolate, TopoFaceSetter);
+            return SealToRadius(GetEdgePoints(face.Points, edge), r, axis, interpolate, specify_Z_Value, axisPosition, TopoFaceSetter);
         }
 
         public static TopoFace SealTwoFace(TopoFace face1, TopoFaceEdges face1Edge, TopoFace face2, TopoFaceEdges face2Edge, bool IsTagent2Face1 = false, bool IsTagent2Face2 = false)
@@ -107,7 +123,29 @@ namespace PTL.Geometry
             return tf;
         }
 
-        static T[] GetEdgePoints<T>(T[,] array, TopoFaceEdges edge)
+        public static List<XYZ4> MergeAndSeqauence(XYZ4[][] Edges, double tolerance = 1e-5)
+        {
+            List<XYZ4[]> edges = Edges.ToList();
+            List<XYZ4> merged = new List<XYZ4>();
+            merged.AddRange(edges[0]);
+            edges.Remove(edges[0]);
+            for (int i = 1; i < edges.Count; i++)
+            {
+                for
+            }
+            return merged;
+        }
+
+        public static List<XYZ4> MergeAndSeqauence(List<XYZ4> merged, List<XYZ4[]> edges, double tolerance = 1e-5)
+        {
+            for (int i = 1; i < edges.Count; i++)
+            {
+                for
+            }
+            return merged;
+        }
+
+        public static T[] GetEdgePoints<T>(T[,] array, TopoFaceEdges edge)
         {
             int n = GetEdgePointsLength(array, edge);
             int nRow = array.GetLength(0);
@@ -150,7 +188,7 @@ namespace PTL.Geometry
             return points;
         }
 
-        static int GetEdgePointsLength<T>(T[,] array, TopoFaceEdges edge)
+        public static int GetEdgePointsLength<T>(T[,] array, TopoFaceEdges edge)
         {
             int n;
             switch (edge)
@@ -181,6 +219,98 @@ namespace PTL.Geometry
             U1,
             V0,
             V1
+        }
+
+        public class PrivateMethods
+        {
+            public static double GetRadius(double[] p, PTL.Definitions.Axis axis)
+            {
+                double r;
+                switch (axis)
+                {
+                    case Definitions.Axis.X:
+                        r = Sqrt(p[1] * p[1] + p[2] * p[2]);
+                        break;
+                    case Definitions.Axis.Y:
+                        r = Sqrt(p[0] * p[0] + p[2] * p[2]);
+                        break;
+                    case Definitions.Axis.Z:
+                        r = Sqrt(p[0] * p[0] + p[1] * p[1]);
+                        break;
+                    default:
+                        r = Sqrt(p[0] * p[0] + p[1] * p[1]);
+                        break;
+                }
+                return r;
+            }
+
+            public static double GetAxisPosition(double[] p, PTL.Definitions.Axis axis)
+            {
+                return p[(int)axis];
+            }
+
+            public static XYZ4 SetPosition(double[] p, double r, double axisPosition, PTL.Definitions.Axis axis)
+            {
+                double ri = GetRadius(p, axis);
+                double ratio = r / ri;
+                double[] newP;
+                switch (axis)
+                {
+                    case Definitions.Axis.X:
+                        newP = new double[] { axisPosition, p[1] * ratio, p[2] * ratio };
+                        break;
+                    case Definitions.Axis.Y:
+                        newP = new double[] { p[0] * ratio, axisPosition, p[2] * ratio };
+                        break;
+                    case Definitions.Axis.Z:
+                        newP = new double[] { p[0] * ratio, p[1] * ratio, axisPosition };
+                        break;
+                    default:
+                        newP = new double[] { p[0] * ratio, p[1] * ratio, axisPosition };
+                        break;
+                }
+                return newP;
+            }
+
+            public static CheckOrientationResult CheckMergeable(List<XYZ4> arr1, List<XYZ4> arr2, double Tolerance = 1e-5)
+            {
+                XYZ4 p11 = arr1.First();
+                XYZ4 p12 = arr1.Last();
+                XYZ4 p21 = arr2.First();
+                XYZ4 p22 = arr2.Last();
+                double[,] dist = new double[,]
+                {
+                    { Norm(p11 - p21), Norm(p11 - p22) },
+                    { Norm(p12 - p21), Norm(p12 - p22) },
+                };
+                int index1 = 0;
+                int index2 = 0;
+                double min = dist[0, 0];
+                for (int i = 0; i < 2; i++)
+                {
+                    for (int j = 0; j < 2; j++)
+                    {
+                        if (dist[i, j] < min)
+                        {
+                            min = dist[i, j];
+                            index1 = i;
+                            index2 = j;
+                        }
+                    }
+                }
+
+                return new CheckOrientationResult() {
+                    IsMergeable = min < Tolerance,
+                    IsArr1NeedToBeReversed = index1 == 0,
+                    IsArr2NeedToBeReversed = index2 == 1 };
+            }
+
+            public class CheckOrientationResult
+            {
+                public bool IsMergeable { get; set; }
+                public bool IsArr1NeedToBeReversed { get; set; }
+                public bool IsArr2NeedToBeReversed { get; set; }
+            }
         }
     }
 }
