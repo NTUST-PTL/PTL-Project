@@ -76,7 +76,6 @@ namespace PTL.OpenGL.Plot
         protected double xScale;
         protected double yScale;
         protected double zScale;
-        protected System.Timers.Timer _UpdateTimer;
         protected bool _Boundary_Changed_NeedCheck;
         #endregion 欄位
 
@@ -373,9 +372,41 @@ namespace PTL.OpenGL.Plot
         /// </summary>
         public Boolean AutoScale { get; set; }
         /// <summary>
-        /// 畫面刷新的最短時間間隔，以毫秒為單位，預設為100毫秒
+        /// 動畫計時器
         /// </summary>
-        public uint LeastRefreshTimeStep { get; set; }
+        public System.Timers.Timer AnimateTimer { get; private set; }
+        /// <summary>
+        /// 使否啟用動畫
+        /// </summary>
+        private bool _IsAnimate;
+        public bool IsAnimate
+        {
+            get { return _IsAnimate; }
+            set {
+                if (_IsAnimate != value)
+                    _IsAnimate = value;
+                if (_IsAnimate)
+                {
+                    AnimateTimer?.Start();
+                }
+                else
+                {
+                    AnimateTimer?.Stop();
+                }
+            }
+        }
+        /// <summary>
+        /// 刷新的時間間隔，以毫秒為單位，預設為33毫秒
+        /// </summary>
+        public double FrameInterval {
+            get { return AnimateTimer.Interval; }
+            set {
+                if (AnimateTimer.Interval != value)
+                {
+                    AnimateTimer.Interval = value;
+                }
+            }
+        }
 
 
 
@@ -398,14 +429,14 @@ namespace PTL.OpenGL.Plot
 
 
         //顏色屬性
-        public Color BackGroundColor { get; set; }
+        public Color BackgroundColor { get; set; }
         public Color GridColor1 { get; set; }
         public Color GridColor2 { get; set; }
         public Color GraduationColor { get; set; }
 
         //渲染開關
-        public bool LightOn { get; set; }
-        public bool SmoothingOn { get; set; }
+        public bool IsLightOn { get; set; }
+        public bool IsSmoothOn { get; set; }
 
 
 
@@ -420,12 +451,12 @@ namespace PTL.OpenGL.Plot
 
             this.geometryBoundary = new XYZ4[2];
             this.viewBoundary = new XYZ4[2];
-            this.BackGroundColor = Color.FromArgb(50, 50, 50);
+            this.BackgroundColor = Color.FromArgb(50, 50, 50);
 
             this.BoundaryGap = 0.2;
 
-            this.LightOn = true;
-            this.SmoothingOn = true;
+            this.IsLightOn = true;
+            this.IsSmoothOn = true;
             this.PlotGrid = true;
             this.GridColor1 = Color.FromArgb(160, 160, 160);
             this.GridColor2 = Color.FromArgb(70, 70, 70);
@@ -448,28 +479,27 @@ namespace PTL.OpenGL.Plot
             this.AutoRefresh = true;
 
             this.openGLWindow.Paint += Paint;
-            this._UpdateTimer = new System.Timers.Timer();
-            this._UpdateTimer.Interval = 1000;
-            this._UpdateTimer.Elapsed += (o, e) => 
+            this.AnimateTimer = new System.Timers.Timer();
+            this.AnimateTimer.Elapsed += (o, e) => 
             {
                 Update();
-                Console.WriteLine("upfate");
-                this._UpdateTimer.Stop();
             };
+            this.IsAnimate = false;
+            this.FrameInterval = 33;
         }
 
         public virtual void Paint(object sender, System.Windows.Forms.PaintEventArgs e)
         {
             //背景
             GL.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);// Clear Screen And Depth Buffer
-            GL.glClearColor(Convert.ToSingle(this.BackGroundColor.R / 255.0),//R G B alpha
-                            Convert.ToSingle(this.BackGroundColor.G / 255.0),
-                            Convert.ToSingle(this.BackGroundColor.B / 255.0),
-                            Convert.ToSingle(this.BackGroundColor.A / 255.0));
+            GL.glClearColor(Convert.ToSingle(this.BackgroundColor.R / 255.0),//R G B alpha
+                            Convert.ToSingle(this.BackgroundColor.G / 255.0),
+                            Convert.ToSingle(this.BackgroundColor.B / 255.0),
+                            Convert.ToSingle(this.BackgroundColor.A / 255.0));
             GL.glFlush();
             
             //打光與材質
-            if (LightOn)
+            if (IsLightOn)
                 PlotSub.Light();
             GL.glDisable(GL.GL_CULL_FACE);
             
@@ -496,7 +526,7 @@ namespace PTL.OpenGL.Plot
             Translated(centerPoint * -1);//平移原點DXF中心
             //開啟平滑模式
             //GL.glEnable(GL.GL_NORMALIZE);
-            if (SmoothingOn)
+            if (IsSmoothOn)
             {
                 GL.glEnable(GL.GL_POINT_SMOOTH);
                 GL.glEnable(GL.GL_BLEND);

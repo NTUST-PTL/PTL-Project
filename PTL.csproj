@@ -97,6 +97,7 @@
   <ItemGroup>
     <Compile Include="Base\Source %282%29.cs" />
     <Compile Include="Data\Binding.cs" />
+    <Compile Include="Data\Conveters\ColorConverter.cs" />
     <Compile Include="Data\Conveters\StringDoubleConverter.cs" />
     <Compile Include="Data\Conveters\BooleanToVisibilityConverter.cs" />
     <Compile Include="Data\Conveters\BooleanConverter.cs" />

@@ -123,24 +123,38 @@ namespace PTL.Geometry
             return tf;
         }
 
-        public static List<XYZ4> MergeAndSeqauence(XYZ4[][] Edges, double tolerance = 1e-5)
+        public static List<XYZ4> MergeAndSeqauence(List<XYZ4[]> Edges, double tolerance = 1e-5)
         {
-            List<XYZ4[]> edges = Edges.ToList();
+            List<List<XYZ4>> edges = Edges.Cast((XYZ4[] arr) => arr.ToList());
             List<XYZ4> merged = new List<XYZ4>();
             merged.AddRange(edges[0]);
             edges.Remove(edges[0]);
-            for (int i = 1; i < edges.Count; i++)
-            {
-                for
-            }
+            merged = MergeAndSeqauence(merged, edges, tolerance);
             return merged;
         }
 
-        public static List<XYZ4> MergeAndSeqauence(List<XYZ4> merged, List<XYZ4[]> edges, double tolerance = 1e-5)
+        public static List<XYZ4> MergeAndSeqauence(List<XYZ4> merged, List<List<XYZ4>> edges, double tolerance = 1e-5)
         {
-            for (int i = 1; i < edges.Count; i++)
+            for (int i = 0; i < edges.Count; i++)
             {
-                for
+                var re = CheckMergeable(merged, edges[i]);
+                if (re.IsMergeable)
+                {
+                    if (re.IsArr1NeedToBeReversed)
+                        merged.Reverse();
+                    if (re.IsArr2NeedToBeReversed)
+                        edges[i].Reverse();
+                    merged.AddRange(edges[i]);
+                    edges.RemoveAt(i);
+                    if (edges.Count != 0)
+                    {
+                        return MergeAndSeqauence(merged, edges, tolerance);
+                    }
+                }
+                else
+                {
+                    return merged;
+                }
             }
             return merged;
         }

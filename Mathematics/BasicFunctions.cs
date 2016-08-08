@@ -11,7 +11,7 @@ using static System.Math;
 
 namespace PTL.Mathematics
 {
-    public class BasicFunctions
+    public static class BasicFunctions
     {
         #region 三角函數
         public static double Sec(double trad)
@@ -604,7 +604,7 @@ namespace PTL.Mathematics
             }
             return newArray;
         }
-        public static System.Array ConvertArrayType<TypeIn, TypeOut>(System.Array array, Func<TypeIn, TypeOut> converter)
+        public static System.Array Cast<TypeIn, TypeOut>(System.Array array, Func<TypeIn, TypeOut> converter)
         {
             //定義Array每個維度的起始索引值(起始值可以不為0)
             int[] lowerBounds = new int[array.Rank];
@@ -637,6 +637,58 @@ namespace PTL.Mathematics
                 index++;
             }
             return newArray;
+        }
+        public static TypeOut[] Cast<TypeIn, TypeOut>(this TypeIn[] array, Func<TypeIn, TypeOut> converter)
+        {
+            TypeOut[] newArr = new TypeOut[array.Length];
+            for (int i = 0; i < array.Length; i++)
+            {
+                newArr[i] = converter(array[i]);
+            }
+            return newArr;
+        }
+        public static TypeOut[,] Cast<TypeIn, TypeOut>(this TypeIn[,] array, Func<TypeIn, TypeOut> converter)
+        {
+            int nRow = array.GetLength(0);
+            int nCol = array.GetLength(1);
+            TypeOut[,] newArr = new TypeOut[nRow, nCol];
+            for (int i = 0; i < nRow; i++)
+            {
+                for (int j = 0; j < nCol; j++)
+                {
+                    newArr[i, j] = converter(array[i, j]);
+                }
+            }
+            return newArr;
+        }
+        public static TypeOut[][,] Cast<TypeIn, TypeOut>(this TypeIn[][,] array, Func<TypeIn, TypeOut> converter)
+        {
+            int nN = array.GetLength(0);
+            TypeOut[][,] newArr = new TypeOut[nN][,];
+            for (int n = 0; n < nN; n++)
+            {
+                int nRow = array[n].GetLength(0);
+                int nCol = array[n].GetLength(1);
+                newArr[n] = new TypeOut[nRow, nCol];
+                for (int i = 0; i < nRow; i++)
+                {
+                    for (int j = 0; j < nCol; j++)
+                    {
+                        newArr[n][i, j] = converter(array[n][i, j]);
+                    }
+                }
+            }
+            
+            return newArr;
+        }
+        public static List<TypeOut> Cast<TypeIn, TypeOut>(this List<TypeIn> list, Func<TypeIn, TypeOut> converter)
+        {
+            List<TypeOut> newList = new List<TypeOut>();
+            foreach (var item in list)
+            {
+                newList.Add(converter(item));
+            }
+            return newList;
         }
         public static void Replace(System.Array Matrix, System.Array TargetMatrix, int[] startIndex)
         {
