@@ -168,5 +168,49 @@ namespace PTL.Windows.VisualExtensions
             }
             return targetFounded;
         }
+
+        /// <summary>
+        /// Find Visual Children by reflection.
+        /// Searching with provided paths.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="paths"></param>
+        /// <param name="depObj"></param>
+        /// <param name="ReachTerminate"></param>
+        /// <returns></returns>
+        public static IEnumerable<T> FindVisualChildren2<T>(this object obj, string[] paths)
+        {
+            if (obj != null)
+            {
+                Type objType = obj.GetType();
+                foreach (var path in paths)
+                {
+                    var property = objType.GetProperty(path);
+                    if (property == null)
+                        continue;
+
+                    var value = property.GetValue(obj);
+                    if (value is T)
+                        yield return (T)value;
+                    foreach (var item in FindVisualChildren2<T>(value, paths))
+                    {
+                        yield return item;
+                    }
+
+                    if (value.GetType().GetInterface(typeof(IEnumerable<>).FullName) != null)
+                    {
+                        foreach (var child in value as IEnumerable)
+                        {
+                            if (child is T)
+                                yield return (T)child;
+                            foreach (var item in FindVisualChildren2<T>(child, paths))
+                            {
+                                yield return item;
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 }

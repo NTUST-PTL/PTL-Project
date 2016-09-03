@@ -14,6 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using PTL.Geometry;
 using PTL.Data;
+using PTL.Definitions;
 
 namespace PTL.Windows.Controls
 {
@@ -67,8 +68,12 @@ namespace PTL.Windows.Controls
             get { return (int)GetValue(FrameIntervalProperty); }
             set { SetValue(FrameIntervalProperty, value); }
         }
+        public Dimension Dimension
+        {
+            get { return (Dimension)GetValue(DimensionProperty); }
+            set { SetValue(DimensionProperty, value); }
+        }
 
-        
         // Using a DependencyProperty as the backing store for GridLineColor1.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty GridColor1Property =
             DependencyProperty.Register("GridColor1", typeof(Color), typeof(OpenGLHost), new PropertyMetadata(Colors.LightGray, OnGridColor1ChangedCallback));
@@ -77,22 +82,26 @@ namespace PTL.Windows.Controls
             DependencyProperty.Register("GridColor2", typeof(Color), typeof(OpenGLHost), new PropertyMetadata(Colors.LightGray, OnGridColor2ChangedCallback));
         // Using a DependencyProperty as the backing store for AutoScale.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty AutoScaleProperty =
-            DependencyProperty.Register("AutoScale", typeof(bool), typeof(OpenGLHost), new PropertyMetadata(false, OnAdaptedPropertyChangedCallback));
+            DependencyProperty.Register("AutoScale", typeof(bool), typeof(OpenGLHost), new PropertyMetadata(false, OnAdaptedViewPropertyChangedCallback));
         // Using a DependencyProperty as the backing store for AutoRefresh.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty AutoRefreshProperty =
-            DependencyProperty.Register("AutoRefresh", typeof(bool), typeof(OpenGLHost), new PropertyMetadata(true, OnAdaptedPropertyChangedCallback));
+            DependencyProperty.Register("AutoRefresh", typeof(bool), typeof(OpenGLHost), new PropertyMetadata(true, OnAdaptedViewPropertyChangedCallback));
         // Using a DependencyProperty as the backing store for Smoothing.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty IsSmoothOnProperty =
-            DependencyProperty.Register("IsSmoothOn", typeof(bool), typeof(OpenGLHost), new PropertyMetadata(true, OnAdaptedPropertyChangedCallback));
+            DependencyProperty.Register("IsSmoothOn", typeof(bool), typeof(OpenGLHost), new PropertyMetadata(true, OnAdaptedViewPropertyChangedCallback));
         // Using a DependencyProperty as the backing store for IsLightOn.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty IsLightOnProperty =
-            DependencyProperty.Register("IsLightOn", typeof(bool), typeof(OpenGLHost), new PropertyMetadata(true, OnAdaptedPropertyChangedCallback));
+            DependencyProperty.Register("IsLightOn", typeof(bool), typeof(OpenGLHost), new PropertyMetadata(true, OnAdaptedViewPropertyChangedCallback));
         // Using a DependencyProperty as the backing store for IsAnimate.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty IsAnimateProperty =
-            DependencyProperty.Register("IsAnimate", typeof(bool), typeof(OpenGLHost), new PropertyMetadata(false, OnAdaptedPropertyChangedCallback));
+            DependencyProperty.Register("IsAnimate", typeof(bool), typeof(OpenGLHost), new PropertyMetadata(false, OnAdaptedViewPropertyChangedCallback));
         // Using a DependencyProperty as the backing store for FrameInterval.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty FrameIntervalProperty =
-            DependencyProperty.Register("FrameInterval", typeof(int), typeof(OpenGLHost), new PropertyMetadata(33, OnAdaptedPropertyChangedCallback));
+            DependencyProperty.Register("FrameInterval", typeof(int), typeof(OpenGLHost), new PropertyMetadata(33, OnAdaptedViewPropertyChangedCallback));
+        // Using a DependencyProperty as the backing store for Dimension.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty DimensionProperty =
+            DependencyProperty.Register("Dimension", typeof(Dimension), typeof(OpenGLHost), new PropertyMetadata(Dimension.ThreeDimension, OnAdaptedWindowPropertyChangedCallback));
+
 
 
         static OpenGLHost()
@@ -136,9 +145,16 @@ namespace PTL.Windows.Controls
             (o as OpenGLHost).OpenGLViewer.View.GridColor2 = (System.Drawing.Color)converter.Convert(e.NewValue, typeof(System.Drawing.Color), null, null);
         }
 
-        private static void OnAdaptedPropertyChangedCallback(DependencyObject o, DependencyPropertyChangedEventArgs e)
+        private static void OnAdaptedViewPropertyChangedCallback(DependencyObject o, DependencyPropertyChangedEventArgs e)
         {
-            (o as OpenGLHost).OpenGLViewer.View.GetType().GetProperty(e.Property.Name).SetValue(o, e.NewValue);
+            var view = (o as OpenGLHost).OpenGLViewer.View;
+            view.GetType().GetProperty(e.Property.Name).SetValue(view, e.NewValue);
+        }
+
+        private static void OnAdaptedWindowPropertyChangedCallback(DependencyObject o, DependencyPropertyChangedEventArgs e)
+        {
+            var viewer = (o as OpenGLHost).OpenGLViewer;
+            viewer.GetType().GetProperty(e.Property.Name).SetValue(viewer, e.NewValue);
         }
     }
 }

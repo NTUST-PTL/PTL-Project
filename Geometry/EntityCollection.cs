@@ -15,7 +15,7 @@ namespace PTL.Geometry
 {
     public abstract class EntityCollection : Entity, ICloneable, ICanPlotInOpenGL, IHaveCoordinateSystem, IHaveBoundary, IHaveColor, IToDXFEntities
     {
-        public Dictionary<String, Entity> Entities = new Dictionary<String, Entity>();
+        public Dictionary<String, Entity> Entities { get; set; } = new Dictionary<String, Entity>();
 
         public EntityCollection()
         {

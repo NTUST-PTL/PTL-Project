@@ -337,3 +337,5 @@ E:\Data\GitHub\PTL-Project\obj\Debug\PTL.dll
 E:\Data\GitHub\PTL-Project\obj\Debug\PTL.pdb
 E:\Data\GitHub\PTL-Project\obj\Debug\Windows\Controls\OpenGLHost.g.cs
 E:\Data\GitHub\PTL-Project\obj\Debug\Windows\Controls\OpenGLHost.baml
+C:\Data\GitHub\PTL-Project\obj\Debug\Windows\Controls\OpenGLHost.g.cs
+C:\Data\GitHub\PTL-Project\obj\Debug\Windows\Controls\OpenGLHost.baml
