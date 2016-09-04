@@ -604,6 +604,20 @@ namespace PTL.Mathematics
             }
             return newArray;
         }
+        public static System.Array Take(System.Array Array, params int[] range)
+        {
+            int n = range.Length;
+            int[] startIndex = new int[n];
+            int[] endIndex = new int[n];
+
+            for (int i = 0; i < n; i++)
+            {
+                startIndex[i] = 0;
+                endIndex[i] = range[i] - 1;
+            }
+
+            return Take(Array, startIndex, endIndex);
+        }
         public static System.Array Cast<TypeIn, TypeOut>(System.Array array, Func<TypeIn, TypeOut> converter)
         {
             //定義Array每個維度的起始索引值(起始值可以不為0)
@@ -1167,6 +1181,317 @@ namespace PTL.Mathematics
             return rM;
         }
         #endregion
+
+        public static class NonlinearFindRoot
+        {
+            public static string nError = "";
+            public static TimeSpan TimeSpanLimit = new TimeSpan(0, 0, 5);
+            public delegate void EquationSet(double[] input, double[] output);
+
+            public static Tuple<double, bool[]> FindRoot(Func<double, double> Equation, double InitialGuest)
+            {
+                double[] x = new double[] { InitialGuest };
+                EquationSet aEquationSet = (double[] xx, double[] yy) => { yy[0] = Equation(xx[0]); };
+                Boolean[] Result = FindRoot(x, aEquationSet);
+                return new Tuple<double, bool[]>(x[0], Result);
+            }
+            public static Tuple<double[], bool[]> FindRoot(Func<double[], double[]> Equation, double[] InitialGuest)
+            {
+                double[] x = new double[InitialGuest.Length];
+                InitialGuest.CopyTo(x, 0);
+                EquationSet aEquationSet = (double[] xx, double[] yy) => { yy = Equation(xx); };
+                Boolean[] Result = FindRoot(x, aEquationSet);
+                return new Tuple<double[], bool[]>(x, Result);
+            }
+            public static bool[] FindRoot(double[] x, EquationSet objEquationSet)
+            {
+                bool Check = false;
+                bool timesUP = newt(x, objEquationSet, Check);
+                bool[] states = new bool[] { timesUP, Check };
+
+                return states;
+            }
+            private static bool newt(double[] x, EquationSet objEquationSet, bool Check)
+            {
+                const int MAXITS = 200;
+                const double TOLF = 1E-08;
+                const double TOLMIN = 1E-10;
+                const int STPMX = 100;
+                const double TOLX = 1E-11;
+
+                bool timsUP = false;
+
+                double den, f, fold, stpmax, sum, temp, test;
+                double d = 0;
+                int n = x.Length;
+                int[] indx = new int[n];
+                double[] g = new double[n];
+                double[] p = new double[n];
+                double[] xold = new double[n];
+                double[,] fjac = new double[n, n];
+                double[] fvec = new double[n];
+
+                f = fmin(x, fvec, objEquationSet);
+                test = 0.0;
+                for (int i = 0; i < n; i++)
+                    if ((Abs(fvec[i]) > test)) test = Abs(fvec[i]);
+                if (test < 0.01 * TOLF)
+                {
+                    Check = false;
+                    return timsUP;
+                }
+                sum = 0;
+                for (int i = 0; i < n; i++) sum = sum + x[i] * x[i];
+                stpmax = STPMX * Max(Sqrt(sum), Convert.ToDouble(n));
+                for (int its = 0; its < MAXITS; its++)
+                {
+                    fdjac(x, fvec, fjac, objEquationSet);
+                    for (int i = 0; i < n; i++)
+                    {
+                        sum = 0;
+                        for (int j = 0; j < n; j++) sum = sum + fjac[j, i] * fvec[j];
+                        g[i] = sum;
+                    }
+                    for (int i = 0; i < n; i++) xold[i] = x[i];
+                    fold = f;
+                    for (int i = 0; i < n; i++) p[i] = -fvec[i];
+                    ludcmp(fjac, indx, d);
+                    lubksb(fjac, indx, p);
+                    timsUP = lnsrch(xold, fold, g, p, x, f, stpmax, Check, fvec, objEquationSet);
+                    if (timsUP)
+                    {
+                        x[0] = 0;
+                        return timsUP;
+                    }
+                    test = 0.0;
+                    for (int i = 0; i < n; i++)
+                        if (Abs(fvec[i]) > test) test = Abs(fvec[i]);
+                    if (test < TOLF)
+                    {
+                        Check = false;
+                        return timsUP;
+                    }
+                    if (Check)
+                    {
+                        test = 0.0;
+                        den = Max(f, 0.5 * n);
+                        for (int i = 0; i < n; i++)
+                        {
+                            temp = Abs(g[i]) * Max(Abs(x[i]), 1.0) / den;
+                            if (temp > test) test = temp;
+                        }
+                        Check = (test < TOLMIN);
+                        return timsUP;
+                    }
+                    test = 0.0;
+                    for (int i = 0; i < n; i++)
+                    {
+                        temp = (Abs(x[i] - xold[i])) / Max(Abs(x[i]), 1.0);
+                        if (temp > test) test = temp;
+                    }
+                    if (test < TOLX) return timsUP;
+                }
+                return timsUP;
+            }
+            private static void ludcmp(double[,] a, int[] indx, double d)
+            {
+                const double TINY = 1E-20;
+                int imax = 0;
+                double big, dum, sum, temp;
+
+                int n = a.GetLength(0);
+                double[] vv = new double[n];
+
+                d = 1;
+
+                for (int i = 0; i < n; i++)
+                {
+                    big = 0;
+                    for (int j = 0; j < n; j++)
+                        if ((temp = Abs(a[i, j])) > big) big = temp;
+                    if (big == 0) nError = "Singular matrix in routine ludcmp";
+                    vv[i] = 1 / big;
+                }
+                for (int j = 0; j < n; j++)
+                {
+                    for (int i = 0; i < j; i++)
+                    {
+                        sum = a[i, j];
+                        for (int k = 0; k < i; k++) sum = sum - a[i, k] * a[k, j];
+                        a[i, j] = sum;
+                    }
+                    big = 0.0;
+                    for (int i = j; i < n; i++)
+                    {
+                        sum = a[i, j];
+                        for (int k = 0; k < j; k++) sum = sum - a[i, k] * a[k, j];
+                        a[i, j] = sum;
+                        dum = vv[i] * Abs(sum);
+                        if ((dum = vv[i] * Abs(sum)) >= big)
+                        {
+                            big = dum;
+                            imax = i;
+                        }
+                    }
+                    if (j != imax)
+                    {
+                        for (int k = 0; k < n; k++)
+                        {
+                            dum = a[imax, k];
+                            a[imax, k] = a[j, k];
+                            a[j, k] = dum;
+                        }
+                        d = -d;
+                        vv[imax] = vv[j];
+                    }
+                    indx[j] = imax;
+                    if (a[j, j] == 0) a[j, j] = TINY;
+
+                    if (j != n - 1)
+                    {
+                        dum = 1.0 / a[j, j];
+                        for (int i = j + 1; i < n; i++) a[i, j] = a[i, j] * dum;
+                    }
+                }
+            }
+            private static void lubksb(double[,] a, int[] indx, double[] b)
+            {
+                int ii = 0, ip;
+                double sum;
+
+                int n = a.GetLength(0);
+                for (int i = 0; i < n; i++)
+                {
+                    ip = indx[i];
+                    sum = b[ip];
+                    b[ip] = b[i];
+                    if (ii != 0)
+                        for (int j = ii - 1; j < i; j++) sum = sum - a[i, j] * b[j];
+                    else if (sum != 0) ii = i + 1;
+                    b[i] = sum;
+                }
+                for (int i = n - 1; i >= 0; i--)
+                {
+                    sum = b[i];
+                    for (int j = i + 1; j < n; j++) sum = sum - a[i, j] * b[j];
+                    b[i] = sum / a[i, i];
+                }
+            }
+            private static bool lnsrch(double[] xold, double fold, double[] g, double[] p, double[] x, double f, double stpmax, bool Check, double[] fvec, EquationSet objEquationSet)
+            {
+                const double ALF = 1E-08;
+                const double TOLX = 1E-11;
+
+                double a, alam, alam2 = 0.0, alamin, b, disc, f2 = 0.0;
+                double rhs1, rhs2, slope, sum, temp, test, tmplam;
+
+                int n = xold.Length;
+                Check = false;
+                sum = 0.0;
+                for (int i = 0; i < n; i++) sum = sum + p[i] * p[i];
+                sum = Sqrt(sum);
+                if (sum > stpmax)
+                    for (int i = 0; i < n; i++) p[i] = p[i] * stpmax / sum;
+                slope = 0.0;
+                for (int i = 0; i < n; i++) slope = slope + g[i] * p[i];
+                if (slope >= 0.0) nError = "Roundoff problem in lnsrch.";
+                test = 0.0;
+                for (int i = 0; i < n; i++)
+                {
+                    temp = Abs(p[i]) / Max(Abs(xold[i]), 1);
+                    if (temp > test) test = temp;
+                }
+                alamin = TOLX / test;
+                alam = 1.0;
+                DateTime startT = DateTime.Now;
+                int i_times = 0;
+                while (true)
+                {
+                    if (i_times == 100)
+                    {
+                        i_times = 0;
+                        if (DateTime.Now - startT > TimeSpanLimit)
+                        {
+                            Debug.WriteLine("NonLinear Find Root Overtime({0}s)", TimeSpanLimit.Seconds);
+                            return true;
+                        }
+                    }
+
+                    for (int i = 0; i < n; i++) x[i] = xold[i] + alam * p[i];
+                    f = fmin(x, fvec, objEquationSet);
+                    if (alam < alamin)
+                    {
+                        for (int i = 0; i < n; i++) x[i] = xold[i];
+                        Check = true;
+                        return false;
+                    }
+                    else if (f <= fold + ALF * alam * slope) return false;
+                    else
+                    {
+                        if (alam == 1.0) tmplam = -slope / (2.0 * (f - fold - slope));
+                        else
+                        {
+                            rhs1 = f - fold - alam * slope;
+                            rhs2 = f2 - fold - alam2 * slope;
+                            a = (rhs1 / (alam * alam) - rhs2 / (alam2 * alam2)) / (alam - alam2);
+                            b = (-alam2 * rhs1 / (alam * alam) + alam * rhs2 / (alam2 * alam2)) / (alam - alam2);
+
+                            if (a == 0.0) tmplam = -slope / (2.0 * b);
+                            else
+                            {
+                                disc = b * b - 3.0 * a * slope;
+                                if (disc < 0.0) tmplam = 0.5 * alam;
+                                else if (b <= 0.0) tmplam = (-b + Sqrt(disc)) / (3.0 * a);
+                                else tmplam = -slope / (b + Sqrt(disc));
+                            }
+                            if (tmplam > 0.5 * alam) tmplam = 0.5 * alam;
+                        }
+                    }
+
+                    alam2 = alam;
+                    f2 = f;
+                    alam = Max(tmplam, 0.1 * alam);
+
+                    i_times++;
+                }
+            }
+            private static void fdjac(double[] x, double[] fvec, double[,] df, EquationSet objEquationSet)
+            {
+                const double EPS = 1E-08;
+
+                double h, temp;
+
+                int n = x.Length;
+                double[] f = new double[n];
+
+                for (int j = 0; j < n; j++)
+                {
+                    temp = x[j];
+                    h = EPS * Abs(temp);
+                    if (h == 0) h = EPS;
+                    x[j] = temp + h;
+                    h = x[j] - temp;
+                    objEquationSet(x, f);
+                    x[j] = temp;
+                    for (int i = 0; i < n; i++) df[i, j] = (f[i] - fvec[i]) / h;
+                }
+            }
+            private static double fmin(double[] x, double[] fvec, EquationSet objEquationSet)
+            {
+                objEquationSet(x, fvec);
+
+                int n = x.Length;
+                double sum = 0.0;
+                for (int i = 0; i < n; i++) sum = sum + fvec[i] * fvec[i];
+                return 0.5 * sum;
+            }
+            private static double Max(double a, double b)
+            {
+                double tMax = a;
+                if (tMax < b) tMax = b;
+                return tMax;
+            }
+        }
 
         #region 其他
         public static double Min(params double[] paras)
