@@ -9,7 +9,7 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using PTL.Extensions.ReflectionExtensions;
 
-namespace PTL.Windows.VisualExtensions
+namespace PTL.Windows.Extensions
 {
     public static class VisualTreeExtention
     {

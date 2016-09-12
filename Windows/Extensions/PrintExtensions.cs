@@ -10,7 +10,7 @@ using System.Windows.Xps.Packaging;
 using System.IO;
 using System.IO.Packaging;
 
-namespace PTL.Windows.VisualExtensions
+namespace PTL.Windows.Extensions
 {
     public static class PrintExtensions
     {

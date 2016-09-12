@@ -258,9 +258,9 @@
     </Compile>
     <Compile Include="Windows\Dependency\DepedencyComand.cs" />
     <Compile Include="Windows\Media\Media3D\LineGeometry3D.cs" />
-    <Compile Include="Windows\VisualExtensions\PrintExtensions.cs" />
-    <Compile Include="Windows\VisualExtensions\VisualTreeExtention.cs" />
-    <Compile Include="Windows\VisualExtensions\HitTest3DExtension.cs" />
+    <Compile Include="Windows\Extensions\PrintExtensions.cs" />
+    <Compile Include="Windows\Extensions\VisualTreeExtention.cs" />
+    <Compile Include="Windows\Extensions\HitTest3DExtension.cs" />
     <Page Include="Windows\Controls\BComboBox.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
