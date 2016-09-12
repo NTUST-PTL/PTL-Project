@@ -8,20 +8,19 @@ using System.Windows.Data;
 using System.Windows.Input;
 namespace PTL.Windows.Dependency
 {
-    public class DepedencyComand : FrameworkElement
+    public class AttachedHelper : FrameworkElement
     {
         public static DependencyProperty CommandProperty =
             DependencyProperty.RegisterAttached(
                 "Command"
                 , typeof(ICommand)
-                , typeof(DepedencyComand)
+                , typeof(AttachedHelper)
                 );
-        
+
         public static void SetCommand(DependencyObject obj, ICommand value)
         {
             obj.SetValue(CommandProperty, value);
         }
-
         public static ICommand GetCommand(DependencyObject obj)
         {
             return obj.GetValue(CommandProperty) as ICommand;
@@ -32,17 +31,18 @@ namespace PTL.Windows.Dependency
             DependencyProperty.RegisterAttached(
                 "CommandParameter"
                 , typeof(object)
-                , typeof(DepedencyComand)
+                , typeof(AttachedHelper)
                 );
-
         public static void SetCommandParameter(DependencyObject obj, object value)
         {
             obj.SetValue(CommandParameterProperty, value);
         }
-
         public static object GetCommandParameter(DependencyObject obj)
         {
             return obj.GetValue(CommandParameterProperty);
         }
+
+
+
     }
 }
