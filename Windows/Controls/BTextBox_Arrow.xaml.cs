@@ -40,8 +40,6 @@ namespace PTL.Windows.Controls
             }
         }
 
-
-
         public static FrameworkPropertyMetadata TextPropertymetadata =
             new FrameworkPropertyMetadata(""
                 , FrameworkPropertyMetadataOptions.BindsTwoWayByDefault
@@ -70,6 +68,8 @@ namespace PTL.Windows.Controls
             , typeof(BTextBox_Arrow)
             , CommandPropertymetadata
             , new ValidateValueCallback(Command_Validate));
+
+
 
         private static void Text_PropertyChanged(
             DependencyObject dobj,
