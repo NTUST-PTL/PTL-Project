@@ -542,7 +542,7 @@ namespace PTL.OpenGL.Plot
             if (Things2Show != null)
                 foreach (var item in Things2Show)
                 {
-                    item.PlotInOpenGL();
+                    item?.PlotInOpenGL();
                 }
 
             ////計算網格

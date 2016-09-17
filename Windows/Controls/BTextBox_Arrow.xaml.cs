@@ -40,6 +40,8 @@ namespace PTL.Windows.Controls
             }
         }
 
+
+
         public static FrameworkPropertyMetadata TextPropertymetadata =
             new FrameworkPropertyMetadata(""
                 , FrameworkPropertyMetadataOptions.BindsTwoWayByDefault
