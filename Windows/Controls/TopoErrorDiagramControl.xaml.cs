@@ -30,18 +30,17 @@ namespace PTL.Windows.Controls
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public class ToothErrorDatas
+        public double[][,] TopoErrors
         {
-            public double[][,] TopoErrors { get; set; }
-            public double[] CenterDiviations { get; set; }
+            get { return (double[][,])GetValue(TopoErrorsProperty); }
+            set { SetValue(TopoErrorsProperty, value); }
         }
-        public ToothErrorDatas ErrorData
+        public double[] PitchDiviations
         {
-            get { return (ToothErrorDatas)GetValue(ErrorDataProperty); }
-            set { SetValue(ErrorDataProperty, value); }
+            get { return (double[])GetValue(PitchDiviationsProperty); }
+            set { SetValue(PitchDiviationsProperty, value); }
         }
-        private double[][,] TopoErrors;
-        private double[] CenterDiviations;
+        public double[][,] ReOrderedTopoErrors{ get; set; }
         public bool IsAutoScale { get; set; } = true;
         public bool IsRootTipSwaped { get; set; } = false;
         public bool IsTranposed { get; set; } = false;
@@ -49,9 +48,18 @@ namespace PTL.Windows.Controls
         public bool IsColReversed { get; set; } = false;
         public bool IsErrorDirectionReversed { get; set; } = false;
 
-        // Using a DependencyProperty as the backing store for ErrorData.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty ErrorDataProperty =
-            DependencyProperty.Register("ErrorData", typeof(ToothErrorDatas), typeof(TopoErrorDiagramControl), new PropertyMetadata(Update));
+
+
+        
+        // Using a DependencyProperty as the backing store for TopoErrors.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty TopoErrorsProperty =
+            DependencyProperty.Register("TopoErrors", typeof(double[][,]), typeof(TopoErrorDiagramControl), new PropertyMetadata(Update));
+        // Using a DependencyProperty as the backing store for PitchDiviations.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty PitchDiviationsProperty =
+            DependencyProperty.Register("PitchDiviations", typeof(double[]), typeof(TopoErrorDiagramControl), new PropertyMetadata(Update));
+
+
+
 
 
         public enum DiagramTypes
@@ -199,9 +207,8 @@ namespace PTL.Windows.Controls
 
         public void DrawGridLineTypeDiagram()
         {
-            if (this.ErrorData != null
-                && this.ErrorData.TopoErrors != null
-                && this.ErrorData.CenterDiviations != null
+            if (this.TopoErrors != null
+                && this.PitchDiviations != null
                 && this.ActualWidth != 0)
             {
                 Func<double, double> s = (percent) => this.outGrid.ActualWidth * (percent / 100.0);
@@ -214,8 +221,8 @@ namespace PTL.Windows.Controls
 
                 SetData();
 
-                int nRow = TopoErrors[0].GetLength(0);
-                int nCol = TopoErrors[0].GetLength(1);
+                int nRow = ReOrderedTopoErrors[0].GetLength(0);
+                int nCol = ReOrderedTopoErrors[0].GetLength(1);
 
 
 
@@ -315,7 +322,7 @@ namespace PTL.Windows.Controls
                         {
                             for (int k = 0; k < nCol; k++)
                             {
-                                maxValue = maxValue < Abs(TopoErrors[i][j,k]) ? Abs(TopoErrors[i][j, k]) : maxValue;
+                                maxValue = maxValue < Abs(ReOrderedTopoErrors[i][j,k]) ? Abs(ReOrderedTopoErrors[i][j, k]) : maxValue;
                             }
                         }
                     }
@@ -345,7 +352,7 @@ namespace PTL.Windows.Controls
                     {
                         for (int k = 0; k < nCol; k++)
                         {
-                            MeasuredPoints[i][j, k] = GridPoints[i][j, k] + vec[i] * TopoErrors[i][j, k] * 1000 * unit;
+                            MeasuredPoints[i][j, k] = GridPoints[i][j, k] + vec[i] * ReOrderedTopoErrors[i][j, k] * 1000 * unit;
                         }
                     }
                 }
@@ -419,9 +426,9 @@ namespace PTL.Windows.Controls
                         for (int k = 0; k < nCol; k++)
                         {
                             Line line = new Line();
-                            line.ToolTip = TopoErrors[i][j, k].ToString("G6");
+                            line.ToolTip = ReOrderedTopoErrors[i][j, k].ToString("G6");
                             line.StrokeThickness = this._GridLineWidth2;
-                            if (TopoErrors[i][j, k] < 0)
+                            if (ReOrderedTopoErrors[i][j, k] < 0)
                                 line.Stroke = this.nagtiveErrorBrush;
                             else
                                 line.Stroke = this.positiveErrorBrush;
@@ -520,14 +527,14 @@ namespace PTL.Windows.Controls
                 {
                     TextBlock[] tbs = new TextBlock[8];
                     double[] errs = {
-                    TopoErrors[0][0, 0],
-                    TopoErrors[1][0, 0],
-                    TopoErrors[0][nRow - 1, 0],
-                    TopoErrors[1][nRow - 1, 0],
-                    TopoErrors[0][0, nCol - 1],
-                    TopoErrors[1][0,  nCol - 1],
-                    TopoErrors[0][nRow - 1, nCol - 1],
-                    TopoErrors[1][nRow - 1,  nCol - 1] };
+                    ReOrderedTopoErrors[0][0, 0],
+                    ReOrderedTopoErrors[1][0, 0],
+                    ReOrderedTopoErrors[0][nRow - 1, 0],
+                    ReOrderedTopoErrors[1][nRow - 1, 0],
+                    ReOrderedTopoErrors[0][0, nCol - 1],
+                    ReOrderedTopoErrors[1][0,  nCol - 1],
+                    ReOrderedTopoErrors[0][nRow - 1, nCol - 1],
+                    ReOrderedTopoErrors[1][nRow - 1,  nCol - 1] };
                     XYZ4[] ps = {
                     GridPoints[0][0, 0],
                     GridPoints[1][0, 0],
@@ -604,7 +611,7 @@ namespace PTL.Windows.Controls
                     {
                         for (int k = 0; k < nCol; k++)
                         {
-                            AverageError = Abs(TopoErrors[i][j, k]) * 1e3;
+                            AverageError = Abs(ReOrderedTopoErrors[i][j, k]) * 1e3;
                         }
                     }
                 }
@@ -617,12 +624,12 @@ namespace PTL.Windows.Controls
                     {
                         for (int k = 0; k < nCol; k++)
                         {
-                            SumOfSquare = TopoErrors[i][j, k] * TopoErrors[i][j, k] * 1e6;
+                            SumOfSquare = ReOrderedTopoErrors[i][j, k] * ReOrderedTopoErrors[i][j, k] * 1e6;
                         }
                     }
                 }
 
-                double spaceError = (CenterDiviations[0] - CenterDiviations[1]) * 1e3;
+                double spaceError = (PitchDiviations[0] - PitchDiviations[1]) * 1e3;
 
                 double Sum = 0;
                 for (int i = 0; i < 2; i++)
@@ -631,7 +638,7 @@ namespace PTL.Windows.Controls
                     {
                         for (int k = 0; k < nCol; k++)
                         {
-                            Sum = TopoErrors[i][j, k] * 1e3;
+                            Sum = ReOrderedTopoErrors[i][j, k] * 1e3;
                         }
                     }
                 }
@@ -639,7 +646,7 @@ namespace PTL.Windows.Controls
                 infos.Text = String.Format(
                     "Average Error: {0:0.#} µm   Sum of Square: {1:0.#} µm^2\r\n" +
                     "Space Error: {2:0.#} µm, Left Div: {3:0.#} µm, Right Div: {4:0.#} µm, Sum: {5:0.#} µm",
-                    AverageError, SumOfSquare, spaceError, CenterDiviations[0], CenterDiviations[1], Sum);
+                    AverageError, SumOfSquare, spaceError, PitchDiviations[0], PitchDiviations[1], Sum);
                 #endregion Other Texts
 
                 this.mStack.Children.Add(tipRootLables[0]);
@@ -651,9 +658,8 @@ namespace PTL.Windows.Controls
 
         public void DrawTextTypeDiagram()
         {
-            if (this.ErrorData != null
-                && this.ErrorData.TopoErrors != null
-                && this.ErrorData.CenterDiviations != null
+            if (this.TopoErrors != null
+                && this.PitchDiviations != null
                 && this.ActualWidth != 0)
             {
                 Func<double, double> s = (percent) => this.outGrid.ActualWidth * (percent / 100.0);
@@ -666,8 +672,8 @@ namespace PTL.Windows.Controls
 
                 SetData();
 
-                int nRow = TopoErrors[0].GetLength(0);
-                int nCol = TopoErrors[0].GetLength(1);
+                int nRow = ReOrderedTopoErrors[0].GetLength(0);
+                int nCol = ReOrderedTopoErrors[0].GetLength(1);
 
 
                 #region Clear StackPanel
@@ -766,7 +772,7 @@ namespace PTL.Windows.Controls
                         {
                             for (int k = 0; k < nCol; k++)
                             {
-                                double value = TopoErrors[i][j, k] * 1000;
+                                double value = ReOrderedTopoErrors[i][j, k] * 1000;
                                 int sigDigits = 6;
                                 XYZ4 p = (GridPoints[i][j, k] + GridPoints[i][j + 1, k] + GridPoints[i][j, k + 1] + GridPoints[i][j + 1, k + 1]) / 4;
 
@@ -897,7 +903,7 @@ namespace PTL.Windows.Controls
                     {
                         for (int k = 0; k < nCol; k++)
                         {
-                            AverageError = Abs(TopoErrors[i][j, k]) * 1e3;
+                            AverageError = Abs(ReOrderedTopoErrors[i][j, k]) * 1e3;
                         }
                     }
                 }
@@ -910,12 +916,12 @@ namespace PTL.Windows.Controls
                     {
                         for (int k = 0; k < nCol; k++)
                         {
-                            SumOfSquare = TopoErrors[i][j, k] * TopoErrors[i][j, k] * 1e6;
+                            SumOfSquare = ReOrderedTopoErrors[i][j, k] * ReOrderedTopoErrors[i][j, k] * 1e6;
                         }
                     }
                 }
 
-                double spaceError = (CenterDiviations[0] - CenterDiviations[1]) * 1e3;
+                double spaceError = (PitchDiviations[0] - PitchDiviations[1]) * 1e3;
 
                 double Sum = 0;
                 for (int i = 0; i < 2; i++)
@@ -924,7 +930,7 @@ namespace PTL.Windows.Controls
                     {
                         for (int k = 0; k < nCol; k++)
                         {
-                            Sum = TopoErrors[i][j, k] * 1e3;
+                            Sum = ReOrderedTopoErrors[i][j, k] * 1e3;
                         }
                     }
                 }
@@ -932,7 +938,7 @@ namespace PTL.Windows.Controls
                 infos.Text = String.Format(
                     "Average Error: {0:0.#} µm   Sum of Square: {1:0.#} µm^2\r\n" +
                     "Space Error: {2:0.#} µm, Left Div: {3:0.#} µm, Right Div: {4:0.#} µm, Sum: {5:0.#} µm",
-                    AverageError, SumOfSquare, spaceError, CenterDiviations[0], CenterDiviations[1], Sum);
+                    AverageError, SumOfSquare, spaceError, PitchDiviations[0], PitchDiviations[1], Sum);
                 #endregion Other Texts
 
                 this.mStack.Children.Add(tips[0]);
@@ -944,27 +950,27 @@ namespace PTL.Windows.Controls
 
         public void SetData()
         {
-            TopoErrors = new double[][,] { this.ErrorData.TopoErrors[0], this.ErrorData.TopoErrors[1] };
-            CenterDiviations = this.ErrorData.CenterDiviations;
+            //建立新的double[][,]陣列以避免變動原始資料來源陣列的內容
+            ReOrderedTopoErrors = new double[][,] { this.TopoErrors[0], this.TopoErrors[1] };
             if (IsTranposed)
             {
                 for (int i = 0; i < 2; i++)
                 {
-                    TopoErrors[i] = Transpose(TopoErrors[i]);
+                    ReOrderedTopoErrors[i] = Transpose(ReOrderedTopoErrors[i]);
                 }
             }
             if (IsRowReversed)
             {
                 for (int i = 0; i < 2; i++)
                 {
-                    TopoErrors[i] = (double[,])Reverse(TopoErrors[i], 0);
+                    ReOrderedTopoErrors[i] = (double[,])Reverse(ReOrderedTopoErrors[i], 0);
                 }
             }
             if (IsColReversed)
             {
                 for (int i = 0; i < 2; i++)
                 {
-                    TopoErrors[i] = (double[,])Reverse(TopoErrors[i], 1);
+                    ReOrderedTopoErrors[i] = (double[,])Reverse(ReOrderedTopoErrors[i], 1);
                 }
             }
         }

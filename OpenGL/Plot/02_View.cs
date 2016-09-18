@@ -540,10 +540,11 @@ namespace PTL.OpenGL.Plot
             //GL.glDisable(GL.GL_LINE_SMOOTH);
             //畫DXFD
             if (Things2Show != null)
-                foreach (var item in Things2Show)
+                foreach (var item in Things2Show.ToArray())
                 {
                     item?.PlotInOpenGL();
                 }
+                
 
             ////計算網格
             if (this.PlotGrid == true || this.PlotGraduation == true)
