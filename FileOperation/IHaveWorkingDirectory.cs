@@ -9,5 +9,8 @@ namespace PTL.FileOperation
     public interface IHaveWorkingDirectory
     {
         WorkingDirectory Directory { get; set; }
+        void Reset();
+        void Save();
+        void OpenExisting();
     }
 }
