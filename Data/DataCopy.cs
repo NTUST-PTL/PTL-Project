@@ -31,7 +31,7 @@ namespace PTL.Data
             foreach (var sourceProperty in sourceType.GetProperties())
             {
                 var targetProperty = targetType.GetProperty(sourceProperty.Name);
-                if (targetProperty != null
+                if (targetProperty != null && targetProperty.CanWrite
                     && !(targetProperty.GetCustomAttributes(typeof(Ignore), true).Cast<Ignore>().Count() > 0))
                     targetProperty?.SetValue(target, sourceProperty.GetValue(source));
             }
