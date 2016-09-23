@@ -65,6 +65,7 @@ namespace PTL.Geometry
             get { return openGLDisplaySize; }
             set { this.openGLDisplaySize = value; }
         }
+        [Newtonsoft.Json.JsonIgnore]
         public Action<VectorD> OpenGLDisplayFunction = PlotAsPoint;
 
         #region Constructor and Destructor

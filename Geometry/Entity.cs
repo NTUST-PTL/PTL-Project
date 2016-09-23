@@ -14,6 +14,7 @@ namespace PTL.Geometry
     {
         public virtual String Name { get; set; }
         private EntityCollection fParent;
+        [Newtonsoft.Json.JsonIgnore]
         public virtual EntityCollection Parent
         {
             get
@@ -57,6 +58,7 @@ namespace PTL.Geometry
             }
         }
         bool? visible = true;
+        [Newtonsoft.Json.JsonIgnore]
         public virtual bool? Visible
         {
             get
@@ -73,7 +75,9 @@ namespace PTL.Geometry
                 }
             }
         }
+        [Newtonsoft.Json.JsonIgnore]
         public Color _color = Color.Black;
+        [Newtonsoft.Json.JsonIgnore]
         public virtual Color Color
         {
             get
