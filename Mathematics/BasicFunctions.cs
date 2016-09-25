@@ -1186,39 +1186,78 @@ namespace PTL.Mathematics
         {
             public static string nError = "";
             public static TimeSpan TimeSpanLimit = new TimeSpan(0, 0, 5);
+            public class Result
+            {
+                public double[] Answer;
+                public bool Succes { get; set; }
+                public bool TimesUp { get; set; }
+            }
             public delegate void EquationSet(double[] input, double[] output);
 
-            public static Tuple<double, bool[]> FindRoot(Func<double, double> Equation, double InitialGuest)
+            public static Result FindRoot(Func<double, double> Equation, double InitialGuest
+                , int MAXITS = 200
+                , double TOLF = 1E-08
+                , double TOLMIN = 1E-10
+                , double TOLX = 1E-11
+                , double STPMX = 100)
             {
                 double[] x = new double[] { InitialGuest };
                 EquationSet aEquationSet = (double[] xx, double[] yy) => { yy[0] = Equation(xx[0]); };
-                Boolean[] Result = FindRoot(x, aEquationSet);
-                return new Tuple<double, bool[]>(x[0], Result);
+                Result Result = FindRoot(x, aEquationSet
+                    , MAXITS
+                    , TOLF
+                    , TOLMIN
+                    , TOLX
+                    , STPMX);
+                return Result;
             }
-            public static Tuple<double[], bool[]> FindRoot(Func<double[], double[]> Equation, double[] InitialGuest)
+            public static Result FindRoot(Func<double[], double[]> Equation, double[] InitialGuest
+                , int MAXITS = 200
+                , double TOLF = 1E-08
+                , double TOLMIN = 1E-10
+                , double TOLX = 1E-11
+                , double STPMX = 100)
             {
                 double[] x = new double[InitialGuest.Length];
                 InitialGuest.CopyTo(x, 0);
-                EquationSet aEquationSet = (double[] xx, double[] yy) => { yy = Equation(xx); };
-                Boolean[] Result = FindRoot(x, aEquationSet);
-                return new Tuple<double[], bool[]>(x, Result);
+                EquationSet aEquationSet = (double[] xx, double[] yy) => {
+                    var y = Equation(xx);
+                    for (int i = 0; i < yy.Length; i++)
+                        yy[i] = y[i];
+                };
+                Result Result = FindRoot(x, aEquationSet
+                    , MAXITS
+                    , TOLF
+                    , TOLMIN
+                    , TOLX
+                    , STPMX);
+                return Result;
             }
-            public static bool[] FindRoot(double[] x, EquationSet objEquationSet)
+            public static Result FindRoot(double[] x, EquationSet objEquationSet
+                , int MAXITS = 200
+                , double TOLF = 1E-08
+                , double TOLMIN = 1E-10
+                , double TOLX = 1E-11
+                , double STPMX = 100)
             {
                 bool Check = false;
-                bool timesUP = newt(x, objEquationSet, Check);
-                bool[] states = new bool[] { timesUP, Check };
+                bool timesUP = newt(x, objEquationSet, Check
+                    , MAXITS
+                    , TOLF
+                    , TOLMIN
+                    , TOLX
+                    , STPMX);
+                Result states = new Result() { TimesUp = timesUP, Succes= Check, Answer = x };
 
                 return states;
             }
-            private static bool newt(double[] x, EquationSet objEquationSet, bool Check)
+            private static bool newt(double[] x, EquationSet objEquationSet, bool Check
+                , int MAXITS = 200
+                , double TOLF = 1E-08
+                , double TOLMIN = 1E-10
+                , double TOLX = 1E-11
+                , double STPMX = 100)
             {
-                const int MAXITS = 200;
-                const double TOLF = 1E-08;
-                const double TOLMIN = 1E-10;
-                const int STPMX = 100;
-                const double TOLX = 1E-11;
-
                 bool timsUP = false;
 
                 double den, f, fold, stpmax, sum, temp, test;
