@@ -52,17 +52,17 @@ namespace PTL.Geometry.MathModel
                             return error;
                         };
                     double[] ans;
-                    try
-                    {
+                    //try
+                    //{
                         ans = MathNet.Numerics.RootFinding.Broyden.FindRoot(func, initialGuess, 1e-8, 100);
-                    }
-                    catch
-                    {
-                        if (startBoundary != null && endBoundary != null)
-                            ans = TreeSearch.NearestSearch(func, new double[] { 0, 0 }, startBoundary, endBoundary, S1: 4, S2: 1, Iteration: 25);
-                        else
-                            ans = TreeSearch.NearestSearch(func, new double[] { 0, 0 }, new double[] { 0, -0.15 }, new double[] { 1.15, 1.15 }, S1: 4, S2: 1, Iteration:25);
-                    }
+                    //}
+                    //catch
+                    //{
+                    //    if (startBoundary != null && endBoundary != null)
+                    //        ans = TreeSearch.NearestSearch(func, new double[] { 0, 0 }, startBoundary, endBoundary, S1: 4, S2: 1, Iteration: 25);
+                    //    else
+                    //        ans = TreeSearch.NearestSearch(func, new double[] { 0, 0 }, new double[] { 0, -0.15 }, new double[] { 1.15, 1.15 }, S1: 4, S2: 1, Iteration:25);
+                    //}
 
                     uniformedPoints[i,j] = surfaceFunc(ans[0], ans[1]);
 

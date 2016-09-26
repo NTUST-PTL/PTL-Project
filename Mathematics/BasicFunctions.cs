@@ -1189,6 +1189,8 @@ namespace PTL.Mathematics
             public class Result
             {
                 public double[] Answer;
+                public int iteration;
+                public double[] Residual;
                 public bool Succes { get; set; }
                 public bool TimesUp { get; set; }
             }
@@ -1241,17 +1243,15 @@ namespace PTL.Mathematics
                 , double STPMX = 100)
             {
                 bool Check = false;
-                bool timesUP = newt(x, objEquationSet, Check
+                Result Result = newt(x, objEquationSet, Check
                     , MAXITS
                     , TOLF
                     , TOLMIN
                     , TOLX
                     , STPMX);
-                Result states = new Result() { TimesUp = timesUP, Succes= Check, Answer = x };
-
-                return states;
+                return Result;
             }
-            private static bool newt(double[] x, EquationSet objEquationSet, bool Check
+            private static Result newt(double[] x, EquationSet objEquationSet, bool Check
                 , int MAXITS = 200
                 , double TOLF = 1E-08
                 , double TOLMIN = 1E-10
@@ -1277,12 +1277,13 @@ namespace PTL.Mathematics
                 if (test < 0.01 * TOLF)
                 {
                     Check = false;
-                    return timsUP;
+                    return new Result() { Answer = x, iteration = 1, Residual = fvec , Succes = true, TimesUp = false};
                 }
                 sum = 0;
                 for (int i = 0; i < n; i++) sum = sum + x[i] * x[i];
                 stpmax = STPMX * Max(Sqrt(sum), Convert.ToDouble(n));
-                for (int its = 0; its < MAXITS; its++)
+                int its = 0;
+                for (its = 0; its < MAXITS; its++)
                 {
                     fdjac(x, fvec, fjac, objEquationSet);
                     for (int i = 0; i < n; i++)
@@ -1299,8 +1300,9 @@ namespace PTL.Mathematics
                     timsUP = lnsrch(xold, fold, g, p, x, f, stpmax, Check, fvec, objEquationSet);
                     if (timsUP)
                     {
-                        x[0] = 0;
-                        return timsUP;
+                        //x[0] = 0;
+                        //return timsUP;
+                        break;
                     }
                     test = 0.0;
                     for (int i = 0; i < n; i++)
@@ -1308,7 +1310,8 @@ namespace PTL.Mathematics
                     if (test < TOLF)
                     {
                         Check = false;
-                        return timsUP;
+                        //return timsUP;
+                        break;
                     }
                     if (Check)
                     {
@@ -1320,7 +1323,8 @@ namespace PTL.Mathematics
                             if (temp > test) test = temp;
                         }
                         Check = (test < TOLMIN);
-                        return timsUP;
+                        //return timsUP;
+                        break;
                     }
                     test = 0.0;
                     for (int i = 0; i < n; i++)
@@ -1328,9 +1332,11 @@ namespace PTL.Mathematics
                         temp = (Abs(x[i] - xold[i])) / Max(Abs(x[i]), 1.0);
                         if (temp > test) test = temp;
                     }
-                    if (test < TOLX) return timsUP;
+                    if (test < TOLX)
+                        //return timsUP;
+                        break;
                 }
-                return timsUP;
+                return new Result() { Answer = x, iteration = its, Residual = fvec, Succes = its < MAXITS, TimesUp = timsUP }; ;
             }
             private static void ludcmp(double[,] a, int[] indx, double d)
             {
