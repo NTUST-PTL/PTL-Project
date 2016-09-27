@@ -44,6 +44,10 @@
     <Reference Include="csgl">
       <HintPath>dll\OpenGL\csgl.dll</HintPath>
     </Reference>
+    <Reference Include="MathNet.Numerics, Version=3.7.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>dll\MathNet\MathNet.Numerics.dll</HintPath>
+    </Reference>
     <Reference Include="netDxf, Version=1.0.1.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>dll\netDxf_1.0.3\bin\Release\netDxf.dll</HintPath>
@@ -323,12 +327,6 @@
     </None>
     <AppDesigner Include="Properties\" />
     <None Include="Snippets\notifypc.snippet" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\mathnet-PTL\src\Numerics\Numerics.csproj">
-      <Project>{b7cae5f4-a23f-4438-b5be-41226618b695}</Project>
-      <Name>Numerics</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="Snippets\propnotify.snippet" />

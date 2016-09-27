@@ -267,7 +267,6 @@ C:\Data\GitHub\PTL-Project\obj\Debug\PTL.csprojResolveAssemblyReference.cache
 C:\Data\GitHub\PTL-Project\bin\Debug\MathNet.Numerics.dll
 C:\Data\GitHub\PTL-Project\bin\Debug\PdfSharp-WPF.dll
 C:\Data\GitHub\PTL-Project\bin\Debug\PdfSharp.Xps.dll
-C:\Data\GitHub\PTL-Project\bin\Debug\MathNet.Numerics.pdb
 C:\Data\GitHub\PTL-Project\bin\Debug\PdfSharp-WPF.xml
 C:\Data\GitHub\PTL-Project\bin\Debug\PdfSharp.Xps.xml
 C:\Data\GitHub\PTL-Project\bin\Debug\System.Windows.Interactivity.dll
