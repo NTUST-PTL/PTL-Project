@@ -7,7 +7,12 @@
              xmlns:ptl="clr-namespace:PTL.Windows.Controls"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
-    <WindowsFormsHost>
-        <ptl:OpenGLViewer x:Name="OpenGLViewer"/>
-    </WindowsFormsHost>
+    <Grid>
+        <Image x:Name="ReplaceImage" Visibility="Hidden"></Image>
+        <Ellipse x:Name="TestUI" Fill="Red"/>
+        <WindowsFormsHost x:Name="WindowsFormsHost">
+            <ptl:OpenGLViewer x:Name="OpenGLViewer"/>
+        </WindowsFormsHost>
+    </Grid>
+    
 </UserControl>
