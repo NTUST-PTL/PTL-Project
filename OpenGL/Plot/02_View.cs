@@ -21,6 +21,10 @@ using PTL.Data;
 using static System.Math;
 using static PTL.Mathematics.BasicFunctions;
 using static PTL.OpenGL.Plot.PlotSub;
+using static CsGL.OpenGL.GL;
+using static CsGL.OpenGL.GLUT;
+using static Tao.OpenGl.Gl;
+using static Tao.OpenGl.Glu;
 
 namespace PTL.OpenGL.Plot
 {

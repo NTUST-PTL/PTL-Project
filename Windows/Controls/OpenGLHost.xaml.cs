@@ -234,13 +234,11 @@ namespace PTL.Windows.Controls
         {
             this.ReplaceImage.Visibility = System.Windows.Visibility.Visible;
             this.WindowsFormsHost.Visibility = System.Windows.Visibility.Hidden;
-            this.TestUI.Visibility = System.Windows.Visibility.Hidden;
         }
 
         public void HideStaticImage()
         {
             this.WindowsFormsHost.Visibility = System.Windows.Visibility.Visible;
-            this.TestUI.Visibility = System.Windows.Visibility.Visible;
             this.ReplaceImage.Visibility = System.Windows.Visibility.Hidden;
         }
     }

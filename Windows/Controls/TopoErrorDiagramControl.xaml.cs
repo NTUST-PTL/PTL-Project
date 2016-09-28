@@ -208,7 +208,6 @@ namespace PTL.Windows.Controls
         public void DrawGridLineTypeDiagram()
         {
             if (this.TopoErrors != null
-                && this.PitchDiviations != null
                 && this.ActualWidth != 0)
             {
                 Func<double, double> s = (percent) => this.outGrid.ActualWidth * (percent / 100.0);
@@ -629,7 +628,10 @@ namespace PTL.Windows.Controls
                     }
                 }
 
-                double spaceError = (PitchDiviations[0] - PitchDiviations[1]) * 1e3;
+                
+                double leftDiviation = PitchDiviations != null ? PitchDiviations[0] : 0;
+                double rightDiviation = PitchDiviations != null ? PitchDiviations[1] : 0;
+                double spaceError = PitchDiviations != null ? (PitchDiviations[0] - PitchDiviations[1]) * 1e3 : 0;
 
                 double Sum = 0;
                 for (int i = 0; i < 2; i++)
@@ -646,7 +648,7 @@ namespace PTL.Windows.Controls
                 infos.Text = String.Format(
                     "Average Error: {0:0.#} µm   Sum of Square: {1:0.#} µm^2\r\n" +
                     "Space Error: {2:0.#} µm, Left Div: {3:0.#} µm, Right Div: {4:0.#} µm, Sum: {5:0.#} µm",
-                    AverageError, SumOfSquare, spaceError, PitchDiviations[0], PitchDiviations[1], Sum);
+                    AverageError, SumOfSquare, spaceError, leftDiviation, rightDiviation, Sum);
                 #endregion Other Texts
 
                 this.mStack.Children.Add(tipRootLables[0]);
@@ -659,7 +661,6 @@ namespace PTL.Windows.Controls
         public void DrawTextTypeDiagram()
         {
             if (this.TopoErrors != null
-                && this.PitchDiviations != null
                 && this.ActualWidth != 0)
             {
                 Func<double, double> s = (percent) => this.outGrid.ActualWidth * (percent / 100.0);
@@ -921,7 +922,9 @@ namespace PTL.Windows.Controls
                     }
                 }
 
-                double spaceError = (PitchDiviations[0] - PitchDiviations[1]) * 1e3;
+                double leftDiviation = PitchDiviations != null ? PitchDiviations[0] : 0;
+                double rightDiviation = PitchDiviations != null ? PitchDiviations[1] : 0;
+                double spaceError = PitchDiviations != null ? (PitchDiviations[0] - PitchDiviations[1]) * 1e3 : 0;
 
                 double Sum = 0;
                 for (int i = 0; i < 2; i++)
@@ -938,7 +941,7 @@ namespace PTL.Windows.Controls
                 infos.Text = String.Format(
                     "Average Error: {0:0.#} µm   Sum of Square: {1:0.#} µm^2\r\n" +
                     "Space Error: {2:0.#} µm, Left Div: {3:0.#} µm, Right Div: {4:0.#} µm, Sum: {5:0.#} µm",
-                    AverageError, SumOfSquare, spaceError, PitchDiviations[0], PitchDiviations[1], Sum);
+                    AverageError, SumOfSquare, spaceError, leftDiviation, rightDiviation, Sum);
                 #endregion Other Texts
 
                 this.mStack.Children.Add(tips[0]);

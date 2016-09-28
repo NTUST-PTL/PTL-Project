@@ -9,7 +9,6 @@
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
         <Image x:Name="ReplaceImage" Visibility="Hidden"></Image>
-        <Ellipse x:Name="TestUI" Fill="Red"/>
         <WindowsFormsHost x:Name="WindowsFormsHost">
             <ptl:OpenGLViewer x:Name="OpenGLViewer"/>
         </WindowsFormsHost>
